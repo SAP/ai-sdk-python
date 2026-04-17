@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.evaluations.utils.validation_utils</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.evaluations.html"><font color="#ffffff">evaluations</font></a>.<a href="gen_ai_hub.evaluations.utils.html"><font color="#ffffff">utils</font></a>.validation_utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/utils/validation_utils.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/utils/validation_utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-extract_deployment_id"><strong>extract_deployment_id</strong></a>(orch_url) -&gt; str</dt></dl>
+ <dl><dt><a name="-fetch_and_validate_orchestration_config"><strong>fetch_and_validate_orchestration_config</strong></a>(ai_core_client: ai_core_sdk.ai_core_v2_client.AICoreV2Client, configuration_id: str, orchestration_config_data: List[dict], resource_group: str, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt></dl>
+ <dl><dt><a name="-validate_config_data_collection"><strong>validate_config_data_collection</strong></a>(accumulated_config_data: Union[List[gen_ai_hub.evaluations._internal._models._EvaluationConfigData], gen_ai_hub.evaluations._internal._models._EvaluationConfigData], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt><dd><tt>wrapper&nbsp;function&nbsp;to&nbsp;perform&nbsp;validation&nbsp;of&nbsp;fetched&nbsp;config&nbsp;data&nbsp;in&nbsp;case&nbsp;of&nbsp;single&nbsp;vs&nbsp;multiple&nbsp;executions&nbsp;flow</tt></dd></dl>
+ <dl><dt><a name="-validate_filtered_models"><strong>validate_filtered_models</strong></a>(configuration_param_bindings, orchestration_config_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt></dl>
+ <dl><dt><a name="-validate_input_config"><strong>validate_input_config</strong></a>(orchestration_config_data: List[dict], metrics: List[str], metric_templates: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt><dd><tt>Validates&nbsp;the&nbsp;input&nbsp;parameters&nbsp;of&nbsp;run&nbsp;data&nbsp;and&nbsp;metrics</tt></dd></dl>
+ <dl><dt><a name="-validate_merged_config_data"><strong>validate_merged_config_data</strong></a>(evaluation_config_data: gen_ai_hub.evaluations._internal._models._EvaluationConfigData, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt><dd><tt>handles&nbsp;the&nbsp;validation&nbsp;of&nbsp;config&nbsp;provided&nbsp;from&nbsp;the&nbsp;user</tt></dd></dl>
+ <dl><dt><a name="-validate_orchestration_configuration"><strong>validate_orchestration_configuration</strong></a>(orchestration_config_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt><dd><tt>Validates&nbsp;the&nbsp;Orchestration&nbsp;configuration&nbsp;provided&nbsp;by&nbsp;user</tt></dd></dl>
+ <dl><dt><a name="-validate_orchestration_url"><strong>validate_orchestration_url</strong></a>(evaluation_config_data: gen_ai_hub.evaluations._internal._models._EvaluationConfigData, orchestration_url: str, ai_core_client: ai_core_sdk.ai_core_v2_client.AICoreV2Client, resource_group: str, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector, proxy_client=None)</dt><dd><tt>Validates&nbsp;if&nbsp;the&nbsp;orchestration&nbsp;deployment&nbsp;url&nbsp;provided&nbsp;via&nbsp;config&nbsp;resides&nbsp;in&nbsp;same<br>
+resourceGroup&nbsp;as&nbsp;workload&nbsp;or&nbsp;not.&nbsp;Also&nbsp;validates&nbsp;if&nbsp;url&nbsp;is&nbsp;valid<br>
+and&nbsp;orchestration&nbsp;deployment&nbsp;is&nbsp;not&nbsp;in&nbsp;terminal&nbsp;state</tt></dd></dl>
+ <dl><dt><a name="-validate_orchestration_url_across_configs"><strong>validate_orchestration_url_across_configs</strong></a>(accumulated_config_data: Union[List[gen_ai_hub.evaluations._internal._models._EvaluationConfigData], gen_ai_hub.evaluations._internal._models._EvaluationConfigData], orchestration_url: str, ai_core_client: ai_core_sdk.ai_core_v2_client.AICoreV2Client, resource_group: str, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector, proxy_client=None)</dt><dd><tt>wrapper&nbsp;function&nbsp;to&nbsp;perform&nbsp;validation&nbsp;of&nbsp;fetched&nbsp;config&nbsp;data&nbsp;in&nbsp;case&nbsp;of&nbsp;single&nbsp;vs&nbsp;multiple&nbsp;executions&nbsp;flow</tt></dd></dl>
+ <dl><dt><a name="-validate_variable_mapping_with_input_config"><strong>validate_variable_mapping_with_input_config</strong></a>(orchestration_config_data: List[dict], dataset_data: dict, variable_mapping: dict, metrics: List[str], metric_templates: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector)</dt><dd><tt>Validates&nbsp;all&nbsp;the&nbsp;required&nbsp;variable&nbsp;mappings&nbsp;provided&nbsp;in&nbsp;input&nbsp;config&nbsp;with&nbsp;a&nbsp;zero-tolerance&nbsp;failure&nbsp;threshold.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;orchestration_config_data(list):&nbsp;Orchestration&nbsp;run&nbsp;configuration<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(dict):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(list[str]):&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metric_templates&nbsp;(list[dict]):&nbsp;Metric&nbsp;templates&nbsp;information&nbsp;resolved&nbsp;from&nbsp;Metric&nbsp;Management&nbsp;Service<br>
+&nbsp;&nbsp;&nbsp;&nbsp;error_collector&nbsp;(ValidationCollector):&nbsp;To&nbsp;accumulate&nbsp;the&nbsp;errors&nbsp;occurred&nbsp;during&nbsp;the&nbsp;process<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;required&nbsp;variable&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;or&nbsp;the&nbsp;default&nbsp;column&nbsp;does&nbsp;not&nbsp;exist&nbsp;in&nbsp;the&nbsp;dataset.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>List</strong> = typing.List<br>
+<strong>logger</strong> = &lt;Logger gen_ai_evaluations_sdk (INFO)&gt;</td></tr></table>
+</body></html>

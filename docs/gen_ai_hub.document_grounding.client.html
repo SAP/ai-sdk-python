@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.document_grounding.client</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.document_grounding.html"><font color="#ffffff">document_grounding</font></a>.client</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/document_grounding/client.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/document_grounding/client.py</a></font></td></tr></table>
+    <p><tt>Client&nbsp;module&nbsp;for&nbsp;Document&nbsp;Grounding&nbsp;API.<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;provides&nbsp;convenient&nbsp;imports&nbsp;for&nbsp;all&nbsp;Document&nbsp;Grounding&nbsp;API&nbsp;clients<br>
+and&nbsp;their&nbsp;associated&nbsp;constants.&nbsp;It&nbsp;serves&nbsp;as&nbsp;the&nbsp;main&nbsp;entry&nbsp;point&nbsp;for&nbsp;accessing<br>
+Pipeline,&nbsp;Retrieval,&nbsp;and&nbsp;Vector&nbsp;API&nbsp;functionality.<br>
+&nbsp;<br>
+Exported&nbsp;clients:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;<a href="#PipelineAPIClient">PipelineAPIClient</a>:&nbsp;Client&nbsp;for&nbsp;managing&nbsp;document&nbsp;vectorization&nbsp;pipelines<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;<a href="#RetrievalAPIClient">RetrievalAPIClient</a>:&nbsp;Client&nbsp;for&nbsp;retrieval&nbsp;operations&nbsp;across&nbsp;data&nbsp;repositories<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;<a href="#VectorAPIClient">VectorAPIClient</a>:&nbsp;Client&nbsp;for&nbsp;vector&nbsp;collection&nbsp;management&nbsp;and&nbsp;semantic&nbsp;search<br>
+&nbsp;<br>
+Exported&nbsp;constants:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;PATH_DOCUMENT_GROUNDING:&nbsp;Base&nbsp;path&nbsp;for&nbsp;document&nbsp;grounding&nbsp;endpoints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;PATH_DOCUMENT_GROUNDING_PIPELINES:&nbsp;Path&nbsp;for&nbsp;pipeline&nbsp;endpoints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;PATH_DOCUMENT_GROUNDING_RETRIEVAL:&nbsp;Path&nbsp;for&nbsp;retrieval&nbsp;endpoints<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;PATH_DOCUMENT_GROUNDING_VECTOR:&nbsp;Path&nbsp;for&nbsp;vector&nbsp;endpoints</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.document_grounding.clients.pipeline_api_client.html#PipelineAPIClient">gen_ai_hub.document_grounding.clients.pipeline_api_client.PipelineAPIClient</a>
+</font></dt><dt><font face="helvetica, arial"><a href="gen_ai_hub.document_grounding.clients.retrieval_api_client.html#RetrievalAPIClient">gen_ai_hub.document_grounding.clients.retrieval_api_client.RetrievalAPIClient</a>
+</font></dt><dt><font face="helvetica, arial"><a href="gen_ai_hub.document_grounding.clients.vector_api_client.html#VectorAPIClient">gen_ai_hub.document_grounding.clients.vector_api_client.VectorAPIClient</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PipelineAPIClient">class <strong>PipelineAPIClient</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#PipelineAPIClient">PipelineAPIClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+The&nbsp;Pipelines&nbsp;API&nbsp;creates&nbsp;and&nbsp;manages&nbsp;vector&nbsp;stores&nbsp;based&nbsp;on&nbsp;documents&nbsp;from&nbsp;user&nbsp;data&nbsp;repositories:<br>
+S3,&nbsp;SFTP,&nbsp;and&nbsp;Microsoft&nbsp;SharePoint.<br>
+Each&nbsp;pipeline&nbsp;represents&nbsp;a&nbsp;configured&nbsp;end-to-end&nbsp;process&nbsp;including&nbsp;the&nbsp;following&nbsp;steps:<br>
+&nbsp;<br>
+-&nbsp;Fetches&nbsp;documents&nbsp;from&nbsp;a&nbsp;supported&nbsp;data&nbsp;source<br>
+&nbsp;<br>
+-&nbsp;Preprocesses&nbsp;and&nbsp;chunks&nbsp;the&nbsp;document&nbsp;content,&nbsp;and&nbsp;generates&nbsp;semantic&nbsp;embeddings.&nbsp;<br>
+&nbsp;&nbsp;Semantic&nbsp;embeddings&nbsp;are&nbsp;multidimensional&nbsp;representations&nbsp;of&nbsp;textual&nbsp;information.<br>
+&nbsp;<br>
+-&nbsp;Stores&nbsp;semantic&nbsp;embeddings&nbsp;into&nbsp;the&nbsp;HANA&nbsp;Vector&nbsp;Store<br>
+&nbsp;<br>
+&nbsp;<br>
+The&nbsp;Pipeline&nbsp;API&nbsp;is&nbsp;compatible&nbsp;with&nbsp;the&nbsp;following&nbsp;data&nbsp;repositories:<br>
+&nbsp;<br>
+-&nbsp;Microsoft&nbsp;SharePoint<br>
+&nbsp;<br>
+-&nbsp;AWS&nbsp;S3<br>
+&nbsp;<br>
+-&nbsp;SFTP<br>
+&nbsp;<br>
+See&nbsp;<a href="https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Pipelines">https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Pipelines</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="PipelineAPIClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initializes&nbsp;the&nbsp;<a href="#PipelineAPIClient">PipelineAPIClient</a><br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;proxy&nbsp;client&nbsp;to&nbsp;use&nbsp;for&nbsp;requests,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-create_pipeline"><strong>create_pipeline</strong></a>(self, pipeline_request: Union[gen_ai_hub.document_grounding.models.pipeline.MSSharePointPipelineCreateRequest, gen_ai_hub.document_grounding.models.pipeline.S3PipelineCreateRequest, gen_ai_hub.document_grounding.models.pipeline.SFTPPipelineCreateRequest]) -&gt; gen_ai_hub.document_grounding.models.pipeline.PipelineIdResponse</dt><dd><tt>Create&nbsp;a&nbsp;document&nbsp;vectorization&nbsp;pipeline<br>
+&nbsp;<br>
+:param&nbsp;pipeline_request:&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;pipeline&nbsp;configuration.<br>
+:type&nbsp;pipeline_request:&nbsp;CreatePipelineRequest<br>
+:return:&nbsp;ID&nbsp;of&nbsp;the&nbsp;created&nbsp;pipeline<br>
+:rtype:&nbsp;PipelineIdResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-delete_pipeline_by_id"><strong>delete_pipeline_by_id</strong></a>(self, pipeline_id: str) -&gt; requests.models.Response</dt><dd><tt>Delete&nbsp;a&nbsp;pipeline&nbsp;by&nbsp;pipeline&nbsp;id<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;ID&nbsp;of&nbsp;the&nbsp;pipeline&nbsp;to&nbsp;delete<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:return:&nbsp;Response&nbsp;of&nbsp;the&nbsp;delete&nbsp;operation<br>
+:rtype:&nbsp;requests.Response</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_execution_document_by_id"><strong>get_execution_document_by_id</strong></a>(self, pipeline_id: str, execution_id: str, document_id: str) -&gt; gen_ai_hub.document_grounding.models.pipeline.Document</dt><dd><tt>Get&nbsp;Document&nbsp;by&nbsp;ID&nbsp;for&nbsp;a&nbsp;Pipeline&nbsp;Execution<br>
+&nbsp;<br>
+:return:&nbsp;Document&nbsp;for&nbsp;the&nbsp;Pipeline&nbsp;Execution<br>
+:rtype:&nbsp;Document</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_execution_documents"><strong>get_execution_documents</strong></a>(self, pipeline_id: str, execution_id: str, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.pipeline.DocumentsStatusResponse</dt><dd><tt>Get&nbsp;Documents&nbsp;for&nbsp;a&nbsp;Pipeline&nbsp;Execution<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:param&nbsp;execution_id:&nbsp;Execution&nbsp;ID<br>
+:type&nbsp;execution_id:&nbsp;str<br>
+:param&nbsp;top:&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;return,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;flag&nbsp;to&nbsp;include&nbsp;count&nbsp;of&nbsp;total&nbsp;documents,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;Documents&nbsp;for&nbsp;the&nbsp;Pipeline&nbsp;Execution<br>
+:rtype:&nbsp;DocumentsStatusResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_by_id"><strong>get_pipeline_by_id</strong></a>(self, pipeline_id: str) -&gt; gen_ai_hub.document_grounding.models.pipeline.BasePipelineResponse</dt><dd><tt>Get&nbsp;details&nbsp;of&nbsp;a&nbsp;pipeline&nbsp;by&nbsp;pipeline&nbsp;id.<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:return:&nbsp;Details&nbsp;of&nbsp;the&nbsp;pipeline<br>
+:rtype:&nbsp;BasePipelineResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_document_by_id"><strong>get_pipeline_document_by_id</strong></a>(self, pipeline_id: str, document_id: str) -&gt; gen_ai_hub.document_grounding.models.pipeline.Document</dt><dd><tt>Get&nbsp;Document&nbsp;by&nbsp;ID&nbsp;for&nbsp;a&nbsp;Pipeline<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:param&nbsp;document_id:&nbsp;Document&nbsp;ID<br>
+:type&nbsp;document_id:&nbsp;str<br>
+:return:&nbsp;Document&nbsp;for&nbsp;the&nbsp;Pipeline<br>
+:rtype:&nbsp;Document</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_documents"><strong>get_pipeline_documents</strong></a>(self, pipeline_id: str, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.pipeline.DocumentsStatusResponse</dt><dd><tt>Get&nbsp;Documents&nbsp;for&nbsp;a&nbsp;Pipeline<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:param&nbsp;top:&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;return,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;flag&nbsp;to&nbsp;include&nbsp;count&nbsp;of&nbsp;total&nbsp;documents,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;Documents&nbsp;for&nbsp;the&nbsp;Pipeline<br>
+:rtype:&nbsp;DocumentsStatusResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_execution_by_id"><strong>get_pipeline_execution_by_id</strong></a>(self, pipeline_id: str, execution_id: str) -&gt; gen_ai_hub.document_grounding.models.pipeline.PipelineExecution</dt><dd><tt>Get&nbsp;Pipeline&nbsp;Execution&nbsp;by&nbsp;ID<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:param&nbsp;execution_id:&nbsp;Execution&nbsp;ID<br>
+:type&nbsp;execution_id:&nbsp;str<br>
+:return:&nbsp;Pipeline&nbsp;Execution<br>
+:rtype:&nbsp;PipelineExecution</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_executions"><strong>get_pipeline_executions</strong></a>(self, pipeline_id: str, last_execution: Optional[bool] = None, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.pipeline.GetPipelineExecutionsResponse</dt><dd><tt>Get&nbsp;Pipeline&nbsp;Executions<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:param&nbsp;last_execution:&nbsp;flag&nbsp;to&nbsp;get&nbsp;only&nbsp;the&nbsp;last&nbsp;execution,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;last_execution:&nbsp;Optional[bool],&nbsp;optional<br>
+:param&nbsp;top:&nbsp;number&nbsp;of&nbsp;executions&nbsp;to&nbsp;retrieve,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;number&nbsp;of&nbsp;executions&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;flag&nbsp;to&nbsp;include&nbsp;count&nbsp;of&nbsp;total&nbsp;executions,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;Pipeline&nbsp;Executions<br>
+:rtype:&nbsp;GetPipelineExecutionsResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipeline_status"><strong>get_pipeline_status</strong></a>(self, pipeline_id: str) -&gt; gen_ai_hub.document_grounding.models.pipeline.GetPipelineStatusResponse</dt><dd><tt>Get&nbsp;pipeline&nbsp;status&nbsp;by&nbsp;pipeline&nbsp;id<br>
+&nbsp;<br>
+:param&nbsp;pipeline_id:&nbsp;Pipeline&nbsp;ID<br>
+:type&nbsp;pipeline_id:&nbsp;str<br>
+:return:&nbsp;Status&nbsp;of&nbsp;the&nbsp;pipeline<br>
+:rtype:&nbsp;GetPipelineStatusResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-get_pipelines"><strong>get_pipelines</strong></a>(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.pipeline.GetPipelinesResponse</dt><dd><tt>Get&nbsp;all&nbsp;pipelines.<br>
+&nbsp;<br>
+:return:&nbsp;Get&nbsp;all&nbsp;pipelines<br>
+:rtype:&nbsp;GetPipelinesResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-search_pipelines"><strong>search_pipelines</strong></a>(self, body: gen_ai_hub.document_grounding.models.pipeline.SearchPipelineRequest) -&gt; gen_ai_hub.document_grounding.models.pipeline.SearchPipelinesResponse</dt><dd><tt>Pipeline&nbsp;Search&nbsp;by&nbsp;Metadata<br>
+&nbsp;<br>
+:param&nbsp;body:&nbsp;The&nbsp;search&nbsp;request&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;metadata&nbsp;filters.<br>
+:type&nbsp;body:&nbsp;SearchPipelineRequest<br>
+:return:&nbsp;Search&nbsp;results&nbsp;containing&nbsp;matching&nbsp;pipelines.<br>
+:rtype:&nbsp;SearchPipelinesResponse</tt></dd></dl>
+
+<dl><dt><a name="PipelineAPIClient-trigger_pipeline"><strong>trigger_pipeline</strong></a>(self, request: gen_ai_hub.document_grounding.models.pipeline.ManualPipelineTrigger) -&gt; requests.models.Response</dt><dd><tt>Trigger&nbsp;Pipeline&nbsp;Manually<br>
+&nbsp;<br>
+:param&nbsp;request:&nbsp;The&nbsp;manual&nbsp;trigger&nbsp;request&nbsp;<a href="builtins.html#object">object</a>.<br>
+:type&nbsp;request:&nbsp;ManualPipelineTrigger<br>
+:return:&nbsp;Response&nbsp;of&nbsp;the&nbsp;trigger&nbsp;operation<br>
+:rtype:&nbsp;requests.Response</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RetrievalAPIClient">class <strong>RetrievalAPIClient</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#RetrievalAPIClient">RetrievalAPIClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+The&nbsp;Retrieval&nbsp;API&nbsp;enables&nbsp;querying&nbsp;and&nbsp;retrieving&nbsp;relevant&nbsp;content&nbsp;from&nbsp;configured&nbsp;data&nbsp;repositories,<br>
+such&nbsp;as&nbsp;vector&nbsp;or&nbsp;external&nbsp;document&nbsp;sources&nbsp;(e.g.,&nbsp;help.sap.com).<br>
+&nbsp;<br>
+Retrieval&nbsp;combines&nbsp;semantic&nbsp;search&nbsp;with&nbsp;repository&nbsp;metadata&nbsp;filtering&nbsp;and&nbsp;supports&nbsp;custom<br>
+retrieval&nbsp;configurations&nbsp;for&nbsp;chunk/document&nbsp;granularity.<br>
+&nbsp;<br>
+Reference:&nbsp;<a href="https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval">https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="RetrievalAPIClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initialize&nbsp;the&nbsp;<a href="#RetrievalAPIClient">RetrievalAPIClient</a>.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;Optional&nbsp;proxy&nbsp;client&nbsp;for&nbsp;making&nbsp;API&nbsp;requests.<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-get_data_repositories"><strong>get_data_repositories</strong></a>(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.retrieval.DataRepositories</dt><dd><tt>List&nbsp;all&nbsp;data&nbsp;repositories&nbsp;available&nbsp;to&nbsp;the&nbsp;tenant.<br>
+&nbsp;<br>
+:param&nbsp;top:&nbsp;the&nbsp;number&nbsp;of&nbsp;items&nbsp;to&nbsp;return,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;the&nbsp;number&nbsp;of&nbsp;items&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;whether&nbsp;to&nbsp;include&nbsp;a&nbsp;count&nbsp;of&nbsp;total&nbsp;items,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;DataRepositories&nbsp;model&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;data&nbsp;repositories<br>
+:rtype:&nbsp;DataRepositories</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-get_data_repository_by_id"><strong>get_data_repository_by_id</strong></a>(self, repository_id: str) -&gt; gen_ai_hub.document_grounding.models.retrieval.DataRepository</dt><dd><tt>Get&nbsp;a&nbsp;single&nbsp;data&nbsp;repository&nbsp;by&nbsp;its&nbsp;unique&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;repository_id:&nbsp;the&nbsp;unique&nbsp;identifier&nbsp;of&nbsp;the&nbsp;data&nbsp;repository<br>
+:type&nbsp;repository_id:&nbsp;str<br>
+:return:&nbsp;DataRepository&nbsp;model&nbsp;representing&nbsp;the&nbsp;data&nbsp;repository<br>
+:rtype:&nbsp;DataRepository</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-search"><strong>search</strong></a>(self, search_input: gen_ai_hub.document_grounding.models.retrieval.RetrievalSearchInput) -&gt; gen_ai_hub.document_grounding.models.retrieval.RetrievalSearchResults</dt><dd><tt>Perform&nbsp;a&nbsp;retrieval&nbsp;search&nbsp;for&nbsp;relevant&nbsp;content.<br>
+&nbsp;<br>
+:param&nbsp;search_input:&nbsp;RetrievalSearchInput&nbsp;model&nbsp;defining&nbsp;the&nbsp;query&nbsp;and&nbsp;filters.<br>
+:type&nbsp;search_input:&nbsp;RetrievalSearchInput<br>
+:return:&nbsp;RetrievalSearchResults&nbsp;model&nbsp;containing&nbsp;repositories,&nbsp;documents,&nbsp;and&nbsp;chunks.<br>
+:rtype:&nbsp;RetrievalSearchResults</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="VectorAPIClient">class <strong>VectorAPIClient</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#VectorAPIClient">VectorAPIClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+The&nbsp;Vector&nbsp;API&nbsp;provides&nbsp;management&nbsp;and&nbsp;search&nbsp;capabilities&nbsp;for&nbsp;vector-based&nbsp;document&nbsp;collections.<br>
+&nbsp;<br>
+It&nbsp;enables&nbsp;creating,&nbsp;retrieving,&nbsp;updating,&nbsp;and&nbsp;deleting&nbsp;collections,&nbsp;as&nbsp;well&nbsp;as<br>
+managing&nbsp;documents&nbsp;and&nbsp;performing&nbsp;semantic&nbsp;vector&nbsp;searches&nbsp;within&nbsp;those&nbsp;collections.<br>
+&nbsp;<br>
+Reference:&nbsp;<a href="https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Vector">https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Vector</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="VectorAPIClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initializes&nbsp;the&nbsp;<a href="#VectorAPIClient">VectorAPIClient</a><br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;Optional&nbsp;proxy&nbsp;client&nbsp;to&nbsp;use&nbsp;for&nbsp;requests<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-create_collection"><strong>create_collection</strong></a>(self, collection_request: gen_ai_hub.document_grounding.models.vector.CollectionCreateRequest) -&gt; requests.models.Response</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_request:&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;collection&nbsp;configuration.<br>
+:type&nbsp;collection_request:&nbsp;CollectionCreateRequest<br>
+:return:&nbsp;requests.Response&nbsp;empty&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;202&nbsp;status&nbsp;code<br>
+:rtype:&nbsp;requests.Response</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-create_documents"><strong>create_documents</strong></a>(self, collection_id: str, request: gen_ai_hub.document_grounding.models.vector.DocumentsCreateRequest) -&gt; gen_ai_hub.document_grounding.models.vector.DocumentsListResponse</dt><dd><tt>Create&nbsp;documents&nbsp;in&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;add&nbsp;documents&nbsp;to.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:param&nbsp;request:&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;documents&nbsp;to&nbsp;create.<br>
+:type&nbsp;request:&nbsp;DocumentsCreateRequest<br>
+:return:&nbsp;A&nbsp;DocumentsListResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;created&nbsp;documents<br>
+:rtype:&nbsp;DocumentsListResponse</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-delete_collection"><strong>delete_collection</strong></a>(self, collection_id: str) -&gt; requests.models.Response</dt><dd><tt>Delete&nbsp;collection&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;delete.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:return:&nbsp;requests.Response&nbsp;empty&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;204&nbsp;status&nbsp;code<br>
+:rtype:&nbsp;requests.Response</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-delete_document"><strong>delete_document</strong></a>(self, collection_id: str, document_id: str) -&gt; requests.models.Response</dt><dd><tt>Delete&nbsp;a&nbsp;document&nbsp;from&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;delete&nbsp;the&nbsp;document&nbsp;from.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:param&nbsp;document_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;document&nbsp;to&nbsp;delete.<br>
+:type&nbsp;document_id:&nbsp;str<br>
+:return:&nbsp;requests.Response&nbsp;empty&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;204&nbsp;status&nbsp;code<br>
+:rtype:&nbsp;requests.Response</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_collection_by_id"><strong>get_collection_by_id</strong></a>(self, collection_id: str) -&gt; gen_ai_hub.document_grounding.models.vector.Collection</dt><dd><tt>Get&nbsp;collection&nbsp;details&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;retrieve.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;Collection&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;collection&nbsp;details<br>
+:rtype:&nbsp;Collection</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_collection_creation_status"><strong>get_collection_creation_status</strong></a>(self, collection_id: str) -&gt; typing.Annotated[gen_ai_hub.document_grounding.models.vector.CollectionCreatedResponse | gen_ai_hub.document_grounding.models.vector.CollectionPendingResponse, FieldInfo(annotation=NoneType, required=True, discriminator='status')]</dt><dd><tt>Get&nbsp;creation&nbsp;status&nbsp;for&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;retrieve&nbsp;the&nbsp;creation&nbsp;status&nbsp;for.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;CollectionCreationStatusResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;creation&nbsp;status<br>
+:rtype:&nbsp;CollectionCreationStatusResponse</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_collection_deletion_status"><strong>get_collection_deletion_status</strong></a>(self, collection_id: str) -&gt; typing.Annotated[gen_ai_hub.document_grounding.models.vector.CollectionDeletedResponse | gen_ai_hub.document_grounding.models.vector.CollectionPendingResponse, FieldInfo(annotation=NoneType, required=True, discriminator='status')]</dt><dd><tt>Get&nbsp;deletion&nbsp;status&nbsp;for&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;retrieve&nbsp;the&nbsp;deletion&nbsp;status&nbsp;for.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;CollectionDeletionStatusResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;deletion&nbsp;status<br>
+:rtype:&nbsp;CollectionDeletionStatusResponse</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_collections"><strong>get_collections</strong></a>(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.vector.CollectionsListResponse</dt><dd><tt>Get&nbsp;all&nbsp;collections.<br>
+&nbsp;<br>
+:param&nbsp;top:&nbsp;the&nbsp;number&nbsp;of&nbsp;collections&nbsp;to&nbsp;retrieve,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;the&nbsp;number&nbsp;of&nbsp;collections&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;whether&nbsp;to&nbsp;include&nbsp;the&nbsp;total&nbsp;count&nbsp;of&nbsp;collections,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;A&nbsp;CollectionsListResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;collections<br>
+:rtype:&nbsp;CollectionsListResponse</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_document_by_id"><strong>get_document_by_id</strong></a>(self, collection_id: str, document_id: str) -&gt; gen_ai_hub.document_grounding.models.vector.Document</dt><dd><tt>Get&nbsp;a&nbsp;document&nbsp;by&nbsp;ID&nbsp;from&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;retrieve&nbsp;the&nbsp;document&nbsp;from.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:param&nbsp;document_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;document&nbsp;to&nbsp;retrieve.<br>
+:type&nbsp;document_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;Document&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;document&nbsp;details<br>
+:rtype:&nbsp;Document</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-get_documents"><strong>get_documents</strong></a>(self, collection_id: str, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.vector.DocumentsResponse</dt><dd><tt>Get&nbsp;documents&nbsp;from&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;retrieve&nbsp;documents&nbsp;from.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:param&nbsp;top:&nbsp;the&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;retrieve,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;the&nbsp;number&nbsp;of&nbsp;documents&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;whether&nbsp;to&nbsp;include&nbsp;the&nbsp;total&nbsp;count&nbsp;of&nbsp;documents,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;A&nbsp;DocumentsResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;documents<br>
+:rtype:&nbsp;DocumentsResponse</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-search"><strong>search</strong></a>(self, request: gen_ai_hub.document_grounding.models.vector.TextSearchRequest) -&gt; gen_ai_hub.document_grounding.models.vector.VectorSearchResults</dt><dd><tt>Perform&nbsp;semantic&nbsp;search&nbsp;in&nbsp;vector&nbsp;collections.<br>
+&nbsp;<br>
+:param&nbsp;request:&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;search&nbsp;parameters.<br>
+:type&nbsp;request:&nbsp;TextSearchRequest<br>
+:return:&nbsp;A&nbsp;VectorSearchResults&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;search&nbsp;results<br>
+:rtype:&nbsp;VectorSearchResults</tt></dd></dl>
+
+<dl><dt><a name="VectorAPIClient-update_documents"><strong>update_documents</strong></a>(self, collection_id: str, request: gen_ai_hub.document_grounding.models.vector.DocumentsUpdateRequest) -&gt; gen_ai_hub.document_grounding.models.vector.DocumentsListResponse</dt><dd><tt>Update&nbsp;documents&nbsp;in&nbsp;a&nbsp;collection.<br>
+&nbsp;<br>
+:param&nbsp;collection_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;collection&nbsp;to&nbsp;update&nbsp;documents&nbsp;in.<br>
+:type&nbsp;collection_id:&nbsp;str<br>
+:param&nbsp;request:&nbsp;The&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;documents&nbsp;to&nbsp;update.<br>
+:type&nbsp;request:&nbsp;DocumentsUpdateRequest<br>
+:return:&nbsp;A&nbsp;DocumentsListResponse&nbsp;<a href="builtins.html#object">object</a>&nbsp;containing&nbsp;the&nbsp;updated&nbsp;documents<br>
+:rtype:&nbsp;DocumentsListResponse</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['PipelineAPIClient', 'RetrievalAPIClient', 'VectorAPIClient']</td></tr></table>
+</body></html>

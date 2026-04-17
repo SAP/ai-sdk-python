@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.orchestration.models.template_ref</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.orchestration.html"><font color="#ffffff">orchestration</font></a>.<a href="gen_ai_hub.orchestration.models.html"><font color="#ffffff">models</font></a>.template_ref</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/template_ref.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/template_ref.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>(<a href="abc.html#ABC">abc.ABC</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.template_ref.html#TemplateRef">TemplateRef</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TemplateRef">class <strong>TemplateRef</strong></a>(<a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#TemplateRef">TemplateRef</a>(**kwargs)<br>
+&nbsp;<br>
+Represents&nbsp;a&nbsp;prompt&nbsp;template&nbsp;reference&nbsp;for&nbsp;generating&nbsp;prompts&nbsp;or&nbsp;conversations.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;factory&nbsp;class&nbsp;for&nbsp;creating&nbsp;a&nbsp;reference&nbsp;to&nbsp;a&nbsp;prompt&nbsp;template.<br>
+It&nbsp;is&nbsp;used&nbsp;to&nbsp;reference&nbsp;a&nbsp;template&nbsp;by&nbsp;id,&nbsp;or&nbsp;the&nbsp;tuple:&nbsp;scenario,&nbsp;name,&nbsp;version<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.template_ref.html#TemplateRef">TemplateRef</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="TemplateRef-__init__"><strong>__init__</strong></a>(self, **kwargs)</dt><dd><tt>Initializes&nbsp;a&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;with&nbsp;dynamic&nbsp;attributes.</tt></dd></dl>
+
+<dl><dt><a name="TemplateRef-to_dict"><strong>to_dict</strong></a>(self)</dt><dd><tt>Converts&nbsp;the&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;to&nbsp;a&nbsp;dictionary&nbsp;representation.<br>
+&nbsp;<br>
+:return:&nbsp;A&nbsp;dictionary&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance.<br>
+:rtype:&nbsp;dict</tt></dd></dl>
+
+<hr>
+Class methods defined here:<br>
+<dl><dt><a name="TemplateRef-from_id"><strong>from_id</strong></a>(prompt_template_id: str)<font color="#909090"><font face="helvetica, arial"> from <a href="abc.html#ABCMeta">abc.ABCMeta</a></font></font></dt><dd><tt>Creates&nbsp;a&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;from&nbsp;a&nbsp;prompt&nbsp;template&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;prompt_template_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;prompt_template_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;with&nbsp;the&nbsp;specified&nbsp;ID.<br>
+:rtype:&nbsp;<a href="#TemplateRef">TemplateRef</a></tt></dd></dl>
+
+<dl><dt><a name="TemplateRef-from_tuple"><strong>from_tuple</strong></a>(scenario: str, name: str, version: str)<font color="#909090"><font face="helvetica, arial"> from <a href="abc.html#ABCMeta">abc.ABCMeta</a></font></font></dt><dd><tt>Creates&nbsp;a&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;from&nbsp;a&nbsp;scenario,&nbsp;name,&nbsp;and&nbsp;version.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;The&nbsp;scenario&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;The&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;version:&nbsp;str<br>
+:return:&nbsp;A&nbsp;<a href="#TemplateRef">TemplateRef</a>&nbsp;instance&nbsp;with&nbsp;the&nbsp;specified&nbsp;scenario,&nbsp;name,&nbsp;and&nbsp;version.<br>
+:rtype:&nbsp;<a href="#TemplateRef">TemplateRef</a></tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

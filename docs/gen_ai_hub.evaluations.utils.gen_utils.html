@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.evaluations.utils.gen_utils</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.evaluations.html"><font color="#ffffff">evaluations</font></a>.<a href="gen_ai_hub.evaluations.utils.html"><font color="#ffffff">utils</font></a>.gen_utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/utils/gen_utils.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/utils/gen_utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-build_model_versions_map"><strong>build_model_versions_map</strong></a>(model_list) -&gt; Dict[str, List[str]]</dt><dd><tt>Builds&nbsp;a&nbsp;map&nbsp;of&nbsp;model&nbsp;names&nbsp;to&nbsp;their&nbsp;versions.</tt></dd></dl>
+ <dl><dt><a name="-check_if_content_filter_provider_supported"><strong>check_if_content_filter_provider_supported</strong></a>(orch_config: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; bool</dt><dd><tt>Validates&nbsp;if&nbsp;all&nbsp;filters&nbsp;in&nbsp;the&nbsp;filtering&nbsp;module&nbsp;configuration&nbsp;are&nbsp;of&nbsp;supported&nbsp;types.<br>
+&nbsp;<br>
+:param&nbsp;orch_config:&nbsp;Orchestration&nbsp;configuration&nbsp;dictionary.<br>
+:type&nbsp;orch_config:&nbsp;dict<br>
+:param&nbsp;error_collector:&nbsp;ValidationCollector&nbsp;instance&nbsp;for&nbsp;collecting&nbsp;validation&nbsp;errors.<br>
+:type&nbsp;error_collector:&nbsp;ValidationCollector<br>
+:return:&nbsp;True&nbsp;if&nbsp;all&nbsp;filters&nbsp;are&nbsp;supported&nbsp;or&nbsp;no&nbsp;filtering&nbsp;is&nbsp;configured,&nbsp;False&nbsp;otherwise.<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+ <dl><dt><a name="-check_if_metric_is_defined"><strong>check_if_metric_is_defined</strong></a>(metrics: List[str], metric_templates: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt></dl>
+ <dl><dt><a name="-count_user_prompts_from_template_list"><strong>count_user_prompts_from_template_list</strong></a>(template_list) -&gt; int</dt></dl>
+ <dl><dt><a name="-create_custom_metric_name"><strong>create_custom_metric_name</strong></a>(custom_metric_config: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; str</dt><dd><tt>Creates&nbsp;a&nbsp;custom&nbsp;metric&nbsp;name&nbsp;based&nbsp;on&nbsp;the&nbsp;provided&nbsp;custom&nbsp;metric&nbsp;configuration.<br>
+&nbsp;<br>
+:param&nbsp;custom_metric_config:&nbsp;Dictionary&nbsp;containing&nbsp;metric&nbsp;configuration.<br>
+:param&nbsp;error_collector:&nbsp;ValidationCollector&nbsp;instance&nbsp;for&nbsp;collecting&nbsp;validation&nbsp;errors.<br>
+:return:&nbsp;A&nbsp;string&nbsp;representing&nbsp;the&nbsp;custom&nbsp;metric&nbsp;name.<br>
+:raises&nbsp;ValidationError:&nbsp;If&nbsp;required&nbsp;fields&nbsp;are&nbsp;missing&nbsp;or&nbsp;invalid.</tt></dd></dl>
+ <dl><dt><a name="-create_model_versions_map_from_configuration_param_bindings"><strong>create_model_versions_map_from_configuration_param_bindings</strong></a>(param_bindings, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; Tuple[Dict[str, List[str]], Optional[str]]</dt></dl>
+ <dl><dt><a name="-create_model_versions_map_from_custom_metric_config"><strong>create_model_versions_map_from_custom_metric_config</strong></a>(custom_metric_config_data) -&gt; Dict[str, List[str]]</dt></dl>
+ <dl><dt><a name="-create_model_versions_map_from_orch_configs"><strong>create_model_versions_map_from_orch_configs</strong></a>(orchestration_configs_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; Optional[Dict[str, List[str]]]</dt></dl>
+ <dl><dt><a name="-extract_dataset_columns"><strong>extract_dataset_columns</strong></a>(template_variables) -&gt; List[str]</dt><dd><tt>Extracts&nbsp;column&nbsp;names&nbsp;from&nbsp;the&nbsp;template&nbsp;variables&nbsp;provided.&nbsp;If&nbsp;the&nbsp;value&nbsp;is&nbsp;a&nbsp;list,&nbsp;extracts&nbsp;column&nbsp;names&nbsp;from&nbsp;the&nbsp;first&nbsp;rows;&nbsp;else,&nbsp;extracts&nbsp;from&nbsp;the&nbsp;template_variables&nbsp;directly.</tt></dd></dl>
+ <dl><dt><a name="-extract_metrics_variables"><strong>extract_metrics_variables</strong></a>(metric_templates, metric_name: str = None) -&gt; Set</dt><dd><tt>Extracts&nbsp;unique&nbsp;set&nbsp;of&nbsp;variables&nbsp;from&nbsp;the&nbsp;'variables'&nbsp;key.</tt></dd></dl>
+ <dl><dt><a name="-flatten_prompt_configuration"><strong>flatten_prompt_configuration</strong></a>(prompt_config: dict) -&gt; str</dt><dd><tt>Flatten&nbsp;a&nbsp;nested&nbsp;prompt&nbsp;configuration&nbsp;dictionary&nbsp;into&nbsp;a&nbsp;readable&nbsp;string.</tt></dd></dl>
+ <dl><dt><a name="-get_accumulated_config_data"><strong>get_accumulated_config_data</strong></a>(evaluation_configs_data: List[gen_ai_hub.evaluations._internal._models._EvaluationConfigData]) -&gt; gen_ai_hub.evaluations._internal._models._EvaluationConfigData</dt></dl>
+ <dl><dt><a name="-get_custom_metric_ids_from_input"><strong>get_custom_metric_ids_from_input</strong></a>(custom_metric_config_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; list[str]</dt><dd><tt>Retrieve&nbsp;custom&nbsp;metric&nbsp;ids&nbsp;from&nbsp;the&nbsp;file&nbsp;data&nbsp;provided&nbsp;by&nbsp;the&nbsp;user.<br>
+&nbsp;<br>
+:param&nbsp;custom_metric_config_data:&nbsp;List&nbsp;of&nbsp;dictionaries&nbsp;containing&nbsp;custom&nbsp;metric&nbsp;definitions.<br>
+:type&nbsp;custom_metric_config_data:&nbsp;List[dict]<br>
+:param&nbsp;error_collector:&nbsp;ValidationCollector&nbsp;instance&nbsp;for&nbsp;collecting&nbsp;validation&nbsp;errors.<br>
+:type&nbsp;error_collector:&nbsp;ValidationCollector<br>
+:return:&nbsp;List&nbsp;of&nbsp;custom&nbsp;metric&nbsp;ids.<br>
+:rtype:&nbsp;list[str]</tt></dd></dl>
+ <dl><dt><a name="-get_defaults"><strong>get_defaults</strong></a>(orchestration_configuration: dict) -&gt; dict</dt><dd><tt>Returns&nbsp;the&nbsp;default&nbsp;field&nbsp;from&nbsp;the&nbsp;orchestration&nbsp;configuration.</tt></dd></dl>
+ <dl><dt><a name="-get_filter_config"><strong>get_filter_config</strong></a>(orch_config: dict) -&gt; dict</dt><dd><tt>Extract&nbsp;the&nbsp;filtering&nbsp;configuration&nbsp;from&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+&nbsp;<br>
+:param&nbsp;orch_config:&nbsp;Orchestration&nbsp;configuration&nbsp;dictionary.<br>
+:type&nbsp;orch_config:&nbsp;dict<br>
+:return:&nbsp;Filtering&nbsp;configuration&nbsp;dictionary,&nbsp;or&nbsp;empty&nbsp;dict&nbsp;if&nbsp;not&nbsp;present.<br>
+:rtype:&nbsp;dict</tt></dd></dl>
+ <dl><dt><a name="-get_grounding_config_from_orch_config"><strong>get_grounding_config_from_orch_config</strong></a>(orch_config) -&gt; dict</dt><dd><tt>Extracts&nbsp;the&nbsp;grounding&nbsp;configuration&nbsp;from&nbsp;the&nbsp;orchestration&nbsp;configuration.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;orch_config&nbsp;(dict):&nbsp;Orchestration&nbsp;configuration.<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dict:&nbsp;Grounding&nbsp;configuration&nbsp;if&nbsp;present,&nbsp;otherwise&nbsp;an&nbsp;empty&nbsp;dictionary.</tt></dd></dl>
+ <dl><dt><a name="-get_grounding_output_param_key"><strong>get_grounding_output_param_key</strong></a>(orch_config: dict) -&gt; str</dt><dd><tt>Determines&nbsp;the&nbsp;correct&nbsp;key&nbsp;to&nbsp;extract&nbsp;the&nbsp;grounding&nbsp;output&nbsp;parameter&nbsp;based&nbsp;on&nbsp;the&nbsp;API&nbsp;version.<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;orch_config&nbsp;(dict):&nbsp;Orchestration&nbsp;configuration.<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;key&nbsp;to&nbsp;extract&nbsp;the&nbsp;grounding&nbsp;output&nbsp;parameter.</tt></dd></dl>
+ <dl><dt><a name="-get_mapped_value_if_exists"><strong>get_mapped_value_if_exists</strong></a>(key, mapping_keys, variable_mapping, dataset_columns) -&gt; str</dt><dd><tt>Gets&nbsp;the&nbsp;first&nbsp;valid&nbsp;mapped&nbsp;value&nbsp;from&nbsp;the&nbsp;list&nbsp;of&nbsp;keys&nbsp;if&nbsp;it&nbsp;exists&nbsp;in&nbsp;variable&nbsp;mapping,&nbsp;else&nbsp;returns&nbsp;the&nbsp;first&nbsp;key</tt></dd></dl>
+ <dl><dt><a name="-get_prompt_variables_from_orch_config"><strong>get_prompt_variables_from_orch_config</strong></a>(orch_config: dict) -&gt; Set[str]</dt></dl>
+ <dl><dt><a name="-get_template_list_from_orch_config"><strong>get_template_list_from_orch_config</strong></a>(orch_config) -&gt; List</dt></dl>
+ <dl><dt><a name="-handle_json_schema_match"><strong>handle_json_schema_match</strong></a>(metrics: list[str], dataset_data: list, variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt></dl>
+ <dl><dt><a name="-handle_language_match"><strong>handle_language_match</strong></a>(metrics: list, dataset_data: list, variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt></dl>
+ <dl><dt><a name="-handle_missing_dependent_variables_in_dataset"><strong>handle_missing_dependent_variables_in_dataset</strong></a>(dataset_data: List[dict], metrics: list[str], metric_templates: list[dict], variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>validates&nbsp;whether&nbsp;all&nbsp;the&nbsp;dependent&nbsp;variables&nbsp;for&nbsp;the&nbsp;metrics&nbsp;list&nbsp;are&nbsp;either&nbsp;directly&nbsp;present&nbsp;as&nbsp;columns&nbsp;in&nbsp;dataset&nbsp;or&nbsp;a&nbsp;variable&nbsp;mapping&nbsp;is&nbsp;provided<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(List[dict]):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate&nbsp;(list&nbsp;of&nbsp;row&nbsp;dictionaries)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(list[str]):&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metric_templates&nbsp;(list[dict]):&nbsp;Metric&nbsp;templates&nbsp;information&nbsp;resolved&nbsp;from&nbsp;Metric&nbsp;Management&nbsp;Service<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;dependent&nbsp;variable&nbsp;is&nbsp;missing&nbsp;in&nbsp;the&nbsp;dataset&nbsp;and&nbsp;the&nbsp;variable&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;for&nbsp;that&nbsp;metric.</tt></dd></dl>
+ <dl><dt><a name="-handle_reference_missing_rows"><strong>handle_reference_missing_rows</strong></a>(dataset_data: List[dict], variable_mapping: dict, metrics: list, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>validates&nbsp;whether&nbsp;the&nbsp;reference&nbsp;columns&nbsp;in&nbsp;the&nbsp;rows&nbsp;are&nbsp;missing&nbsp;in&nbsp;the&nbsp;dataset&nbsp;for&nbsp;all&nbsp;metrics&nbsp;and&nbsp;for&nbsp;each&nbsp;individual&nbsp;metrics<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(List[dict]):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate&nbsp;(list&nbsp;of&nbsp;row&nbsp;dictionaries)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(list):&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;required&nbsp;variable&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;or&nbsp;the&nbsp;default&nbsp;column&nbsp;does&nbsp;not&nbsp;exist&nbsp;in&nbsp;the&nbsp;dataset.</tt></dd></dl>
+ <dl><dt><a name="-has_filter_key"><strong>has_filter_key</strong></a>(orch_config: dict) -&gt; bool</dt><dd><tt>Check&nbsp;if&nbsp;the&nbsp;'filtering'&nbsp;key&nbsp;is&nbsp;present&nbsp;in&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+&nbsp;<br>
+:param&nbsp;orch_config:&nbsp;Orchestration&nbsp;configuration&nbsp;dictionary.<br>
+:type&nbsp;orch_config:&nbsp;dict<br>
+:return:&nbsp;True&nbsp;if&nbsp;filtering&nbsp;key&nbsp;is&nbsp;present,&nbsp;False&nbsp;otherwise.<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+ <dl><dt><a name="-is_value_in_json"><strong>is_value_in_json</strong></a>(value, name, data: dict[str, str]) -&gt; bool</dt><dd><tt>Check&nbsp;if&nbsp;a&nbsp;value&nbsp;matches&nbsp;a&nbsp;name&nbsp;or&nbsp;exists&nbsp;in&nbsp;a&nbsp;mapping&nbsp;dictionary.<br>
+&nbsp;<br>
+:param&nbsp;value:&nbsp;The&nbsp;value&nbsp;to&nbsp;search&nbsp;for.<br>
+:type&nbsp;value:&nbsp;Any<br>
+:param&nbsp;name:&nbsp;The&nbsp;name&nbsp;to&nbsp;compare&nbsp;against.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;data:&nbsp;Dictionary&nbsp;to&nbsp;search&nbsp;in&nbsp;(keys&nbsp;or&nbsp;values).<br>
+:type&nbsp;data:&nbsp;dict[str,&nbsp;str]<br>
+:return:&nbsp;True&nbsp;if&nbsp;value&nbsp;matches&nbsp;name&nbsp;or&nbsp;is&nbsp;found&nbsp;in&nbsp;data,&nbsp;False&nbsp;otherwise.<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+ <dl><dt><a name="-list_prompt_variables"><strong>list_prompt_variables</strong></a>(format_string: str) -&gt; list[str]</dt><dd><tt>Get&nbsp;all&nbsp;fields&nbsp;(parameters)&nbsp;of&nbsp;the&nbsp;form&nbsp;{{&nbsp;?param_name&nbsp;}}&nbsp;from&nbsp;the&nbsp;template.<br>
+Optionally&nbsp;return&nbsp;the&nbsp;raw&nbsp;field&nbsp;names&nbsp;without&nbsp;stripping&nbsp;spaces&nbsp;and&nbsp;'?'.</tt></dd></dl>
+ <dl><dt><a name="-parse_model_filter_list"><strong>parse_model_filter_list</strong></a>(param, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; List</dt><dd><tt>Parse&nbsp;and&nbsp;return&nbsp;model&nbsp;filter&nbsp;list&nbsp;from&nbsp;a&nbsp;param.</tt></dd></dl>
+ <dl><dt><a name="-populate_dataset_data_if_data_missing"><strong>populate_dataset_data_if_data_missing</strong></a>(dataset_data: list, variable_mapped_key, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;and&nbsp;Populates&nbsp;the&nbsp;dataset_data&nbsp;with&nbsp;missing&nbsp;data&nbsp;fields&nbsp;if&nbsp;golden&nbsp;truth&nbsp;is&nbsp;present&nbsp;and&nbsp;throws&nbsp;error&nbsp;if&nbsp;dataset&nbsp;is&nbsp;partially&nbsp;filled</tt></dd></dl>
+ <dl><dt><a name="-populate_dataset_data_if_individual_metric_reference_provided"><strong>populate_dataset_data_if_individual_metric_reference_provided</strong></a>(dataset_data: List[dict], variable_mapping: dict, metrics: list, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>populates&nbsp;reference&nbsp;value&nbsp;across&nbsp;all&nbsp;rows&nbsp;of&nbsp;dataset_data&nbsp;if&nbsp;individual&nbsp;metric&nbsp;reference&nbsp;is&nbsp;provided<br>
+and&nbsp;is&nbsp;different&nbsp;than&nbsp;all&nbsp;metrics&nbsp;reference&nbsp;provided.&nbsp;This&nbsp;population&nbsp;happens&nbsp;if&nbsp;the&nbsp;provided&nbsp;reference&nbsp;is&nbsp;a&nbsp;golden&nbsp;instance<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(List[dict]):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate&nbsp;(list&nbsp;of&nbsp;row&nbsp;dictionaries)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(list):&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.</tt></dd></dl>
+ <dl><dt><a name="-populate_dataset_data_if_single_reference_provided"><strong>populate_dataset_data_if_single_reference_provided</strong></a>(dataset_data: List[dict], variable_mapping: dict, collector) -&gt; None</dt><dd><tt>Populates&nbsp;the&nbsp;dataset_data&nbsp;with&nbsp;missing&nbsp;reference&nbsp;column&nbsp;entries&nbsp;across&nbsp;rows&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;for&nbsp;only&nbsp;all&nbsp;metrics&nbsp;case&nbsp;where&nbsp;a&nbsp;golden&nbsp;reference&nbsp;is&nbsp;present<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(List[dict]):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate&nbsp;(list&nbsp;of&nbsp;row&nbsp;dictionaries)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.</tt></dd></dl>
+ <dl><dt><a name="-populate_dataset_data_if_single_schema_provided"><strong>populate_dataset_data_if_single_schema_provided</strong></a>(dataset_data, variable_mapping, collector) -&gt; None</dt><dd><tt>Populates&nbsp;the&nbsp;dataset_data&nbsp;with&nbsp;missing&nbsp;json&nbsp;schema&nbsp;column&nbsp;entries&nbsp;across&nbsp;rows&nbsp;of&nbsp;dataset_data</tt></dd></dl>
+ <dl><dt><a name="-remove_filter_metrics_if_provider_not_supported"><strong>remove_filter_metrics_if_provider_not_supported</strong></a>(orchestration_config_data: List[dict], metrics: List[str], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Removes&nbsp;content&nbsp;filter-related&nbsp;metric&nbsp;IDs&nbsp;from&nbsp;the&nbsp;metrics&nbsp;list&nbsp;if&nbsp;the&nbsp;content&nbsp;filter<br>
+provider&nbsp;is&nbsp;not&nbsp;supported&nbsp;for&nbsp;any&nbsp;of&nbsp;the&nbsp;runs&nbsp;in&nbsp;orchestration_config_data.</tt></dd></dl>
+ <dl><dt><a name="-resolve_orchestration_config_v2"><strong>resolve_orchestration_config_v2</strong></a>(template_data: List[gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplate], llm: gen_ai_hub.orchestration_v2.models.llm_model_details.LLMModelDetails) -&gt; dict</dt></dl>
+ <dl><dt><a name="-select_model_details_randomly"><strong>select_model_details_randomly</strong></a>(orchestration_config_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; Optional[Tuple[str, str]]</dt><dd><tt>Selects&nbsp;at&nbsp;random,&nbsp;model&nbsp;name&nbsp;and&nbsp;version&nbsp;from&nbsp;the&nbsp;list&nbsp;of&nbsp;model&nbsp;names&nbsp;and&nbsp;versions&nbsp;provided&nbsp;by&nbsp;the&nbsp;users&nbsp;run&nbsp;data.</tt></dd></dl>
+ <dl><dt><a name="-set_model_details_from_run_configs"><strong>set_model_details_from_run_configs</strong></a>(orch_config) -&gt; Optional[Tuple[str, str]]</dt><dd><tt>Sets&nbsp;the&nbsp;model&nbsp;name&nbsp;and&nbsp;version&nbsp;from&nbsp;the&nbsp;run&nbsp;data&nbsp;if&nbsp;available.<br>
+If&nbsp;not&nbsp;available,&nbsp;it&nbsp;returns&nbsp;None.</tt></dd></dl>
+ <dl><dt><a name="-update_artifact_dict"><strong>update_artifact_dict</strong></a>(artifact_reference: gen_ai_hub.evaluations.models.artifact_source.ArtifactSource, artifact_dict_count: dict) -&gt; None</dt></dl>
+ <dl><dt><a name="-update_test_orch_config"><strong>update_test_orch_config</strong></a>(model_name, model_version, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; Optional[dict]</dt></dl>
+ <dl><dt><a name="-update_variable_mapping"><strong>update_variable_mapping</strong></a>(variable_mapping: dict, prefix_key: str, variable_mapping_dict: dict) -&gt; dict</dt></dl>
+ <dl><dt><a name="-validate_all_metrics_mapping"><strong>validate_all_metrics_mapping</strong></a>(variable_mapping: dict, dataset_columns: list, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;the&nbsp;variable&nbsp;mapping&nbsp;for&nbsp;'all_metrics'&nbsp;with&nbsp;a&nbsp;zero-tolerance&nbsp;failure&nbsp;threshold.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_columns&nbsp;(list):&nbsp;List&nbsp;of&nbsp;column&nbsp;names&nbsp;in&nbsp;the&nbsp;dataset.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;'all_metrics'&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;or&nbsp;the&nbsp;direct&nbsp;column&nbsp;does&nbsp;not&nbsp;exist&nbsp;in&nbsp;the&nbsp;dataset.</tt></dd></dl>
+ <dl><dt><a name="-validate_individual_custom_metrics"><strong>validate_individual_custom_metrics</strong></a>(variable_mapping: dict, dataset_columns: list, custom_metric_ids: list, custom_metric_variables: set, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;the&nbsp;variable&nbsp;mapping&nbsp;for&nbsp;any&nbsp;metric&nbsp;mapping&nbsp;with&nbsp;a&nbsp;zero-tolerance&nbsp;failure&nbsp;threshold.</tt></dd></dl>
+ <dl><dt><a name="-validate_individual_metrics"><strong>validate_individual_metrics</strong></a>(metrics: list[str], variable_mapping: dict, dataset_columns: list, metric_dependent_variables: set, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;the&nbsp;variable&nbsp;mapping&nbsp;for&nbsp;any&nbsp;metric&nbsp;mapping&nbsp;with&nbsp;a&nbsp;zero-tolerance&nbsp;failure&nbsp;threshold.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics&nbsp;(list):&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_columns&nbsp;(list):&nbsp;List&nbsp;of&nbsp;column&nbsp;names&nbsp;in&nbsp;the&nbsp;dataset.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metric_dependent_variables&nbsp;(set):&nbsp;Set&nbsp;of&nbsp;dependent&nbsp;variables&nbsp;for&nbsp;all&nbsp;metrics<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;metric&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;or&nbsp;the&nbsp;direct&nbsp;column&nbsp;does&nbsp;not&nbsp;exist&nbsp;in&nbsp;the&nbsp;dataset.</tt></dd></dl>
+ <dl><dt><a name="-validate_language_code_and_data_population"><strong>validate_language_code_and_data_population</strong></a>(dataset_data: list, variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Populates&nbsp;the&nbsp;dataset_data&nbsp;with&nbsp;missing&nbsp;language&nbsp;column&nbsp;entries&nbsp;across&nbsp;rows&nbsp;of&nbsp;dataset_data</tt></dd></dl>
+ <dl><dt><a name="-validate_metric_name"><strong>validate_metric_name</strong></a>(metric: str, all_supported_metrics: List, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;if&nbsp;metrics&nbsp;name&nbsp;is&nbsp;not&nbsp;empty&nbsp;and&nbsp;the&nbsp;value&nbsp;actually&nbsp;exists&nbsp;in&nbsp;the&nbsp;list&nbsp;of&nbsp;supported&nbsp;metrics</tt></dd></dl>
+ <dl><dt><a name="-validate_metrics"><strong>validate_metrics</strong></a>(metrics: List[str], metric_templates: List[dict], orchestration_config_data: List[dict], error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;if&nbsp;metrics&nbsp;list&nbsp;is&nbsp;empty&nbsp;or&nbsp;metric&nbsp;name&nbsp;is&nbsp;invalid</tt></dd></dl>
+ <dl><dt><a name="-validate_prompts_in_templating_module"><strong>validate_prompts_in_templating_module</strong></a>(orchestration_config_data: List[dict], metric: str, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Checks&nbsp;whether&nbsp;the&nbsp;templating&nbsp;config&nbsp;provided&nbsp;in&nbsp;the&nbsp;Orchestration&nbsp;Config&nbsp;has&nbsp;exactly&nbsp;one&nbsp;user&nbsp;prompt</tt></dd></dl>
+ <dl><dt><a name="-validate_variable_mapping_of_metrics"><strong>validate_variable_mapping_of_metrics</strong></a>(metrics: list[str], metric_templates: list[dict], dataset_data: List[dict], variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;variable&nbsp;mapping&nbsp;of&nbsp;metrics&nbsp;with&nbsp;tolerance&nbsp;to&nbsp;zero&nbsp;failure&nbsp;threshold<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metrics:&nbsp;List&nbsp;of&nbsp;metrics&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;config<br>
+&nbsp;&nbsp;&nbsp;&nbsp;metric_templates&nbsp;(list[dict]):&nbsp;Metric&nbsp;templates&nbsp;information&nbsp;resolved&nbsp;from&nbsp;Metric&nbsp;Management&nbsp;Service<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data:&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping:&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;input&nbsp;config<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Validates&nbsp;and&nbsp;throws&nbsp;validation&nbsp;error&nbsp;even&nbsp;if&nbsp;one&nbsp;variable&nbsp;mapping&nbsp;related&nbsp;to&nbsp;metrics&nbsp;is&nbsp;invalid.</tt></dd></dl>
+ <dl><dt><a name="-validate_variable_mapping_of_prompts"><strong>validate_variable_mapping_of_prompts</strong></a>(orchestration_config_data: list, dataset_data: List[dict], variable_mapping: dict, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector) -&gt; None</dt><dd><tt>Validates&nbsp;the&nbsp;variable&nbsp;mapping&nbsp;for&nbsp;prompts&nbsp;with&nbsp;a&nbsp;zero-tolerance&nbsp;failure&nbsp;threshold.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;orchestration_config_data&nbsp;(list):&nbsp;Orchestration&nbsp;run&nbsp;configuration<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dataset_data&nbsp;(dict):&nbsp;Dataset&nbsp;rows&nbsp;to&nbsp;validate<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variable_mapping&nbsp;(dict):&nbsp;The&nbsp;variable&nbsp;mapping&nbsp;provided&nbsp;in&nbsp;the&nbsp;input&nbsp;configuration.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValidationError:&nbsp;If&nbsp;any&nbsp;prompts&nbsp;variable&nbsp;mapping&nbsp;is&nbsp;invalid&nbsp;or&nbsp;does&nbsp;not&nbsp;exist&nbsp;in&nbsp;the&nbsp;dataset.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>AICORE_LLM_COMPLETION_KEY</strong> = 'aicore_llm_completion'<br>
+<strong>AICORE_LLM_PROMPT_TEMPLATE_KEY</strong> = 'prompt'<br>
+<strong>ALL_METRICS_COLUMN_MAPPING_KEY</strong> = 'all_metrics'<br>
+<strong>AZURE_CONTENT_SAFETY_KEY</strong> = 'azure_content_safety'<br>
+<strong>Any</strong> = typing.Any<br>
+<strong>COLUMN_MAPPING_DEFAULT_KEYS</strong> = ['prompt', 'all_metrics']<br>
+<strong>CONFIG_KEY</strong> = 'config'<br>
+<strong>CONTENT_FILTER_ON_INPUT_METRIC_ID</strong> = 'content_filter_on_input'<br>
+<strong>CONTENT_FILTER_ON_OUTPUT_METRIC_ID</strong> = 'content_filter_on_output'<br>
+<strong>Dict</strong> = typing.Dict<br>
+<strong>FILTERS_KEY</strong> = 'filters'<br>
+<strong>ID</strong> = 'id'<br>
+<strong>INPUT_VARIABLE_REGEX_PATTERN</strong> = r'(?&lt;=\{\{).+?(?=\}\})'<br>
+<strong>JSON_SCHEMA_KEY</strong> = 'json_schema'<br>
+<strong>JSON_SCHEMA_MATCH_METRIC_ID</strong> = 'json_schema_match'<br>
+<strong>LANGUAGE_KEY</strong> = 'language'<br>
+<strong>LANGUAGE_MATCH_METRIC_ID</strong> = 'f3ad2f40-8fcd-41ba-8a9a-fb82469bf99b'<br>
+<strong>LATEST_MODEL_VERSION_KEY</strong> = 'latest'<br>
+<strong>LLAMA_GUARD_CONTENT_SAFETY_KEY</strong> = 'llama_guard_3_8b'<br>
+<strong>LLM_AS_A_JUDGE</strong> = 'llm-as-a-judge'<br>
+<strong>LLM_MODULE_V2_NAME_KEY</strong> = 'name'<br>
+<strong>LLM_MODULE_V2_PARAMETERS_KEY</strong> = 'parameters'<br>
+<strong>LLM_MODULE_V2_VERSION_KEY</strong> = 'version'<br>
+<strong>List</strong> = typing.List<br>
+<strong>MODEL_CONFIGURATION_KEY</strong> = 'model_configuration'<br>
+<strong>MODEL_FILTER_LIST_KEY</strong> = 'modelFilterList'<br>
+<strong>MODEL_FILTER_LIST_TYPE_KEY</strong> = 'modelFilterListType'<br>
+<strong>MODEL_KEY</strong> = 'model'<br>
+<strong>MODEL_NAME_KEY</strong> = 'model_name'<br>
+<strong>MODEL_VERSION_KEY</strong> = 'model_version'<br>
+<strong>MODULES_KEY</strong> = 'modules'<br>
+<strong>NAME_KEY</strong> = 'name'<br>
+<strong>ORCHESTRATION_CONFIGURATION_V2</strong> = {'config': {'modules': {'prompt_templating': {'model': {'name': '', 'params': {}, 'version': ''}, 'prompt': {'defaults': {}, 'template': [{...}]}}}}}<br>
+<strong>ORCHESTRATION_CONFIG_TEMPLATE_V2</strong> = {'modules': {'prompt_templating': {'model': {}, 'prompt': {}}}}<br>
+<strong>Optional</strong> = typing.Optional<br>
+<strong>PREDEFINED_SYSTEM_VARIABLES_LIST</strong> = ['aicore_llm_completion', 'prompt', 'grounding_query', 'grounding_response']<br>
+<strong>PROMPT_KEY</strong> = 'prompt'<br>
+<strong>PROMPT_REGISTRY_CONTENT_KEY</strong> = 'content'<br>
+<strong>PROMPT_REGISTRY_ROLE_KEY</strong> = 'role'<br>
+<strong>PROMPT_TEMPLATING_KEY</strong> = 'prompt_templating'<br>
+<strong>REFERENCE_KEY</strong> = 'reference'<br>
+<strong>SYSTEM_DEFINED_METRIC_MAPPING</strong> = {'bert_score': 'BERT Score', 'bleu': 'BLEU', 'content_filter_on_input': 'Content Filter on Input', 'content_filter_on_output': 'Content Filter on Output', 'exact_match': 'Exact Match', 'f3ad2f40-8fcd-41ba-8a9a-fb82469bf99b': 'Language Match', 'json_schema_match': 'JSON Schema Match', 'pointwise_answer_relevance': 'Pointwise Answer Relevance', 'pointwise_conciseness': 'Pointwise Conciseness', 'pointwise_correctness': 'Pointwise Correctness', ...}<br>
+<strong>Set</strong> = typing.Set<br>
+<strong>TEMPLATE_KEY</strong> = 'template'<br>
+<strong>TYPE_KEY</strong> = 'type'<br>
+<strong>Tuple</strong> = typing.Tuple<br>
+<strong>VALIDATION_REGEX_PATTERN_FOR_INPUT_VARIABLES</strong> = '(?!_)(?!.*__)(?!.*--)^[a-zA-Z][a-zA-Z0-9_-]*[a-zA-Z0-9]$'<br>
+<strong>VARIABLES_KEY</strong> = 'variables'<br>
+<strong>VARIABLE_MAPPING_DATA_PREFIX_KEY</strong> = 'data/'<br>
+<strong>logger</strong> = &lt;Logger gen_ai_evaluations_sdk (INFO)&gt;</td></tr></table>
+</body></html>

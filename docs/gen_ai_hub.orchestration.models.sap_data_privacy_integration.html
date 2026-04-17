@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.orchestration.models.sap_data_privacy_integration</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.orchestration.html"><font color="#ffffff">orchestration</font></a>.<a href="gen_ai_hub.orchestration.models.html"><font color="#ffffff">models</font></a>.sap_data_privacy_integration</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/sap_data_privacy_integration.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/sap_data_privacy_integration.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#str">builtins.str</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#MaskingMethod">MaskingMethod</a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#ProfileEntity">ProfileEntity</a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="enum.html#Enum">enum.Enum</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#MaskingMethod">MaskingMethod</a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#ProfileEntity">ProfileEntity</a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.data_masking.html#DataMaskingProvider">gen_ai_hub.orchestration.models.data_masking.DataMaskingProvider</a>(<a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>, <a href="abc.html#ABC">abc.ABC</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="MaskingMethod">class <strong>MaskingMethod</strong></a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#MaskingMethod">MaskingMethod</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Enumerates&nbsp;the&nbsp;supported&nbsp;masking&nbsp;methods.<br>
+&nbsp;<br>
+This&nbsp;enum&nbsp;defines&nbsp;the&nbsp;two&nbsp;main&nbsp;methods&nbsp;for&nbsp;masking&nbsp;sensitive&nbsp;information:&nbsp;anonymization&nbsp;and&nbsp;pseudonymization.<br>
+Anonymization&nbsp;irreversibly&nbsp;removes&nbsp;sensitive&nbsp;data,&nbsp;while&nbsp;pseudonymization&nbsp;allows&nbsp;the&nbsp;original&nbsp;data&nbsp;to&nbsp;be&nbsp;recovered.<br>
+&nbsp;<br>
+Values:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ANONYMIZATION:&nbsp;Irreversibly&nbsp;replaces&nbsp;sensitive&nbsp;data&nbsp;with&nbsp;placeholders&nbsp;(e.g.,&nbsp;MASKED_ENTITY).<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;PSEUDONYMIZATION:&nbsp;Replaces&nbsp;sensitive&nbsp;data&nbsp;with&nbsp;reversible&nbsp;placeholders&nbsp;(e.g.,&nbsp;MASKED_ENTITY_ID).<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#MaskingMethod">MaskingMethod</a></dd>
+<dd><a href="builtins.html#str">builtins.str</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>ANONYMIZATION</strong> = &lt;MaskingMethod.ANONYMIZATION: 'anonymization'&gt;</dl>
+
+<dl><dt><strong>PSEUDONYMIZATION</strong> = &lt;MaskingMethod.PSEUDONYMIZATION: 'pseudonymization'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ProfileEntity">class <strong>ProfileEntity</strong></a>(<a href="builtins.html#str">builtins.str</a>, <a href="enum.html#Enum">enum.Enum</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ProfileEntity">ProfileEntity</a>(value,&nbsp;names=None,&nbsp;*,&nbsp;module=None,&nbsp;qualname=None,&nbsp;type=None,&nbsp;start=1)<br>
+&nbsp;<br>
+Enumerates&nbsp;the&nbsp;entity&nbsp;categories&nbsp;that&nbsp;can&nbsp;be&nbsp;masked&nbsp;by&nbsp;the&nbsp;SAP&nbsp;Data&nbsp;Privacy&nbsp;Integration&nbsp;service.<br>
+&nbsp;<br>
+This&nbsp;enum&nbsp;lists&nbsp;different&nbsp;types&nbsp;of&nbsp;personal&nbsp;or&nbsp;sensitive&nbsp;information&nbsp;(PII)&nbsp;that&nbsp;can&nbsp;be&nbsp;detected&nbsp;and&nbsp;masked<br>
+by&nbsp;the&nbsp;data&nbsp;masking&nbsp;module,&nbsp;such&nbsp;as&nbsp;personal&nbsp;details,&nbsp;organizational&nbsp;data,&nbsp;contact&nbsp;information,&nbsp;and&nbsp;identifiers.<br>
+&nbsp;<br>
+Values:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;PERSON:&nbsp;Represents&nbsp;personal&nbsp;names.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ORG:&nbsp;Represents&nbsp;organizational&nbsp;names.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;UNIVERSITY:&nbsp;Represents&nbsp;educational&nbsp;institutions.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;LOCATION:&nbsp;Represents&nbsp;geographical&nbsp;locations.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;EMAIL:&nbsp;Represents&nbsp;email&nbsp;addresses.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;PHONE:&nbsp;Represents&nbsp;phone&nbsp;numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ADDRESS:&nbsp;Represents&nbsp;physical&nbsp;addresses.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SAP_IDS_INTERNAL:&nbsp;Represents&nbsp;internal&nbsp;SAP&nbsp;identifiers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SAP_IDS_PUBLIC:&nbsp;Represents&nbsp;public&nbsp;SAP&nbsp;identifiers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;URL:&nbsp;Represents&nbsp;URLs.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;USERNAME_PASSWORD:&nbsp;Represents&nbsp;usernames&nbsp;and&nbsp;passwords.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NATIONAL_ID:&nbsp;Represents&nbsp;national&nbsp;identification&nbsp;numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;IBAN:&nbsp;Represents&nbsp;International&nbsp;Bank&nbsp;Account&nbsp;Numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SSN:&nbsp;Represents&nbsp;Social&nbsp;Security&nbsp;Numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;CREDIT_CARD_NUMBER:&nbsp;Represents&nbsp;credit&nbsp;card&nbsp;numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;PASSPORT:&nbsp;Represents&nbsp;passport&nbsp;numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;DRIVING_LICENSE:&nbsp;Represents&nbsp;driving&nbsp;license&nbsp;numbers.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;NATIONALITY:&nbsp;Represents&nbsp;nationality&nbsp;information.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;RELIGIOUS_GROUP:&nbsp;Represents&nbsp;religious&nbsp;group&nbsp;affiliation.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;POLITICAL_GROUP:&nbsp;Represents&nbsp;political&nbsp;group&nbsp;affiliation.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;PRONOUNS_GENDER:&nbsp;Represents&nbsp;pronouns&nbsp;and&nbsp;gender&nbsp;identity.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;GENDER:&nbsp;Represents&nbsp;gender&nbsp;information.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SEXUAL_ORIENTATION:&nbsp;Represents&nbsp;sexual&nbsp;orientation.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TRADE_UNION:&nbsp;Represents&nbsp;trade&nbsp;union&nbsp;membership.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SENSITIVE_DATA:&nbsp;Represents&nbsp;any&nbsp;other&nbsp;sensitive&nbsp;information.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#ProfileEntity">ProfileEntity</a></dd>
+<dd><a href="builtins.html#str">builtins.str</a></dd>
+<dd><a href="enum.html#Enum">enum.Enum</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>ADDRESS</strong> = &lt;ProfileEntity.ADDRESS: 'profile-address'&gt;</dl>
+
+<dl><dt><strong>CREDIT_CARD_NUMBER</strong> = &lt;ProfileEntity.CREDIT_CARD_NUMBER: 'profile-credit-card-number'&gt;</dl>
+
+<dl><dt><strong>DRIVING_LICENSE</strong> = &lt;ProfileEntity.DRIVING_LICENSE: 'profile-driverlicense'&gt;</dl>
+
+<dl><dt><strong>EMAIL</strong> = &lt;ProfileEntity.EMAIL: 'profile-email'&gt;</dl>
+
+<dl><dt><strong>GENDER</strong> = &lt;ProfileEntity.GENDER: 'profile-gender'&gt;</dl>
+
+<dl><dt><strong>IBAN</strong> = &lt;ProfileEntity.IBAN: 'profile-iban'&gt;</dl>
+
+<dl><dt><strong>LOCATION</strong> = &lt;ProfileEntity.LOCATION: 'profile-location'&gt;</dl>
+
+<dl><dt><strong>NATIONALITY</strong> = &lt;ProfileEntity.NATIONALITY: 'profile-nationality'&gt;</dl>
+
+<dl><dt><strong>NATIONAL_ID</strong> = &lt;ProfileEntity.NATIONAL_ID: 'profile-nationalid'&gt;</dl>
+
+<dl><dt><strong>ORG</strong> = &lt;ProfileEntity.ORG: 'profile-org'&gt;</dl>
+
+<dl><dt><strong>PASSPORT</strong> = &lt;ProfileEntity.PASSPORT: 'profile-passport'&gt;</dl>
+
+<dl><dt><strong>PERSON</strong> = &lt;ProfileEntity.PERSON: 'profile-person'&gt;</dl>
+
+<dl><dt><strong>PHONE</strong> = &lt;ProfileEntity.PHONE: 'profile-phone'&gt;</dl>
+
+<dl><dt><strong>POLITICAL_GROUP</strong> = &lt;ProfileEntity.POLITICAL_GROUP: 'profile-political-group'&gt;</dl>
+
+<dl><dt><strong>PRONOUNS_GENDER</strong> = &lt;ProfileEntity.PRONOUNS_GENDER: 'profile-pronouns-gender'&gt;</dl>
+
+<dl><dt><strong>RELIGIOUS_GROUP</strong> = &lt;ProfileEntity.RELIGIOUS_GROUP: 'profile-religious-group'&gt;</dl>
+
+<dl><dt><strong>SAP_IDS_INTERNAL</strong> = &lt;ProfileEntity.SAP_IDS_INTERNAL: 'profile-sapids-internal'&gt;</dl>
+
+<dl><dt><strong>SAP_IDS_PUBLIC</strong> = &lt;ProfileEntity.SAP_IDS_PUBLIC: 'profile-sapids-public'&gt;</dl>
+
+<dl><dt><strong>SENSITIVE_DATA</strong> = &lt;ProfileEntity.SENSITIVE_DATA: 'profile-sensitive-data'&gt;</dl>
+
+<dl><dt><strong>SEXUAL_ORIENTATION</strong> = &lt;ProfileEntity.SEXUAL_ORIENTATION: 'profile-sexual-orientation'&gt;</dl>
+
+<dl><dt><strong>SSN</strong> = &lt;ProfileEntity.SSN: 'profile-ssn'&gt;</dl>
+
+<dl><dt><strong>TRADE_UNION</strong> = &lt;ProfileEntity.TRADE_UNION: 'profile-trade-union'&gt;</dl>
+
+<dl><dt><strong>UNIVERSITY</strong> = &lt;ProfileEntity.UNIVERSITY: 'profile-university'&gt;</dl>
+
+<dl><dt><strong>URL</strong> = &lt;ProfileEntity.URL: 'profile-url'&gt;</dl>
+
+<dl><dt><strong>USERNAME_PASSWORD</strong> = &lt;ProfileEntity.USERNAME_PASSWORD: 'profile-username-password'&gt;</dl>
+
+<hr>
+Data descriptors inherited from <a href="enum.html#Enum">enum.Enum</a>:<br>
+<dl><dt><strong>name</strong></dt>
+<dd><tt>The&nbsp;name&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<dl><dt><strong>value</strong></dt>
+<dd><tt>The&nbsp;value&nbsp;of&nbsp;the&nbsp;Enum&nbsp;member.</tt></dd>
+</dl>
+<hr>
+Readonly properties inherited from <a href="enum.html#EnumMeta">enum.EnumMeta</a>:<br>
+<dl><dt><strong>__members__</strong></dt>
+<dd><tt>Returns&nbsp;a&nbsp;mapping&nbsp;of&nbsp;member&nbsp;name-&gt;value.<br>
+&nbsp;<br>
+This&nbsp;mapping&nbsp;lists&nbsp;all&nbsp;enum&nbsp;members,&nbsp;including&nbsp;aliases.&nbsp;Note&nbsp;that&nbsp;this<br>
+is&nbsp;a&nbsp;read-only&nbsp;view&nbsp;of&nbsp;the&nbsp;internal&nbsp;mapping.</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="SAPDataPrivacyIntegration">class <strong>SAPDataPrivacyIntegration</strong></a>(<a href="gen_ai_hub.orchestration.models.data_masking.html#DataMaskingProvider">gen_ai_hub.orchestration.models.data_masking.DataMaskingProvider</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a>(method:&nbsp;gen_ai_hub.orchestration.models.sap_data_privacy_integration.<a href="#MaskingMethod">MaskingMethod</a>,&nbsp;entities:&nbsp;List[gen_ai_hub.orchestration.models.sap_data_privacy_integration.<a href="#ProfileEntity">ProfileEntity</a>],&nbsp;allowlist:&nbsp;List[<a href="builtins.html#str">str</a>]&nbsp;=&nbsp;None,&nbsp;mask_grounding_input:&nbsp;bool&nbsp;=&nbsp;False)<br>
+&nbsp;<br>
+SAP&nbsp;Data&nbsp;Privacy&nbsp;Integration&nbsp;provider&nbsp;for&nbsp;data&nbsp;masking.<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;implements&nbsp;the&nbsp;SAP&nbsp;Data&nbsp;Privacy&nbsp;Integration&nbsp;service,&nbsp;which&nbsp;can&nbsp;anonymize&nbsp;or&nbsp;pseudonymize<br>
+specified&nbsp;entity&nbsp;categories&nbsp;in&nbsp;the&nbsp;input&nbsp;data.&nbsp;It&nbsp;supports&nbsp;masking&nbsp;sensitive&nbsp;information&nbsp;like&nbsp;personal&nbsp;names,<br>
+contact&nbsp;details,&nbsp;and&nbsp;identifiers.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.sap_data_privacy_integration.html#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.data_masking.html#DataMaskingProvider">gen_ai_hub.orchestration.models.data_masking.DataMaskingProvider</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="SAPDataPrivacyIntegration-__init__"><strong>__init__</strong></a>(self, method: gen_ai_hub.orchestration.models.sap_data_privacy_integration.MaskingMethod, entities: List[gen_ai_hub.orchestration.models.sap_data_privacy_integration.ProfileEntity], allowlist: List[str] = None, mask_grounding_input: bool = False)</dt><dd><tt>Initializes&nbsp;the&nbsp;<a href="#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a>&nbsp;data&nbsp;masking&nbsp;provider.<br>
+&nbsp;<br>
+:param&nbsp;method:&nbsp;The&nbsp;method&nbsp;of&nbsp;masking&nbsp;to&nbsp;apply<br>
+:type&nbsp;method:&nbsp;<a href="#MaskingMethod">MaskingMethod</a><br>
+:param&nbsp;entities:&nbsp;A&nbsp;list&nbsp;of&nbsp;entity&nbsp;categories&nbsp;to&nbsp;be&nbsp;masked<br>
+:type&nbsp;entities:&nbsp;List[<a href="#ProfileEntity">ProfileEntity</a>]<br>
+:param&nbsp;allowlist:&nbsp;A&nbsp;list&nbsp;of&nbsp;strings&nbsp;that&nbsp;should&nbsp;not&nbsp;be&nbsp;masked,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;allowlist:&nbsp;List[<a href="builtins.html#str">str</a>],&nbsp;optional<br>
+:param&nbsp;mask_grounding_input:&nbsp;A&nbsp;flag&nbsp;indicating&nbsp;whether&nbsp;to&nbsp;mask&nbsp;input&nbsp;to&nbsp;the&nbsp;grounding&nbsp;module,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;mask_grounding_input:&nbsp;bool,&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="SAPDataPrivacyIntegration-to_dict"><strong>to_dict</strong></a>(self)</dt><dd><tt>Converts&nbsp;the&nbsp;<a href="#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a>&nbsp;instance&nbsp;to&nbsp;a&nbsp;dictionary&nbsp;representation.<br>
+&nbsp;<br>
+:return:&nbsp;Dictionary&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="#SAPDataPrivacyIntegration">SAPDataPrivacyIntegration</a>&nbsp;instance.<br>
+:rtype:&nbsp;dict</tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>List</strong> = typing.List</td></tr></table>
+</body></html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.evaluations.helpers.s3_file_client</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.evaluations.html"><font color="#ffffff">evaluations</font></a>.<a href="gen_ai_hub.evaluations.helpers.html"><font color="#ffffff">helpers</font></a>.s3_file_client</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/helpers/s3_file_client.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/helpers/s3_file_client.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="boto3.html">boto3</a><br>
+<a href="csv.html">csv</a><br>
+</td><td width="25%" valign=top><a href="json.html">json</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+<a href="sqlite3.html">sqlite3</a><br>
+</td><td width="25%" valign=top><a href="tempfile.html">tempfile</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.evaluations.helpers.s3_file_client.html#S3FileClient">S3FileClient</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="S3FileClient">class <strong>S3FileClient</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#S3FileClient">S3FileClient</a>(bucket_name:&nbsp;str,&nbsp;region:&nbsp;str&nbsp;=&nbsp;None,&nbsp;aws_access_key_id:&nbsp;str&nbsp;=&nbsp;None,&nbsp;aws_secret_access_key:&nbsp;str&nbsp;=&nbsp;None,&nbsp;error_collector:&nbsp;gen_ai_hub.evaluations.helpers.collector.ValidationCollector&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+S3&nbsp;client&nbsp;for&nbsp;read/write&nbsp;file&nbsp;operations&nbsp;with&nbsp;format-specific&nbsp;parsing.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="S3FileClient-__init__"><strong>__init__</strong></a>(self, bucket_name: str, region: str = None, aws_access_key_id: str = None, aws_secret_access_key: str = None, error_collector: gen_ai_hub.evaluations.helpers.collector.ValidationCollector = None)</dt><dd><tt>Initialize&nbsp;S3&nbsp;client&nbsp;with&nbsp;flexible&nbsp;authentication&nbsp;options.<br>
+&nbsp;<br>
+:param&nbsp;bucket_name:&nbsp;S3&nbsp;bucket&nbsp;name<br>
+:type&nbsp;bucket_name:&nbsp;str<br>
+:param&nbsp;region:&nbsp;AWS&nbsp;region&nbsp;(defaults&nbsp;to&nbsp;boto3&nbsp;default),&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;region:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;aws_access_key_id:&nbsp;AWS&nbsp;access&nbsp;key&nbsp;(optional&nbsp;if&nbsp;using&nbsp;IAM/profile),&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;aws_access_key_id:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;aws_secret_access_key:&nbsp;AWS&nbsp;secret&nbsp;key&nbsp;(optional&nbsp;if&nbsp;using&nbsp;IAM/profile),&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;aws_secret_access_key:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;error_collector:&nbsp;Validation&nbsp;error&nbsp;collector,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;error_collector:&nbsp;ValidationCollector,&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-get_sqlitedb_tables_data_from_s3"><strong>get_sqlitedb_tables_data_from_s3</strong></a>(self, s3_key: str, tables_list: List[str]) -&gt; Dict[str, List[Dict]]</dt><dd><tt>Download&nbsp;SQLite&nbsp;DB&nbsp;from&nbsp;S3,&nbsp;load&nbsp;given&nbsp;tables&nbsp;into&nbsp;memory,&nbsp;return&nbsp;dict&nbsp;of&nbsp;lists.<br>
+&nbsp;<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;<a href="builtins.html#object">object</a>&nbsp;key&nbsp;for&nbsp;the&nbsp;SQLite&nbsp;database&nbsp;file<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;tables_list:&nbsp;List&nbsp;of&nbsp;table&nbsp;names&nbsp;to&nbsp;extract&nbsp;from&nbsp;the&nbsp;database<br>
+:type&nbsp;tables_list:&nbsp;List[str]<br>
+:return:&nbsp;Dictionary&nbsp;mapping&nbsp;table&nbsp;names&nbsp;to&nbsp;lists&nbsp;of&nbsp;row&nbsp;dictionaries<br>
+:rtype:&nbsp;Dict[str,&nbsp;List[Dict]]<br>
+:raises&nbsp;RuntimeError:&nbsp;If&nbsp;database&nbsp;operations&nbsp;fail</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-read_csv"><strong>read_csv</strong></a>(self, s3_key: str, encoding: str = 'utf-8') -&gt; List[Dict[str, Any]]</dt><dd><tt>Read&nbsp;CSV&nbsp;file&nbsp;from&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;<a href="builtins.html#object">object</a>&nbsp;key<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;encoding:&nbsp;File&nbsp;encoding,&nbsp;defaults&nbsp;to&nbsp;"utf-8"<br>
+:type&nbsp;encoding:&nbsp;str,&nbsp;optional<br>
+:return:&nbsp;List&nbsp;of&nbsp;dictionaries,&nbsp;one&nbsp;per&nbsp;row<br>
+:rtype:&nbsp;List[Dict[str,&nbsp;Any]]</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-read_json"><strong>read_json</strong></a>(self, s3_key: str, encoding: str = 'utf-8') -&gt; Dict[str, Any]</dt><dd><tt>Read&nbsp;JSON&nbsp;file&nbsp;from&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;<a href="builtins.html#object">object</a>&nbsp;key<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;encoding:&nbsp;File&nbsp;encoding,&nbsp;defaults&nbsp;to&nbsp;"utf-8"<br>
+:type&nbsp;encoding:&nbsp;str,&nbsp;optional<br>
+:return:&nbsp;Dictionary&nbsp;containing&nbsp;JSON&nbsp;data,&nbsp;or&nbsp;empty&nbsp;list&nbsp;if&nbsp;file&nbsp;is&nbsp;empty&nbsp;or&nbsp;error&nbsp;occurs<br>
+:rtype:&nbsp;Dict[str,&nbsp;Any]</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-read_jsonl"><strong>read_jsonl</strong></a>(self, s3_key: str, encoding: str = 'utf-8') -&gt; List[Dict[str, Any]]</dt><dd><tt>Read&nbsp;JSONL&nbsp;(JSON&nbsp;Lines)&nbsp;file&nbsp;from&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;<a href="builtins.html#object">object</a>&nbsp;key<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;encoding:&nbsp;File&nbsp;encoding,&nbsp;defaults&nbsp;to&nbsp;"utf-8"<br>
+:type&nbsp;encoding:&nbsp;str,&nbsp;optional<br>
+:return:&nbsp;List&nbsp;of&nbsp;dictionaries,&nbsp;one&nbsp;per&nbsp;line<br>
+:rtype:&nbsp;List[Dict[str,&nbsp;Any]]</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-upload_csv"><strong>upload_csv</strong></a>(self, data: List[Dict], s3_key: str, **kwargs) -&gt; bool</dt><dd><tt>Upload&nbsp;CSV&nbsp;data&nbsp;to&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;data:&nbsp;List&nbsp;of&nbsp;dictionaries&nbsp;to&nbsp;upload&nbsp;as&nbsp;CSV<br>
+:type&nbsp;data:&nbsp;List[Dict]<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;key&nbsp;path<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;kwargs:&nbsp;Additional&nbsp;S3&nbsp;put_object&nbsp;parameters<br>
+:type&nbsp;kwargs:&nbsp;dict<br>
+:return:&nbsp;True&nbsp;if&nbsp;upload&nbsp;succeeded,&nbsp;False&nbsp;otherwise<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-upload_json"><strong>upload_json</strong></a>(self, data: Any, s3_key: str, **kwargs) -&gt; bool</dt><dd><tt>Upload&nbsp;JSON&nbsp;data&nbsp;to&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;data:&nbsp;Data&nbsp;to&nbsp;upload&nbsp;(will&nbsp;be&nbsp;JSON-serialized)<br>
+:type&nbsp;data:&nbsp;Any<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;key&nbsp;path<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;kwargs:&nbsp;Additional&nbsp;S3&nbsp;put_object&nbsp;parameters<br>
+:type&nbsp;kwargs:&nbsp;dict<br>
+:return:&nbsp;True&nbsp;if&nbsp;upload&nbsp;succeeded,&nbsp;False&nbsp;otherwise<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="S3FileClient-upload_jsonl"><strong>upload_jsonl</strong></a>(self, data: List[Dict], s3_key: str, **kwargs) -&gt; bool</dt><dd><tt>Upload&nbsp;JSONL&nbsp;data&nbsp;to&nbsp;S3.<br>
+&nbsp;<br>
+:param&nbsp;data:&nbsp;List&nbsp;of&nbsp;dictionaries&nbsp;to&nbsp;upload&nbsp;as&nbsp;JSONL<br>
+:type&nbsp;data:&nbsp;List[Dict]<br>
+:param&nbsp;s3_key:&nbsp;S3&nbsp;key&nbsp;path<br>
+:type&nbsp;s3_key:&nbsp;str<br>
+:param&nbsp;kwargs:&nbsp;Additional&nbsp;S3&nbsp;put_object&nbsp;parameters<br>
+:type&nbsp;kwargs:&nbsp;dict<br>
+:return:&nbsp;True&nbsp;if&nbsp;upload&nbsp;succeeded,&nbsp;False&nbsp;otherwise<br>
+:rtype:&nbsp;bool</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Any</strong> = typing.Any<br>
+<strong>CONTENT_TYPE</strong> = 'application/json'<br>
+<strong>Dict</strong> = typing.Dict<br>
+<strong>List</strong> = typing.List<br>
+<strong>logger</strong> = &lt;Logger gen_ai_evaluations_sdk (INFO)&gt;</td></tr></table>
+</body></html>

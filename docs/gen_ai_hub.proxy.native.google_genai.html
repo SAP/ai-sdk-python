@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: package gen_ai_hub.proxy.native.google_genai</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.proxy.html"><font color="#ffffff">proxy</font></a>.<a href="gen_ai_hub.proxy.native.html"><font color="#ffffff">native</font></a>.google_genai</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/proxy/native/google_genai/__init__.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/proxy/native/google_genai/__init__.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Package Contents</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="gen_ai_hub.proxy.native.google_genai.clients.html">clients</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial">google.genai._interactions.BaseTransport(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.proxy.native.google_genai.clients.html#AICoreDynamicTransport">gen_ai_hub.proxy.native.google_genai.clients.AICoreDynamicTransport</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="google.genai.client.html#Client">google.genai.client.Client</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.proxy.native.google_genai.clients.html#Client">gen_ai_hub.proxy.native.google_genai.clients.Client</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="httpx.html#AsyncBaseTransport">httpx.AsyncBaseTransport</a>(<a href="builtins.html#object">builtins.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.proxy.native.google_genai.clients.html#AsyncAICoreDynamicTransport">gen_ai_hub.proxy.native.google_genai.clients.AsyncAICoreDynamicTransport</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AICoreDynamicTransport">class <strong>AICoreDynamicTransport</strong></a>(google.genai._interactions.BaseTransport)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#AICoreDynamicTransport">AICoreDynamicTransport</a>(proxy_client:&nbsp;gen_ai_hub.proxy.core.base.BaseProxyClient,&nbsp;**deployment_selector_kwargs)<br>
+&nbsp;<br>
+Synchronous&nbsp;transport&nbsp;that&nbsp;dynamically&nbsp;resolves&nbsp;deployment&nbsp;URLs&nbsp;per&nbsp;request.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.proxy.native.google_genai.clients.html#AICoreDynamicTransport">AICoreDynamicTransport</a></dd>
+<dd>google.genai._interactions.BaseTransport</dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="AICoreDynamicTransport-__init__"><strong>__init__</strong></a>(self, proxy_client: gen_ai_hub.proxy.core.base.BaseProxyClient, **deployment_selector_kwargs)</dt><dd><tt>Transport&nbsp;constructor.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;The&nbsp;proxy&nbsp;client&nbsp;used&nbsp;to&nbsp;select&nbsp;deployments.<br>
+:type&nbsp;proxy_client:&nbsp;BaseProxyClient</tt></dd></dl>
+
+<dl><dt><a name="AICoreDynamicTransport-close"><strong>close</strong></a>(self)</dt><dd><tt>Closes&nbsp;the&nbsp;inner&nbsp;transport.</tt></dd></dl>
+
+<dl><dt><a name="AICoreDynamicTransport-get_selector_kwargs"><strong>get_selector_kwargs</strong></a>(self)</dt><dd><tt>Get&nbsp;the&nbsp;deployment&nbsp;selector&nbsp;kwargs.<br>
+&nbsp;<br>
+:return:&nbsp;The&nbsp;deployment&nbsp;selector&nbsp;kwargs.<br>
+:rtype:&nbsp;dict</tt></dd></dl>
+
+<dl><dt><a name="AICoreDynamicTransport-handle_request"><strong>handle_request</strong></a>(self, request: httpx.Request) -&gt; httpx.Response</dt><dd><tt>Handles&nbsp;the&nbsp;request&nbsp;by&nbsp;rewriting&nbsp;it&nbsp;to&nbsp;route&nbsp;through&nbsp;the&nbsp;appropriate&nbsp;AI&nbsp;Core&nbsp;deployment.<br>
+&nbsp;<br>
+:param&nbsp;request:&nbsp;The&nbsp;original&nbsp;HTTPX&nbsp;request.<br>
+:type&nbsp;request:&nbsp;httpx.Request<br>
+:return:&nbsp;The&nbsp;HTTPX&nbsp;response&nbsp;from&nbsp;the&nbsp;AI&nbsp;Core&nbsp;deployment.<br>
+:rtype:&nbsp;httpx.Response</tt></dd></dl>
+
+<hr>
+Methods inherited from google.genai._interactions.BaseTransport:<br>
+<dl><dt><a name="AICoreDynamicTransport-__enter__"><strong>__enter__</strong></a>(self: 'T') -&gt; 'T'</dt></dl>
+
+<dl><dt><a name="AICoreDynamicTransport-__exit__"><strong>__exit__</strong></a>(self, exc_type: 'type[BaseException] | None' = None, exc_value: 'BaseException | None' = None, traceback: 'TracebackType | None' = None) -&gt; 'None'</dt></dl>
+
+<hr>
+Data descriptors inherited from google.genai._interactions.BaseTransport:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AsyncAICoreDynamicTransport">class <strong>AsyncAICoreDynamicTransport</strong></a>(<a href="httpx.html#AsyncBaseTransport">httpx.AsyncBaseTransport</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#AsyncAICoreDynamicTransport">AsyncAICoreDynamicTransport</a>(proxy_client:&nbsp;gen_ai_hub.proxy.core.base.BaseProxyClient,&nbsp;**deployment_selector_kwargs)<br>
+&nbsp;<br>
+Asynchronous&nbsp;transport&nbsp;that&nbsp;dynamically&nbsp;resolves&nbsp;deployment&nbsp;URLs&nbsp;per&nbsp;request.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.proxy.native.google_genai.clients.html#AsyncAICoreDynamicTransport">AsyncAICoreDynamicTransport</a></dd>
+<dd><a href="httpx.html#AsyncBaseTransport">httpx.AsyncBaseTransport</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="AsyncAICoreDynamicTransport-__init__"><strong>__init__</strong></a>(self, proxy_client: gen_ai_hub.proxy.core.base.BaseProxyClient, **deployment_selector_kwargs)</dt><dd><tt>Transport&nbsp;constructor.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;The&nbsp;proxy&nbsp;client&nbsp;used&nbsp;to&nbsp;select&nbsp;deployments.<br>
+:type&nbsp;proxy_client:&nbsp;BaseProxyClient</tt></dd></dl>
+
+<dl><dt>async <a name="AsyncAICoreDynamicTransport-aclose"><strong>aclose</strong></a>(self)</dt><dd><tt>Closes&nbsp;the&nbsp;inner&nbsp;transport.</tt></dd></dl>
+
+<dl><dt><a name="AsyncAICoreDynamicTransport-get_selector_kwargs"><strong>get_selector_kwargs</strong></a>(self)</dt><dd><tt>get&nbsp;the&nbsp;deployment&nbsp;selector&nbsp;kwargs.<br>
+&nbsp;<br>
+:return:&nbsp;The&nbsp;deployment&nbsp;selector&nbsp;kwargs.<br>
+:rtype:&nbsp;dict</tt></dd></dl>
+
+<dl><dt>async <a name="AsyncAICoreDynamicTransport-handle_async_request"><strong>handle_async_request</strong></a>(self, request: httpx.Request) -&gt; httpx.Response</dt><dd><tt>Handles&nbsp;the&nbsp;request&nbsp;by&nbsp;rewriting&nbsp;it&nbsp;to&nbsp;route&nbsp;through&nbsp;the&nbsp;appropriate&nbsp;AI&nbsp;Core&nbsp;deployment.<br>
+&nbsp;<br>
+:param&nbsp;request:&nbsp;The&nbsp;original&nbsp;HTTPX&nbsp;request.<br>
+:type&nbsp;request:&nbsp;httpx.Request<br>
+:return:&nbsp;The&nbsp;HTTPX&nbsp;response&nbsp;from&nbsp;the&nbsp;AI&nbsp;Core&nbsp;deployment.<br>
+:rtype:&nbsp;httpx.Response</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="httpx.html#AsyncBaseTransport">httpx.AsyncBaseTransport</a>:<br>
+<dl><dt>async <a name="AsyncAICoreDynamicTransport-__aenter__"><strong>__aenter__</strong></a>(self: 'A') -&gt; 'A'</dt></dl>
+
+<dl><dt>async <a name="AsyncAICoreDynamicTransport-__aexit__"><strong>__aexit__</strong></a>(self, exc_type: 'type[BaseException] | None' = None, exc_value: 'BaseException | None' = None, traceback: 'TracebackType | None' = None) -&gt; 'None'</dt></dl>
+
+<hr>
+Data descriptors inherited from <a href="httpx.html#AsyncBaseTransport">httpx.AsyncBaseTransport</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Client">class <strong>Client</strong></a>(<a href="google.genai.client.html#Client">google.genai.client.Client</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Client">Client</a>(vertexai:&nbsp;bool&nbsp;=&nbsp;True,&nbsp;project:&nbsp;str&nbsp;=&nbsp;'placeholder',&nbsp;location:&nbsp;str&nbsp;=&nbsp;'placeholder',&nbsp;deployment_id:&nbsp;str&nbsp;=&nbsp;'',&nbsp;config_id:&nbsp;str&nbsp;=&nbsp;'',&nbsp;config_name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;proxy_client:&nbsp;gen_ai_hub.proxy.core.base.BaseProxyClient&nbsp;=&nbsp;None,&nbsp;timeout:&nbsp;int&nbsp;=&nbsp;None,&nbsp;**kwargs)<br>
+&nbsp;<br>
+Unified,&nbsp;native-feeling&nbsp;client&nbsp;that&nbsp;dynamically&nbsp;routes&nbsp;requests<br>
+through&nbsp;SAP&nbsp;AI&nbsp;Core&nbsp;deployments&nbsp;based&nbsp;on&nbsp;the&nbsp;requested&nbsp;identifiers&nbsp;e.g.&nbsp;model&nbsp;name.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.proxy.native.google_genai.clients.html#Client">Client</a></dd>
+<dd><a href="google.genai.client.html#Client">google.genai.client.Client</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Client-__init__"><strong>__init__</strong></a>(self, vertexai: bool = True, project: str = 'placeholder', location: str = 'placeholder', deployment_id: str = '', config_id: str = '', config_name: str = '', proxy_client: gen_ai_hub.proxy.core.base.BaseProxyClient = None, timeout: int = None, **kwargs)</dt><dd><tt>Initializes&nbsp;the&nbsp;<a href="#Client">Client</a>.<br>
+&nbsp;<br>
+:param&nbsp;vertexai:&nbsp;to&nbsp;indicate&nbsp;Vertex&nbsp;AI&nbsp;usage,&nbsp;defaults&nbsp;to&nbsp;True<br>
+:type&nbsp;vertexai:&nbsp;bool,&nbsp;optional<br>
+:param&nbsp;project:&nbsp;the&nbsp;GCP&nbsp;project,&nbsp;defaults&nbsp;to&nbsp;"placeholder"<br>
+:type&nbsp;project:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;location:&nbsp;the&nbsp;GCP&nbsp;location,&nbsp;defaults&nbsp;to&nbsp;"placeholder"<br>
+:type&nbsp;location:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;deployment_id:&nbsp;the&nbsp;deployment&nbsp;identifier,&nbsp;defaults&nbsp;to&nbsp;""<br>
+:type&nbsp;deployment_id:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;config_id:&nbsp;the&nbsp;configuration&nbsp;identifier,&nbsp;defaults&nbsp;to&nbsp;""<br>
+:type&nbsp;config_id:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;config_name:&nbsp;the&nbsp;configuration&nbsp;name,&nbsp;defaults&nbsp;to&nbsp;""<br>
+:type&nbsp;config_name:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;proxy_client:&nbsp;the&nbsp;proxy&nbsp;client&nbsp;to&nbsp;use,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;proxy_client:&nbsp;BaseProxyClient,&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;request&nbsp;timeout,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;int,&nbsp;optional</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="google.genai.client.html#Client">google.genai.client.Client</a>:<br>
+<dl><dt><a name="Client-__del__"><strong>__del__</strong></a>(self) -&gt; None</dt></dl>
+
+<dl><dt><a name="Client-__enter__"><strong>__enter__</strong></a>(self) -&gt; 'Client'</dt></dl>
+
+<dl><dt><a name="Client-__exit__"><strong>__exit__</strong></a>(self, exc_type: Optional[Exception], exc_value: Optional[Exception], traceback: Optional[traceback]) -&gt; None</dt></dl>
+
+<dl><dt><a name="Client-close"><strong>close</strong></a>(self) -&gt; None</dt><dd><tt>Closes&nbsp;the&nbsp;synchronous&nbsp;client&nbsp;explicitly.<br>
+&nbsp;<br>
+However,&nbsp;it&nbsp;doesn't&nbsp;close&nbsp;the&nbsp;async&nbsp;client,&nbsp;which&nbsp;can&nbsp;be&nbsp;closed&nbsp;using&nbsp;the<br>
+<a href="#Client">Client</a>.aio.aclose()&nbsp;method&nbsp;or&nbsp;using&nbsp;the&nbsp;async&nbsp;context&nbsp;manager.<br>
+&nbsp;<br>
+Usage:<br>
+..&nbsp;code-block::&nbsp;python<br>
+&nbsp;<br>
+&nbsp;&nbsp;from&nbsp;google.genai&nbsp;import&nbsp;<a href="#Client">Client</a><br>
+&nbsp;<br>
+&nbsp;&nbsp;client&nbsp;=&nbsp;<a href="#Client">Client</a>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vertexai=True,&nbsp;project='my-project-id',&nbsp;location='us-central1'<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;response_1&nbsp;=&nbsp;client.models.generate_content(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model='gemini-2.0-flash',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contents='Hello&nbsp;World',<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;response_2&nbsp;=&nbsp;client.models.generate_content(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model='gemini-2.0-flash',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contents='Hello&nbsp;World',<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;#&nbsp;Close&nbsp;the&nbsp;client&nbsp;to&nbsp;release&nbsp;resources.<br>
+&nbsp;&nbsp;client.<a href="#Client-close">close</a>()</tt></dd></dl>
+
+<hr>
+Readonly properties inherited from <a href="google.genai.client.html#Client">google.genai.client.Client</a>:<br>
+<dl><dt><strong>aio</strong></dt>
+</dl>
+<dl><dt><strong>auth_tokens</strong></dt>
+</dl>
+<dl><dt><strong>batches</strong></dt>
+</dl>
+<dl><dt><strong>caches</strong></dt>
+</dl>
+<dl><dt><strong>chats</strong></dt>
+</dl>
+<dl><dt><strong>file_search_stores</strong></dt>
+</dl>
+<dl><dt><strong>files</strong></dt>
+</dl>
+<dl><dt><strong>interactions</strong></dt>
+</dl>
+<dl><dt><strong>models</strong></dt>
+</dl>
+<dl><dt><strong>operations</strong></dt>
+</dl>
+<dl><dt><strong>tunings</strong></dt>
+</dl>
+<dl><dt><strong>vertexai</strong></dt>
+<dd><tt>Returns&nbsp;whether&nbsp;the&nbsp;client&nbsp;is&nbsp;using&nbsp;the&nbsp;Vertex&nbsp;AI&nbsp;API.</tt></dd>
+</dl>
+<hr>
+Data descriptors inherited from <a href="google.genai.client.html#Client">google.genai.client.Client</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['Client', 'AICoreDynamicTransport', 'AsyncAICoreDynamicTransport']</td></tr></table>
+</body></html>

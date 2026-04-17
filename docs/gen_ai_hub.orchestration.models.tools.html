@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.orchestration.models.tools</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.orchestration.html"><font color="#ffffff">orchestration</font></a>.<a href="gen_ai_hub.orchestration.models.html"><font color="#ffffff">models</font></a>.tools</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/tools.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration/models/tools.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="inspect.html">inspect</a><br>
+</td><td width="25%" valign=top><a href="typing.html">typing</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>(<a href="abc.html#ABC">abc.ABC</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.tools.html#ChatCompletionTool">ChatCompletionTool</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration.models.tools.html#FunctionTool">FunctionTool</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ChatCompletionTool">class <strong>ChatCompletionTool</strong></a>(<a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ChatCompletionTool">ChatCompletionTool</a>(type_:&nbsp;str)<br>
+&nbsp;<br>
+Base&nbsp;class&nbsp;for&nbsp;all&nbsp;chat&nbsp;completion&nbsp;tools.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.tools.html#ChatCompletionTool">ChatCompletionTool</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ChatCompletionTool-__init__"><strong>__init__</strong></a>(self, type_: str)</dt><dd><tt>Initializes&nbsp;a&nbsp;<a href="#ChatCompletionTool">ChatCompletionTool</a>&nbsp;instance.<br>
+&nbsp;<br>
+:param&nbsp;type_:&nbsp;The&nbsp;type&nbsp;of&nbsp;the&nbsp;tool.<br>
+:type&nbsp;type_:&nbsp;str</tt></dd></dl>
+
+<dl><dt><a name="ChatCompletionTool-to_dict"><strong>to_dict</strong></a>(self) -&gt; Dict[str, Any]</dt><dd><tt>Converts&nbsp;the&nbsp;<a href="#ChatCompletionTool">ChatCompletionTool</a>&nbsp;instance&nbsp;to&nbsp;a&nbsp;dictionary&nbsp;representation.<br>
+&nbsp;<br>
+:return:&nbsp;A&nbsp;dictionary&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="#ChatCompletionTool">ChatCompletionTool</a>&nbsp;instance.<br>
+:rtype:&nbsp;Dict[str,&nbsp;Any]</tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="FunctionTool">class <strong>FunctionTool</strong></a>(<a href="gen_ai_hub.orchestration.models.tools.html#ChatCompletionTool">ChatCompletionTool</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#FunctionTool">FunctionTool</a>(name:&nbsp;str,&nbsp;parameters:&nbsp;dict,&nbsp;strict:&nbsp;bool&nbsp;=&nbsp;False,&nbsp;description:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;function:&nbsp;Optional[Callable]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Represents&nbsp;a&nbsp;function&nbsp;tool&nbsp;for&nbsp;OpenAI-like&nbsp;function&nbsp;calling.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.orchestration.models.tools.html#FunctionTool">FunctionTool</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.tools.html#ChatCompletionTool">ChatCompletionTool</a></dd>
+<dd><a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="FunctionTool-__init__"><strong>__init__</strong></a>(self, name: str, parameters: dict, strict: bool = False, description: Optional[str] = None, function: Optional[Callable] = None)</dt><dd><tt>Initializes&nbsp;a&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;instance.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;function.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;parameters:&nbsp;The&nbsp;parameters&nbsp;schema&nbsp;for&nbsp;the&nbsp;function.<br>
+:type&nbsp;parameters:&nbsp;dict<br>
+:param&nbsp;strict:&nbsp;Whether&nbsp;to&nbsp;enforce&nbsp;strict&nbsp;parameter&nbsp;checking,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;strict:&nbsp;bool,&nbsp;optional<br>
+:param&nbsp;description:&nbsp;The&nbsp;description&nbsp;of&nbsp;the&nbsp;function,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;description:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;function:&nbsp;The&nbsp;actual&nbsp;callable&nbsp;function,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;function:&nbsp;Optional[Callable],&nbsp;optional</tt></dd></dl>
+
+<dl><dt>async <a name="FunctionTool-aexecute"><strong>aexecute</strong></a>(self, **kwargs: Any) -&gt; Any</dt><dd><tt>Asynchronously&nbsp;execute&nbsp;the&nbsp;function&nbsp;with&nbsp;the&nbsp;provided&nbsp;arguments.<br>
+&nbsp;<br>
+:raises&nbsp;ValueError:&nbsp;If&nbsp;the&nbsp;function&nbsp;is&nbsp;not&nbsp;set&nbsp;or&nbsp;if&nbsp;unexpected&nbsp;arguments&nbsp;are&nbsp;provided&nbsp;in&nbsp;strict&nbsp;mode.<br>
+:return:&nbsp;The&nbsp;result&nbsp;of&nbsp;the&nbsp;function&nbsp;execution.<br>
+:rtype:&nbsp;Any</tt></dd></dl>
+
+<dl><dt><a name="FunctionTool-execute"><strong>execute</strong></a>(self, **kwargs: Any) -&gt; Any</dt><dd><tt>Execute&nbsp;the&nbsp;function&nbsp;with&nbsp;the&nbsp;provided&nbsp;arguments.<br>
+&nbsp;<br>
+:raises&nbsp;ValueError:&nbsp;If&nbsp;the&nbsp;function&nbsp;is&nbsp;not&nbsp;set&nbsp;or&nbsp;if&nbsp;unexpected&nbsp;arguments&nbsp;are&nbsp;provided&nbsp;in&nbsp;strict&nbsp;mode.<br>
+:return:&nbsp;The&nbsp;result&nbsp;of&nbsp;the&nbsp;function&nbsp;execution.<br>
+:rtype:&nbsp;Any</tt></dd></dl>
+
+<dl><dt><a name="FunctionTool-to_dict"><strong>to_dict</strong></a>(self) -&gt; Dict[str, Any]</dt><dd><tt>Converts&nbsp;the&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;instance&nbsp;to&nbsp;a&nbsp;dictionary&nbsp;representation.<br>
+&nbsp;<br>
+:return:&nbsp;A&nbsp;dictionary&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;instance.<br>
+:rtype:&nbsp;Dict[str,&nbsp;Any]</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="FunctionTool-from_function"><strong>from_function</strong></a>(func: Callable, *, description: Optional[str] = None, strict: bool = False) -&gt; 'FunctionTool'</dt><dd><tt>Create&nbsp;a&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;from&nbsp;a&nbsp;Python&nbsp;function.<br>
+&nbsp;<br>
+:param&nbsp;func:&nbsp;The&nbsp;Python&nbsp;function&nbsp;to&nbsp;convert.<br>
+:type&nbsp;func:&nbsp;Callable<br>
+:param&nbsp;description:&nbsp;The&nbsp;description&nbsp;of&nbsp;the&nbsp;function,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;description:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;strict:&nbsp;Whether&nbsp;to&nbsp;enforce&nbsp;strict&nbsp;parameter&nbsp;checking,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;strict:&nbsp;bool,&nbsp;optional<br>
+:raises&nbsp;TypeError:&nbsp;If&nbsp;any&nbsp;parameter&nbsp;is&nbsp;missing&nbsp;a&nbsp;type&nbsp;hint.<br>
+:return:&nbsp;A&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;instance.<br>
+:rtype:&nbsp;<a href="#FunctionTool">FunctionTool</a></tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.orchestration.models.base.html#JSONSerializable">gen_ai_hub.orchestration.models.base.JSONSerializable</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-function_tool"><strong>function_tool</strong></a>(func: Optional[Callable] = None, *, description: Optional[str] = None, strict: bool = False) -&gt; Union[Callable[[Callable], gen_ai_hub.orchestration.models.tools.FunctionTool], gen_ai_hub.orchestration.models.tools.FunctionTool]</dt><dd><tt>Create&nbsp;a&nbsp;decorator&nbsp;that&nbsp;converts&nbsp;a&nbsp;function&nbsp;into&nbsp;a&nbsp;<a href="#FunctionTool">FunctionTool</a>.<br>
+&nbsp;<br>
+Usage:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+@function_tool<br>
+&nbsp;<br>
+def&nbsp;my_func(...):&nbsp;...<br>
+&nbsp;<br>
+@<a href="#-function_tool">function_tool</a>()<br>
+&nbsp;<br>
+def&nbsp;my_func(...):&nbsp;...<br>
+&nbsp;<br>
+:param&nbsp;func:&nbsp;The&nbsp;function&nbsp;to&nbsp;convert,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;func:&nbsp;Optional[Callable],&nbsp;optional<br>
+:param&nbsp;description:&nbsp;The&nbsp;description&nbsp;of&nbsp;the&nbsp;function,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;description:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;strict:&nbsp;Whether&nbsp;to&nbsp;enforce&nbsp;strict&nbsp;parameter&nbsp;checking,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;strict:&nbsp;bool,&nbsp;optional<br>
+:return:&nbsp;A&nbsp;<a href="#FunctionTool">FunctionTool</a>&nbsp;instance&nbsp;or&nbsp;a&nbsp;decorator&nbsp;function.<br>
+:rtype:&nbsp;Callable[[Callable],&nbsp;<a href="#FunctionTool">FunctionTool</a>]&nbsp;|&nbsp;<a href="#FunctionTool">FunctionTool</a></tt></dd></dl>
+ <dl><dt><a name="-python_type_to_json_type"><strong>python_type_to_json_type</strong></a>(py_type)</dt><dd><tt>Converts&nbsp;a&nbsp;Python&nbsp;type&nbsp;to&nbsp;a&nbsp;JSON&nbsp;Schema&nbsp;type.<br>
+&nbsp;<br>
+:param&nbsp;py_type:&nbsp;The&nbsp;Python&nbsp;type&nbsp;to&nbsp;convert.<br>
+:type&nbsp;py_type:&nbsp;type<br>
+:return:&nbsp;A&nbsp;dictionary&nbsp;representing&nbsp;the&nbsp;JSON&nbsp;Schema&nbsp;type.<br>
+:rtype:&nbsp;Dict[str,&nbsp;Any]</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Any</strong> = typing.Any<br>
+<strong>Callable</strong> = typing.Callable<br>
+<strong>Dict</strong> = typing.Dict<br>
+<strong>Optional</strong> = typing.Optional</td></tr></table>
+</body></html>

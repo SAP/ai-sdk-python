@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.evaluations.models.dataset_config</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.evaluations.html"><font color="#ffffff">evaluations</font></a>.<a href="gen_ai_hub.evaluations.models.html"><font color="#ffffff">models</font></a>.dataset_config</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/models/dataset_config.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/models/dataset_config.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.evaluations.models.dataset_config.html#Dataset">Dataset</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Dataset">class <strong>Dataset</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Dataset">Dataset</a>(source:&nbsp;Union[str,&nbsp;pathlib.Path,&nbsp;gen_ai_hub.evaluations.models.artifact_source.ArtifactSource])<br>
+&nbsp;<br>
+<a href="#Dataset">Dataset</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;for&nbsp;the&nbsp;evaluations&nbsp;flow.<br>
+&nbsp;<br>
+The&nbsp;<a href="#Dataset">Dataset</a>&nbsp;class&nbsp;accepts&nbsp;various&nbsp;source&nbsp;types&nbsp;for&nbsp;evaluation&nbsp;datasets&nbsp;including<br>
+local&nbsp;file&nbsp;paths&nbsp;(as&nbsp;strings&nbsp;or&nbsp;Path&nbsp;objects)&nbsp;or&nbsp;AI&nbsp;Core&nbsp;artifacts.<br>
+&nbsp;<br>
+:param&nbsp;source:&nbsp;Source&nbsp;of&nbsp;the&nbsp;dataset&nbsp;-&nbsp;can&nbsp;be&nbsp;a&nbsp;file&nbsp;path&nbsp;string,&nbsp;Path&nbsp;<a href="builtins.html#object">object</a>,&nbsp;or&nbsp;ArtifactSource<br>
+:type&nbsp;source:&nbsp;Union[str,&nbsp;Path,&nbsp;ArtifactSource]<br>
+&nbsp;<br>
+**Examples**:<br>
+&nbsp;<br>
+Using&nbsp;a&nbsp;Path&nbsp;<a href="builtins.html#object">object</a>:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Dataset">Dataset</a>(Path("data/sample.json"))<br>
+&nbsp;<br>
+Using&nbsp;a&nbsp;string&nbsp;path:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Dataset">Dataset</a>("data/sample.json")<br>
+&nbsp;<br>
+Using&nbsp;an&nbsp;ArtifactSource&nbsp;with&nbsp;artifact&nbsp;dictionary:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Dataset">Dataset</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ArtifactSource(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;artifact={<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"id":&nbsp;"xyfz-rtyu-2456-ojns-yu6s",<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name":&nbsp;"dataset-artifact",<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url":&nbsp;"ai://default/eval_dataset"<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path="rootfolder/data.csv",<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_type="csv"<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+...&nbsp;)<br>
+&nbsp;<br>
+Using&nbsp;an&nbsp;ArtifactSource&nbsp;with&nbsp;artifact&nbsp;ID:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#Dataset">Dataset</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ArtifactSource(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;artifact="xyfz-rtyu-2456-ojns-yu6s",<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path="rootfolder/data.csv",<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file_type="csv"<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)<br>
+...&nbsp;)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Dataset-__init__"><strong>__init__</strong></a>(self, source: Union[str, pathlib.Path, gen_ai_hub.evaluations.models.artifact_source.ArtifactSource])</dt><dd><tt>Initialize&nbsp;a&nbsp;<a href="#Dataset">Dataset</a>&nbsp;instance.<br>
+&nbsp;<br>
+:param&nbsp;source:&nbsp;Source&nbsp;of&nbsp;the&nbsp;dataset&nbsp;-&nbsp;can&nbsp;be&nbsp;a&nbsp;file&nbsp;path&nbsp;string,&nbsp;Path&nbsp;<a href="builtins.html#object">object</a>,&nbsp;or&nbsp;ArtifactSource<br>
+:type&nbsp;source:&nbsp;Union[str,&nbsp;Path,&nbsp;ArtifactSource]</tt></dd></dl>
+
+<hr>
+Readonly properties defined here:<br>
+<dl><dt><strong>file_type</strong></dt>
+<dd><tt>Infer&nbsp;the&nbsp;file&nbsp;type&nbsp;from&nbsp;the&nbsp;source.<br>
+&nbsp;<br>
+For&nbsp;ArtifactSource,&nbsp;returns&nbsp;the&nbsp;explicitly&nbsp;set&nbsp;file_type.<br>
+For&nbsp;file&nbsp;paths,&nbsp;infers&nbsp;the&nbsp;type&nbsp;from&nbsp;the&nbsp;file&nbsp;extension.<br>
+&nbsp;<br>
+:return:&nbsp;File&nbsp;type&nbsp;(e.g.,&nbsp;"json",&nbsp;"jsonl",&nbsp;"csv")&nbsp;or&nbsp;None&nbsp;if&nbsp;cannot&nbsp;be&nbsp;determined<br>
+:rtype:&nbsp;Optional[str]</tt></dd>
+</dl>
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['Dataset']</td></tr></table>
+</body></html>

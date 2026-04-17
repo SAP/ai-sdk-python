@@ -1,0 +1,163 @@
+name: Tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run tests daily at 22:00 UTC
+    - cron: '0 22 * * *'
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unit-tests:
+    name: 'Unit Tests - Python ${{ matrix.python-version }}'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Run unit tests with coverage
+        run: |
+          mkdir -p test-results
+          pytest -p pytest_cov \
+            --cov=./gen_ai_hub \
+            --cov-report xml:test-results/coverage.xml \
+            --cov-report html:test-results/coverage-html \
+            --cov-report term-missing \
+            --junit-xml=test-results/unit-tests.xml \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            tests
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports-py${{ matrix.python-version }}
+          path: test-results/
+          retention-days: 30
+
+      - name: Comment PR with coverage
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-py${{ matrix.python-version }}
+          path: test-results/coverage.xml
+
+  integration-tests:
+    name: 'Integration Tests - Python ${{ matrix.python-version }}'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    # Only run integration tests if credentials are available (not on external PRs)
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+
+      - name: Run integration tests (core)
+        env:
+          AICORE_RESOURCE_GROUP: gen-ai-hub-sdk
+          AICORE_SERVICE_KEY: ${{ secrets.AICORE_SERVICE_KEY }}
+        run: |
+          mkdir -p test-results
+          pytest --cov=./gen_ai_hub \
+            --junit-xml=test-results/integration-tests-core.xml \
+            --cov-report xml:test-results/integration-coverage-core.xml \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            -m "not bedrock" \
+            integration_tests
+        if: env.AICORE_SERVICE_KEY != ''
+
+      - name: Upload integration test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results-py${{ matrix.python-version }}
+          path: test-results/
+          retention-days: 30
+
+  test-results:
+    name: 'Publish Test Results'
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    if: always()
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-test-results
+
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: '**/unit-tests.xml'
+          check_name: 'Test Results'
+
+      - name: Comment on PR with test summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Find and read coverage reports
+            let coverage_info = '';
+            const artifact_dirs = fs.readdirSync('all-test-results');
+            for (const dir of artifact_dirs) {
+              const coverage_file = path.join('all-test-results', dir, 'coverage.xml');
+              if (fs.existsSync(coverage_file)) {
+                coverage_info += `✅ Coverage report available in artifacts: ${dir}\n`;
+              }
+            }
+            
+            const comment = `## Test Results Summary\n\n${coverage_info || 'No coverage reports found'}`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+
