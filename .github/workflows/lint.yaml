@@ -37,9 +37,11 @@ jobs:
         run: |
           mkdir -p pylint-reports
           pylint gen_ai_hub \
+            --errors-only \
             --output-format=json \
             > pylint-reports/pylint-py${{ matrix.python-version }}.json
           pylint gen_ai_hub \
+            --errors-only \
             --output-format=colorized
 
       - name: Upload pylint reports

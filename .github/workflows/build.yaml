@@ -38,7 +38,7 @@ jobs:
 
       - name: Check syntax with Python compiler
         run: |
-          python -m py_compile gen_ai_hub/
+          python -m compileall -q gen_ai_hub/
 
       - name: Build distribution packages
         run: |
