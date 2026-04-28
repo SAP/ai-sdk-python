@@ -94,7 +94,7 @@ jobs:
 
       - name: Run integration tests (core)
         env:
-          AICORE_RESOURCE_GROUP: gen-ai-hub-sdk
+          AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
           AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
           AICORE_AUTH_URL: ${{ secrets.AICORE_AUTH_URL }}
           AICORE_CLIENT_ID: ${{ secrets.AICORE_CLIENT_ID }}
@@ -170,8 +170,7 @@ jobs:
           else:
             print(f"PASS: {summary}")
           PY
-        if: ${{ secrets.AICORE_BASE_URL != '' && secrets.AICORE_AUTH_URL != '' && secrets.AICORE_CLIENT_ID != '' && secrets.AICORE_CLIENT_SECRET != '' && secrets.AWS_ACCESS_KEY_ID != '' && secrets.AWS_SECRET_ACCESS_KEY != '' }}
-
+          
       - name: Upload integration test results
         if: always()
         uses: actions/upload-artifact@v4
