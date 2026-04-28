@@ -7,3 +7,4 @@ respx
 parameterized~=0.9
 pylint>=3.0.2
 pillow
+python-dotenv>=1.0.0
