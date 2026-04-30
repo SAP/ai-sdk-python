@@ -1,0 +1,56 @@
+name: draft-release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  draft-github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Get version from tag
+        id: get-version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog for this version
+        id: get-changelog
+        run: |
+          python3 << 'EOF'
+          import re
+
+          with open('RELEASE_NOTES.md', 'r') as f:
+              content = f.read()
+
+          # Extract the section for this version
+          version = "${{ steps.get-version.outputs.version }}"
+          pattern = rf'^## {re.escape(version)}$(.*?)(?=^## |\Z)'
+          match = re.search(pattern, content, re.MULTILINE | re.DOTALL)
+
+          if match:
+              changelog = match.group(1).strip()
+          else:
+              changelog = f"Release {version}\n\nSee RELEASE_NOTES.md for details."
+
+          # Write to output file for GitHub Actions
+          with open('changelog.txt', 'w') as f:
+              f.write(changelog)
+          EOF
+
+          CHANGELOG=$(cat changelog.txt)
+          # Use multiline output
+          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Create Draft Release
+        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1.21.0
+        with:
+          tag: ${{ github.ref_name }}
+          draft: true
+          body: ${{ steps.get-changelog.outputs.changelog }}
+          token: ${{ secrets.GITHUB_TOKEN }}

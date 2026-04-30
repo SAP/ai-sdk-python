@@ -1,0 +1,64 @@
+name: bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Semver compatible version string (X.Y.Z)'
+        required: true
+      bump-type:
+        description: 'Type of version bump'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.SAP_AI_SDK_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.SAP_AI_SDK_BOT_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config --local user.email "${{ vars.SAP_AI_SDK_BOT_EMAIL }}"
+          git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
+
+      - name: Update version file
+        id: bump
+        run: |
+          echo "${{ inputs.version }}" > version.txt
+          echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@f677139bbe7f9c59b41e69216b2540ccb3cec6a6 # v5.2.1
+        with:
+          python-version: '3.11'
+
+      - name: Generate changelog from commits
+        run: |
+          python scripts/generate_changelog.py "${{ inputs.version }}" --update
+
+      - name: Commit and tag
+        run: |
+          git add version.txt RELEASE_NOTES.md
+          git commit -m "chore: bump version to ${{ inputs.version }}"
+          git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
+          git push origin main
+          git push origin "v${{ inputs.version }}"

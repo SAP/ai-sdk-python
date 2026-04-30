@@ -3,8 +3,8 @@ name: Tests
 on:
   workflow_dispatch:
   schedule:
-    # Run tests daily at 22:00 UTC
-    - cron: '0 22 * * *'
+    # Run tests weekly on Monday at 22:00 UTC
+    - cron: '0 22 * * 1'
   push:
     branches:
       - main
