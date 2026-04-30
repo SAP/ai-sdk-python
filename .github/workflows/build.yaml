@@ -5,9 +5,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'generative-ai-hub-sdk/**'
   pull_request:
     branches:
       - main
+    paths:
+      - 'generative-ai-hub-sdk/**'
 
 jobs:
   build:
@@ -33,18 +37,22 @@ jobs:
           pip install build wheel setuptools
 
       - name: Install dependencies
+        working-directory: generative-ai-hub-sdk
         run: |
           pip install -r requirements.txt
 
       - name: Check syntax with Python compiler
+        working-directory: generative-ai-hub-sdk
         run: |
           python -m compileall -q gen_ai_hub/
 
       - name: Build distribution packages
+        working-directory: generative-ai-hub-sdk
         run: |
           python -m build
 
       - name: List generated artifacts
+        working-directory: generative-ai-hub-sdk
         run: |
           ls -la dist/
           echo "=== Wheel File ==="
@@ -54,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-py${{ matrix.python-version }}
-          path: dist/
+          path: generative-ai-hub-sdk/dist/
           retention-days: 30
 
   build-summary:
@@ -90,10 +98,10 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            
+
             let artifacts_info = '';
             const artifact_dirs = fs.readdirSync('all-artifacts');
-            
+
             for (const dir of artifact_dirs) {
               if (dir.includes('build-artifacts')) {
                 const build_path = path.join('all-artifacts', dir);
@@ -104,10 +112,10 @@ jobs:
                 }
               }
             }
-            
+
             const status = '${{ needs.build.result }}' === 'success' ? '✅' : '❌';
             const comment = `## Build Status ${status}\n\n${status === '✅' ? 'Distribution packages built successfully.' : 'Build failed. Please check the logs.'}\n\n### Generated Artifacts:\n${artifacts_info || 'See artifacts in Actions'}`;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,

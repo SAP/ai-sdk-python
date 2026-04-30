@@ -42,6 +42,7 @@ jobs:
 
       - name: Update version file
         id: bump
+        working-directory: generative-ai-hub-sdk
         run: |
           echo "${{ inputs.version }}" > version.txt
           echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
@@ -52,12 +53,13 @@ jobs:
           python-version: '3.11'
 
       - name: Generate changelog from commits
+        working-directory: generative-ai-hub-sdk
         run: |
           python scripts/generate_changelog.py "${{ inputs.version }}" --update
 
       - name: Commit and tag
         run: |
-          git add version.txt RELEASE_NOTES.md
+          git add generative-ai-hub-sdk/version.txt generative-ai-hub-sdk/RELEASE_NOTES.md
           git commit -m "chore: bump version to ${{ inputs.version }}"
           git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
           git push origin main
