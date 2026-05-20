@@ -32,7 +32,7 @@ dependencies = [
     "click~=8.3",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest~=9.0",
     "pytest-cov~=7.0",
@@ -45,6 +45,9 @@ aicore = "ai_core_sdk.cli:cli"
 [project.urls]
 Homepage = "https://www.sap.com/"
 Download = "https://pypi.python.org/pypi/ai-core-sdk"
+
+[tool.uv.sources]
+sap-ai-sdk-base = { workspace = true }
 
 [tool.setuptools.dynamic]
 version = {file = "version.txt"}

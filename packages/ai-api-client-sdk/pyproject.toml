@@ -33,7 +33,7 @@ dependencies = [
     "requests~=2.32",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest~=9.0",
     "pytest-cov~=7.0",

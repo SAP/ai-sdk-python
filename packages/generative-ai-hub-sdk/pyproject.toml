@@ -62,6 +62,8 @@ amazon = [
 all = [
     "sap-ai-sdk-gen[google,amazon]",
 ]
+
+[dependency-groups]
 dev = [
     "httpx~=0.28.1",
     "pytest~=9.0",
@@ -77,6 +79,9 @@ dev = [
 [project.urls]
 Homepage = "https://www.sap.com/"
 Download = "https://pypi.python.org/pypi/sap-ai-sdk-gen"
+
+[tool.uv.sources]
+sap-ai-sdk-core = { workspace = true }
 
 [tool.setuptools.dynamic]
 version = {file = "version.txt"}

@@ -1,11 +1,8 @@
 install:
-	pip install \
-		-e "packages/ai-api-client-sdk[dev]" \
-		-e "packages/ai-core-sdk[dev]" \
-		-e "packages/generative-ai-hub-sdk[all,dev]"
+	uv sync --all-packages --all-extras
 
 test:
-	pytest
+	uv run pytest
 
 test-pkg:
-	pytest packages/$(pkg)/tests
+	uv run pytest packages/$(pkg)/tests

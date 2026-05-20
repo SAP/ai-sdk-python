@@ -1,3 +1,6 @@
+[tool.uv.workspace]
+members = ["packages/*"]
+
 [tool.pytest.ini_options]
 testpaths = [
     "packages/ai-api-client-sdk/tests",
