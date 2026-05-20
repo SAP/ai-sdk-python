@@ -1,0 +1,9 @@
+name: simple
+version: 0.0.1
+scenario: my-scenario
+spec:
+  template:
+    - role: "system"
+      content: "{{ ?instruction }}"
+    - role: "user"
+      content: "Some more {{ ?user_input }}"

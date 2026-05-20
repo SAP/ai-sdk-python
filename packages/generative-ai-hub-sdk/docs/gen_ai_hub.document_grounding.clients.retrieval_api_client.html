@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.document_grounding.clients.retrieval_api_client</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.document_grounding.html"><font color="#ffffff">document_grounding</font></a>.<a href="gen_ai_hub.document_grounding.clients.html"><font color="#ffffff">clients</font></a>.retrieval_api_client</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/document_grounding/clients/retrieval_api_client.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/document_grounding/clients/retrieval_api_client.py</a></font></td></tr></table>
+    <p><tt>Retrieval&nbsp;API&nbsp;client&nbsp;for&nbsp;Document&nbsp;Grounding.<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;provides&nbsp;the&nbsp;<a href="#RetrievalAPIClient">RetrievalAPIClient</a>&nbsp;class&nbsp;for&nbsp;querying&nbsp;and&nbsp;retrieving<br>
+relevant&nbsp;content&nbsp;from&nbsp;configured&nbsp;data&nbsp;repositories.&nbsp;The&nbsp;Retrieval&nbsp;API&nbsp;combines<br>
+semantic&nbsp;search&nbsp;with&nbsp;repository&nbsp;metadata&nbsp;filtering&nbsp;and&nbsp;supports&nbsp;custom&nbsp;retrieval<br>
+configurations&nbsp;for&nbsp;chunk/document&nbsp;granularity.<br>
+&nbsp;<br>
+Supported&nbsp;repository&nbsp;types:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Vector&nbsp;stores<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;External&nbsp;document&nbsp;sources&nbsp;(e.g.,&nbsp;help.sap.com)<br>
+&nbsp;<br>
+API&nbsp;Reference:&nbsp;<a href="https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval">https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval</a></tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="humps.html">humps</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.document_grounding.clients.retrieval_api_client.html#RetrievalAPIClient">RetrievalAPIClient</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RetrievalAPIClient">class <strong>RetrievalAPIClient</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#RetrievalAPIClient">RetrievalAPIClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+The&nbsp;Retrieval&nbsp;API&nbsp;enables&nbsp;querying&nbsp;and&nbsp;retrieving&nbsp;relevant&nbsp;content&nbsp;from&nbsp;configured&nbsp;data&nbsp;repositories,<br>
+such&nbsp;as&nbsp;vector&nbsp;or&nbsp;external&nbsp;document&nbsp;sources&nbsp;(e.g.,&nbsp;help.sap.com).<br>
+&nbsp;<br>
+Retrieval&nbsp;combines&nbsp;semantic&nbsp;search&nbsp;with&nbsp;repository&nbsp;metadata&nbsp;filtering&nbsp;and&nbsp;supports&nbsp;custom<br>
+retrieval&nbsp;configurations&nbsp;for&nbsp;chunk/document&nbsp;granularity.<br>
+&nbsp;<br>
+Reference:&nbsp;<a href="https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval">https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="RetrievalAPIClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initialize&nbsp;the&nbsp;<a href="#RetrievalAPIClient">RetrievalAPIClient</a>.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;Optional&nbsp;proxy&nbsp;client&nbsp;for&nbsp;making&nbsp;API&nbsp;requests.<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-get_data_repositories"><strong>get_data_repositories</strong></a>(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) -&gt; gen_ai_hub.document_grounding.models.retrieval.DataRepositories</dt><dd><tt>List&nbsp;all&nbsp;data&nbsp;repositories&nbsp;available&nbsp;to&nbsp;the&nbsp;tenant.<br>
+&nbsp;<br>
+:param&nbsp;top:&nbsp;the&nbsp;number&nbsp;of&nbsp;items&nbsp;to&nbsp;return,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;top:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;skip:&nbsp;the&nbsp;number&nbsp;of&nbsp;items&nbsp;to&nbsp;skip,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;skip:&nbsp;Optional[int],&nbsp;optional<br>
+:param&nbsp;count:&nbsp;whether&nbsp;to&nbsp;include&nbsp;a&nbsp;count&nbsp;of&nbsp;total&nbsp;items,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;count:&nbsp;Optional[bool],&nbsp;optional<br>
+:return:&nbsp;DataRepositories&nbsp;model&nbsp;containing&nbsp;the&nbsp;list&nbsp;of&nbsp;data&nbsp;repositories<br>
+:rtype:&nbsp;DataRepositories</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-get_data_repository_by_id"><strong>get_data_repository_by_id</strong></a>(self, repository_id: str) -&gt; gen_ai_hub.document_grounding.models.retrieval.DataRepository</dt><dd><tt>Get&nbsp;a&nbsp;single&nbsp;data&nbsp;repository&nbsp;by&nbsp;its&nbsp;unique&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;repository_id:&nbsp;the&nbsp;unique&nbsp;identifier&nbsp;of&nbsp;the&nbsp;data&nbsp;repository<br>
+:type&nbsp;repository_id:&nbsp;str<br>
+:return:&nbsp;DataRepository&nbsp;model&nbsp;representing&nbsp;the&nbsp;data&nbsp;repository<br>
+:rtype:&nbsp;DataRepository</tt></dd></dl>
+
+<dl><dt><a name="RetrievalAPIClient-search"><strong>search</strong></a>(self, search_input: gen_ai_hub.document_grounding.models.retrieval.RetrievalSearchInput) -&gt; gen_ai_hub.document_grounding.models.retrieval.RetrievalSearchResults</dt><dd><tt>Perform&nbsp;a&nbsp;retrieval&nbsp;search&nbsp;for&nbsp;relevant&nbsp;content.<br>
+&nbsp;<br>
+:param&nbsp;search_input:&nbsp;RetrievalSearchInput&nbsp;model&nbsp;defining&nbsp;the&nbsp;query&nbsp;and&nbsp;filters.<br>
+:type&nbsp;search_input:&nbsp;RetrievalSearchInput<br>
+:return:&nbsp;RetrievalSearchResults&nbsp;model&nbsp;containing&nbsp;repositories,&nbsp;documents,&nbsp;and&nbsp;chunks.<br>
+:rtype:&nbsp;RetrievalSearchResults</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Optional</strong> = typing.Optional<br>
+<strong>PATH_DOCUMENT_GROUNDING_RETRIEVAL</strong> = '/lm/document-grounding/retrieval'</td></tr></table>
+</body></html>

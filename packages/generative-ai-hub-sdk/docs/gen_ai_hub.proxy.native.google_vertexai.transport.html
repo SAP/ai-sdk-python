@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.proxy.native.google_vertexai.transport</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.proxy.html"><font color="#ffffff">proxy</font></a>.<a href="gen_ai_hub.proxy.native.html"><font color="#ffffff">native</font></a>.<a href="gen_ai_hub.proxy.native.google_vertexai.html"><font color="#ffffff">google_vertexai</font></a>.transport</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/proxy/native/google_vertexai/transport.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/proxy/native/google_vertexai/transport.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="google.api_core.exceptions.html">google.api_core.exceptions</a><br>
+<a href="google.api_core.gapic_v1.html">google.api_core.gapic_v1</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="google.protobuf.json_format.html">google.protobuf.json_format</a><br>
+<a href="google.api_core.path_template.html">google.api_core.path_template</a><br>
+<a href="google.cloud.aiplatform_v1beta1.types.prediction_service.html">google.cloud.aiplatform_v1beta1.types.prediction_service</a><br>
+</td><td width="25%" valign=top><a href="google.api_core.rest_helpers.html">google.api_core.rest_helpers</a><br>
+<a href="google.api_core.rest_streaming.html">google.api_core.rest_streaming</a><br>
+<a href="google.api_core.retry.html">google.api_core.retry</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.html#PredictionServiceRestTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestTransport</a>(<a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.html#PredictionServiceTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.PredictionServiceTransport</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.proxy.native.google_vertexai.transport.html#PatchedPredictionServiceRestTransport">PatchedPredictionServiceRestTransport</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PatchedPredictionServiceRestTransport">class <strong>PatchedPredictionServiceRestTransport</strong></a>(<a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.html#PredictionServiceRestTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestTransport</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#PatchedPredictionServiceRestTransport">PatchedPredictionServiceRestTransport</a>(*,&nbsp;host:&nbsp;str&nbsp;=&nbsp;'aiplatform.googleapis.com',&nbsp;credentials:&nbsp;Optional[google.auth.credentials.Credentials]&nbsp;=&nbsp;None,&nbsp;credentials_file:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;scopes:&nbsp;Optional[Sequence[str]]&nbsp;=&nbsp;None,&nbsp;client_cert_source_for_mtls:&nbsp;Optional[Callable[[],&nbsp;Tuple[bytes,&nbsp;bytes]]]&nbsp;=&nbsp;None,&nbsp;quota_project_id:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;client_info:&nbsp;google.api_core.gapic_v1.client_info.ClientInfo&nbsp;=&nbsp;&amp;lt;google.api_core.gapic_v1.client_info.ClientInfo&nbsp;object&nbsp;at&nbsp;0x7fb9a3b31c90&amp;gt;,&nbsp;always_use_jwt_access:&nbsp;Optional[bool]&nbsp;=&nbsp;False,&nbsp;url_scheme:&nbsp;str&nbsp;=&nbsp;'https',&nbsp;interceptor:&nbsp;Optional[google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestInterceptor]&nbsp;=&nbsp;None,&nbsp;api_audience:&nbsp;Optional[str]&nbsp;=&nbsp;None)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+<a href="#PatchedPredictionServiceRestTransport">PatchedPredictionServiceRestTransport</a>&nbsp;is&nbsp;created&nbsp;to&nbsp;resolve&nbsp;an&nbsp;issue&nbsp;in&nbsp;the&nbsp;Vertex&nbsp;AI&nbsp;SDK.<br>
+This&nbsp;class&nbsp;should&nbsp;be&nbsp;removed&nbsp;as&nbsp;soon&nbsp;as&nbsp;the&nbsp;bug&nbsp;is&nbsp;resolved&nbsp;upstream.&nbsp;The&nbsp;issue&nbsp;is&nbsp;that&nbsp;the<br>
+Python&nbsp;requests&nbsp;library&nbsp;is&nbsp;not&nbsp;called&nbsp;with&nbsp;the&nbsp;parameter&nbsp;stream=True&nbsp;within&nbsp;the&nbsp;_StreamGenerateContents<br>
+__call__&nbsp;method.&nbsp;The&nbsp;__call__&nbsp;method&nbsp;has&nbsp;been&nbsp;copied&nbsp;over&nbsp;and&nbsp;was&nbsp;only&nbsp;adjusted&nbsp;at&nbsp;places&nbsp;marked<br>
+with&nbsp;PATCHED.<br>
+Bug&nbsp;is&nbsp;reported&nbsp;at&nbsp;<a href="https://github.com/googleapis/gapic-generator-python/issues/2076">https://github.com/googleapis/gapic-generator-python/issues/2076</a>.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.proxy.native.google_vertexai.transport.html#PatchedPredictionServiceRestTransport">PatchedPredictionServiceRestTransport</a></dd>
+<dd><a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.html#PredictionServiceRestTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestTransport</a></dd>
+<dd><a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.html#PredictionServiceTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.PredictionServiceTransport</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<hr>
+Methods inherited from <a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.html#PredictionServiceRestTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestTransport</a>:<br>
+<dl><dt><a name="PatchedPredictionServiceRestTransport-__init__"><strong>__init__</strong></a>(self, *, host: str = 'aiplatform.googleapis.com', credentials: Optional[google.auth.credentials.Credentials] = None, credentials_file: Optional[str] = None, scopes: Optional[Sequence[str]] = None, client_cert_source_for_mtls: Optional[Callable[[], Tuple[bytes, bytes]]] = None, quota_project_id: Optional[str] = None, client_info: google.api_core.gapic_v1.client_info.ClientInfo = &lt;google.api_core.gapic_v1.client_info.ClientInfo object at 0x7fb9a3b31c90&gt;, always_use_jwt_access: Optional[bool] = False, url_scheme: str = 'https', interceptor: Optional[google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestInterceptor] = None, api_audience: Optional[str] = None) -&gt; None</dt><dd><tt>Instantiate&nbsp;the&nbsp;transport.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;host&nbsp;(Optional[str]):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;hostname&nbsp;to&nbsp;connect&nbsp;to&nbsp;(default:&nbsp;'aiplatform.googleapis.com').<br>
+&nbsp;&nbsp;&nbsp;&nbsp;credentials&nbsp;(Optional[google.auth.credentials.Credentials]):&nbsp;The<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;authorization&nbsp;credentials&nbsp;to&nbsp;attach&nbsp;to&nbsp;requests.&nbsp;These<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;credentials&nbsp;identify&nbsp;the&nbsp;application&nbsp;to&nbsp;the&nbsp;service;&nbsp;if&nbsp;none<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;are&nbsp;specified,&nbsp;the&nbsp;client&nbsp;will&nbsp;attempt&nbsp;to&nbsp;ascertain&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;credentials&nbsp;from&nbsp;the&nbsp;environment.<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;credentials_file&nbsp;(Optional[str]):&nbsp;A&nbsp;file&nbsp;with&nbsp;credentials&nbsp;that&nbsp;can<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;loaded&nbsp;with&nbsp;:func:`google.auth.load_credentials_from_file`.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;argument&nbsp;is&nbsp;ignored&nbsp;if&nbsp;``channel``&nbsp;is&nbsp;provided.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;scopes&nbsp;(Optional(Sequence[str])):&nbsp;A&nbsp;list&nbsp;of&nbsp;scopes.&nbsp;This&nbsp;argument&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ignored&nbsp;if&nbsp;``channel``&nbsp;is&nbsp;provided.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;client_cert_source_for_mtls&nbsp;(Callable[[],&nbsp;Tuple[bytes,&nbsp;bytes]]):&nbsp;Client<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;certificate&nbsp;to&nbsp;configure&nbsp;mutual&nbsp;TLS&nbsp;HTTP&nbsp;channel.&nbsp;It&nbsp;is&nbsp;ignored<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;``channel``&nbsp;is&nbsp;provided.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;quota_project_id&nbsp;(Optional[str]):&nbsp;An&nbsp;optional&nbsp;project&nbsp;to&nbsp;use&nbsp;for&nbsp;billing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;and&nbsp;quota.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;client_info&nbsp;(google.api_core.gapic_v1.client_info.ClientInfo):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;client&nbsp;info&nbsp;used&nbsp;to&nbsp;send&nbsp;a&nbsp;user-agent&nbsp;string&nbsp;along&nbsp;with<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;API&nbsp;requests.&nbsp;If&nbsp;``None``,&nbsp;then&nbsp;default&nbsp;info&nbsp;will&nbsp;be&nbsp;used.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Generally,&nbsp;you&nbsp;only&nbsp;need&nbsp;to&nbsp;set&nbsp;this&nbsp;if&nbsp;you&nbsp;are&nbsp;developing<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;your&nbsp;own&nbsp;client&nbsp;library.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;always_use_jwt_access&nbsp;(Optional[bool]):&nbsp;Whether&nbsp;self&nbsp;signed&nbsp;JWT&nbsp;should<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;used&nbsp;for&nbsp;service&nbsp;account&nbsp;credentials.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;url_scheme:&nbsp;the&nbsp;protocol&nbsp;scheme&nbsp;for&nbsp;the&nbsp;API&nbsp;endpoint.&nbsp;&nbsp;Normally<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"https",&nbsp;but&nbsp;for&nbsp;testing&nbsp;or&nbsp;local&nbsp;servers,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"http"&nbsp;can&nbsp;be&nbsp;specified.</tt></dd></dl>
+
+<dl><dt><a name="PatchedPredictionServiceRestTransport-close"><strong>close</strong></a>(self)</dt><dd><tt>Closes&nbsp;resources&nbsp;associated&nbsp;with&nbsp;the&nbsp;transport.<br>
+&nbsp;<br>
+..&nbsp;warning::<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Only&nbsp;call&nbsp;this&nbsp;method&nbsp;if&nbsp;the&nbsp;transport&nbsp;is&nbsp;NOT&nbsp;shared<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with&nbsp;other&nbsp;clients&nbsp;-&nbsp;this&nbsp;may&nbsp;cause&nbsp;errors&nbsp;in&nbsp;other&nbsp;clients!</tt></dd></dl>
+
+<hr>
+Readonly properties inherited from <a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.html#PredictionServiceRestTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.rest.PredictionServiceRestTransport</a>:<br>
+<dl><dt><strong>cancel_operation</strong></dt>
+</dl>
+<dl><dt><strong>chat_completions</strong></dt>
+</dl>
+<dl><dt><strong>count_tokens</strong></dt>
+</dl>
+<dl><dt><strong>delete_operation</strong></dt>
+</dl>
+<dl><dt><strong>direct_predict</strong></dt>
+</dl>
+<dl><dt><strong>direct_raw_predict</strong></dt>
+</dl>
+<dl><dt><strong>explain</strong></dt>
+</dl>
+<dl><dt><strong>generate_content</strong></dt>
+</dl>
+<dl><dt><strong>get_iam_policy</strong></dt>
+</dl>
+<dl><dt><strong>get_location</strong></dt>
+</dl>
+<dl><dt><strong>get_operation</strong></dt>
+</dl>
+<dl><dt><strong>kind</strong></dt>
+</dl>
+<dl><dt><strong>list_locations</strong></dt>
+</dl>
+<dl><dt><strong>list_operations</strong></dt>
+</dl>
+<dl><dt><strong>predict</strong></dt>
+</dl>
+<dl><dt><strong>raw_predict</strong></dt>
+</dl>
+<dl><dt><strong>server_streaming_predict</strong></dt>
+</dl>
+<dl><dt><strong>set_iam_policy</strong></dt>
+</dl>
+<dl><dt><strong>stream_direct_predict</strong></dt>
+</dl>
+<dl><dt><strong>stream_direct_raw_predict</strong></dt>
+</dl>
+<dl><dt><strong>stream_generate_content</strong></dt>
+</dl>
+<dl><dt><strong>stream_raw_predict</strong></dt>
+</dl>
+<dl><dt><strong>streaming_predict</strong></dt>
+</dl>
+<dl><dt><strong>streaming_raw_predict</strong></dt>
+</dl>
+<dl><dt><strong>test_iam_permissions</strong></dt>
+</dl>
+<dl><dt><strong>wait_operation</strong></dt>
+</dl>
+<hr>
+Readonly properties inherited from <a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.html#PredictionServiceTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.PredictionServiceTransport</a>:<br>
+<dl><dt><strong>host</strong></dt>
+</dl>
+<hr>
+Data descriptors inherited from <a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.html#PredictionServiceTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.PredictionServiceTransport</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.html#PredictionServiceTransport">google.cloud.aiplatform_v1beta1.services.prediction_service.transports.base.PredictionServiceTransport</a>:<br>
+<dl><dt><strong>AUTH_SCOPES</strong> = ('https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/cloud-platform.read-only')</dl>
+
+<dl><dt><strong>DEFAULT_HOST</strong> = 'aiplatform.googleapis.com'</dl>
+
+<dl><dt><strong>__annotations__</strong> = {'DEFAULT_HOST': &lt;class 'str'&gt;}</dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Dict</strong> = typing.Dict<br>
+<strong>List</strong> = typing.List<br>
+<strong>Optional</strong> = typing.Optional<br>
+<strong>OptionalRetry</strong> = typing.Union[google.api_core.retry.retry_unary.R...pi_core.gapic_v1.method._MethodDefault, NoneType]<br>
+<strong>Sequence</strong> = typing.Sequence<br>
+<strong>Tuple</strong> = typing.Tuple<br>
+<strong>Union</strong> = typing.Union</td></tr></table>
+</body></html>

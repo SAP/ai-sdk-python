@@ -1,0 +1,18 @@
+#!/usr/bin/env groovy
+
+AIF_TOOLKIT_VERSION='master'
+
+library "piper-lib"
+library "piper-lib-os"
+library "AIF_CICD_Toolkit@${AIF_TOOLKIT_VERSION}"
+
+executeAIFPipeline( branch: 'master', 
+                    libraryVersion: "${AIF_TOOLKIT_VERSION}", 
+                    stagesToExclude:
+                                    [   'Validate Swagger with Contract',
+                                        'Verify Provider',
+                                        'Verify Consumer Contract as Provider', 
+                                        'Run Whitesource Scan',
+                                        'PPMS Whitesource Compliance'
+                                    ]
+                  )

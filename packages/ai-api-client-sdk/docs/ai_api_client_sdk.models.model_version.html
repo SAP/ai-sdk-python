@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module ai_api_client_sdk.models.model_version</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="ai_api_client_sdk.html"><font color="#ffffff">ai_api_client_sdk</font></a>.<a href="ai_api_client_sdk.models.html"><font color="#ffffff">models</font></a>.model_version</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ndation_ai-api-client-sdk_master/ai_api_client_sdk/models/model_version.py">/home/jenkins/agent/workspace/ndation_ai-api-client-sdk_master/ai_api_client_sdk/models/model_version.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="ai_api_client_sdk.models.model_version.html#ModelVersion">ModelVersion</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ModelVersion">class <strong>ModelVersion</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#ModelVersion">ModelVersion</a>(name:&nbsp;str,&nbsp;is_latest:&nbsp;bool,&nbsp;deprecated:&nbsp;bool,&nbsp;retirement_date:&nbsp;Optional[datetime.datetime]&nbsp;=&nbsp;None,&nbsp;context_length:&nbsp;Optional[int]&nbsp;=&nbsp;None,&nbsp;input_types:&nbsp;Optional[List[str]]&nbsp;=&nbsp;None,&nbsp;capabilities:&nbsp;Optional[List[str]]&nbsp;=&nbsp;None,&nbsp;metadata:&nbsp;Optional[Dict[str,&nbsp;str]]&nbsp;=&nbsp;None,&nbsp;cost:&nbsp;Optional[Dict[str,&nbsp;str]]&nbsp;=&nbsp;None,&nbsp;suggested_replacements:&nbsp;Optional[List[str]]&nbsp;=&nbsp;None,&nbsp;streaming_supported:&nbsp;Optional[bool]&nbsp;=&nbsp;None,&nbsp;orchestration_capabilities:&nbsp;Optional[List[str]]&nbsp;=&nbsp;None,&nbsp;**kwargs)<br>
+&nbsp;<br>
+The&nbsp;<a href="#ModelVersion">ModelVersion</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;defines&nbsp;a&nbsp;version&nbsp;for&nbsp;a&nbsp;model<br>
+:param&nbsp;name:&nbsp;Name&nbsp;of&nbsp;the&nbsp;model&nbsp;version<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;is_latest:&nbsp;True&nbsp;if&nbsp;model&nbsp;version&nbsp;is&nbsp;latest,&nbsp;otherwise&nbsp;false<br>
+:type&nbsp;is_latest:&nbsp;bool<br>
+:param&nbsp;deprecated:&nbsp;True&nbsp;if&nbsp;model&nbsp;version&nbsp;is&nbsp;deprecated,&nbsp;otherwise&nbsp;false<br>
+:type&nbsp;deprecated:&nbsp;bool<br>
+:param&nbsp;retirement_date:&nbsp;Retirement&nbsp;date&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;retirement_date:&nbsp;datetime,&nbsp;optional<br>
+:param&nbsp;context_length:&nbsp;Context&nbsp;length&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;context_length:&nbsp;int,&nbsp;optional<br>
+:param&nbsp;input_types:&nbsp;Input&nbsp;types&nbsp;supported&nbsp;by&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;input_types:&nbsp;List[str],&nbsp;optional<br>
+:param&nbsp;capabilities:&nbsp;Capabilities&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;capabilities:&nbsp;List[str],&nbsp;optional<br>
+:param&nbsp;metadata:&nbsp;Metadata&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;metadata:&nbsp;List[Dict[str,&nbsp;str]],&nbsp;optional<br>
+:param&nbsp;cost:&nbsp;Cost&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;cost:&nbsp;List[Dict[str,&nbsp;str]],&nbsp;optional<br>
+:param&nbsp;suggested_replacements:&nbsp;Suggested&nbsp;replacements&nbsp;for&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;suggested_replacements:&nbsp;List[str],&nbsp;optional<br>
+:param&nbsp;streaming_supported:&nbsp;True&nbsp;if&nbsp;streaming&nbsp;is&nbsp;supported,&nbsp;otherwise&nbsp;false<br>
+:type&nbsp;streaming_supported:&nbsp;bool,&nbsp;optional<br>
+:param&nbsp;orchestration_capabilities:&nbsp;Orchestration&nbsp;capabilities&nbsp;of&nbsp;the&nbsp;model&nbsp;version,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;orchestration_capabilities:&nbsp;List[str],&nbsp;optional<br>
+:param&nbsp;`**kwargs`:&nbsp;The&nbsp;keyword&nbsp;arguments&nbsp;are&nbsp;there&nbsp;in&nbsp;case&nbsp;there&nbsp;are&nbsp;additional&nbsp;attributes&nbsp;returned&nbsp;from&nbsp;server<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ModelVersion-__eq__"><strong>__eq__</strong></a>(self, other)</dt><dd><tt>Return&nbsp;self==value.</tt></dd></dl>
+
+<dl><dt><a name="ModelVersion-__init__"><strong>__init__</strong></a>(self, name: str, is_latest: bool, deprecated: bool, retirement_date: Optional[datetime.datetime] = None, context_length: Optional[int] = None, input_types: Optional[List[str]] = None, capabilities: Optional[List[str]] = None, metadata: Optional[Dict[str, str]] = None, cost: Optional[Dict[str, str]] = None, suggested_replacements: Optional[List[str]] = None, streaming_supported: Optional[bool] = None, orchestration_capabilities: Optional[List[str]] = None, **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="ModelVersion-from_dict"><strong>from_dict</strong></a>(model_version_dict: Dict[str, Any])</dt><dd><tt>Returns&nbsp;a&nbsp;:class:`ai_api_client_sdk.models.model_version.<a href="#ModelVersion">ModelVersion</a>`&nbsp;<a href="builtins.html#object">object</a>,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;dict<br>
+provided&nbsp;as&nbsp;parameter<br>
+&nbsp;<br>
+:param&nbsp;model_version_dict:&nbsp;Dict&nbsp;which&nbsp;includes&nbsp;the&nbsp;necessary&nbsp;values&nbsp;to&nbsp;create&nbsp;the&nbsp;<a href="builtins.html#object">object</a><br>
+:type&nbsp;model_version_dict:&nbsp;Dict[str,&nbsp;Any]<br>
+:return:&nbsp;An&nbsp;<a href="builtins.html#object">object</a>,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;provided<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.model_version.<a href="#ModelVersion">ModelVersion</a>`</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Any</strong> = typing.Any<br>
+<strong>Dict</strong> = typing.Dict<br>
+<strong>List</strong> = typing.List<br>
+<strong>Optional</strong> = typing.Optional</td></tr></table>
+</body></html>

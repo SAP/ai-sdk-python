@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.evaluations.models.evaluation_config</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.evaluations.html"><font color="#ffffff">evaluations</font></a>.<a href="gen_ai_hub.evaluations.models.html"><font color="#ffffff">models</font></a>.evaluation_config</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/models/evaluation_config.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/evaluations/models/evaluation_config.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.evaluations.models.evaluation_config.html#EvaluationConfig">EvaluationConfig</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="EvaluationConfig">class <strong>EvaluationConfig</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#EvaluationConfig">EvaluationConfig</a>(dataset_config:&nbsp;gen_ai_hub.evaluations.models.dataset_config.Dataset,&nbsp;metrics:&nbsp;List[gen_ai_hub.evaluations.models.metric_config.MetricConfig],&nbsp;llm:&nbsp;Optional[gen_ai_hub.orchestration_v2.models.llm_model_details.LLMModelDetails]&nbsp;=&nbsp;None,&nbsp;template:&nbsp;Union[str,&nbsp;gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateSpec,&nbsp;gen_ai_hub.orchestration_v2.models.template_ref.TemplateRef,&nbsp;NoneType]&nbsp;=&nbsp;None,&nbsp;orchestration_registry_reference:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;template_variable_mapping:&nbsp;Optional[dict]&nbsp;=&nbsp;None,&nbsp;test_row_count:&nbsp;Optional[int]&nbsp;=&nbsp;-1,&nbsp;repetitions:&nbsp;Optional[int]&nbsp;=&nbsp;1,&nbsp;tags:&nbsp;Optional[dict]&nbsp;=&nbsp;'{}',&nbsp;debug_mode:&nbsp;Optional[bool]&nbsp;=&nbsp;False)<br>
+&nbsp;<br>
+Defines&nbsp;the&nbsp;evaluation&nbsp;configuration&nbsp;<a href="builtins.html#object">object</a>&nbsp;for&nbsp;the&nbsp;Evaluations&nbsp;flow.<br>
+&nbsp;<br>
+This&nbsp;class&nbsp;encapsulates&nbsp;all&nbsp;configuration&nbsp;parameters&nbsp;needed&nbsp;to&nbsp;run&nbsp;an&nbsp;evaluation&nbsp;job,<br>
+including&nbsp;the&nbsp;model/template&nbsp;configuration,&nbsp;dataset,&nbsp;metrics,&nbsp;and&nbsp;execution&nbsp;settings.<br>
+&nbsp;<br>
+At&nbsp;least&nbsp;one&nbsp;of&nbsp;the&nbsp;following&nbsp;must&nbsp;be&nbsp;provided:<br>
+&nbsp;<br>
+-&nbsp;``llm``&nbsp;and&nbsp;``template``&nbsp;combination&nbsp;(using&nbsp;orchestration_v2&nbsp;models)<br>
+-&nbsp;``orchestration_registry_reference``&nbsp;(UUID&nbsp;of&nbsp;a&nbsp;registered&nbsp;orchestration&nbsp;configuration)<br>
+&nbsp;<br>
+:param&nbsp;dataset_config:&nbsp;Dataset&nbsp;configuration&nbsp;<a href="builtins.html#object">object</a>&nbsp;specifying&nbsp;the&nbsp;evaluation&nbsp;dataset<br>
+:type&nbsp;dataset_config:&nbsp;Dataset<br>
+:param&nbsp;metrics:&nbsp;List&nbsp;of&nbsp;metric&nbsp;configurations&nbsp;for&nbsp;evaluation<br>
+:type&nbsp;metrics:&nbsp;List[MetricConfig]<br>
+:param&nbsp;llm:&nbsp;LLM&nbsp;configuration&nbsp;from&nbsp;orchestration_v2&nbsp;(LLMModelDetails)<br>
+:type&nbsp;llm:&nbsp;Optional[LLM]<br>
+:param&nbsp;template:&nbsp;Prompt&nbsp;template&nbsp;as&nbsp;string,&nbsp;PromptTemplateSpec,&nbsp;or&nbsp;TemplateRef<br>
+:type&nbsp;template:&nbsp;Optional[Union[str,&nbsp;PromptTemplateSpec,&nbsp;TemplateRef]]<br>
+:param&nbsp;orchestration_registry_reference:&nbsp;UUID&nbsp;of&nbsp;registered&nbsp;orchestration&nbsp;configuration<br>
+:type&nbsp;orchestration_registry_reference:&nbsp;Optional[str]<br>
+:param&nbsp;template_variable_mapping:&nbsp;Variable&nbsp;mapping&nbsp;for&nbsp;the&nbsp;prompt&nbsp;template<br>
+:type&nbsp;template_variable_mapping:&nbsp;Optional[dict]<br>
+:param&nbsp;test_row_count:&nbsp;Number&nbsp;of&nbsp;rows&nbsp;to&nbsp;sample&nbsp;from&nbsp;dataset&nbsp;(-1&nbsp;for&nbsp;all&nbsp;rows),&nbsp;defaults&nbsp;to&nbsp;-1<br>
+:type&nbsp;test_row_count:&nbsp;Optional[int]<br>
+:param&nbsp;repetitions:&nbsp;Number&nbsp;of&nbsp;times&nbsp;to&nbsp;repeat&nbsp;evaluation&nbsp;over&nbsp;the&nbsp;dataset,&nbsp;defaults&nbsp;to&nbsp;1<br>
+:type&nbsp;repetitions:&nbsp;Optional[int]<br>
+:param&nbsp;tags:&nbsp;User-defined&nbsp;metadata&nbsp;as&nbsp;key-value&nbsp;pairs,&nbsp;defaults&nbsp;to&nbsp;"{}"<br>
+:type&nbsp;tags:&nbsp;Optional[dict]<br>
+:param&nbsp;debug_mode:&nbsp;Enable&nbsp;debug&nbsp;logs&nbsp;in&nbsp;hyperscaler&nbsp;output&nbsp;path,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;debug_mode:&nbsp;Optional[bool]<br>
+&nbsp;<br>
+..&nbsp;note::<br>
+&nbsp;&nbsp;&nbsp;This&nbsp;module&nbsp;uses&nbsp;orchestration_v2&nbsp;models&nbsp;directly.<br>
+&nbsp;<br>
+**Example&nbsp;using&nbsp;TemplateRef&nbsp;with&nbsp;ID**:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;from&nbsp;gen_ai_hub.evaluations.models&nbsp;import&nbsp;<a href="#EvaluationConfig">EvaluationConfig</a>,&nbsp;Dataset,&nbsp;MetricConfig<br>
+&gt;&gt;&gt;&nbsp;from&nbsp;gen_ai_hub.orchestration_v2.models.llm_model_details&nbsp;import&nbsp;LLMModelDetails&nbsp;as&nbsp;LLM<br>
+&gt;&gt;&gt;&nbsp;from&nbsp;gen_ai_hub.orchestration_v2.models.template_ref&nbsp;import&nbsp;TemplateRef,&nbsp;TemplateRefByID<br>
+&gt;&gt;&gt;&nbsp;config&nbsp;=&nbsp;<a href="#EvaluationConfig">EvaluationConfig</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataset_config=Dataset("data/test.jsonl"),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metrics=[MetricConfig(name="accuracy")],<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;llm=LLM(name="gpt-4",&nbsp;version="latest"),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template=TemplateRef(template_ref=TemplateRefByID(id="template-id-here")),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test_row_count=100<br>
+...&nbsp;)<br>
+&nbsp;<br>
+**Example&nbsp;using&nbsp;TemplateRef&nbsp;with&nbsp;scenario/name/version**:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;from&nbsp;gen_ai_hub.orchestration_v2.models.template_ref&nbsp;import&nbsp;TemplateRefByScenarioNameVersion<br>
+&gt;&gt;&gt;&nbsp;config&nbsp;=&nbsp;<a href="#EvaluationConfig">EvaluationConfig</a>(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dataset_config=Dataset("data/test.jsonl"),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metrics=[MetricConfig(name="accuracy")],<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;llm=LLM(name="gpt-4",&nbsp;version="latest",&nbsp;params={"temperature":&nbsp;0.7}),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;template=TemplateRef(template_ref=TemplateRefByScenarioNameVersion(<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scenario="foundation-models",&nbsp;name="prompt1",&nbsp;version="1.0"<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)),<br>
+...&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;test_row_count=100<br>
+...&nbsp;)<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="EvaluationConfig-__init__"><strong>__init__</strong></a>(self, dataset_config: gen_ai_hub.evaluations.models.dataset_config.Dataset, metrics: List[gen_ai_hub.evaluations.models.metric_config.MetricConfig], llm: Optional[gen_ai_hub.orchestration_v2.models.llm_model_details.LLMModelDetails] = None, template: Union[str, gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateSpec, gen_ai_hub.orchestration_v2.models.template_ref.TemplateRef, NoneType] = None, orchestration_registry_reference: Optional[str] = None, template_variable_mapping: Optional[dict] = None, test_row_count: Optional[int] = -1, repetitions: Optional[int] = 1, tags: Optional[dict] = '{}', debug_mode: Optional[bool] = False)</dt><dd><tt>Initialize&nbsp;an&nbsp;<a href="#EvaluationConfig">EvaluationConfig</a>&nbsp;instance.<br>
+&nbsp;<br>
+:param&nbsp;dataset_config:&nbsp;Dataset&nbsp;configuration&nbsp;<a href="builtins.html#object">object</a><br>
+:type&nbsp;dataset_config:&nbsp;Dataset<br>
+:param&nbsp;metrics:&nbsp;List&nbsp;of&nbsp;metric&nbsp;configurations<br>
+:type&nbsp;metrics:&nbsp;List[MetricConfig]<br>
+:param&nbsp;llm:&nbsp;LLM&nbsp;<a href="builtins.html#object">object</a>&nbsp;from&nbsp;orchestration_v2&nbsp;(LLMModelDetails),&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;llm:&nbsp;Optional[LLM]<br>
+:param&nbsp;template:&nbsp;Prompt&nbsp;template&nbsp;(string,&nbsp;PromptTemplateSpec,&nbsp;or&nbsp;TemplateRef),&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;template:&nbsp;Optional[Union[str,&nbsp;PromptTemplateSpec,&nbsp;TemplateRef]]<br>
+:param&nbsp;orchestration_registry_reference:&nbsp;UUID&nbsp;of&nbsp;orchestration&nbsp;config,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;orchestration_registry_reference:&nbsp;Optional[str]<br>
+:param&nbsp;template_variable_mapping:&nbsp;Variable&nbsp;mapping&nbsp;for&nbsp;prompt&nbsp;template,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;template_variable_mapping:&nbsp;Optional[dict]<br>
+:param&nbsp;test_row_count:&nbsp;Number&nbsp;of&nbsp;dataset&nbsp;rows&nbsp;to&nbsp;sample&nbsp;(-1&nbsp;for&nbsp;all),&nbsp;defaults&nbsp;to&nbsp;-1<br>
+:type&nbsp;test_row_count:&nbsp;Optional[int]<br>
+:param&nbsp;repetitions:&nbsp;Number&nbsp;of&nbsp;evaluation&nbsp;repetitions&nbsp;(minimum:&nbsp;1),&nbsp;defaults&nbsp;to&nbsp;1<br>
+:type&nbsp;repetitions:&nbsp;Optional[int]<br>
+:param&nbsp;tags:&nbsp;Key-value&nbsp;metadata&nbsp;pairs&nbsp;applied&nbsp;to&nbsp;all&nbsp;runs,&nbsp;defaults&nbsp;to&nbsp;"{}"<br>
+:type&nbsp;tags:&nbsp;Optional[dict]<br>
+:param&nbsp;debug_mode:&nbsp;Enable&nbsp;debug&nbsp;logging,&nbsp;defaults&nbsp;to&nbsp;False<br>
+:type&nbsp;debug_mode:&nbsp;Optional[bool]<br>
+:raises&nbsp;ValueError:&nbsp;If&nbsp;neither&nbsp;(llm,&nbsp;template)&nbsp;nor&nbsp;orchestration_registry_reference&nbsp;is&nbsp;provided</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['EvaluationConfig']</td></tr></table>
+</body></html>

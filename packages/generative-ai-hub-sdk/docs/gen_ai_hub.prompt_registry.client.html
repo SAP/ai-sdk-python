@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.prompt_registry.client</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.prompt_registry.html"><font color="#ffffff">prompt_registry</font></a>.client</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/prompt_registry/client.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/prompt_registry/client.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>(<a href="abc.html#ABC">abc.ABC</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.prompt_registry.client.html#OrchestrationConfigClient">OrchestrationConfigClient</a>
+</font></dt><dt><font face="helvetica, arial"><a href="gen_ai_hub.prompt_registry.client.html#PromptTemplateClient">PromptTemplateClient</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="OrchestrationConfigClient">class <strong>OrchestrationConfigClient</strong></a>(<a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#OrchestrationConfigClient">OrchestrationConfigClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Client&nbsp;for&nbsp;interacting&nbsp;with&nbsp;the&nbsp;Prompt&nbsp;Registry&nbsp;Orchestration&nbsp;Config&nbsp;API.<br>
+&nbsp;<br>
+<a href="https://api.sap.com/api/PROMPT_REGISTRY_API/overview">https://api.sap.com/api/PROMPT_REGISTRY_API/overview</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.prompt_registry.client.html#OrchestrationConfigClient">OrchestrationConfigClient</a></dd>
+<dd><a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="OrchestrationConfigClient-create_orchestration_config"><strong>create_orchestration_config</strong></a>(self, name: str, version: str, scenario: str, spec: gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig | dict) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigPostResponse</dt><dd><tt>Create&nbsp;an&nbsp;orchestration&nbsp;config.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;scenario:&nbsp;the&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;spec:&nbsp;the&nbsp;specification&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;spec:&nbsp;Union[dict,&nbsp;OrchestrationConfig]<br>
+&nbsp;<br>
+:return:&nbsp;An&nbsp;OrchestrationConfigPostResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigPostResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-delete_orchestration_config_by_id"><strong>delete_orchestration_config_by_id</strong></a>(self, config_id: str) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigDeleteResponse</dt><dd><tt>Delete&nbsp;a&nbsp;specific&nbsp;version&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;config_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;config_id:&nbsp;str<br>
+&nbsp;<br>
+:return:&nbsp;An&nbsp;OrchestrationConfigDeleteResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigDeleteResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-export_orchestration_config"><strong>export_orchestration_config</strong></a>(self, config_id: str) -&gt; bytes</dt><dd><tt>Export&nbsp;a&nbsp;design&nbsp;orchestration&nbsp;config&nbsp;&nbsp;in&nbsp;a&nbsp;declarative&nbsp;compatible&nbsp;yaml&nbsp;file.<br>
+Supports&nbsp;only&nbsp;single&nbsp;file&nbsp;export.<br>
+&nbsp;<br>
+:param&nbsp;config_id:&nbsp;The&nbsp;id&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config&nbsp;to&nbsp;export.<br>
+:type&nbsp;config_id:&nbsp;str<br>
+:return:&nbsp;bytes:&nbsp;The&nbsp;content&nbsp;of&nbsp;the&nbsp;exported&nbsp;file<br>
+:rtype:&nbsp;bytes</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-get_orchestration_config_by_id"><strong>get_orchestration_config_by_id</strong></a>(self, config_id: str, resolve_template_ref: bool = None) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigGetResponse</dt><dd><tt>Retrieve&nbsp;a&nbsp;specific&nbsp;version&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;config_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config&nbsp;to&nbsp;retrieve.<br>
+:type&nbsp;config_id:&nbsp;str<br>
+:param&nbsp;resolve_template_ref:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;resolve_template_ref:&nbsp;bool,&nbsp;optional<br>
+&nbsp;<br>
+:return:&nbsp;An&nbsp;OrchestrationConfigGetResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigGetResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-get_orchestration_config_history"><strong>get_orchestration_config_history</strong></a>(self, scenario: str, name: str, version: str, include_spec: bool = None, resolve_template_ref: bool = None) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigListResponse</dt><dd><tt>Retrieve&nbsp;the&nbsp;history&nbsp;of&nbsp;edits&nbsp;to&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;The&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;The&nbsp;version&nbsp;ID&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;include_spec:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;include_spec:&nbsp;bool,&nbsp;optional<br>
+:param&nbsp;resolve_template_ref:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;resolve_template_ref:&nbsp;bool,&nbsp;optional<br>
+&nbsp;<br>
+:return:&nbsp;An&nbsp;OrchestrationConfigListResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigListResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-get_orchestration_configs"><strong>get_orchestration_configs</strong></a>(self, scenario: str, name: str, version: str, retrieve: str = None, include_spec: bool = None, resolve_template_ref: bool = None) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigListResponse</dt><dd><tt>Retrieve&nbsp;the&nbsp;latest&nbsp;version&nbsp;of&nbsp;every&nbsp;orchestration&nbsp;config&nbsp;based&nbsp;on&nbsp;the&nbsp;filters.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;the&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;orchestration&nbsp;config.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;retrieve:&nbsp;both(default),&nbsp;imperative,&nbsp;declarative<br>
+:type&nbsp;retrieve:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;include_spec:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;include_spec:&nbsp;bool,&nbsp;optional<br>
+:param&nbsp;resolve_template_ref:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;resolve_template_ref:&nbsp;bool,&nbsp;optional<br>
+&nbsp;<br>
+:return:&nbsp;An&nbsp;OrchestrationConfigListResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigListResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationConfigClient-import_orchestration_config"><strong>import_orchestration_config</strong></a>(self, file: bytes) -&gt; gen_ai_hub.prompt_registry.models.orchestration_config.OrchestrationConfigPostResponse</dt><dd><tt>Import&nbsp;a&nbsp;runtime/declarative&nbsp;orchestration&nbsp;config&nbsp;into&nbsp;the&nbsp;design&nbsp;time&nbsp;environment.<br>
+&nbsp;<br>
+:param&nbsp;file:&nbsp;binary&nbsp;file&nbsp;content<br>
+:type&nbsp;file:&nbsp;bytes<br>
+:return:&nbsp;A&nbsp;OrchestrationConfigPostResponse&nbsp;object.<br>
+:rtype:&nbsp;OrchestrationConfigPostResponse</tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Methods inherited from <a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>:<br>
+<dl><dt><a name="OrchestrationConfigClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initializes&nbsp;the&nbsp;PromptRegistryClient.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;Optional&nbsp;proxy&nbsp;client&nbsp;to&nbsp;use&nbsp;for&nbsp;requests.<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="PromptTemplateClient">class <strong>PromptTemplateClient</strong></a>(<a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#PromptTemplateClient">PromptTemplateClient</a>(proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+Client&nbsp;for&nbsp;interacting&nbsp;with&nbsp;the&nbsp;Prompt&nbsp;Registry&nbsp;Prompt&nbsp;Template&nbsp;API.<br>
+&nbsp;<br>
+<a href="https://api.sap.com/api/PROMPT_REGISTRY_API/overview">https://api.sap.com/api/PROMPT_REGISTRY_API/overview</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="gen_ai_hub.prompt_registry.client.html#PromptTemplateClient">PromptTemplateClient</a></dd>
+<dd><a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a></dd>
+<dd><a href="abc.html#ABC">abc.ABC</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="PromptTemplateClient-create_prompt_template"><strong>create_prompt_template</strong></a>(self, name: str, version: str, scenario: str, prompt_template_spec: gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateSpec) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplatePostResponse</dt><dd><tt>Create&nbsp;or&nbsp;update&nbsp;a&nbsp;prompt&nbsp;template.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;scenario:&nbsp;the&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;prompt_template_spec:&nbsp;the&nbsp;specification&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;prompt_template_spec:&nbsp;PromptTemplateSpec<br>
+:return:&nbsp;A&nbsp;PromptTemplatePostResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplatePostResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-delete_prompt_template_by_id"><strong>delete_prompt_template_by_id</strong></a>(self, template_id: str) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateDeleteResponse</dt><dd><tt>Delete&nbsp;a&nbsp;specific&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;template_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;to&nbsp;delete.<br>
+:type&nbsp;template_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;PromptTemplateDeleteResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateDeleteResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-export_prompt_template"><strong>export_prompt_template</strong></a>(self, template_id: str) -&gt; bytes</dt><dd><tt>Export&nbsp;a&nbsp;design&nbsp;time&nbsp;template&nbsp;in&nbsp;a&nbsp;declarative&nbsp;compatible&nbsp;yaml&nbsp;file.&nbsp;Supports&nbsp;only&nbsp;single&nbsp;file&nbsp;export.<br>
+&nbsp;<br>
+:param&nbsp;template_id:&nbsp;The&nbsp;id&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;to&nbsp;export.<br>
+:type&nbsp;template_id:&nbsp;str<br>
+:return:&nbsp;bytes:&nbsp;The&nbsp;content&nbsp;of&nbsp;the&nbsp;exported&nbsp;file<br>
+:rtype:&nbsp;bytes</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-fill_prompt_template"><strong>fill_prompt_template</strong></a>(self, scenario: str, name: str, version: str, input_params: dict, metadata: bool = False) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateSubstitutionResponse</dt><dd><tt>Replace&nbsp;the&nbsp;placeholders&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;referenced&nbsp;via&nbsp;scenario-name-version&nbsp;<br>
+with&nbsp;user&nbsp;provided&nbsp;values.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;the&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;input_params:&nbsp;User&nbsp;provided&nbsp;values&nbsp;to&nbsp;replace&nbsp;the&nbsp;placeholders&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;input_params:&nbsp;dict<br>
+:param&nbsp;metadata:&nbsp;False(default),&nbsp;True&nbsp;return&nbsp;resource&nbsp;object&nbsp;with&nbsp;all&nbsp;details.<br>
+:type&nbsp;metadata:&nbsp;bool,&nbsp;optional<br>
+:return:&nbsp;A&nbsp;PromptTemplateSubstitutionResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateSubstitutionResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-fill_prompt_template_by_id"><strong>fill_prompt_template_by_id</strong></a>(self, template_id: str, input_params: dict, metadata: bool = False) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateSubstitutionResponse</dt><dd><tt>Replace&nbsp;the&nbsp;placeholders&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;referenced&nbsp;via&nbsp;template_id&nbsp;with&nbsp;user&nbsp;provided&nbsp;values.<br>
+&nbsp;<br>
+:param&nbsp;template_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;template_id:&nbsp;str<br>
+:param&nbsp;input_params:&nbsp;User&nbsp;provided&nbsp;values&nbsp;to&nbsp;replace&nbsp;the&nbsp;placeholders&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;input_params:&nbsp;dict<br>
+:param&nbsp;metadata:&nbsp;False(default),&nbsp;True&nbsp;return&nbsp;resource&nbsp;object&nbsp;with&nbsp;all&nbsp;details.<br>
+:type&nbsp;metadata:&nbsp;bool,&nbsp;optional<br>
+:return:&nbsp;A&nbsp;PromptTemplateSubstitutionResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateSubstitutionResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-get_prompt_template_by_id"><strong>get_prompt_template_by_id</strong></a>(self, template_id: str) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateGetResponse</dt><dd><tt>Retrieve&nbsp;a&nbsp;specific&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;by&nbsp;ID.<br>
+&nbsp;<br>
+:param&nbsp;template_id:&nbsp;The&nbsp;ID&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template&nbsp;to&nbsp;retrieve.<br>
+:type&nbsp;template_id:&nbsp;str<br>
+:return:&nbsp;A&nbsp;PromptTemplateGetResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateGetResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-get_prompt_template_history"><strong>get_prompt_template_history</strong></a>(self, scenario: str, name: str, version: str) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateListResponse</dt><dd><tt>Retrieve&nbsp;the&nbsp;history&nbsp;of&nbsp;edits&nbsp;to&nbsp;the&nbsp;prompt&nbsp;template.&nbsp;Only&nbsp;for&nbsp;imperative&nbsp;managed&nbsp;prompt&nbsp;templates.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;The&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;The&nbsp;version&nbsp;ID&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;version:&nbsp;str<br>
+:return:&nbsp;A&nbsp;PromptTemplateListResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateListResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-get_prompt_templates"><strong>get_prompt_templates</strong></a>(self, scenario: str, name: str, version: str, retrieve: str = None, include_spec: bool = None) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplateListResponse</dt><dd><tt>Retrieve&nbsp;the&nbsp;latest&nbsp;version&nbsp;of&nbsp;every&nbsp;prompt&nbsp;template&nbsp;based&nbsp;on&nbsp;the&nbsp;filters.<br>
+&nbsp;<br>
+:param&nbsp;scenario:&nbsp;the&nbsp;scenario&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;scenario:&nbsp;str<br>
+:param&nbsp;name:&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;version:&nbsp;the&nbsp;version&nbsp;of&nbsp;the&nbsp;prompt&nbsp;template.<br>
+:type&nbsp;version:&nbsp;str<br>
+:param&nbsp;retrieve:&nbsp;both(default),&nbsp;imperative,&nbsp;declarative<br>
+:type&nbsp;retrieve:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;include_spec:&nbsp;false(default),&nbsp;true<br>
+:type&nbsp;include_spec:&nbsp;bool,&nbsp;optional<br>
+:return:&nbsp;A&nbsp;PromptTemplateListResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplateListResponse</tt></dd></dl>
+
+<dl><dt><a name="PromptTemplateClient-import_prompt_template"><strong>import_prompt_template</strong></a>(self, file: bytes) -&gt; gen_ai_hub.prompt_registry.models.prompt_template.PromptTemplatePostResponse</dt><dd><tt>Import&nbsp;a&nbsp;runtime/declarative&nbsp;prompt&nbsp;template&nbsp;into&nbsp;the&nbsp;design&nbsp;time&nbsp;environment.<br>
+&nbsp;<br>
+:param&nbsp;file:&nbsp;binary&nbsp;file&nbsp;content<br>
+:type&nbsp;file:&nbsp;bytes<br>
+:return:&nbsp;A&nbsp;PromptTemplatePostResponse&nbsp;object.<br>
+:rtype:&nbsp;PromptTemplatePostResponse</tt></dd></dl>
+
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__abstractmethods__</strong> = frozenset()</dl>
+
+<dl><dt><strong>__annotations__</strong> = {}</dl>
+
+<hr>
+Methods inherited from <a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>:<br>
+<dl><dt><a name="PromptTemplateClient-__init__"><strong>__init__</strong></a>(self, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None)</dt><dd><tt>Initializes&nbsp;the&nbsp;PromptRegistryClient.<br>
+&nbsp;<br>
+:param&nbsp;proxy_client:&nbsp;Optional&nbsp;proxy&nbsp;client&nbsp;to&nbsp;use&nbsp;for&nbsp;requests.<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="gen_ai_hub.prompt_registry.client.html#PromptRegistryClient">PromptRegistryClient</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['PromptTemplateClient', 'OrchestrationConfigClient']</td></tr></table>
+</body></html>

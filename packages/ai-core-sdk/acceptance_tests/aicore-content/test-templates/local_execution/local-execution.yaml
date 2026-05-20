@@ -1,0 +1,156 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ai-core-sdk-acceptance-test-
+  namespace: platform-tests
+spec:
+  entrypoint: ai-core-sdk
+  imagePullSecrets:
+    - name: acceptance-test-container-registry
+  
+  volumeClaimTemplates:
+  - metadata:
+      name: workspace
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 0.5Gi
+ 
+  templates:
+  - name: ai-core-sdk
+    serviceAccountName: '{{inputs.parameters.workflow-sa}}'
+    inputs:
+      parameters:
+      - name: component
+        value: ai-core-sdk
+      - name: workflow-sa
+        value: platform-tests-sa
+      - name: bucket-base-path
+        value: test
+      - name: artifact-registry-name
+        value: aicore-acceptance-tests
+      - name: artifact-registry-secret
+        value: aicore-acceptance-tests-bucket
+      - {name: workdir, value: /workdir}
+      - {name: artifactdir, value: /test_results}
+      - {name: suite-results, value: TESTSUITE_RESULTS}
+      - {name: debug, value: "true"}
+      - {name: test-type, value: smoke_test}
+
+      - {name: suffix, value: -debug}
+    steps:
+    - - name: run-acceptance-tests
+        templateRef:
+          name: at-ai-core-sdk
+          template: acceptance-tests
+        continueOn:
+          error: true
+          failed: true
+        arguments:
+          parameters:
+          - {name: workdir, value: '{{inputs.parameters.workdir}}'}
+          - {name: test-type, value: '{{inputs.parameters.test-type}}'}
+          - {name: workflow-sa, value: '{{inputs.parameters.workflow-sa}}'}
+          - {name: debug, value: '{{inputs.parameters.debug}}'}
+
+    - - name: aggregate-results-component
+        template: aggregate-results-component
+        arguments:
+          parameters:
+          - {name: result-status, value: '{{steps.run-acceptance-tests.status}}'}
+          - {name: component-name, value: '{{inputs.parameters.component}}'}
+          - {name: suite-results, value: '{{inputs.parameters.suite-results}}'}
+          - {name: artifactdir, value: '{{inputs.parameters.artifactdir}}'}
+          - {name: workdir, value: '{{inputs.parameters.workdir}}'}
+          - {name: bucket-path, value: '{{inputs.parameters.bucket-base-path}}/{{inputs.parameters.component}}'}
+          - {name: workflow-sa, value: '{{inputs.parameters.workflow-sa}}'}
+          - {name: artifact-registry-name, value: '{{inputs.parameters.artifact-registry-name}}'}
+          - {name: artifact-registry-secret, value: '{{inputs.parameters.artifact-registry-secret}}'}
+
+  - name: aggregate-results-component
+    serviceAccountName: "{{inputs.parameters.workflow-sa}}"
+    inputs:
+      parameters:
+      - name: result-status
+      - name: component-name
+      - name: suite-results
+      - name: artifactdir
+      - name: workdir
+      - name: bucket-path
+      - name: workflow-sa
+      - name: artifact-registry-name
+      - name: artifact-registry-secret
+    outputs:
+      artifacts:
+      - name: test-results
+        path: "{{inputs.parameters.artifactdir}}"
+        archive:
+          none: {}
+        s3:
+          endpoint: s3.amazonaws.com
+          bucket: "{{inputs.parameters.artifact-registry-name}}"
+          key: "{{inputs.parameters.bucket-path}}"
+          accessKeySecret:
+            name: "{{inputs.parameters.artifact-registry-secret}}"
+            key: accessKeyId
+          secretKeySecret:
+            name: "{{inputs.parameters.artifact-registry-secret}}"
+            key: secretAccessKey
+          region: eu-central-1
+
+    container:
+      imagePullPolicy: "IfNotPresent"
+      image: "debian:10-slim"
+      volumeMounts:
+      - {name: workspace, mountPath: "{{inputs.parameters.workdir}}"}
+      command: [bash, -c]
+      workingDir: "{{inputs.parameters.workdir}}"
+      args: 
+      - >
+        set -e;
+        component_name="{{inputs.parameters.component-name}}";
+        workdir="{{inputs.parameters.workdir}}";
+        artifactdir="{{inputs.parameters.artifactdir}}";
+        output_file="${artifactdir}/{{inputs.parameters.suite-results}}";
+        s3_bucket="{{inputs.parameters.artifact-registry-name}}";
+        bucket_path="{{inputs.parameters.bucket-path}}";
+        global_status="{{inputs.parameters.result-status}}";
+
+        abs_path=$(\
+          printf "https://%s.s3.eu-central-1.amazonaws.com/%s/%s" \
+            "${s3_bucket}" \
+            "${bucket_path}" 
+        );
+
+        function main() {
+          echo "[INFO] component: ${component_name}";
+          echo "[INFO] absolute path: \"${abs_path}\".";
+
+          cp -a "${workdir}/." "${artifactdir}/";
+          ls -lisa "${workdir}";
+          
+          
+          echo "[INFO] raw global testsuite status: ${global_status}";
+
+          if [[ "${global_status}" == "FAILURE" ]] || 
+             [[ "${global_status}" == "Failed" ]]; then
+            echo "FAILED" > "${output_file}";
+            exit 1;
+          elif [[ "${global_status}" == "ERROR" ]] || 
+             [[ "${global_status}" == "Error" ]]; then
+            echo "ERROR" > "${output_file}";
+            exit 1;
+          elif [[ "${global_status}" == "SUCCESS" ]] ||
+               [[ "${global_status}" == "Succeeded" ]]; then
+            echo "SUCCESS" > "${output_file}";
+            exit 0;
+          else
+            echo "${global_status}" > "${output_file}";
+            exit 1;
+          fi
+
+        }
+
+        main "${@}"
+

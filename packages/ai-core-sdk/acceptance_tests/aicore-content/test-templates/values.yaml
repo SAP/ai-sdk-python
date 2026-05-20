@@ -1,0 +1,14 @@
+image: com.sap.ai/ai-core-sdk-acceptancetest
+unifiedApiSubdomain: api.ai
+tenantTests:
+  main:
+    enabled: "true"
+    secret: xsuaa-std
+    customTestTenantEnabled: "{{ .Values.testsuite.customTestTenantEnabled }}"
+  worker:
+    enabled: "{{ .Values.testsuite.testWorkerEnabledTenant }}"
+    secret: aicore-std-test-worker
+    customTestTenantEnabled: "{{ .Values.testsuite.customTestTenantEnabled }}"
+testsuite:
+  testWorkerEnabledTenant: false
+  customTestTenantEnabled: false

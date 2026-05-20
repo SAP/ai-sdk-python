@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module gen_ai_hub.orchestration_v2.service</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="gen_ai_hub.html"><font color="#ffffff">gen_ai_hub</font></a>.<a href="gen_ai_hub.orchestration_v2.html"><font color="#ffffff">orchestration_v2</font></a>.service</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration_v2/service.py">/home/jenkins/agent/workspace/ation_generative-ai-hub-sdk_main/gen_ai_hub/orchestration_v2/service.py</a></font></td></tr></table>
+    <p><tt>Module&nbsp;for&nbsp;orchestration&nbsp;service&nbsp;handling&nbsp;requests&nbsp;and&nbsp;responses.<br>
+&nbsp;<br>
+Provides&nbsp;synchronous&nbsp;and&nbsp;asynchronous&nbsp;methods&nbsp;to&nbsp;run&nbsp;orchestration&nbsp;pipelines.</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="asyncio.html">asyncio</a><br>
+<a href="httpx.html">httpx</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="gen_ai_hub.orchestration_v2.service.html#OrchestrationService">OrchestrationService</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="OrchestrationService">class <strong>OrchestrationService</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#OrchestrationService">OrchestrationService</a>(api_url:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;config:&nbsp;Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig]&nbsp;=&nbsp;None,&nbsp;config_ref:&nbsp;Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef,&nbsp;gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef,&nbsp;NoneType]&nbsp;=&nbsp;None,&nbsp;proxy_client:&nbsp;Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient]&nbsp;=&nbsp;None,&nbsp;deployment_id:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;config_name:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;config_id:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;openai.Timeout,&nbsp;NoneType]&nbsp;=&nbsp;None)<br>
+&nbsp;<br>
+A&nbsp;service&nbsp;for&nbsp;executing&nbsp;orchestration&nbsp;requests,&nbsp;allowing&nbsp;for&nbsp;the&nbsp;generation&nbsp;of&nbsp;LLM-generated&nbsp;content<br>
+through&nbsp;a&nbsp;pipeline&nbsp;of&nbsp;configured&nbsp;modules.<br>
+&nbsp;<br>
+This&nbsp;service&nbsp;supports&nbsp;both&nbsp;synchronous&nbsp;and&nbsp;asynchronous&nbsp;request&nbsp;execution.&nbsp;For&nbsp;streaming&nbsp;responses,<br>
+special&nbsp;care&nbsp;is&nbsp;taken&nbsp;to&nbsp;not&nbsp;close&nbsp;the&nbsp;underlying&nbsp;HTTP&nbsp;stream&nbsp;prematurely.<br>
+&nbsp;<br>
+See&nbsp;<a href="https://api.sap.com/api/ORCHESTRATION_API_v2/overview">https://api.sap.com/api/ORCHESTRATION_API_v2/overview</a><br>
+&nbsp;<br>
+Args:<br>
+&nbsp;<br>
+api_url:&nbsp;The&nbsp;base&nbsp;URL&nbsp;for&nbsp;the&nbsp;orchestration&nbsp;API.<br>
+&nbsp;<br>
+config:&nbsp;The&nbsp;default&nbsp;orchestration&nbsp;configuration.<br>
+&nbsp;<br>
+config_ref:&nbsp;The&nbsp;reference&nbsp;to&nbsp;default&nbsp;orchestration&nbsp;configuration.<br>
+&nbsp;<br>
+proxy_client:&nbsp;A&nbsp;GenAIHubProxyClient&nbsp;instance.<br>
+&nbsp;<br>
+deployment_id:&nbsp;Optional&nbsp;deployment&nbsp;ID.<br>
+&nbsp;<br>
+config_name:&nbsp;Optional&nbsp;configuration&nbsp;name.<br>
+&nbsp;<br>
+config_id:&nbsp;Optional&nbsp;configuration&nbsp;ID.<br>
+&nbsp;<br>
+timeout:&nbsp;Optional&nbsp;timeout&nbsp;for&nbsp;HTTP&nbsp;requests.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="OrchestrationService-__init__"><strong>__init__</strong></a>(self, api_url: Optional[str] = None, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, proxy_client: Optional[gen_ai_hub.proxy.gen_ai_hub_proxy.client.GenAIHubProxyClient] = None, deployment_id: Optional[str] = None, config_name: Optional[str] = None, config_id: Optional[str] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None)</dt><dd><tt>Initializes&nbsp;the&nbsp;<a href="#OrchestrationService">OrchestrationService</a>.<br>
+&nbsp;<br>
+:param&nbsp;api_url:&nbsp;the&nbsp;base&nbsp;URL&nbsp;for&nbsp;the&nbsp;orchestration&nbsp;API,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;api_url:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;proxy_client:&nbsp;the&nbsp;GenAIHubProxyClient&nbsp;instance,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;proxy_client:&nbsp;Optional[GenAIHubProxyClient],&nbsp;optional<br>
+:param&nbsp;deployment_id:&nbsp;the&nbsp;deployment&nbsp;ID,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;deployment_id:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;config_name:&nbsp;the&nbsp;configuration&nbsp;name,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_name:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;config_id:&nbsp;the&nbsp;configuration&nbsp;ID,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_id:&nbsp;Optional[str],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;for&nbsp;HTTP&nbsp;requests,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:raises&nbsp;ValueError:&nbsp;if&nbsp;both&nbsp;config&nbsp;and&nbsp;config_ref&nbsp;are&nbsp;provided.</tt></dd></dl>
+
+<dl><dt>async <a name="OrchestrationService-aclose_http_connection"><strong>aclose_http_connection</strong></a>(self)</dt><dd><tt>Closes&nbsp;the&nbsp;httpx&nbsp;asynchronous&nbsp;client.</tt></dd></dl>
+
+<dl><dt>async <a name="OrchestrationService-aembed"><strong>aembed</strong></a>(self, config: gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsOrchestrationConfig, input: gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsInput, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsPostResponse</dt><dd><tt>Executes&nbsp;an&nbsp;embeddings&nbsp;request&nbsp;asynchronously.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;embeddings&nbsp;orchestration&nbsp;configuration<br>
+:type&nbsp;config:&nbsp;EmbeddingsOrchestrationConfig<br>
+:param&nbsp;input:&nbsp;the&nbsp;input&nbsp;text&nbsp;to&nbsp;embed<br>
+:type&nbsp;input:&nbsp;EmbeddingsInput<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;the&nbsp;EmbeddingsPostResponse&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;EmbeddingsPostResponse</tt></dd></dl>
+
+<dl><dt>async <a name="OrchestrationService-arun"><strong>arun</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; gen_ai_hub.orchestration_v2.models.response.CompletionPostResponse</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;request&nbsp;asynchronously&nbsp;(non-streaming).<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;the&nbsp;CompletionPostResponse&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;CompletionPostResponse</tt></dd></dl>
+
+<dl><dt>async <a name="OrchestrationService-arun_with_retries"><strong>arun_with_retries</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None, max_retries: int = 10, base_delay: float = 1.0) -&gt; gen_ai_hub.orchestration_v2.models.response.OrchestrationResponseWithRetries | None</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;request&nbsp;asynchronously&nbsp;with&nbsp;automatic&nbsp;retry&nbsp;on&nbsp;rate&nbsp;limits&nbsp;(429)&nbsp;and&nbsp;server&nbsp;errors.<br>
+Uses&nbsp;exponential&nbsp;backoff&nbsp;with&nbsp;jitter&nbsp;to&nbsp;handle&nbsp;rate&nbsp;limiting&nbsp;gracefully.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:param&nbsp;max_retries:&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;retry&nbsp;attempts,&nbsp;defaults&nbsp;to&nbsp;10<br>
+:type&nbsp;max_retries:&nbsp;int,&nbsp;optional<br>
+:param&nbsp;base_delay:&nbsp;the&nbsp;initial&nbsp;delay&nbsp;between&nbsp;retries&nbsp;in&nbsp;seconds,&nbsp;defaults&nbsp;to&nbsp;1.0<br>
+:type&nbsp;base_delay:&nbsp;float,&nbsp;optional<br>
+:return:&nbsp;the&nbsp;OrchestrationResponseWithRetries&nbsp;with&nbsp;retry&nbsp;count&nbsp;information<br>
+:rtype:&nbsp;OrchestrationResponseWithRetries&nbsp;|&nbsp;None<br>
+:raises&nbsp;ValueError:&nbsp;if&nbsp;no&nbsp;configuration&nbsp;is&nbsp;provided.<br>
+:raises&nbsp;OrchestrationError:&nbsp;if&nbsp;request&nbsp;fails&nbsp;after&nbsp;all&nbsp;retries&nbsp;(includes&nbsp;retry&nbsp;count).</tt></dd></dl>
+
+<dl><dt>async <a name="OrchestrationService-astream"><strong>astream</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; gen_ai_hub.orchestration_v2.sse_client.AsyncSSEClient</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;streaming&nbsp;request&nbsp;asynchronously.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;the&nbsp;AsyncSSEClient&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;AsyncSSEClient</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-close_http_connection"><strong>close_http_connection</strong></a>(self)</dt><dd><tt>Closes&nbsp;the&nbsp;httpx&nbsp;synchronous&nbsp;client.</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-embed"><strong>embed</strong></a>(self, config: gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsOrchestrationConfig, input: gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsInput, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; gen_ai_hub.orchestration_v2.models.embeddings.EmbeddingsPostResponse</dt><dd><tt>Executes&nbsp;an&nbsp;embeddings&nbsp;request&nbsp;synchronously.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;embeddings&nbsp;orchestration&nbsp;configuration<br>
+:type&nbsp;config:&nbsp;EmbeddingsOrchestrationConfig<br>
+:param&nbsp;input:&nbsp;the&nbsp;input&nbsp;text&nbsp;to&nbsp;embed<br>
+:type&nbsp;input:&nbsp;EmbeddingsInput<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;the&nbsp;EmbeddingsPostResponse&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;EmbeddingsPostResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-handle_retry"><strong>handle_retry</strong></a>(self, retry_count: int, base_delay: float, error: gen_ai_hub.orchestration_v2.exceptions.OrchestrationError, max_retries: int) -&gt; float</dt><dd><tt>Handles&nbsp;retry&nbsp;logic&nbsp;with&nbsp;exponential&nbsp;backoff&nbsp;and&nbsp;jitter.<br>
+If&nbsp;Retry-After&nbsp;header&nbsp;exists,&nbsp;use&nbsp;it&nbsp;as&nbsp;min_delay&nbsp;to&nbsp;add&nbsp;jitter&nbsp;on&nbsp;top<br>
+&nbsp;<br>
+:param&nbsp;retry_count:&nbsp;the&nbsp;incremented&nbsp;retry&nbsp;attempt&nbsp;number<br>
+:type&nbsp;retry_count:&nbsp;int<br>
+:param&nbsp;base_delay:&nbsp;the&nbsp;initial&nbsp;delay&nbsp;between&nbsp;retries&nbsp;in&nbsp;seconds<br>
+:type&nbsp;base_delay:&nbsp;float<br>
+:param&nbsp;error:&nbsp;the&nbsp;exception&nbsp;that&nbsp;occurred<br>
+:type&nbsp;error:&nbsp;OrchestrationError<br>
+:param&nbsp;max_retries:&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;retry&nbsp;attempts<br>
+:type&nbsp;max_retries:&nbsp;int<br>
+:raises&nbsp;error:&nbsp;throws&nbsp;the&nbsp;original&nbsp;error&nbsp;if&nbsp;no&nbsp;retry&nbsp;should&nbsp;be&nbsp;attempted<br>
+:return:&nbsp;the&nbsp;number&nbsp;of&nbsp;seconds&nbsp;to&nbsp;wait&nbsp;before&nbsp;next&nbsp;retry<br>
+:rtype:&nbsp;float</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-run"><strong>run</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; gen_ai_hub.orchestration_v2.models.response.CompletionPostResponse</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;request&nbsp;synchronously&nbsp;(non-streaming).<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;provided,&nbsp;the&nbsp;default&nbsp;configuration&nbsp;is&nbsp;used.<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;the&nbsp;CompletionPostResponse&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;CompletionPostResponse</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-run_with_retries"><strong>run_with_retries</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None, max_retries: int = 10, base_delay: float = 1.0) -&gt; gen_ai_hub.orchestration_v2.models.response.OrchestrationResponseWithRetries | None</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;request&nbsp;with&nbsp;automatic&nbsp;retry&nbsp;on&nbsp;rate&nbsp;limits&nbsp;(429)&nbsp;and&nbsp;server&nbsp;errors.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:param&nbsp;max_retries:&nbsp;the&nbsp;maximum&nbsp;number&nbsp;of&nbsp;retry&nbsp;attempts,&nbsp;defaults&nbsp;to&nbsp;10<br>
+:type&nbsp;max_retries:&nbsp;int,&nbsp;optional<br>
+:param&nbsp;base_delay:&nbsp;the&nbsp;initial&nbsp;delay&nbsp;between&nbsp;retries&nbsp;in&nbsp;seconds,&nbsp;defaults&nbsp;to&nbsp;1.0<br>
+:type&nbsp;base_delay:&nbsp;float,&nbsp;optional<br>
+:return:&nbsp;the&nbsp;OrchestrationResponseWithRetries&nbsp;with&nbsp;retry&nbsp;count&nbsp;information<br>
+:rtype:&nbsp;OrchestrationResponseWithRetries&nbsp;|&nbsp;None<br>
+:raises&nbsp;ValueError:&nbsp;if&nbsp;no&nbsp;configuration&nbsp;is&nbsp;provided.<br>
+:raises&nbsp;OrchestrationError:&nbsp;if&nbsp;request&nbsp;fails&nbsp;after&nbsp;all&nbsp;retries&nbsp;(includes&nbsp;retry&nbsp;count).</tt></dd></dl>
+
+<dl><dt><a name="OrchestrationService-stream"><strong>stream</strong></a>(self, config: Optional[gen_ai_hub.orchestration_v2.models.config.OrchestrationConfig] = None, config_ref: Union[gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByIdConfigRef, gen_ai_hub.orchestration_v2.models.config.CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef, NoneType] = None, placeholder_values: Optional[dict] = None, history: Optional[List[Union[gen_ai_hub.orchestration_v2.models.message.SystemMessage, gen_ai_hub.orchestration_v2.models.message.UserMessage, gen_ai_hub.orchestration_v2.models.message.AssistantMessage, gen_ai_hub.orchestration_v2.models.message.ToolChatMessage, gen_ai_hub.orchestration_v2.models.message.DeveloperChatMessage, gen_ai_hub.orchestration_v2.models.message.ResponseChatMessage]]] = None, timeout: Union[int, float, openai.Timeout, NoneType] = None) -&gt; Iterable[gen_ai_hub.orchestration_v2.models.response.StreamCompletionPostResponse]</dt><dd><tt>Executes&nbsp;an&nbsp;orchestration&nbsp;streaming&nbsp;request&nbsp;synchronously.<br>
+&nbsp;<br>
+:param&nbsp;config:&nbsp;the&nbsp;orchestration&nbsp;configuration,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config:&nbsp;Optional[OrchestrationConfig],&nbsp;optional<br>
+:param&nbsp;config_ref:&nbsp;the&nbsp;orchestration&nbsp;configuration&nbsp;reference,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;config_ref:&nbsp;Optional[OrchestrationConfigReference],&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;not&nbsp;provided,&nbsp;the&nbsp;default&nbsp;configuration&nbsp;is&nbsp;used.<br>
+:param&nbsp;placeholder_values:&nbsp;the&nbsp;template&nbsp;values,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;placeholder_values:&nbsp;Optional[dict],&nbsp;optional<br>
+:param&nbsp;history:&nbsp;the&nbsp;message&nbsp;history,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;history:&nbsp;Optional[List[ChatMessage]],&nbsp;optional<br>
+:param&nbsp;timeout:&nbsp;the&nbsp;timeout&nbsp;overwrite&nbsp;per&nbsp;request,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;timeout:&nbsp;Union[int,&nbsp;float,&nbsp;httpx.Timeout,&nbsp;None],&nbsp;optional<br>
+:return:&nbsp;An&nbsp;Iterable[StreamCompletionPostResponse]&nbsp;<a href="builtins.html#object">object</a><br>
+:rtype:&nbsp;Iterable[StreamCompletionPostResponse]</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__all__</strong> = ['OrchestrationService']</td></tr></table>
+</body></html>
