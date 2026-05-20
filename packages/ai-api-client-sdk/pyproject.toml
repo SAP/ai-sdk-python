@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sap-ai-sdk-base"
+dynamic = ["version"]
+description = "SAP Cloud SDK for AI (Python): Base Client"
+readme = "PYPIDESCRIPTION.md"
+license = {text = "SAP DEVELOPER LICENSE AGREEMENT"}
+authors = [{name = "SAP SE"}]
+keywords = ["SAP AI Core"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: Other/Proprietary License",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "aenum~=3.1",
+    "pyhumps~=3.0",
+    "requests~=2.32",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest~=9.0",
+    "pytest-cov~=7.0",
+    "pylint~=4.0",
+]
+
+[project.urls]
+Homepage = "https://www.sap.com/"
+Download = "https://pypi.python.org/pypi/ai-api-client-sdk"
+
+[tool.setuptools.dynamic]
+version = {file = "version.txt"}
+
+[tool.setuptools.packages.find]
+exclude = ["*test*"]

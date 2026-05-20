@@ -1,3 +1,0 @@
-aenum~=3.1
-pyhumps~=3.0
-requests~=2.32

@@ -1,3 +1,0 @@
-sap-ai-sdk-base~=3.4
-click~=8.3
-
