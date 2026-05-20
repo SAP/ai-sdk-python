@@ -3,13 +3,12 @@ ARG ARTIFACTORY=https://int.repositories.cloud.sap/artifactory/api/pypi/build-sn
 
 RUN echo "custom docker image for pylint"
 
-COPY requirements-test.txt requirements-test.txt
-COPY requirements.txt requirements.txt
+COPY pyproject.toml version.txt ./
+RUN mkdir -p gen_ai_hub && touch gen_ai_hub/__init__.py
 
 RUN apt-get update
 RUN apt install make -y
 RUN apt install libgeos++-dev -y
 RUN apt install gcc -y
 
-RUN pip3 install --trusted-host int.repositories.cloud.sap --trusted-host github.wdf.sap.corp --index-url $ARTIFACTORY -r requirements.txt
-RUN pip3 install -I --index-url $ARTIFACTORY -r requirements-test.txt
+RUN pip3 install --trusted-host int.repositories.cloud.sap --trusted-host github.wdf.sap.corp --index-url $ARTIFACTORY ".[all,dev]"

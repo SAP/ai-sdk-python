@@ -9,12 +9,12 @@ on:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
 
 jobs:
   unit-tests:
@@ -32,20 +32,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        working-directory: generative-ai-hub-sdk
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-test.txt
+        working-directory: packages/generative-ai-hub-sdk
+        run: uv sync --all-extras
 
       - name: Run unit tests with coverage
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         run: |
           mkdir -p test-results
-          pytest -p pytest_cov \
+          uv run pytest -p pytest_cov \
             --cov=./gen_ai_hub \
             --cov-report xml:test-results/coverage.xml \
             --cov-report html:test-results/coverage-html \
@@ -61,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-reports-py${{ matrix.python-version }}
-          path: generative-ai-hub-sdk/test-results/
+          path: packages/generative-ai-hub-sdk/test-results/
           retention-days: 30
 
       - name: Comment PR with coverage
@@ -69,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-py${{ matrix.python-version }}
-          path: generative-ai-hub-sdk/test-results/coverage.xml
+          path: packages/generative-ai-hub-sdk/test-results/coverage.xml
 
   integration-tests:
     name: 'Integration Tests - Python ${{ matrix.python-version }}'
@@ -90,17 +89,16 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Install dependencies
-        working-directory: generative-ai-hub-sdk
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-test.txt
+        working-directory: packages/generative-ai-hub-sdk
+        run: uv sync --all-extras
 
       - name: Run integration tests (core)
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         env:
           AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
           AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
@@ -111,7 +109,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           mkdir -p test-results
-          pytest --cov=./gen_ai_hub \
+          uv run pytest --cov=./gen_ai_hub \
             --junit-xml=test-results/integration-tests-core.xml \
             --cov-report xml:test-results/integration-coverage-core.xml \
             --verbosity=2 \
@@ -184,7 +182,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: integration-test-results-py${{ matrix.python-version }}
-          path: generative-ai-hub-sdk/test-results/
+          path: packages/generative-ai-hub-sdk/test-results/
           retention-days: 30
 
   test-results:

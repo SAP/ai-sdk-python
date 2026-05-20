@@ -6,12 +6,12 @@ on:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
 
 jobs:
   build:
@@ -29,30 +29,29 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Install build tools
-        run: |
-          python -m pip install --upgrade pip
-          pip install build wheel setuptools
+        run: pip install build
 
       - name: Install dependencies
-        working-directory: generative-ai-hub-sdk
-        run: |
-          pip install -r requirements.txt
+        working-directory: packages/generative-ai-hub-sdk
+        run: uv sync --extra all
 
       - name: Check syntax with Python compiler
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         run: |
           python -m compileall -q gen_ai_hub/
 
       - name: Build distribution packages
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         run: |
           python -m build
 
       - name: List generated artifacts
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         run: |
           ls -la dist/
           echo "=== Wheel File ==="
@@ -62,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts-py${{ matrix.python-version }}
-          path: generative-ai-hub-sdk/dist/
+          path: packages/generative-ai-hub-sdk/dist/
           retention-days: 30
 
   build-summary:
