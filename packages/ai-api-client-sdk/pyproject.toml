@@ -26,7 +26,7 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
     "aenum~=3.1",
     "pyhumps~=3.0",
