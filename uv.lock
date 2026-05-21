@@ -2981,7 +2981,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.0" },
     { name = "pydantic", specifier = "~=2.12" },
     { name = "sap-ai-sdk-core", editable = "packages/ai-core-sdk" },
-    { name = "sap-ai-sdk-gen", extras = ["amazon", "google"], marker = "extra == 'all'" },
+    { name = "sap-ai-sdk-gen", extras = ["amazon", "google"], marker = "extra == 'all'", editable = "packages/generative-ai-hub-sdk" },
 ]
 provides-extras = ["google", "amazon", "all"]
 
