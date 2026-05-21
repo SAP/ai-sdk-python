@@ -1,12 +1,9 @@
 [tool.uv.workspace]
 members = ["packages/*"]
 
-[tool.pytest.ini_options]
-testpaths = [
-    "packages/ai-api-client-sdk/tests",
-    "packages/ai-core-sdk/tests",
-    "packages/generative-ai-hub-sdk/tests",
-]
-markers = [
-    "bedrock: mark a test as a bedrock test running in a different environment",
+[tool.coverage.run]
+source = [
+    "packages/ai-api-client-sdk/ai_api_client_sdk",
+    "packages/ai-core-sdk/ai_core_sdk",
+    "packages/generative-ai-hub-sdk/gen_ai_hub",
 ]

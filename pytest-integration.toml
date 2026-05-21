@@ -1,0 +1,9 @@
+[tool.pytest]
+testpaths = [
+    "packages/ai-api-client-sdk/integration_tests",
+    "packages/ai-core-sdk/integration_tests",
+    "packages/generative-ai-hub-sdk/integration_tests",
+]
+markers = [
+    "bedrock: mark a test as a bedrock test running in a different environment",
+]
