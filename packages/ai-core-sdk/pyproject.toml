@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sap-ai-sdk-core"
+dynamic = ["version"]
+description = "SAP Cloud SDK for AI (Python): Core SDK"
+readme = "PYPIDESCRIPTION.md"
+license = {text = "SAP DEVELOPER LICENSE AGREEMENT"}
+authors = [{name = "SAP SE"}]
+keywords = ["SAP AI Core", "SAP AI Core API"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: Other/Proprietary License",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "sap-ai-sdk-base~=3.4",
+    "click~=8.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.0.3",
+    "pytest-cov==7.1.0",
+    "pylint==4.0.5",
+]
+
+[project.scripts]
+aicore = "ai_core_sdk.cli:cli"
+
+[project.urls]
+Homepage = "https://www.sap.com/"
+Download = "https://pypi.python.org/pypi/ai-core-sdk"
+
+[tool.uv.sources]
+sap-ai-sdk-base = { workspace = true }
+
+[tool.setuptools.dynamic]
+version = {file = "version.txt"}
+
+[tool.setuptools.packages.find]
+exclude = ["*test*"]

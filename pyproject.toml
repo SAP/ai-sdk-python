@@ -1,0 +1,13 @@
+[project]
+name = "ai-sdk-python"
+version = "0.0.0"
+requires-python = ">=3.10"
+
+[tool.uv.sources]
+sap-ai-sdk-base = { workspace = true }
+sap-ai-sdk-core = { workspace = true }
+sap-ai-sdk-gen = { workspace = true }
+
+[tool.uv.workspace]
+members = ["packages/*"]
+

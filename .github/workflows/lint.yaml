@@ -6,12 +6,12 @@ on:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
   pull_request:
     branches:
       - main
     paths:
-      - 'generative-ai-hub-sdk/**'
+      - 'packages/generative-ai-hub-sdk/**'
   pull_request_target:
     types:
       - opened
@@ -55,39 +55,38 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
       - name: Install dependencies
-        working-directory: generative-ai-hub-sdk
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-test.txt
+        working-directory: packages/generative-ai-hub-sdk
+        run: uv sync --all-extras
 
       - name: Run pylint
-        working-directory: generative-ai-hub-sdk
+        working-directory: packages/generative-ai-hub-sdk
         run: |
           mkdir -p pylint-reports
-          pylint gen_ai_hub \
+          uv run pylint gen_ai_hub \
             --errors-only \
             --output-format=json \
             > pylint-reports/pylint-py${{ matrix.python-version }}.json
-          pylint gen_ai_hub \
+          uv run pylint gen_ai_hub \
             --errors-only \
             --output-format=colorized
 
       - name: Upload pylint reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: pylint-reports-py${{ matrix.python-version }}
-          path: generative-ai-hub-sdk/pylint-reports/
+          path: packages/generative-ai-hub-sdk/pylint-reports/
           retention-days: 30
 
   lint-summary:

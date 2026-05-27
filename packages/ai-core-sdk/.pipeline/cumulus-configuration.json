@@ -1,0 +1,29 @@
+{
+  "backlogIds": [
+    "AI"
+  ],
+  "coverageThreshold": {
+    "aggregated": {
+      "branchRate": {
+        "0": "red",
+        "50": "blue",
+        "75": "green"
+      },
+      "lineRate": {
+        "0": "orange",
+        "50": "yellow",
+        "75": "green"
+      }
+    },
+    "jacoco": {
+      "branchRate": {
+        "0": "red",
+        "50": "green"
+      },
+      "lineRate": {
+        "0": "yellow",
+        "75": "green"
+      }
+    }
+  }
+}

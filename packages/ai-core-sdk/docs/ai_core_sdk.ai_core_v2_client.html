@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module ai_core_sdk.ai_core_v2_client</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="ai_core_sdk.html"><font color="#ffffff">ai_core_sdk</font></a>.ai_core_v2_client</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/jenkins/agent/workspace/AI-Foundation_ai-core-sdk_master/ai_core_sdk/ai_core_v2_client.py">/home/jenkins/agent/workspace/AI-Foundation_ai-core-sdk_master/ai_core_sdk/ai_core_v2_client.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="ai_core_sdk.ai_core_v2_client.html#AICoreV2Client">AICoreV2Client</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AICoreV2Client">class <strong>AICoreV2Client</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#AICoreV2Client">AICoreV2Client</a>(base_url:&nbsp;str,&nbsp;auth_url:&nbsp;str&nbsp;=&nbsp;None,&nbsp;client_id:&nbsp;str&nbsp;=&nbsp;None,&nbsp;client_secret:&nbsp;str&nbsp;=&nbsp;None,&nbsp;cert_str:&nbsp;str&nbsp;=&nbsp;None,&nbsp;key_str:&nbsp;str&nbsp;=&nbsp;None,&nbsp;cert_file_path:&nbsp;str&nbsp;=&nbsp;None,&nbsp;key_file_path:&nbsp;str&nbsp;=&nbsp;None,&nbsp;token_creator:&nbsp;Callable[[],&nbsp;str]&nbsp;=&nbsp;None,&nbsp;resource_group:&nbsp;str&nbsp;=&nbsp;None,&nbsp;client_type:&nbsp;str&nbsp;=&nbsp;'AI&nbsp;Core&nbsp;Python&nbsp;SDK',&nbsp;**kwargs)<br>
+&nbsp;<br>
+The&nbsp;<a href="#AICoreV2Client">AICoreV2Client</a>&nbsp;is&nbsp;the&nbsp;class&nbsp;implemented&nbsp;to&nbsp;interact&nbsp;with&nbsp;the&nbsp;AI&nbsp;Core&nbsp;endpoints.&nbsp;The&nbsp;user&nbsp;can&nbsp;use&nbsp;its<br>
+attributes&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;resources,&nbsp;for&nbsp;interacting&nbsp;with&nbsp;endpoints&nbsp;related&nbsp;to&nbsp;that&nbsp;resource.&nbsp;(i.e.,<br>
+aicoreclient.scenario)<br>
+&nbsp;<br>
+:param&nbsp;base_url:&nbsp;Base&nbsp;URL&nbsp;of&nbsp;the&nbsp;AI&nbsp;Core.&nbsp;Should&nbsp;include&nbsp;the&nbsp;base&nbsp;path&nbsp;as&nbsp;well.&nbsp;(i.e.,&nbsp;"&lt;base_url&gt;/lm/scenarios"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;should&nbsp;work)<br>
+:type&nbsp;base_url:&nbsp;str<br>
+:param&nbsp;auth_url:&nbsp;URL&nbsp;of&nbsp;the&nbsp;authorization&nbsp;endpoint.&nbsp;Should&nbsp;be&nbsp;the&nbsp;full&nbsp;URL&nbsp;(including&nbsp;/oauth/token),&nbsp;defaults&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+:type&nbsp;auth_url:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;client_id:&nbsp;client&nbsp;id&nbsp;to&nbsp;be&nbsp;used&nbsp;for&nbsp;authorization,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;client_id:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;client_secret:&nbsp;client&nbsp;secret&nbsp;to&nbsp;be&nbsp;used&nbsp;for&nbsp;authorization,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;client_secret:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;cert_str:&nbsp;certificate&nbsp;file&nbsp;content,&nbsp;needs&nbsp;to&nbsp;be&nbsp;provided&nbsp;alongside&nbsp;the&nbsp;key_str&nbsp;parameter,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;cert_str:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;key_str:&nbsp;key&nbsp;file&nbsp;content,&nbsp;needs&nbsp;to&nbsp;be&nbsp;provided&nbsp;alongside&nbsp;the&nbsp;cert_str&nbsp;parameter,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;key_str:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;cert_file_path:&nbsp;path&nbsp;to&nbsp;the&nbsp;certificate&nbsp;file,&nbsp;needs&nbsp;to&nbsp;be&nbsp;provided&nbsp;alongside&nbsp;the&nbsp;key_file_path&nbsp;parameter,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;cert_file_path:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;key_file_path:&nbsp;path&nbsp;to&nbsp;the&nbsp;key&nbsp;file,&nbsp;needs&nbsp;to&nbsp;be&nbsp;provided&nbsp;alongside&nbsp;the&nbsp;cert_file_path&nbsp;parameter,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;key_file_path:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;token_creator:&nbsp;the&nbsp;function&nbsp;which&nbsp;returns&nbsp;the&nbsp;Bearer&nbsp;token,&nbsp;when&nbsp;called.&nbsp;Either&nbsp;this,&nbsp;or<br>
+&nbsp;&nbsp;&nbsp;&nbsp;auth_url&nbsp;&amp;&nbsp;client_id&nbsp;&amp;&nbsp;client_secret&nbsp;should&nbsp;be&nbsp;specified,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;token_creator:&nbsp;Callable[[],&nbsp;str],&nbsp;optional<br>
+:param&nbsp;resource_group:&nbsp;The&nbsp;default&nbsp;resource&nbsp;group&nbsp;which&nbsp;will&nbsp;be&nbsp;used&nbsp;while&nbsp;sending&nbsp;the&nbsp;requests&nbsp;to&nbsp;the&nbsp;server.&nbsp;If<br>
+&nbsp;&nbsp;&nbsp;&nbsp;not&nbsp;set,&nbsp;the&nbsp;resource_group&nbsp;should&nbsp;be&nbsp;specified&nbsp;with&nbsp;every&nbsp;request&nbsp;to&nbsp;the&nbsp;server,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;resource_group:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;client_type:&nbsp;The&nbsp;client&nbsp;type&nbsp;which&nbsp;will&nbsp;be&nbsp;sent&nbsp;in&nbsp;the&nbsp;User-Agent&nbsp;header&nbsp;of&nbsp;the&nbsp;requests,&nbsp;defaults&nbsp;to<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"AI&nbsp;Core&nbsp;Python&nbsp;SDK"<br>
+:type&nbsp;client_type:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;\**kwargs:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;*read_timeout*&nbsp;(int):&nbsp;Read&nbsp;timeout&nbsp;for&nbsp;requests&nbsp;in&nbsp;seconds,&nbsp;defaults&nbsp;to&nbsp;60s<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;*connect_timeout*&nbsp;(int):&nbsp;Connect&nbsp;timeout&nbsp;for&nbsp;requests&nbsp;in&nbsp;seconds,&nbsp;defaults&nbsp;to&nbsp;60s<br>
+&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;*num_request_retries*&nbsp;(int):&nbsp;Number&nbsp;of&nbsp;retries&nbsp;for&nbsp;failing&nbsp;requests&nbsp;with&nbsp;http&nbsp;status&nbsp;code&nbsp;429,&nbsp;500,&nbsp;502,&nbsp;503&nbsp;or&nbsp;504,&nbsp;defaults&nbsp;to&nbsp;10<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="AICoreV2Client-__init__"><strong>__init__</strong></a>(self, base_url: str, auth_url: str = None, client_id: str = None, client_secret: str = None, cert_str: str = None, key_str: str = None, cert_file_path: str = None, key_file_path: str = None, token_creator: Callable[[], str] = None, resource_group: str = None, client_type: str = 'AI Core Python SDK', **kwargs)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="AICoreV2Client-from_env"><strong>from_env</strong></a>(profile_name: str = None, **kwargs)</dt><dd><tt>Alternative&nbsp;way&nbsp;to&nbsp;create&nbsp;an&nbsp;<a href="#AICoreV2Client">AICoreV2Client</a>&nbsp;<a href="builtins.html#object">object</a>.<br>
+Parameters&nbsp;for&nbsp;base_url,&nbsp;auth_url,&nbsp;client_id,&nbsp;client_secret,&nbsp;x.509&nbsp;credentials&nbsp;(either&nbsp;as&nbsp;file&nbsp;path&nbsp;or&nbsp;string)<br>
+and&nbsp;resource_group&nbsp;can&nbsp;be&nbsp;passed&nbsp;as&nbsp;keyword&nbsp;or&nbsp;are&nbsp;pulled&nbsp;from&nbsp;environment&nbsp;variables.<br>
+It&nbsp;is&nbsp;also&nbsp;possible&nbsp;to&nbsp;use&nbsp;a&nbsp;profile,&nbsp;which&nbsp;is&nbsp;a&nbsp;json&nbsp;file&nbsp;in&nbsp;the&nbsp;config&nbsp;directory.&nbsp;The&nbsp;profile&nbsp;name&nbsp;can&nbsp;be<br>
+passed&nbsp;as&nbsp;keyword&nbsp;or&nbsp;is&nbsp;pulled&nbsp;from&nbsp;the&nbsp;environment&nbsp;variable&nbsp;AICORE_PROFILE.&nbsp;If&nbsp;no&nbsp;profile&nbsp;is&nbsp;specified,<br>
+the&nbsp;default&nbsp;profile&nbsp;is&nbsp;used.<br>
+A&nbsp;specific&nbsp;path&nbsp;to&nbsp;a&nbsp;config,&nbsp;that&nbsp;should&nbsp;be&nbsp;used,&nbsp;can&nbsp;be&nbsp;set&nbsp;via&nbsp;the&nbsp;environment&nbsp;variable&nbsp;AICORE_CONFIG.<br>
+The&nbsp;hierarchy&nbsp;of&nbsp;precedence&nbsp;is:<br>
+1.&nbsp;keyword&nbsp;argument<br>
+2.&nbsp;environment&nbsp;variable<br>
+3.&nbsp;configuration&nbsp;file<br>
+4.&nbsp;value&nbsp;from&nbsp;VCAP_SERVICES&nbsp;environment&nbsp;variable,&nbsp;if&nbsp;exists<br>
+&nbsp;<br>
+:param&nbsp;profile_name:&nbsp;name&nbsp;of&nbsp;the&nbsp;profile&nbsp;to&nbsp;use,&nbsp;defaults&nbsp;to&nbsp;None.&nbsp;If&nbsp;None&nbsp;is&nbsp;passed,&nbsp;the&nbsp;profile&nbsp;is&nbsp;read&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;environment&nbsp;variable&nbsp;AICORE_PROFILE.&nbsp;If&nbsp;this&nbsp;is&nbsp;not&nbsp;set,&nbsp;the&nbsp;default&nbsp;profile&nbsp;is&nbsp;used.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;default&nbsp;profile&nbsp;is&nbsp;read&nbsp;from&nbsp;$AICORE_HOME/config.json.<br>
+:type&nbsp;profile_name:&nbsp;optional,&nbsp;str<br>
+**kwargs:&nbsp;check&nbsp;the&nbsp;parameters&nbsp;of&nbsp;the&nbsp;class&nbsp;constructor</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>logger</strong> = &lt;Logger ai_core_sdk (INFO)&gt;</dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>Callable</strong> = typing.Callable</td></tr></table>
+</body></html>

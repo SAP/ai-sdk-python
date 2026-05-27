@@ -1,0 +1,7 @@
+recursive-include ai_core_sdk *
+include *.txt
+include docs/*.html
+exclude integration_tests/*
+exclude requirements-test.txt
+recursive-exclude tests *
+exclude MANIFEST.in

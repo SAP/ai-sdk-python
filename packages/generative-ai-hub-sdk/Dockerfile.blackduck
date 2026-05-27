@@ -1,0 +1,35 @@
+FROM dockerio.int.repositories.cloud.sap/python:3.14-slim
+
+RUN echo "Custom Docker image for BlackDuck"
+RUN apt-get clean
+RUN apt update && apt upgrade -y
+RUN apt install curl -y
+
+ARG NEXUS=https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi/simple
+
+# Install OpenJDK
+RUN apt install openjdk-21-jre -y
+RUN apt install gcc -y
+
+# Verify Java installation and set BDS_JAVA_HOME
+RUN java_path=$(dirname $(dirname $(readlink -f $(which java)))) && \
+    echo "java -version" && java -version && \
+    echo "PWD is: $PWD"  && \
+    echo "Java path is: $java_path" && \
+    export BDS_JAVA_HOME=$java_path && \
+    echo "BDS_JAVA_HOME is: $BDS_JAVA_HOME" 
+
+# To persist the BDS_JAVA_HOME environment variable
+ENV BDS_JAVA_HOME=/usr/lib/jvm/java-21-openjdk-headless
+
+
+RUN addgroup --gid 1001 mlapi
+RUN adduser -u 1000 --ingroup mlapi --home /home/mlapi mlapi
+
+COPY --chown=mlapi:mlapi . /app
+WORKDIR /app
+
+RUN pip install -U setuptools && \
+    pip install -U pylint && \
+    pip install --trusted-host nexus.wdf.sap.corp --trusted-host github.wdf.sap.corp --index-url $NEXUS ".[all]"
+

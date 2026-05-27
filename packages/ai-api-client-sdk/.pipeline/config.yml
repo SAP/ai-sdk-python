@@ -1,0 +1,106 @@
+project:
+  executeType: 'pythonLib'
+  unitTestsFolder: 'tests'
+  deploymentHealthPath: ''
+  runSecurityScansOnPR: false
+  runSecurityScansOnDefaultBranch: true
+  sapCheckPPMSCompliance: false
+  isPPMSUpdateForDockerImage: false
+  customLintDocker: 'Dockerfile.pylint'
+  blackDuckDocker: 'Dockerfile.blackduck'
+  versionScheme: 'PEP-440'
+  githubHttpsUrl: 'https://github.wdf.sap.corp/AI/ai-api-client-sdk.git'
+general:
+  buildTool: pip
+  scanType: pip
+  xMakeBuildQuality: Release
+  gitSshKeyCredentialsId: 'SSH_github'
+  xMakeDevCredentialsId: 'aif-xmake'
+  pythonSourceFolderPath: 'ai_api_client_sdk/'
+  sapPiperDownloadCredentialsId: 'd9e23346-ab04-4c23-add9-409af338fdab'
+steps:
+  executeBuild:
+    xMakeDownloadBuildResult: false
+  artifactPrepareVersion:
+    buildTool: custom
+    filePath: cfg/VERSION
+  executeSonarScan:
+    instance: 'SAP_EE_sonar'
+    tokenVaultPath: 'product/AI/aif_inject_secrets/ai-api-client-sdk/sonar'
+  checkmarxOneExecuteScan:
+    checkmarxOneCredentialsId: 'AILIB_CICD_CxOne'
+    serverUrl: 'https://checkmarx.tools.sap'
+    projectName: 'ai-api-client-sdk' 
+    applicationName: 'AI_LIBRARIES_AND_SDKS'
+    preset: 'SAP_Default_Python'    
+    filterPattern: '!**/.xmake/**, !**/*.html, !**/*.xml, **/*.py, !**/scripts/**, !**/tests/**, !**/integration_tests/**, !**/component_tests/**, !**/ml-api-facade-performancetest/**, !**/env/**, !**/**vaultSecretContent_*.json, !**/whitesource-workspace*/**, !**/whitesource*/**, !**/.tox/**'
+    generatePdfReport: true
+    incremental: true
+    fullScansScheduled: false
+    fullScanCycle: 10
+    avoidDuplicateProjectScans: false
+    vulnerabilityThresholdEnabled: true
+    vulnerabilityThresholdResult: 'FAILURE'
+    vulnerabilityThresholdHigh: 0
+    vulnerabilityThresholdMedium: 0
+    vulnerabilityThresholdLow: 100
+    vulnerabilityThresholdUnit: absolute
+  detectExecuteScan:
+    serverUrl: 'https://sap.blackducksoftware.com'
+    detectTokenCredentialsId: 'AIF_BlackDuckToken'
+    customTlsCertificateLinks:
+      - http://aia.pki.co.sap.com/aia/SAPNetCA_G2.crt
+      - http://aia.pki.co.sap.com/aia/SAP%20Global%20Root%20CA.crt
+    projectName: 'ai-api-client-sdk' # set according to your own requirement
+    githubApiUrl: 'https://github.wdf.sap.corp/api/v3/repos/AI/ai-api-client-sdk'
+    githubTokenCredentialsId: 'blackduckpr'
+    useDetect9: true
+    verbose: true
+    versioningModel: 'major'
+    groups:
+      - "AI API CLIENT SDK 1.0"
+    scanProperties:
+      - --detect.python.python3=true
+      - --blackduck.signature.scanner.memory=4096
+      - --detect.timeout=6000
+      - --blackduck.trust.cert=true
+      - --logging.level.com.synopsys.integration=DEBUG
+      - --detect.maven.excluded.scopes=test
+      - --detect.pip.requirements.path=requirements.txt
+      # - --detect.output.path='.pipeline/stepReports' # log files will be generated under this folder
+      # - --detect.tools.excluded=SIGNATURE_SCAN # to ignore signature scans
+      # - --detect.diagnostic=true # to create diagnostic zip containing files needed for troubleshooting
+      # - --detect.cleanup=false # If true(default), the log/zip files created by Detect will be cleaned up automatically.
+      # - --detect.blackduck.scan.mode=INTELLIGENT # When scan comes from a PR instead of a branch scan then it usually defaults to RAPID mode. Results for such scan will be not uploaded to the server. Hence added this
+  detectExecuteCTPScan:
+    ctp_serverUrl: 'https://sap-cci.app.blackduck.com'
+    ctp_detectTokenCredentialsId: 'GenAIHubSDK_BD_CTP'
+    ctp_projectName: 'ai-api-client-sdk' # set according to your own requirement
+    useDetect9: true
+    ctp_groups:
+      - "AI API CLIENT SDK 1.0"
+    ctp_scanProperties:
+      - --detect.python.python3=true
+      - --blackduck.signature.scanner.memory=4096
+      - --detect.timeout=6000
+      - --blackduck.trust.cert=true
+      - --logging.level.com.synopsys.integration=DEBUG
+      - --detect.maven.excluded.scopes=test
+      - --detect.pip.requirements.path=requirements.txt
+      - --detect.blackduck.signature.scanner.individual.file.matching=ALL #must for blackduck-CTP scan
+  sapCumulusUpload:
+    cumulusFileCredentialsId: 'ai-api-client-sdk-cumulus'
+    pipelineId: '3300d933-8ce2-444b-9b59-86ca2d6e52c1'
+  sapCollectPolicyResults:
+    centralPolicyKeys:
+      - SDOL-009-SAST
+    cumulusFileCredentialsId: 'ai-api-client-sdk-cumulus'
+    resultFile: 'collected-policy-results.json'
+    validateCompliance: true
+  sendNotificationMail:
+    notificationRecipients: ''
+  slackSendNotification: #Put your team channel name under SAP Machine Learning workspace (sap-ml.slack.com)
+    channel: 'ml-api-facade-dev'
+InjectSecretInTestFromVault:
+  ComponentTestSecretVaultPath: 'product/AI/aif_inject_secrets/ai-api-client-sdk/integration_test_secrets/intwdf-new-std'
+  AcceptanceTestSecretVaultPath: 'product/AI/aif_inject_secrets/ai-api-client-sdk/integration_test_secrets/intwdf-new-std'

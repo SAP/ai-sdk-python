@@ -1,0 +1,42 @@
+cumulusUpload: 
+  filePattern: ".pipeline/cumulus-configuration.json"
+  stepResultType: "cumulus-upload"
+requirementMapping: 
+  filePattern: ".pipeline/requirement.mapping" 
+  stepResultType: "requirement-mapping"
+coverage:
+  filePattern: "**sonarscan*.json"
+  stepResultType: "sonarqube"
+logs:
+  filePattern: "pylint.log,hadolint.xml,jenkins-log.txt"
+  stepResultType: "log"
+junit:
+  filePattern: "generated-unit-test-results/**/*.xml,generated-acceptance-test-results/**/*.xml,generated-component-test-results/**/*.xml"
+  stepResultType: "junit"
+checkmarx:
+  filePattern: "**/CxSASTReport_*.pdf, **/*CxSAST*.html, **/ScanReport.*, **/piper_checkmarx_report.json, **/*checkmarx_*.json"
+  stepResultType: "checkmarx"
+protecode:
+  filePattern: "*protecode_report.pdf,protecode-ignored-vulnerabilities.yaml,*piper_protecode_report.html,**/*protecode_*.json, *protecodeExecuteScan.json"
+  stepResultType: "protecode"
+sonarqube:
+  filePattern: "**sonarscan.json"
+  stepResultType: "sonarqube"
+unitTest:
+  filePattern: "**unit_tests.xml"
+  stepResultType: "unit-test"
+componentTest:
+  filePattern: "*component-test-results/**/*.xml, *component-test-results/*.xml"
+  stepResultType: "integration-test"
+acceptanceTest:
+  filePattern: "*acceptance-test-results/**/*.xml, *acceptance-test-results/*.xml"
+  stepResultType: "acceptance-test"
+envjson:
+  filePattern: "**env.json"
+  stepResultType: "envjson"
+xmake:
+  filePattern: "**/xmake_stage.json"
+  stepResultType: "xmake"
+blackduck:
+  filePattern: "**/*BlackDuck_RiskReport.pdf, **/blackduck-ip.json, **/toolrun_detectExecute_*.json, **/piper_detect_policy_violation_report.html, **/piper_detect_vulnerability_report.html, **/piper_detect_vulnerability.sarif"
+  stepResultType: "blackduck-ip"
