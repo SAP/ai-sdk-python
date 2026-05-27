@@ -11,3 +11,7 @@ sap-ai-sdk-gen = { workspace = true }
 [tool.uv.workspace]
 members = ["packages/*"]
 
+[tool.pytest]
+markers = [
+    "bedrock: mark a test as a bedrock test running in a different environment",
+]
