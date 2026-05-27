@@ -1,0 +1,38 @@
+name: setup
+description: Checkout repo, set up Python and uv, and install dependencies.
+inputs:
+  python-version:
+    description: 'Python version'
+    default: '3.13'
+  registry-token:
+    description: 'Auth token for the PyPI registry'
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
+    - name: Install dependencies
+      shell: bash
+      env:
+        REGISTRY_TOKEN: ${{ inputs.registry-token }}
+        IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
+      run: |
+        if [[ "$IS_FORK" == "true" ]]; then
+          # forks don't have access to the artifactory registry, so we skip --locked and fall back to PyPI
+          uv sync --all-packages --all-extras
+        else
+          UV_INDEX_ARTIFACTORY_USERNAME=x-token \
+          UV_INDEX_ARTIFACTORY_PASSWORD="${REGISTRY_TOKEN}" \
+            uv sync --all-packages --all-extras --locked
+        fi

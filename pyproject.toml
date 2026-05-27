@@ -3,6 +3,11 @@ name = "ai-sdk-python"
 version = "0.0.0"
 requires-python = ">=3.10"
 
+[[tool.uv.index]]
+name = "artifactory"
+url = "https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/simple/"
+default = true
+
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
 sap-ai-sdk-core = { workspace = true }

@@ -20,19 +20,9 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
-          python-version: '3.13'
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
-      - name: Install dependencies
-        run: uv sync --all-packages --all-extras --locked
+          registry-token: ${{ secrets.NPM_TOKEN_ARTIFACTORY }}
 
       - name: Run pylint
         run: |
@@ -58,19 +48,10 @@ jobs:
             path: packages/generative-ai-hub-sdk/tests
             source: packages/generative-ai-hub-sdk/gen_ai_hub
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
-      - name: Install dependencies
-        run: uv sync --all-packages --all-extras --locked
+          registry-token: ${{ secrets.NPM_TOKEN_ARTIFACTORY }}
 
       - name: Run unit tests with coverage
         id: run-tests
@@ -120,19 +101,9 @@ jobs:
             path: packages/generative-ai-hub-sdk/integration_tests
             source: packages/generative-ai-hub-sdk/gen_ai_hub
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: ./.github/actions/setup@main
         with:
-          python-version: '3.13'
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
-      - name: Install dependencies
-        run: uv sync --all-packages --all-extras --locked
+          registry-token: ${{ secrets.NPM_TOKEN_ARTIFACTORY }}
 
       - name: Run integration tests
         id: run-tests
