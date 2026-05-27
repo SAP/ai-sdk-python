@@ -16,7 +16,6 @@ permissions:
 
 jobs:
   lint:
-    name: 'Linter - Python 3.13'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
