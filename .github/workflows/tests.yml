@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - main
-      - monorepo-uv
+      - os-migration
   pull_request:
     branches:
       - main
