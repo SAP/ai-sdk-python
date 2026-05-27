@@ -1,0 +1,28 @@
+version: 2
+registries:
+  sap-artifactory:
+    type: npm-registry
+    url: https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/
+    token: ${{secrets.DBOT_NPM_TOKEN_ARTIFACTORY}}
+    replaces-base: true
+updates:
+  - package-ecosystem: uv
+    target-branch: 'main'
+    directory: /
+    registries:
+      - sap-artifactory
+    schedule:
+      interval: daily
+      time: '22:00'
+    cooldown:
+      default-days: 5
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: github-actions
+    target-branch: 'main'
+    directory: /
+    schedule:
+      interval: daily
+      time: '22:00'
+    cooldown:
+      default-days: 5
