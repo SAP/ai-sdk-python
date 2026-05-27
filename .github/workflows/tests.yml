@@ -73,26 +73,39 @@ jobs:
           echo "${{ steps.run-tests.outcome == 'success' && '✅ passed' || '❌ failed' }} [test results](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
 
   integration-tests:
-    name: 'Integration Tests - Python ${{ matrix.python-version }}'
+    name: 'Integration Tests - ${{ matrix.package.name }} - Python 3.13'
     runs-on: ubuntu-latest
     # Only run integration tests if credentials are available (not on external PRs)
     if: |
       github.event_name != 'pull_request' ||
       github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - name: ai-api-client-sdk
+            path: packages/ai-api-client-sdk/integration_tests
+            source: packages/ai-api-client-sdk/ai_api_client_sdk
+          - name: ai-core-sdk
+            path: packages/ai-core-sdk/integration_tests
+            source: packages/ai-core-sdk/ai_core_sdk
+          - name: generative-ai-hub-sdk
+            path: packages/generative-ai-hub-sdk/integration_tests
+            source: packages/generative-ai-hub-sdk/gen_ai_hub
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Set up Python
+      - name: Set up Python 3.13
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
-          python-version: 3.13
+          python-version: '3.13'
 
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
       - name: Install dependencies
-        run: uv sync --all-packages --all-extras
+        run: uv sync --all-packages --all-extras --locked
 
       - name: Run integration tests
         id: run-tests
@@ -106,20 +119,21 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           mkdir -p test-results
-          uv run pytest -c pytest-integration.toml \
-            --cov \
+          uv run pytest ${{ matrix.package.path }} \
+            --cov=${{ matrix.package.source }} \
+            --cov-report xml:test-results/coverage.xml \
             --junit-xml=test-results/integration-tests.xml \
-            --cov-report xml:test-results/integration-coverage.xml \
             --verbosity=2 \
             -ra \
             --disable-warnings \
             -m "not bedrock"
+
       - name: Upload integration test results
         if: always()
         id: upload
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: integration-test-results-py${{ matrix.python-version }}
+          name: integration-test-results-${{ matrix.package.name }}-py3.13
           path: test-results/
           retention-days: 30
 
