@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   unit-tests:
-    name: 'unit tests - ${{ matrix.package.name }} (Python ${{ matrix.python-version }})'
+    name: 'unit tests (${{ matrix.package.name }}, ${{ matrix.python-version }})'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -78,6 +78,7 @@ jobs:
           echo "${{ steps.run-tests.outcome == 'success' && '✅ passed' || '❌ failed' }} [test results](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
 
   integration-tests:
+    name: 'integration tests (${{ matrix.package.name }})'
     runs-on: ubuntu-latest
     # Only run integration tests if credentials are available (not on external PRs)
     if: |
