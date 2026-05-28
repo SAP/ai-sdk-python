@@ -21,6 +21,7 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run pylint
@@ -53,6 +54,7 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           python-version: ${{ matrix.python-version }}
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run unit tests with coverage
@@ -103,8 +105,9 @@ jobs:
             path: packages/generative-ai-hub-sdk/integration_tests
             source: packages/generative-ai-hub-sdk/gen_ai_hub
     steps:
-      - uses: ./.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run integration tests
