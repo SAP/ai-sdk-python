@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'main'
-      - 'os-migration'
   pull_request: ~
   workflow_dispatch: ~
 
