@@ -39,6 +39,16 @@ name = "ai-sdk-python"
 version = "0.0.0"
 source = { virtual = "." }
 
+[package.dev-dependencies]
+dev = [
+    { name = "pip-licenses" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pip-licenses", specifier = ">=5.5.5" }]
+
 [[package]]
 name = "aiobotocore"
 version = "3.7.0"
@@ -1390,7 +1400,7 @@ wheels = [
 
 [[package]]
 name = "langsmith"
-version = "0.8.5"
+version = "0.8.6"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
 dependencies = [
     { name = "httpx" },
@@ -1400,12 +1410,13 @@ dependencies = [
     { name = "requests" },
     { name = "requests-toolbelt" },
     { name = "uuid-utils" },
+    { name = "websockets" },
     { name = "xxhash" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/17/eb/8883d1158c743d0aac350f09df7880714d27283497e8c80bb9fe3480f165/langsmith-0.8.5.tar.gz", hash = "sha256:3615243d99c12f4047f13042bdc05a373dce232d106a6511b3ca7b48c5af1c2c" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/7a/61/d269b8bd3376031de7be6ac2de8ba94fafff67635195d97aa0e842027ac7/langsmith-0.8.6.tar.gz", hash = "sha256:a46fd3403c2de3a9c34f72ebb7b2e45872627671adcc67c6a4c571520b6931cc" }
 wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/23/85/968c88a63e32a59b3e5c68afd2fe114ce0708a125db0be1a85efc25fb2ea/langsmith-0.8.5-py3-none-any.whl", hash = "sha256:efc779f9d450dcaf9d97bc8894f4926276509d6e730e05289af9a64debce06ae" },
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/7e/c5/28f99eccd79ce89ec93de9a5039a74ddf4740f2d9671b0a06c5d2e200914/langsmith-0.8.6-py3-none-any.whl", hash = "sha256:b304888ea5ec5fe397db24f0bf474b0c8e472fb23ee36a2007e9837f6ff29cc1" },
 ]
 
 [[package]]
@@ -2133,12 +2144,25 @@ wheels = [
 ]
 
 [[package]]
-name = "platformdirs"
-version = "4.9.6"
+name = "pip-licenses"
+version = "5.5.5"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/9f/4a/0883b8e3802965322523f0b200ecf33d31f10991d0401162f4b23c698b42/platformdirs-4.9.6.tar.gz", hash = "sha256:3bfa75b0ad0db84096ae777218481852c0ebc6c727b3168c1b9e0118e458cf0a" }
+dependencies = [
+    { name = "prettytable" },
+    { name = "tomli", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/7d/18/ddd93af610a04f56a51a27095ddfe55238e1ec236f6758730a0d2c0b49f2/pip_licenses-5.5.5.tar.gz", hash = "sha256:60750c006adf7a0910347b726e8ee9fee3bc8d2e7c8307a5c4ec0776c8e2a276" }
 wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/75/a6/a0a304dc33b49145b21f4808d763822111e67d1c3a32b524a1baf947b6e1/platformdirs-4.9.6-py3-none-any.whl", hash = "sha256:e61adb1d5e5cb3441b4b7710bea7e4c12250ca49439228cc1021c00dcfac0917" },
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/2a/9a/6acfdb8d463eac7cdae7534d35d72237eca63f5fbafe797289d8a5fae447/pip_licenses-5.5.5-py3-none-any.whl", hash = "sha256:f4c4c6d9e6a03612cf59f29f19dc8ab54904d82e055b8e191498f2279a224e14" },
+]
+
+[[package]]
+name = "platformdirs"
+version = "4.10.0"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/d7/47/e4501f49c178ae1d9f4a75073fda4204f52647993f075a9db4d14930e0c5/platformdirs-4.10.0.tar.gz", hash = "sha256:31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/81/e6/cd9575ac904136b3cbf7aa7ee819ef86eedb7274e46f230e94ea4342e729/platformdirs-4.10.0-py3-none-any.whl", hash = "sha256:fb516cdb12eb0d857d0cd85a7c57cea4d060bee4578d6cf5a14dfdf8cbf8784a" },
 ]
 
 [[package]]
@@ -2148,6 +2172,18 @@ source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pyp
 sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3" }
 wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746" },
+]
+
+[[package]]
+name = "prettytable"
+version = "3.17.0"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+dependencies = [
+    { name = "wcwidth" },
+]
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/79/45/b0847d88d6cfeb4413566738c8bbf1e1995fad3d42515327ff32cc1eb578/prettytable-3.17.0.tar.gz", hash = "sha256:59f2590776527f3c9e8cf9fe7b66dd215837cca96a9c39567414cbc632e8ddb0" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/ee/8c/83087ebc47ab0396ce092363001fa37c17153119ee282700c0713a195853/prettytable-3.17.0-py3-none-any.whl", hash = "sha256:aad69b294ddbe3e1f95ef8886a060ed1666a0b83018bbf56295f6f226c43d287" },
 ]
 
 [[package]]
@@ -3330,6 +3366,15 @@ wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/ed/15/dd1fab6f7fcd15f2c331d0c1f0f516bb1113a640216460f82be53db3dcf8/uuid_utils-0.16.0-pp311-pypy311_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dc0824a31898ef46a9d84d748c3abe27cdb615ac3773c53cc1f84fc8e66dc7c4" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/96/56/62dcd551b140cbeb0f87522da2015b4b9e5818327b920506ad88d28562b0/uuid_utils-0.16.0-pp311-pypy311_pp73-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:abfbf5e0c47fb31b37164a99515104e449a0bee36a071dc8b105457a2b35a5e6" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/44/e7/3937b9a9d6745b94dbe7b86531e098db8c53b77c8d07df7daa9577a47b8e/uuid_utils-0.16.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:680799a9ade01d69c53cb9d41392ced24919d4f600bfab5060b61fca37510097" },
+]
+
+[[package]]
+name = "wcwidth"
+version = "0.7.0"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/2c/ee/afaf0f85a9a18fe47a67f1e4422ed6cf1fe642f0ae0a2f81166231303c52/wcwidth-0.7.0.tar.gz", hash = "sha256:90e3a7ea092341c44b99562e75d09e4d5160fe7a3974c6fb842a101a95e7eed0" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/41/52/e465037f5375f43533d1a80b6923955201596a99142ed524d77b571a1418/wcwidth-0.7.0-py3-none-any.whl", hash = "sha256:5d69154c429a82910e241c738cd0e2976fac8a2dd47a1a805f4afed1c0f136f2" },
 ]
 
 [[package]]

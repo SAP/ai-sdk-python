@@ -30,6 +30,9 @@ jobs:
             --errors-only \
             --output-format=json \
 
+      - name: Check dependency licenses
+        run: uv run pip-licenses
+
   unit-tests:
     name: 'unit tests (${{ matrix.package.name }}, ${{ matrix.python-version }})'
     runs-on: ubuntu-latest

@@ -7,13 +7,13 @@ name = "sap-ai-sdk-base"
 dynamic = ["version"]
 description = "SAP Cloud SDK for AI (Python): Base Client"
 readme = "PYPIDESCRIPTION.md"
-license = {text = "SAP DEVELOPER LICENSE AGREEMENT"}
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{name = "SAP SE"}]
 keywords = ["SAP AI Core"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: Other/Proprietary License",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX :: Linux",
