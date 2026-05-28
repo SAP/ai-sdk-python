@@ -5,7 +5,7 @@ requires-python = ">=3.10"
 
 [[tool.uv.index]]
 name = "artifactory"
-url = "https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/simple/"
+url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/"
 default = true
 
 [tool.uv.sources]

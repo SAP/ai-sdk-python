@@ -30,7 +30,8 @@ runs:
       run: |
         if [[ "$IS_FORK" == "true" ]]; then
           # forks don't have access to the artifactory registry, so we skip --locked and fall back to PyPI
-          uv sync --all-packages --all-extras
+          UV_INDEX_URL="https://pypi.org/simple/" \
+            uv sync --all-packages --all-extras
         else
           UV_INDEX_ARTIFACTORY_USERNAME=x-token \
           UV_INDEX_ARTIFACTORY_PASSWORD="${REGISTRY_TOKEN}" \
