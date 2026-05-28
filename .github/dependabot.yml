@@ -3,7 +3,7 @@ registries:
   sap-artifactory:
     type: npm-registry
     url: https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/
-    token: ${{secrets.DBOT_NPM_TOKEN_ARTIFACTORY}}
+    token: ${{secrets.DBOT_ARTIFACTORY_TOKEN}}
     replaces-base: true
 updates:
   - package-ecosystem: uv
