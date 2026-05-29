@@ -1,0 +1,173 @@
+name: build
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request: ~
+  workflow_dispatch: ~
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run pylint
+        run: |
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub \
+            --errors-only \
+            --output-format=json \
+
+      - name: Check dependency licenses
+        run: uv run pip-licenses
+
+  unit-tests:
+    name: 'unit tests (${{ matrix.package.name }}, ${{ matrix.python-version }})'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13', '3.14']
+        package:
+          - name: ai-api-client-sdk
+            path: packages/ai-api-client-sdk/tests
+            source: packages/ai-api-client-sdk/ai_api_client_sdk
+          - name: ai-core-sdk
+            path: packages/ai-core-sdk/tests
+            source: packages/ai-core-sdk/ai_core_sdk
+          - name: generative-ai-hub-sdk
+            path: packages/generative-ai-hub-sdk/tests
+            source: packages/generative-ai-hub-sdk/gen_ai_hub
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          python-version: ${{ matrix.python-version }}
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run unit tests with coverage
+        id: run-tests
+        run: |
+          uv run pytest ${{ matrix.package.path }} \
+            --cov=${{ matrix.package.source }} \
+            --cov-report xml:coverage.xml \
+            --junit-xml=unit-tests.xml \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings
+
+      - name: Upload coverage reports
+        if: always()
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-results-${{ matrix.package.name }}-py${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            unit-tests.xml
+          retention-days: 30
+
+      - name: Summarize results
+        if: always()
+        run: |
+          echo "${{ steps.run-tests.outcome == 'success' && '✅ passed' || '❌ failed' }} [test results](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
+
+  integration-tests:
+    name: 'integration tests (${{ matrix.package.name }})'
+    runs-on: ubuntu-latest
+    # Only run integration tests if credentials are available (not on external PRs)
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - name: ai-api-client-sdk
+            path: packages/ai-api-client-sdk/integration_tests
+            source: packages/ai-api-client-sdk/ai_api_client_sdk
+          - name: ai-core-sdk
+            path: packages/ai-core-sdk/integration_tests
+            source: packages/ai-core-sdk/ai_core_sdk
+          - name: generative-ai-hub-sdk
+            path: packages/generative-ai-hub-sdk/integration_tests
+            source: packages/generative-ai-hub-sdk/gen_ai_hub
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run integration tests
+        id: run-tests
+        env:
+          AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
+          AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
+          AICORE_AUTH_URL: ${{ secrets.AICORE_AUTH_URL }}
+          AICORE_CLIENT_ID: ${{ secrets.AICORE_CLIENT_ID }}
+          AICORE_CLIENT_SECRET: ${{ secrets.AICORE_CLIENT_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          uv run pytest ${{ matrix.package.path }} \
+            --cov=${{ matrix.package.source }} \
+            --cov-report xml:coverage.xml \
+            --junit-xml=integration-tests.xml \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            -m "not bedrock"
+
+      - name: Upload integration test results
+        if: always()
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: integration-test-results-${{ matrix.package.name }}-py3.13
+          path: |
+            coverage.xml
+            integration-tests.xml
+          retention-days: 30
+
+      - name: Summarize results
+        if: always()
+        run: |
+          echo "${{ steps.run-tests.outcome == 'success' && '✅ passed' || '❌ failed' }} [test results](${{ steps.upload.outputs.artifact-url }})" >> $GITHUB_STEP_SUMMARY
+
+  dependabot:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == github.event.pull_request.head.repo.full_name }}
+    needs: [unit-tests, checks]
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Approve a PR
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: gh pr review --approve "$PR_URL"
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: gh pr merge --auto --squash "$PR_URL"
