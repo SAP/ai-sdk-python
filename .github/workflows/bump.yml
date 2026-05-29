@@ -52,6 +52,14 @@ jobs:
           uvx bump-my-version bump ${{ inputs.bump-type }}
           echo "version=$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
+      - name: Check release notes
+        if: inputs.package == 'generative-ai-hub-sdk'
+        run: |
+          if ! grep -qF "## ${{ steps.bump.outputs.version }}" packages/generative-ai-hub-sdk/RELEASE_NOTES.md; then
+            echo "RELEASE_NOTES.md does not contain an entry for version ${{ steps.bump.outputs.version }}"
+            exit 1
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
@@ -62,10 +70,13 @@ jobs:
         run: |
           python scripts/generate_changelog.py "${{ steps.bump.outputs.version }}" --update
 
-      - name: Commit and tag
+      - name: Commit
         run: |
-          git add packages/${{ inputs.package }}/version.txt packages/${{ inputs.package }}/RELEASE_NOTES.md
+          git add packages/${{ inputs.package }}/version.txt
           git commit -m "chore: bump ${{ inputs.package }} version to ${{ steps.bump.outputs.version }}"
-          git tag -a "${{ inputs.package }}-v${{ steps.bump.outputs.version }}" -m "Release ${{ inputs.package }} v${{ steps.bump.outputs.version }}"
           git push origin main
+
+      - name: Tag
+        run: |
+          git tag -a "${{ inputs.package }}-v${{ steps.bump.outputs.version }}" -m "Release ${{ inputs.package }} v${{ steps.bump.outputs.version }}"
           git push origin "${{ inputs.package }}-v${{ steps.bump.outputs.version }}"
