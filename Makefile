@@ -4,6 +4,9 @@ install:
 lint:
 	uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub --errors-only --output-format=colorized
 
+license-check:
+	uv run pip-licenses
+
 test:
 	uv run pytest packages/ai-api-client-sdk/tests
 	uv run pytest packages/ai-core-sdk/tests

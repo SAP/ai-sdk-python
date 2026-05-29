@@ -7,13 +7,13 @@ name = "sap-ai-sdk-gen"
 dynamic = ["version"]
 description = "SAP Cloud SDK for AI (Python): generative AI SDK"
 readme = "PYPIDESCRIPTION.md"
-license = {text = "SAP DEVELOPER LICENSE AGREEMENT"}
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{name = "SAP SE"}]
 keywords = ["SAP AI Core", "SAP generative AI SDK", "SAP Generative AI Hub"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: Other/Proprietary License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows :: Windows 10",
     "Operating System :: Microsoft :: Windows :: Windows 7",
@@ -73,6 +73,9 @@ dev = [
     "respx==0.23.1",
     "parameterized==0.9.0",
     "pillow==12.2.0",
+    "sphinx<9.0.0",
+    "myst_nb",
+    "sphinxawesome-theme",
 ]
 
 [project.urls]
