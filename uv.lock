@@ -3979,13 +3979,8 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
-acceptance = [
-    { name = "pyhamcrest" },
-    { name = "pylint" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-]
 dev = [
+    { name = "pyhamcrest" },
     { name = "pylint" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -3998,13 +3993,8 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-acceptance = [
-    { name = "pyhamcrest", specifier = "==2.1.0" },
-    { name = "pylint", specifier = "==4.0.5" },
-    { name = "pytest", specifier = "==9.0.3" },
-    { name = "pytest-cov", specifier = "==7.1.0" },
-]
 dev = [
+    { name = "pyhamcrest", specifier = "==2.1.0" },
     { name = "pylint", specifier = "==4.0.5" },
     { name = "pytest", specifier = "==9.0.3" },
     { name = "pytest-cov", specifier = "==7.1.0" },
@@ -4052,6 +4042,7 @@ google = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "myst-nb" },
     { name = "parameterized" },
     { name = "pillow" },
     { name = "pylint" },
@@ -4060,9 +4051,6 @@ dev = [
     { name = "pytest-cov" },
     { name = "requests-mock" },
     { name = "respx" },
-]
-docs = [
-    { name = "myst-nb" },
     { name = "sphinx", version = "8.1.3", source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }, marker = "python_full_version < '3.11'" },
     { name = "sphinx", version = "8.2.3", source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }, marker = "python_full_version >= '3.11'" },
     { name = "sphinxawesome-theme" },
@@ -4096,6 +4084,7 @@ provides-extras = ["google", "amazon", "all"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "myst-nb" },
     { name = "parameterized", specifier = "==0.9.0" },
     { name = "pillow", specifier = "==12.2.0" },
     { name = "pylint", specifier = "==4.0.5" },
@@ -4104,9 +4093,6 @@ dev = [
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "requests-mock", specifier = "==1.12.1" },
     { name = "respx", specifier = "==0.23.1" },
-]
-docs = [
-    { name = "myst-nb" },
     { name = "sphinx", specifier = "<9.0.0" },
     { name = "sphinxawesome-theme" },
 ]
