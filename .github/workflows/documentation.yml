@@ -27,11 +27,11 @@ jobs:
         run: uv sync --package sap-ai-sdk-gen --group dev
 
       - name: Make HTML
-        working-directory: packages/generative-ai-hub-sdk/docs
+        working-directory: packages/gen/docs
         run: uv run make
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/generative-ai-hub-sdk/docs/build/html
+          publish_dir: packages/gen/docs/build/html

@@ -16,4 +16,4 @@ Renovate is set up for this repository. For further information, take a look at 
 
 ## Releasing to public PyPI
 
-Please follow [this guide](https://wiki.wdf.sap.corp/wiki/display/AI/Delivering+artifacts+to+PyPI) to release ai-core-sdk to public PyPI repositories.
+Please follow [this guide](https://wiki.wdf.sap.corp/wiki/display/AI/Delivering+artifacts+to+PyPI) to release sap-ai-sdk-core to public PyPI repositories.

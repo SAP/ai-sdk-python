@@ -43,7 +43,7 @@ aicore = "ai_core_sdk.cli:cli"
 
 [project.urls]
 Homepage = "https://www.sap.com/"
-Download = "https://pypi.python.org/pypi/ai-core-sdk"
+Download = "https://pypi.python.org/pypi/sap-ai-sdk-core"
 
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }

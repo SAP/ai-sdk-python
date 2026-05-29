@@ -35,7 +35,7 @@ jobs:
           pip install build
 
       - name: Build package
-        working-directory: packages/generative-ai-hub-sdk
+        working-directory: packages/gen
         run: |
           python -m build
 
@@ -44,4 +44,4 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
           skip-existing: false
-          packages-dir: packages/generative-ai-hub-sdk/dist/
+          packages-dir: packages/gen/dist/

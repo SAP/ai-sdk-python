@@ -8,14 +8,14 @@ license-check:
 	uv run pip-licenses
 
 test:
-	uv run pytest packages/ai-api-client-sdk/tests
-	uv run pytest packages/ai-core-sdk/tests
-	uv run pytest packages/generative-ai-hub-sdk/tests
+	uv run pytest packages/base/tests
+	uv run pytest packages/core/tests
+	uv run pytest packages/gen/tests
 
 test-integration:
-	uv run pytest packages/ai-api-client-sdk/integration_tests
-	uv run pytest packages/ai-core-sdk/integration_tests
-	uv run pytest packages/generative-ai-hub-sdk/integration_tests
+	uv run pytest packages/base/integration_tests
+	uv run pytest packages/core/integration_tests
+	uv run pytest packages/gen/integration_tests
 
 test-pkg:
 	uv run pytest packages/$(pkg)/tests

@@ -19,7 +19,7 @@ jobs:
 
       - name: Extract changelog for this version
         id: get-changelog
-        working-directory: packages/generative-ai-hub-sdk
+        working-directory: packages/gen
         run: |
           python3 << 'EOF'
           import re
@@ -42,7 +42,7 @@ jobs:
               f.write(changelog)
           EOF
 
-          CHANGELOG=$(cat packages/generative-ai-hub-sdk/changelog.txt)
+          CHANGELOG=$(cat packages/gen/changelog.txt)
           # Use multiline output
           echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
           echo "$CHANGELOG" >> "$GITHUB_OUTPUT"

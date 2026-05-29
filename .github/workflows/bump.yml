@@ -8,9 +8,9 @@ on:
         required: true
         type: choice
         options:
-          - ai-api-client-sdk
-          - ai-core-sdk
-          - generative-ai-hub-sdk
+          - base
+          - core
+          - gen
       bump-type:
         description: 'Increment the minor (X.Y+1.0) or patch (X.Y.Z+1) version component based on the current version.txt'
         required: true
@@ -53,9 +53,9 @@ jobs:
           echo "version=$(cat version.txt)" >> "$GITHUB_OUTPUT"
 
       - name: Check release notes
-        if: inputs.package == 'generative-ai-hub-sdk'
+        if: inputs.package == 'gen'
         run: |
-          if ! grep -qF "## ${{ steps.bump.outputs.version }}" packages/generative-ai-hub-sdk/RELEASE_NOTES.md; then
+          if ! grep -qF "## ${{ steps.bump.outputs.version }}" packages/gen/RELEASE_NOTES.md; then
             echo "RELEASE_NOTES.md does not contain an entry for version ${{ steps.bump.outputs.version }}"
             exit 1
           fi
