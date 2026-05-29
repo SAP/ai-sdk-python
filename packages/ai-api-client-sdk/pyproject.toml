@@ -38,13 +38,21 @@ dev = [
     "pytest==9.0.3",
     "pytest-cov==7.1.0",
     "pylint==4.0.5",
+    "bump-my-version",
 ]
 
 [project.urls]
 Homepage = "https://www.sap.com/"
 Download = "https://pypi.python.org/pypi/ai-api-client-sdk"
 
-[tool.setuptools.dynamic]
+[tool.bumpversion]
+current_version = "3.4.0"
+commit = false
+tag = false
+
+[[tool.bumpversion.files]]
+filename = "version.txt"
+
 version = {file = "version.txt"}
 
 [tool.setuptools.packages.find]

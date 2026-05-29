@@ -76,6 +76,7 @@ dev = [
     "sphinx<9.0.0",
     "myst_nb",
     "sphinxawesome-theme",
+    "bump-my-version",
 ]
 
 [project.urls]
@@ -84,6 +85,14 @@ Download = "https://pypi.python.org/pypi/sap-ai-sdk-gen"
 
 [tool.uv.sources]
 sap-ai-sdk-core = { workspace = true }
+
+[tool.bumpversion]
+current_version = "7.0.0"
+commit = false
+tag = false
+
+[[tool.bumpversion.files]]
+filename = "version.txt"
 
 [tool.setuptools.dynamic]
 version = {file = "version.txt"}
