@@ -2,7 +2,10 @@ name: draft-release
 
 on:
   push:
-    tags: ['v*']
+    tags:
+      - 'base-v*'
+      - 'core-v*'
+      - 'gen-v*'
 
 jobs:
   draft-github-release:
@@ -14,36 +17,16 @@ jobs:
       - name: Get version from tag
         id: get-version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          TAG="${GITHUB_REF_NAME}"
+          PACKAGE="${TAG%%-v*}"
+          VERSION="${TAG#${PACKAGE}-v}"
+          echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
 
-      - name: Extract changelog for this version
+      - name: Extract changelog
         id: get-changelog
-        working-directory: packages/gen
         run: |
-          python3 << 'EOF'
-          import re
-
-          with open('RELEASE_NOTES.md', 'r') as f:
-              content = f.read()
-
-          # Extract the section for this version
-          version = "${{ steps.get-version.outputs.version }}"
-          pattern = rf'^## {re.escape(version)}$(.*?)(?=^## |\Z)'
-          match = re.search(pattern, content, re.MULTILINE | re.DOTALL)
-
-          if match:
-              changelog = match.group(1).strip()
-          else:
-              changelog = f"Release {version}\n\nSee RELEASE_NOTES.md for details."
-
-          # Write to output file for GitHub Actions
-          with open('changelog.txt', 'w') as f:
-              f.write(changelog)
-          EOF
-
-          CHANGELOG=$(cat packages/gen/changelog.txt)
-          # Use multiline output
+          CHANGELOG=$(python3 .github/scripts/extract_changelog.py "${{ steps.get-version.outputs.package }}" "${{ steps.get-version.outputs.version }}")
           echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
           echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"

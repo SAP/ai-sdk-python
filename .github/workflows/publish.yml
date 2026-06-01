@@ -1,11 +1,8 @@
 name: publish-testpypi
 
 on:
-  workflow_dispatch:
-    inputs:
-      release-tag:
-        description: 'Release tag to publish (e.g., v1.0.0)'
-        required: true
+  release:
+    types: [published]
 
 jobs:
   publish-pypi:
@@ -17,25 +14,20 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          ref: ${{ inputs.release-tag }}
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install dependencies
+      - name: Get package from tag
+        id: meta
         run: |
-          python -m pip install --upgrade pip
-          pip install build
+          TAG="${{ github.event.release.tag_name }}"
+          PACKAGE="${TAG%%-v*}"
+          echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Build package
-        working-directory: packages/gen
+        working-directory: packages/${{ steps.meta.outputs.package }}
         run: |
           python -m build
 
@@ -44,4 +36,4 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
           skip-existing: false
-          packages-dir: packages/gen/dist/
+          packages-dir: packages/${{ steps.meta.outputs.package }}/dist/
