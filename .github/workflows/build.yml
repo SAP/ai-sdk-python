@@ -1,6 +1,4 @@
-# TODO: Remove this workflow - pure Python packages produce identical wheels across Python versions,
-# making the matrix build redundant. Syntax checking is covered by the test workflow.
-name: Build
+name: build
 
 on:
   workflow_dispatch:
