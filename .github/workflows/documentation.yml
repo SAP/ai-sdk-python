@@ -6,6 +6,7 @@ on:
       - 'base-v*'
       - 'core-v*'
       - 'gen-v*'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
