@@ -7,6 +7,15 @@ on:
       - 'core-v*'
       - 'gen-v*'
   workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to build documentation for'
+        required: true
+        type: choice
+        options:
+          - base
+          - core
+          - gen
 
 jobs:
   build-and-deploy:
@@ -15,9 +24,14 @@ jobs:
     steps:
       - name: Determine package from tag
         id: meta
+        env:
+          INPUT_PACKAGE: ${{ inputs.package }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
-          PACKAGE="${TAG%%-v*}"
+          PACKAGE="${INPUT_PACKAGE}"
+          if [[ -z "$PACKAGE" ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            PACKAGE="${TAG%%-v*}"
+          fi
           echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
 
       - name: Setup
