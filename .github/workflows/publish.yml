@@ -27,9 +27,8 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Build package
-        working-directory: packages/${{ steps.meta.outputs.package }}
         run: |
-          uv build
+          uv build --package sap-ai-sdk-${{ steps.meta.outputs.package }} --out-dir packages/${{ steps.meta.outputs.package }}/dist
 
       - name: Publish package distributions to TestPyPI
         uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
