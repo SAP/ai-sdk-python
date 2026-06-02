@@ -12,7 +12,7 @@ on:
           - core
           - gen
       bump-type:
-        description: 'Increment the minor (X.Y+1.0) or patch (X.Y.Z+1) version component based on the current version.txt'
+        description: 'Increment the minor (X.Y+1.0) or patch (X.Y.Z+1) version component based on the current version in pyproject.toml'
         required: true
         type: choice
         options:
@@ -47,10 +47,8 @@ jobs:
 
       - name: Bump
         id: bump
-        working-directory: packages/${{ inputs.package }}
         run: |
-          uvx bump-my-version bump ${{ inputs.bump-type }}
-          echo "version=$(cat version.txt)" >> "$GITHUB_OUTPUT"
+          echo "version=$(uv version --bump ${{ inputs.bump-type }} --package sap-ai-sdk-${{ inputs.package }} --short | tail -1)" >> "$GITHUB_OUTPUT"
 
       - name: Check release notes
         if: inputs.package == 'gen'
@@ -60,19 +58,14 @@ jobs:
             exit 1
           fi
 
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.13'
-
       - name: Generate changelog from commits
         working-directory: packages/${{ inputs.package }}
         run: |
-          python scripts/generate_changelog.py "${{ steps.bump.outputs.version }}" --update
+          uv run python scripts/generate_changelog.py "${{ steps.bump.outputs.version }}" --update
 
       - name: Commit
         run: |
-          git add packages/${{ inputs.package }}/version.txt
+          git add packages/${{ inputs.package }}/pyproject.toml
           git commit -m "chore: bump ${{ inputs.package }} version to ${{ steps.bump.outputs.version }}"
           git push origin main
 

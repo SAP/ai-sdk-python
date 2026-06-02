@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sap-ai-sdk-gen"
-dynamic = ["version"]
+version = "7.0.0"
 description = "SAP Cloud SDK for AI (Python): generative AI SDK"
 readme = "PYPIDESCRIPTION.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-authors = [{name = "SAP SE"}]
+authors = [{ name = "SAP SE" }]
 keywords = ["SAP AI Core", "SAP generative AI SDK", "SAP Generative AI Hub"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -50,18 +50,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-google = [
-    "google-genai~=1.73.1",
-    "langchain-google-genai~=4.2.0",
-]
-amazon = [
-    "boto3>=1.40.61",
-    "aiobotocore>=3.2.0",
-    "langchain-aws~=1.4.0",
-]
-all = [
-    "sap-ai-sdk-gen[google,amazon]",
-]
+google = ["google-genai~=1.73.1", "langchain-google-genai~=4.2.0"]
+amazon = ["boto3>=1.40.61", "aiobotocore>=3.2.0", "langchain-aws~=1.4.0"]
+all = ["sap-ai-sdk-gen[google,amazon]"]
 
 [dependency-groups]
 dev = [
@@ -76,7 +67,6 @@ dev = [
     "sphinx<9.0.0",
     "myst_nb",
     "sphinxawesome-theme",
-    "bump-my-version",
 ]
 
 [project.urls]
@@ -85,17 +75,6 @@ Download = "https://pypi.python.org/pypi/sap-ai-sdk-gen"
 
 [tool.uv.sources]
 sap-ai-sdk-core = { workspace = true }
-
-[tool.bumpversion]
-current_version = "7.0.0"
-commit = false
-tag = false
-
-[[tool.bumpversion.files]]
-filename = "version.txt"
-
-[tool.setuptools.dynamic]
-version = {file = "version.txt"}
 
 [tool.setuptools.packages.find]
 exclude = ["*test*"]
