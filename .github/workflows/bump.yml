@@ -3,15 +3,20 @@ name: bump
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Semver compatible version string (X.Y.Z)'
-        required: true
-      bump-type:
-        description: 'Type of version bump'
+      package:
+        description: 'Package to bump'
         required: true
         type: choice
         options:
-          - major
+          - base
+          - core
+          - gen
+      bump-type:
+        description: 'Increment the minor (X.Y+1.0) or patch (X.Y.Z+1) version component based on the current version in pyproject.toml'
+        required: true
+        type: choice
+        options:
+          # - major we should be careful with that
           - minor
           - patch
 
@@ -40,27 +45,31 @@ jobs:
           git config --local user.email "${{ vars.SAP_AI_SDK_BOT_EMAIL }}"
           git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
 
-      - name: Update version file
+      - name: Bump
         id: bump
-        working-directory: packages/generative-ai-hub-sdk
-        run: | # zizmor: ignore[template-injection]
-          echo "${{ inputs.version }}" > version.txt
-          echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "version=$(uv version --bump ${{ inputs.bump-type }} --package sap-ai-sdk-${{ inputs.package }} --short | tail -1)" >> "$GITHUB_OUTPUT"
 
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.11'
+      - name: Check release notes
+        if: inputs.package == 'gen'
+        run: |
+          if ! grep -qF "## ${{ steps.bump.outputs.version }}" packages/gen/RELEASE_NOTES.md; then
+            echo "RELEASE_NOTES.md does not contain an entry for version ${{ steps.bump.outputs.version }}"
+            exit 1
+          fi
 
       - name: Generate changelog from commits
-        working-directory: packages/generative-ai-hub-sdk
-        run: | # zizmor: ignore[template-injection]
-          python scripts/generate_changelog.py "${{ inputs.version }}" --update
+        working-directory: packages/${{ inputs.package }}
+        run: |
+          uv run python scripts/generate_changelog.py "${{ steps.bump.outputs.version }}" --update
 
-      - name: Commit and tag
-        run: | # zizmor: ignore[template-injection]
-          git add packages/generative-ai-hub-sdk/version.txt packages/generative-ai-hub-sdk/RELEASE_NOTES.md
-          git commit -m "chore: bump version to ${{ inputs.version }}"
-          git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
+      - name: Commit
+        run: |
+          git add packages/${{ inputs.package }}/pyproject.toml
+          git commit -m "chore: bump ${{ inputs.package }} version to ${{ steps.bump.outputs.version }}"
           git push origin main
-          git push origin "v${{ inputs.version }}"
+
+      - name: Tag
+        run: |
+          git tag -a "${{ inputs.package }}-v${{ steps.bump.outputs.version }}" -m "Release ${{ inputs.package }} v${{ steps.bump.outputs.version }}"
+          git push origin "${{ inputs.package }}-v${{ steps.bump.outputs.version }}"

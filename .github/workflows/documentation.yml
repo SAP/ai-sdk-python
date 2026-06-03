@@ -1,37 +1,50 @@
-name: Build and Deploy to GitHub Pages
+name: documentation
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'base-v*'
+      - 'core-v*'
+      - 'gen-v*'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to build documentation for'
+        required: true
+        type: choice
+        options:
+          - base
+          - core
+          - gen
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Determine package from tag
+        id: meta
+        env:
+          INPUT_PACKAGE: ${{ inputs.package }}
+        run: |
+          PACKAGE="${INPUT_PACKAGE}"
+          if [[ -z "$PACKAGE" ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            PACKAGE="${TAG%%-v*}"
+          fi
+          echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup
+        uses: ./.github/actions/setup
         with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-        with:
-          python-version: '3.13'
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
-      - name: Install dependencies
-        run: uv sync --package sap-ai-sdk-gen --group dev
+          ref: ${{ github.ref_name }}
 
       - name: Make HTML
-        working-directory: packages/generative-ai-hub-sdk/docs
+        working-directory: packages/${{ steps.meta.outputs.package }}/docs
         run: uv run make
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
+      - name: Upload documentation artifact
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/generative-ai-hub-sdk/docs/build/html
+          name: docs-${{ github.ref_name }}
+          path: packages/${{ steps.meta.outputs.package }}/docs/build/html

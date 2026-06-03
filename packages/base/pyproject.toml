@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sap-ai-sdk-base"
-dynamic = ["version"]
+version = "3.4.0"
 description = "SAP Cloud SDK for AI (Python): Base Client"
 readme = "PYPIDESCRIPTION.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-authors = [{name = "SAP SE"}]
+authors = [{ name = "SAP SE" }]
 keywords = ["SAP AI Core"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -27,25 +27,14 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.9"
-dependencies = [
-    "aenum~=3.1",
-    "pyhumps~=3.0",
-    "requests~=2.32",
-]
+dependencies = ["aenum~=3.1", "pyhumps~=3.0", "requests~=2.32"]
 
 [dependency-groups]
-dev = [
-    "pytest==9.0.3",
-    "pytest-cov==7.1.0",
-    "pylint==4.0.5",
-]
+dev = ["pytest==9.0.3", "pytest-cov==7.1.0", "pylint==4.0.5"]
 
 [project.urls]
 Homepage = "https://www.sap.com/"
-Download = "https://pypi.python.org/pypi/ai-api-client-sdk"
-
-[tool.setuptools.dynamic]
-version = {file = "version.txt"}
+Download = "https://pypi.python.org/pypi/sap-ai-sdk-base"
 
 [tool.setuptools.packages.find]
 exclude = ["*test*"]

@@ -6,7 +6,7 @@ proposed
 
 ## Context
 
-The SDK ships multiple related packages (`ai-api-client-sdk`, `ai-core-sdk`, `generative-ai-hub-sdk`) that share dev tooling, CI, and cross-package dependencies. We need a way to manage them in a single repository with consistent dependency resolution and a single lockfile.
+The SDK ships multiple related packages (`base`, `core`, `gen`) that share dev tooling, CI, and cross-package dependencies. We need a way to manage them in a single repository with consistent dependency resolution and a single lockfile.
 
 ## Decision (preliminary)
 
@@ -48,5 +48,5 @@ Each package manages its own venv. A top-level script or Makefile coordinates in
 **Cons:**
 
 - No shared lockfile — dependency drift between packages
-- Cross-package local installs require `pip install -e` per package in the right order (ai-api-client-sdk → ai-core-sdk → generative-ai-hub-sdk)
+- Cross-package local installs require `pip install -e` per package in the right order (base → core → gen)
 - CI must repeat the install step for each package

@@ -1,4 +1,4 @@
-name: build
+name: ci
 
 on:
   push:
@@ -41,15 +41,15 @@ jobs:
       matrix:
         python-version: ['3.13', '3.14']
         package:
-          - name: ai-api-client-sdk
-            path: packages/ai-api-client-sdk/tests
-            source: packages/ai-api-client-sdk/ai_api_client_sdk
-          - name: ai-core-sdk
-            path: packages/ai-core-sdk/tests
-            source: packages/ai-core-sdk/ai_core_sdk
-          - name: generative-ai-hub-sdk
-            path: packages/generative-ai-hub-sdk/tests
-            source: packages/generative-ai-hub-sdk/gen_ai_hub
+          - name: base
+            path: packages/base/tests
+            source: packages/base/ai_api_client_sdk
+          - name: core
+            path: packages/core/tests
+            source: packages/core/ai_core_sdk
+          - name: gen
+            path: packages/gen/tests
+            source: packages/gen/gen_ai_hub
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
@@ -95,15 +95,15 @@ jobs:
       fail-fast: false
       matrix:
         package:
-          - name: ai-api-client-sdk
-            path: packages/ai-api-client-sdk/integration_tests
-            source: packages/ai-api-client-sdk/ai_api_client_sdk
-          - name: ai-core-sdk
-            path: packages/ai-core-sdk/integration_tests
-            source: packages/ai-core-sdk/ai_core_sdk
-          - name: generative-ai-hub-sdk
-            path: packages/generative-ai-hub-sdk/integration_tests
-            source: packages/generative-ai-hub-sdk/gen_ai_hub
+          - name: base
+            path: packages/base/integration_tests
+            source: packages/base/ai_api_client_sdk
+          - name: core
+            path: packages/core/integration_tests
+            source: packages/core/ai_core_sdk
+          - name: gen
+            path: packages/gen/integration_tests
+            source: packages/gen/gen_ai_hub
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
