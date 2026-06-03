@@ -24,10 +24,12 @@ jobs:
         run: pip install zizmor
 
       - name: Run zizmor (log)
-        run: zizmor .github/
+        run: zizmor --config zizmor.yml .github/
 
       - name: Run zizmor (SARIF)
         uses: zizmorcore/zizmor-action@5f14fd08f7cf1cb1609c1e344975f152c7ee938d # v0.5.6
         if: always()
+        with:
+          config: zizmor.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

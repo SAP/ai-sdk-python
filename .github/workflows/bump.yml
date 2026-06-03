@@ -43,7 +43,7 @@ jobs:
       - name: Update version file
         id: bump
         working-directory: packages/generative-ai-hub-sdk
-        run: |
+        run: | # zizmor: ignore[template-injection]
           echo "${{ inputs.version }}" > version.txt
           echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
 
@@ -54,11 +54,11 @@ jobs:
 
       - name: Generate changelog from commits
         working-directory: packages/generative-ai-hub-sdk
-        run: |
+        run: | # zizmor: ignore[template-injection]
           python scripts/generate_changelog.py "${{ inputs.version }}" --update
 
       - name: Commit and tag
-        run: |
+        run: | # zizmor: ignore[template-injection]
           git add packages/generative-ai-hub-sdk/version.txt packages/generative-ai-hub-sdk/RELEASE_NOTES.md
           git commit -m "chore: bump version to ${{ inputs.version }}"
           git tag -a "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"

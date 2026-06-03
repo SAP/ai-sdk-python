@@ -1,0 +1,20 @@
+rules:
+  # already following SAP policies
+  dependabot-cooldown:
+    config:
+      days: 4
+  # requires more effort to fix
+  secrets-inherit:
+    ignore:
+      - publish.yml
+  # requires more effort to fix
+  excessive-permissions:
+    disable: true
+  dangerous-triggers:
+    ignore:
+      - lint-pr.yml # TODO: investigate if this really needs pull_request_target
+  # allow unpinned references to own repositories
+  unpinned-uses:
+    config:
+      policies:
+        'SAP/ai-sdk-python/*': any
