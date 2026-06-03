@@ -49,3 +49,9 @@ sap-ai-sdk-base = { workspace = true }
 
 [tool.setuptools.packages.find]
 exclude = ["*test*"]
+
+[tool.commitizen]
+tag_format = "core-v$version"
+version_provider = "pep621"
+changelog_file = "RELEASE_NOTES.md"
+update_changelog_on_bump = true

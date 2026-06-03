@@ -38,3 +38,9 @@ Download = "https://pypi.python.org/pypi/sap-ai-sdk-base"
 
 [tool.setuptools.packages.find]
 exclude = ["*test*"]
+
+[tool.commitizen]
+tag_format = "base-v$version"
+version_provider = "pep621"
+changelog_file = "RELEASE_NOTES.md"
+update_changelog_on_bump = true
