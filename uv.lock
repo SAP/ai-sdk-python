@@ -359,35 +359,6 @@ wheels = [
 ]
 
 [[package]]
-name = "bracex"
-version = "2.6"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/63/9a/fec38644694abfaaeca2798b58e276a8e61de49e2e37494ace423395febc/bracex-2.6.tar.gz", hash = "sha256:98f1347cd77e22ee8d967a30ad4e310b233f7754dbf31ff3fceb76145ba47dc7" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/9d/2a/9186535ce58db529927f6cf5990a849aa9e052eea3e2cfefe20b9e1802da/bracex-2.6-py3-none-any.whl", hash = "sha256:0b0049264e7340b3ec782b5cb99beb325f36c3782a32e36e876452fd49a09952" },
-]
-
-[[package]]
-name = "bump-my-version"
-version = "1.3.0"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-dependencies = [
-    { name = "click" },
-    { name = "httpx" },
-    { name = "pydantic" },
-    { name = "pydantic-settings" },
-    { name = "questionary" },
-    { name = "rich" },
-    { name = "rich-click" },
-    { name = "tomlkit" },
-    { name = "wcmatch" },
-]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/3d/61/07b90027091a4192b4a0290dc3da1aeea6b9e7b6b4c0f7fd30dab36070c1/bump_my_version-1.3.0.tar.gz", hash = "sha256:5780137a8d93378af3839798fcba01c7e6cb28dcc5aa5a7ab4d8507787f1995c" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/36/01/b168791bfbfb0322ef6d38d236f6f17a02e41fb7753e23e4cdb0f19ac969/bump_my_version-1.3.0-py3-none-any.whl", hash = "sha256:3cdaa54588d2443a29303b77e7539417187952c3d22f87bfdd32c0fe6af2f570" },
-]
-
-[[package]]
 name = "certifi"
 version = "2026.5.20"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
@@ -3474,18 +3445,6 @@ wheels = [
 ]
 
 [[package]]
-name = "questionary"
-version = "2.1.1"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-dependencies = [
-    { name = "prompt-toolkit" },
-]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/f6/45/eafb0bba0f9988f6a2520f9ca2df2c82ddfa8d67c95d6625452e97b204a5/questionary-2.1.1.tar.gz", hash = "sha256:3d7e980292bb0107abaa79c68dd3eee3c561b83a0f89ae482860b181c8bd412d" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/3c/26/1062c7ec1b053db9e499b4d2d5bc231743201b74051c973dadeac80a8f43/questionary-2.1.1-py3-none-any.whl", hash = "sha256:a51af13f345f1cdea62347589fbb6df3b290306ab8930713bfae4d475a7d4a59" },
-]
-
-[[package]]
 name = "referencing"
 version = "0.37.0"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
@@ -3670,35 +3629,6 @@ dependencies = [
 sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/43/98/4e55c9c486404ec12373708d015ebce157966965a5ebe7f28ff2c784d41b/respx-0.23.1.tar.gz", hash = "sha256:242dcc6ce6b5b9bf621f5870c82a63997e8e82bc7c947f9ffe272b8f3dd5a780" }
 wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/1d/4a/221da6ca167db45693d8d26c7dc79ccfc978a440251bf6721c9aaf251ac0/respx-0.23.1-py2.py3-none-any.whl", hash = "sha256:b18004b029935384bccfa6d7d9d74b4ec9af73a081cc28600fffc0447f4b8c1a" },
-]
-
-[[package]]
-name = "rich"
-version = "15.0.0"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-dependencies = [
-    { name = "markdown-it-py", version = "3.0.0", source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }, marker = "python_full_version < '3.11'" },
-    { name = "markdown-it-py", version = "4.2.0", source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }, marker = "python_full_version >= '3.11'" },
-    { name = "pygments" },
-]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb" },
-]
-
-[[package]]
-name = "rich-click"
-version = "1.9.8"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-dependencies = [
-    { name = "click" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-    { name = "rich" },
-    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
-]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/f7/ea/21e4867ea0ef881ffd4c0550fc21a061435e50d6324bcd034396633cbc18/rich_click-1.9.8.tar.gz", hash = "sha256:4008f921da88b5d91646c134ec881c1500e5a6b3f093e90e8f29400e09608371" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/6d/97/a87901aef6b7e7e4a34c6dd6cc17dca8594a592ef9d9dd765fca2b7facf7/rich_click-1.9.8-py3-none-any.whl", hash = "sha256:12873865396e6927835d4eabb1cc3996edcd65b7ac9b2391a29eca4f335a2f93" },
 ]
 
 [[package]]
@@ -4012,6 +3942,7 @@ wheels = [
 
 [[package]]
 name = "sap-ai-sdk-base"
+version = "3.4.0"
 source = { editable = "packages/base" }
 dependencies = [
     { name = "aenum" },
@@ -4021,7 +3952,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "bump-my-version" },
     { name = "pylint" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -4036,7 +3966,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bump-my-version" },
     { name = "pylint", specifier = "==4.0.5" },
     { name = "pytest", specifier = "==9.0.3" },
     { name = "pytest-cov", specifier = "==7.1.0" },
@@ -4044,6 +3973,7 @@ dev = [
 
 [[package]]
 name = "sap-ai-sdk-core"
+version = "3.3.0"
 source = { editable = "packages/core" }
 dependencies = [
     { name = "click" },
@@ -4052,7 +3982,6 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "bump-my-version" },
     { name = "pyhamcrest" },
     { name = "pylint" },
     { name = "pytest" },
@@ -4067,7 +3996,6 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bump-my-version" },
     { name = "pyhamcrest", specifier = "==2.1.0" },
     { name = "pylint", specifier = "==4.0.5" },
     { name = "pytest", specifier = "==9.0.3" },
@@ -4076,6 +4004,7 @@ dev = [
 
 [[package]]
 name = "sap-ai-sdk-gen"
+version = "7.0.0"
 source = { editable = "packages/gen" }
 dependencies = [
     { name = "click" },
@@ -4116,7 +4045,6 @@ google = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "bump-my-version" },
     { name = "myst-nb" },
     { name = "parameterized" },
     { name = "pillow" },
@@ -4153,13 +4081,12 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.0" },
     { name = "pydantic", specifier = "~=2.12" },
     { name = "sap-ai-sdk-core", editable = "packages/core" },
-    { name = "sap-ai-sdk-gen", extras = ["amazon", "google"], marker = "extra == 'all'", editable = "packages/gen" },
+    { name = "sap-ai-sdk-gen", extras = ["google", "amazon"], marker = "extra == 'all'", editable = "packages/gen" },
 ]
 provides-extras = ["google", "amazon", "all"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bump-my-version" },
     { name = "myst-nb" },
     { name = "parameterized", specifier = "==0.9.0" },
     { name = "pillow", specifier = "==12.2.0" },
@@ -4749,18 +4676,6 @@ wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/ed/15/dd1fab6f7fcd15f2c331d0c1f0f516bb1113a640216460f82be53db3dcf8/uuid_utils-0.16.0-pp311-pypy311_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dc0824a31898ef46a9d84d748c3abe27cdb615ac3773c53cc1f84fc8e66dc7c4" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/96/56/62dcd551b140cbeb0f87522da2015b4b9e5818327b920506ad88d28562b0/uuid_utils-0.16.0-pp311-pypy311_pp73-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:abfbf5e0c47fb31b37164a99515104e449a0bee36a071dc8b105457a2b35a5e6" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/44/e7/3937b9a9d6745b94dbe7b86531e098db8c53b77c8d07df7daa9577a47b8e/uuid_utils-0.16.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:680799a9ade01d69c53cb9d41392ced24919d4f600bfab5060b61fca37510097" },
-]
-
-[[package]]
-name = "wcmatch"
-version = "10.1"
-source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
-dependencies = [
-    { name = "bracex" },
-]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/79/3e/c0bdc27cf06f4e47680bd5803a07cb3dfd17de84cde92dd217dcb9e05253/wcmatch-10.1.tar.gz", hash = "sha256:f11f94208c8c8484a16f4f48638a85d771d9513f4ab3f37595978801cb9465af" }
-wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/eb/d8/0d1d2e9d3fabcf5d6840362adcf05f8cf3cd06a73358140c3a97189238ae/wcmatch-10.1-py3-none-any.whl", hash = "sha256:5848ace7dbb0476e5e55ab63c6bbd529745089343427caa5537f230cc01beb8a" },
 ]
 
 [[package]]
