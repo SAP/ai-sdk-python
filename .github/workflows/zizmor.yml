@@ -25,7 +25,7 @@ jobs:
         run: pip install zizmor
 
       - name: Run zizmor (log)
-        run: zizmor --config zizmor.yml .github/
+        run: zizmor --config zizmor.yml --min-severity high .github/
 
       - name: Run zizmor (SARIF)
         uses: zizmorcore/zizmor-action@5f14fd08f7cf1cb1609c1e344975f152c7ee938d # v0.5.6
