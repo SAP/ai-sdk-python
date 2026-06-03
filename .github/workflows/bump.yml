@@ -37,11 +37,11 @@ jobs:
 
       - name: Bump version and generate changelog
         working-directory: packages/${{ inputs.package }}
-        run: uvx commitizen bump
+        run: uv run cz bump
 
       - name: Push
         working-directory: packages/${{ inputs.package }}
         run: |
-          VERSION=$(uvx commitizen version --project)
+          VERSION=$(uv run cz version --project)
           git push origin main
           git push origin "${{ inputs.package }}-v${VERSION}"

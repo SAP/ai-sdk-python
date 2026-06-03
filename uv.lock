@@ -41,13 +41,17 @@ source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [
+    { name = "commitizen" },
     { name = "pip-licenses" },
 ]
 
 [package.metadata]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pip-licenses", specifier = ">=5.5.5" }]
+dev = [
+    { name = "commitizen", specifier = ">=4" },
+    { name = "pip-licenses", specifier = ">=5.5.5" },
+]
 
 [[package]]
 name = "aiobotocore"
@@ -258,6 +262,15 @@ source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pyp
 sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/35/5d/752690df9ef5b76e169e68d6a129fa6d08a7100ca7f754c89495db3c6019/appnope-0.1.4.tar.gz", hash = "sha256:1de3860566df9caf38f01f86f65e0e13e379af54f9e4bee1e66b48f2efffd1ee" }
 wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/81/29/5ecc3a15d5a33e31b26c11426c45c501e439cb865d0bff96315d86443b78/appnope-0.1.4-py2.py3-none-any.whl", hash = "sha256:502575ee11cd7a28c0205f379b525beefebab9d161b7c964670864014ed7213c" },
+]
+
+[[package]]
+name = "argcomplete"
+version = "3.6.3"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/38/61/0b9ae6399dd4a58d8c1b1dc5a27d6f2808023d0b5dd3104bb99f45a33ff6/argcomplete-3.6.3.tar.gz", hash = "sha256:62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/74/f5/9373290775639cb67a2fce7f629a1c240dce9f12fe927bc32b2736e16dfc/argcomplete-3.6.3-py3-none-any.whl", hash = "sha256:f5007b3a600ccac5d25bbce33089211dfd49eab4a7718da3f10e3082525a92ce" },
 ]
 
 [[package]]
@@ -585,6 +598,30 @@ wheels = [
 ]
 
 [[package]]
+name = "commitizen"
+version = "4.16.3"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+dependencies = [
+    { name = "argcomplete" },
+    { name = "charset-normalizer" },
+    { name = "colorama" },
+    { name = "decli" },
+    { name = "deprecated" },
+    { name = "jinja2" },
+    { name = "packaging" },
+    { name = "prompt-toolkit" },
+    { name = "pyyaml" },
+    { name = "questionary" },
+    { name = "termcolor" },
+    { name = "tomlkit" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+]
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/17/cc/d87b094ef858c67febcd1d8902352c84b42c9ebc8221d6f2e9d553273358/commitizen-4.16.3.tar.gz", hash = "sha256:5cdca4c02715cc770312f4b505c65a6c39024c73ece41b943bccaf81c44436ed" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/98/35/c7995b1e66159193dd31ed5628d59acbaf4611811645eedf0fb2d5a91946/commitizen-4.16.3-py3-none-any.whl", hash = "sha256:ce1be39fe98a16725fd0c960daf0f360acac86db7ae8db1e1df8d3541005b5be" },
+]
+
+[[package]]
 name = "coverage"
 version = "7.14.1"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
@@ -801,12 +838,33 @@ wheels = [
 ]
 
 [[package]]
+name = "decli"
+version = "0.6.3"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/0c/59/d4ffff1dee2c8f6f2dd8f87010962e60f7b7847504d765c91ede5a466730/decli-0.6.3.tar.gz", hash = "sha256:87f9d39361adf7f16b9ca6e3b614badf7519da13092f2db3c80ca223c53c7656" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/d8/fa/ec878c28bc7f65b77e7e17af3522c9948a9711b9fa7fc4c5e3140a7e3578/decli-0.6.3-py3-none-any.whl", hash = "sha256:5152347c7bb8e3114ad65db719e5709b28d7f7f45bdb709f70167925e55640f3" },
+]
+
+[[package]]
 name = "decorator"
 version = "5.3.1"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
 sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/60/8b/32f9823da46cde7df2087faa08cd98d01b908f8dcab982cdba9c84e85355/decorator-5.3.1.tar.gz", hash = "sha256:4cbcdd55a6efadb9dbea26b858f4fb3264567b52d69ca0d25b721b553f60ea82" }
 wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/05/7f/798705f5296a58ca505d600456748d1be48078eac8a7050d8a98bc9edb89/decorator-5.3.1-py3-none-any.whl", hash = "sha256:f47fe6fdbd2edd623ecfe36875d37aba411624e2670dd395dddae1358689bb3c" },
+]
+
+[[package]]
+name = "deprecated"
+version = "1.3.1"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+dependencies = [
+    { name = "wrapt" },
+]
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/49/85/12f0a49a7c4ffb70572b6c2ef13c90c88fd190debda93b23f026b25f9634/deprecated-1.3.1.tar.gz", hash = "sha256:b1b50e0ff0c1fddaa5708a2c6b0a6588bb09b892825ab2b214ac9ea9d92a5223" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/84/d0/205d54408c08b13550c733c4b85429e7ead111c7f0014309637425520a9a/deprecated-1.3.1-py2.py3-none-any.whl", hash = "sha256:597bfef186b6f60181535a29fbe44865ce137a5079f295b479886c82729d5f3f" },
 ]
 
 [[package]]
@@ -2826,14 +2884,14 @@ wheels = [
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.52"
+version = "3.0.51"
 source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
 dependencies = [
     { name = "wcwidth" },
 ]
-sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/a1/96/06e01a7b38dce6fe1db213e061a4602dd6032a8a97ef6c1a862537732421/prompt_toolkit-3.0.52.tar.gz", hash = "sha256:28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/bb/6e/9d084c929dfe9e3bfe0c6a47e31f78a25c54627d64a66e884a8bf5474f1c/prompt_toolkit-3.0.51.tar.gz", hash = "sha256:931a162e3b27fc90c86f1b48bb1fb2c528c2761475e57c9c06de13311c7b54ed" }
 wheels = [
-    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/84/03/0d3ce49e2505ae70cf43bc5bb3033955d2fc9f932163e84dc0779cc47f48/prompt_toolkit-3.0.52-py3-none-any.whl", hash = "sha256:9aac639a3bbd33284347de5ad8d68ecc044b91a762dc39b7c21095fcd6a19955" },
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/ce/4f/5249960887b1fbe561d9ff265496d170b55a735b76724f10ef19f9e40716/prompt_toolkit-3.0.51-py3-none-any.whl", hash = "sha256:52742911fde84e2d423e2f9a4cf1de7d7ac4e51958f648d9540e0fb8db077b07" },
 ]
 
 [[package]]
@@ -3442,6 +3500,18 @@ wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/49/0e/3f0d0d335c6b3abb9b7b723776d0b21fa7f3a6c819a0db6097059aada160/pyzmq-27.1.0-pp311-pypy311_pp73-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:53b40f8ae006f2734ee7608d59ed661419f087521edbfc2149c3932e9c14808c" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/a1/cf/f2b3784d536250ffd4be70e049f3b60981235d70c6e8ce7e3ef21e1adb25/pyzmq-27.1.0-pp311-pypy311_pp73-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:f605d884e7c8be8fe1aa94e0a783bf3f591b84c24e4bc4f3e7564c82ac25e271" },
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/01/1b/5dbe84eefc86f48473947e2f41711aded97eecef1231f4558f1f02713c12/pyzmq-27.1.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:c9f7f6e13dff2e44a6afeaf2cf54cee5929ad64afaf4d40b50f93c58fc687355" },
+]
+
+[[package]]
+name = "questionary"
+version = "2.1.1"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+dependencies = [
+    { name = "prompt-toolkit" },
+]
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/f6/45/eafb0bba0f9988f6a2520f9ca2df2c82ddfa8d67c95d6625452e97b204a5/questionary-2.1.1.tar.gz", hash = "sha256:3d7e980292bb0107abaa79c68dd3eee3c561b83a0f89ae482860b181c8bd412d" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/3c/26/1062c7ec1b053db9e499b4d2d5bc231743201b74051c973dadeac80a8f43/questionary-2.1.1-py3-none-any.whl", hash = "sha256:a51af13f345f1cdea62347589fbb6df3b290306ab8930713bfae4d475a7d4a59" },
 ]
 
 [[package]]
@@ -4362,6 +4432,15 @@ source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pyp
 sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/47/c6/ee486fd809e357697ee8a44d3d69222b344920433d3b6666ccd9b374630c/tenacity-9.1.4.tar.gz", hash = "sha256:adb31d4c263f2bd041081ab33b498309a57c77f9acf2db65aadf0898179cf93a" }
 wheels = [
     { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/d7/c1/eb8f9debc45d3b7918a32ab756658a0904732f75e555402972246b0b8e71/tenacity-9.1.4-py3-none-any.whl", hash = "sha256:6095a360c919085f28c6527de529e76a06ad89b23659fa881ae0649b867a9d55" },
+]
+
+[[package]]
+name = "termcolor"
+version = "3.3.0"
+source = { registry = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/" }
+sdist = { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/46/79/cf31d7a93a8fdc6aa0fbb665be84426a8c5a557d9240b6239e9e11e35fc5/termcolor-3.3.0.tar.gz", hash = "sha256:348871ca648ec6a9a983a13ab626c0acce02f515b9e1983332b17af7979521c5" }
+wheels = [
+    { url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/packages/packages/33/d1/8bb87d21e9aeb323cc03034f5eaf2c8f69841e40e4853c2627edf8111ed3/termcolor-3.3.0-py3-none-any.whl", hash = "sha256:cf642efadaf0a8ebbbf4bc7a31cec2f9b5f21a9f726f4ccbb08192c9c26f43a5" },
 ]
 
 [[package]]
