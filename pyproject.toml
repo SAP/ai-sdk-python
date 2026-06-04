@@ -12,6 +12,12 @@ name = "artifactory"
 url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/"
 default = true
 
+# currently not working
+# [[tool.uv.index]]
+# name = "artifactory-int"
+# publish-url = "https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi"
+# url = "https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi/simple"
+
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
 sap-ai-sdk-core = { workspace = true }
