@@ -84,6 +84,8 @@ tag_format = "gen-v$version"
 version_provider = "pep621"
 changelog_file = "RELEASE_NOTES.md"
 update_changelog_on_bump = true
+bump_pattern = '^(BREAKING CHANGE|feat|fix|refactor|perf)\(gen\)(!)?:'
+changelog_pattern = '^(BREAKING CHANGE|feat|fix|refactor|perf)\(gen\)(!)?:'
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
