@@ -2,15 +2,6 @@ name: bump
 
 on:
   workflow_dispatch:
-    inputs:
-      package:
-        description: 'Package to bump'
-        required: true
-        type: choice
-        options:
-          - base
-          - core
-          - gen
 
 jobs:
   bump:
@@ -35,7 +26,7 @@ jobs:
           git config --local user.email "${{ vars.SAP_AI_SDK_BOT_EMAIL }}"
           git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
 
-      - name: Bump version and generate changelog
+      - name: Bump versions and generate changelogs
         working-directory: packages/${{ inputs.package }}
         run: uv run cz bump
 
