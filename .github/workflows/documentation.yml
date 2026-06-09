@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           ref: ${{ github.ref_name }}
 
