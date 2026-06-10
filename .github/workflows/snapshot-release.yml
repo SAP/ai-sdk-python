@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - os-migration
 
 jobs:
   snapshot-release:
@@ -49,29 +50,29 @@ jobs:
       - name: Build gen
         run: uv build --package sap-ai-sdk-gen --out-dir packages/gen/dist
 
-      - name: Release base to Artifactory #(TODO: currently not working)
-        working-directory: packages/base
-        run: |
-          uv publish \
-            --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
-            --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
-            --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
-            dist/
+      # - name: Release base to Artifactory #(TODO: currently not working)
+      #   working-directory: packages/base
+      #   run: |
+      #     uv publish \
+      #       --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
+      #       --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
+      #       --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
+      #       dist/
 
-      - name: Release core to Artifactory #(TODO: currently not working)
-        working-directory: packages/core
-        run: |
-          uv publish \
-            --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
-            --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
-            --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
-            dist/
+      # - name: Release core to Artifactory #(TODO: currently not working)
+      #   working-directory: packages/core
+      #   run: |
+      #     uv publish \
+      #       --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
+      #       --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
+      #       --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
+      #       dist/
 
-      - name: Release gen to Artifactory #(TODO: currently not working)
-        working-directory: packages/gen
-        run: |
-          uv publish \
-            --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
-            --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
-            --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
-            dist/
+      # - name: Release gen to Artifactory #(TODO: currently not working)
+      #   working-directory: packages/gen
+      #   run: |
+      #     uv publish \
+      #       --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
+      #       --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
+      #       --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
+      #       dist/
