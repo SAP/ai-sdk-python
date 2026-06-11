@@ -10,7 +10,8 @@ jobs:
   snapshot-release:
     runs-on: ubuntu-latest
     env:
-      UV_NO_SYNC: '1'
+      UV_INDEX_ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
+      UV_INDEX_ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_TOKEN }}
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
