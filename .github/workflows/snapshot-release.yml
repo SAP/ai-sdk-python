@@ -20,7 +20,9 @@ jobs:
         id: bump-base
         working-directory: packages/base
         run: |
-          uv run cz bump --version-files-only --prerelease alpha
+          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
+          uv run cz bump --version-files-only --prerelease alpha || \
+            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
           sed -i "s/a0$/a$(date +%s)/" pyproject.toml
           echo "version=$(uv run cz version --project)" >> "$GITHUB_OUTPUT"
           # pin core dependency
@@ -30,7 +32,9 @@ jobs:
         id: bump-core
         working-directory: packages/core
         run: |
-          uv run cz bump --version-files-only --prerelease alpha
+          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
+          uv run cz bump --version-files-only --prerelease alpha || \
+            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
           sed -i "s/a0$/a$(date +%s)/" pyproject.toml
           echo "version=$(uv run cz version --project)" >> "$GITHUB_OUTPUT"
           # pin gen dependency
@@ -39,7 +43,9 @@ jobs:
       - name: Bump gen version
         working-directory: packages/gen
         run: |
-          uv run cz bump --version-files-only --prerelease alpha
+          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
+          uv run cz bump --version-files-only --prerelease alpha || \
+            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
           sed -i "s/a0$/a$(date +%s)/" pyproject.toml
 
       - name: Build base
