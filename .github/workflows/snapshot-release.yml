@@ -21,7 +21,7 @@ jobs:
           bump() (
             local pkg=$1
             cd packages/$pkg
-            uv run cz bump --version-files-only --prerelease alpha; code=$?
+            uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
             # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
             if [ $code -eq 3 ]; then
               uv run cz bump --version-files-only --prerelease alpha --increment PATCH
