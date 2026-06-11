@@ -32,10 +32,10 @@ jobs:
           )
 
           bump base
-          sed -i "s/sap-ai-sdk-base~=[^ ,]*/sap-ai-sdk-base==$(cd packages/base && uv run cz version --project)/" packages/core/pyproject.toml
+          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(cd packages/base && uv run cz version --project)/" packages/core/pyproject.toml
 
           bump core
-          sed -i "s/sap-ai-sdk-core>=[^ ,]*/sap-ai-sdk-core==$(cd packages/core && uv run cz version --project)/" packages/gen/pyproject.toml
+          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$(cd packages/core && uv run cz version --project)/" packages/gen/pyproject.toml
 
           bump gen
 
