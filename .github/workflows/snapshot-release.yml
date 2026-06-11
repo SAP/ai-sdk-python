@@ -16,37 +16,28 @@ jobs:
           index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
-      - name: Bump base version
-        id: bump-base
-        working-directory: packages/base
+      - name: Bump versions
         run: |
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          uv run cz bump --version-files-only --prerelease alpha || \
-            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
-          sed -i "s/a0$/a$(date +%s)/" pyproject.toml
-          echo "version=$(uv run cz version --project)" >> "$GITHUB_OUTPUT"
-          # pin core dependency
-          sed -i "s/sap-ai-sdk-base~=[^ ,]*/sap-ai-sdk-base==$(uv run cz version --project)/" ../core/pyproject.toml
+          bump() (
+            local pkg=$1
+            cd packages/$pkg
+            uv run cz bump --version-files-only --prerelease alpha; code=$?
+            # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
+            if [ $code -eq 3 ]; then
+              uv run cz bump --version-files-only --prerelease alpha --increment PATCH
+            elif [ $code -ne 0 ]; then
+              exit $code
+            fi
+            sed -i "s/a0$/a$(date +%s)/" pyproject.toml
+          )
 
-      - name: Bump core version
-        id: bump-core
-        working-directory: packages/core
-        run: |
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          uv run cz bump --version-files-only --prerelease alpha || \
-            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
-          sed -i "s/a0$/a$(date +%s)/" pyproject.toml
-          echo "version=$(uv run cz version --project)" >> "$GITHUB_OUTPUT"
-          # pin gen dependency
-          sed -i "s/sap-ai-sdk-core>=[^ ,]*/sap-ai-sdk-core==$(uv run cz version --project)/" ../gen/pyproject.toml
+          bump base
+          sed -i "s/sap-ai-sdk-base~=[^ ,]*/sap-ai-sdk-base==$(cd packages/base && uv run cz version --project)/" packages/core/pyproject.toml
 
-      - name: Bump gen version
-        working-directory: packages/gen
-        run: |
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          uv run cz bump --version-files-only --prerelease alpha || \
-            { code=$?; [ $code -eq 3 ] && uv run cz bump --version-files-only --prerelease alpha --increment PATCH || exit $code; }
-          sed -i "s/a0$/a$(date +%s)/" pyproject.toml
+          bump core
+          sed -i "s/sap-ai-sdk-core>=[^ ,]*/sap-ai-sdk-core==$(cd packages/core && uv run cz version --project)/" packages/gen/pyproject.toml
+
+          bump gen
 
       - name: Build base
         run: uv build --package sap-ai-sdk-base --out-dir packages/base/dist
