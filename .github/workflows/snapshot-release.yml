@@ -19,75 +19,37 @@ jobs:
           index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
-      # - name: Bump versions
-      #   run: |
-      #     bump() (
-      #       local pkg=$1
-      #       cd packages/$pkg
-      #       uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
-      #       # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-      #       if [ $code -eq 3 ]; then
-      #         uv run cz bump --version-files-only --prerelease alpha --increment PATCH
-      #       elif [ $code -ne 0 ]; then
-      #         exit $code
-      #       fi
-      #       sed -i "s/a0$/a$(date +%s)/" pyproject.toml
-      #     )
-      #
-      #     bump base
-      #     sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(cd packages/base && uv run cz version --project)/" packages/core/pyproject.toml
-      #
-      #     bump core
-      #     sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$(cd packages/core && uv run cz version --project)/" packages/gen/pyproject.toml
-      #
-      #     bump gen
-
-      - name: Bump base version
-        working-directory: packages/base
+      - name: Bump versions
         run: |
-          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
-          elif [ $code -ne 0 ]; then
-            exit $code
-          fi
-          sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          version=$(uv run cz version --project)
-          echo version
-          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$version/" ../core/pyproject.toml
+          bump() (
+            local pkg=$1
+            echo "Bumping $pkg..."
+            cd packages/$pkg
+            uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+            # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
+            if [ $code -eq 3 ]; then
+              echo "No commits found for $pkg, falling back to patch bump..."
+              uv run cz bump --version-files-only --prerelease alpha --increment PATCH
+            elif [ $code -ne 0 ]; then
+              echo "cz bump failed for $pkg with exit code $code"
+              exit $code
+            fi
+            echo "Applying timestamp suffix for $pkg..."
+            sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
+            echo "$pkg version: $(uv run cz version --project)"
+          )
 
-          echo pyproject.toml
-          cat pyproject.toml
+          bump base
+          version=$(cd packages/base && uv run cz version --project)
+          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$version/" packages/core/pyproject.toml
+          echo "Pinned sap-ai-sdk-base==$version in core"
 
-          echo ../core/pyproject.toml
-          cat ../core/pyproject.toml
+          bump core
+          version=$(cd packages/core && uv run cz version --project)
+          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$version/" packages/gen/pyproject.toml
+          echo "Pinned sap-ai-sdk-core==$version in gen"
 
-      - name: Bump core version
-        working-directory: packages/core
-        run: |
-          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
-          elif [ $code -ne 0 ]; then
-            exit $code
-          fi
-          sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          version=$(uv run cz version --project)
-          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$version/" ../gen/pyproject.toml
-
-      - name: Bump gen version
-        working-directory: packages/gen
-        run: |
-          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
-          # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
-          if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
-          elif [ $code -ne 0 ]; then
-            exit $code
-          fi
-          sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
+          bump gen
 
       - name: Build base
         run: uv build --package sap-ai-sdk-base --out-dir packages/base/dist
