@@ -42,10 +42,10 @@ jobs:
       - name: Bump base version
         working-directory: packages/base
         run: |
-          uv run cz bump --version-files-only --prerelease alpha --no-changelog && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --no-changelog --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi
@@ -55,10 +55,10 @@ jobs:
       - name: Bump core version
         working-directory: packages/core
         run: |
-          uv run cz bump --version-files-only --prerelease alpha --no-changelog && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --no-changelog --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi
@@ -68,10 +68,10 @@ jobs:
       - name: Bump gen version
         working-directory: packages/gen
         run: |
-          uv run cz bump --version-files-only --prerelease alpha --no-changelog && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run cz bump --version-files-only --prerelease alpha --no-changelog --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi

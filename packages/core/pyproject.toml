@@ -56,7 +56,6 @@ tag_format = "core-v${version}"
 ignored_tag_formats = ["*-v${version}"]
 version_provider = "pep621"
 changelog_file = "RELEASE_NOTES.md"
-update_changelog_on_bump = true
 
 [tool.commitizen.customize]
 bump_pattern = '^(feat|fix)\(core\)'

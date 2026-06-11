@@ -28,7 +28,7 @@ jobs:
 
       - name: Bump versions and generate changelogs
         working-directory: packages/${{ inputs.package }}
-        run: uv run cz bump
+        run: uv run cz bump --changelog
 
       - name: Push
         working-directory: packages/${{ inputs.package }}
