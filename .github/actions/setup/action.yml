@@ -9,7 +9,7 @@ inputs:
     default: '1'
   python-version:
     description: 'Python version'
-    default: '3.14'
+    default: '3.13'
   index-username:
     description: 'Username for the PyPI index'
     default: ''

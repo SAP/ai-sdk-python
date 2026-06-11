@@ -50,6 +50,8 @@ jobs:
             exit $code
           fi
           sed -i "s/a0$/a$(date +%s)/" pyproject.toml
+          cat pyproject.toml
+          cat ../core/pyproject.toml
           sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(uv run cz version --project)/" ../core/pyproject.toml
 
       - name: Bump core version
