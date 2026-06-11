@@ -9,6 +9,8 @@ on:
 jobs:
   snapshot-release:
     runs-on: ubuntu-latest
+    env:
+      UV_NO_SYNC: '1'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
@@ -21,10 +23,10 @@ jobs:
       #     bump() (
       #       local pkg=$1
       #       cd packages/$pkg
-      #       uv run --no-sync cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+      #       uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
       #       # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
       #       if [ $code -eq 3 ]; then
-      #         uv run --no-sync cz bump --version-files-only --prerelease alpha --increment PATCH
+      #         uv run cz bump --version-files-only --prerelease alpha --increment PATCH
       #       elif [ $code -ne 0 ]; then
       #         exit $code
       #       fi
@@ -32,25 +34,25 @@ jobs:
       #     )
       #
       #     bump base
-      #     sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(cd packages/base && uv run --no-sync cz version --project)/" packages/core/pyproject.toml
+      #     sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(cd packages/base && uv run cz version --project)/" packages/core/pyproject.toml
       #
       #     bump core
-      #     sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$(cd packages/core && uv run --no-sync cz version --project)/" packages/gen/pyproject.toml
+      #     sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$(cd packages/core && uv run cz version --project)/" packages/gen/pyproject.toml
       #
       #     bump gen
 
       - name: Bump base version
         working-directory: packages/base
         run: |
-          uv run --no-sync cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run --no-sync cz bump --version-files-only --prerelease alpha --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi
           sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          version=$(uv run --no-sync cz version --project)
+          version=$(uv run cz version --project)
           echo version
           sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$version/" ../core/pyproject.toml
 
@@ -63,24 +65,24 @@ jobs:
       - name: Bump core version
         working-directory: packages/core
         run: |
-          uv run --no-sync cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run --no-sync cz bump --version-files-only --prerelease alpha --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi
           sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          version=$(uv run --no-sync cz version --project)
+          version=$(uv run cz version --project)
           sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$version/" ../gen/pyproject.toml
 
       - name: Bump gen version
         working-directory: packages/gen
         run: |
-          uv run --no-sync cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+          uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
           # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
           if [ $code -eq 3 ]; then
-            uv run --no-sync cz bump --version-files-only --prerelease alpha --increment PATCH
+            uv run cz bump --version-files-only --prerelease alpha --increment PATCH
           elif [ $code -ne 0 ]; then
             exit $code
           fi
