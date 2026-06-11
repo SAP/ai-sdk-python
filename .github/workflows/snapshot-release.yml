@@ -50,7 +50,9 @@ jobs:
             exit $code
           fi
           sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$(uv run cz version --project)/" ../core/pyproject.toml
+          version=$(uv run cz version --project)
+          echo version
+          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$version/" ../core/pyproject.toml
 
           echo pyproject.toml
           cat pyproject.toml
@@ -69,7 +71,8 @@ jobs:
             exit $code
           fi
           sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
-          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$(uv run cz version --project)/" ../gen/pyproject.toml
+          version=$(uv run cz version --project)
+          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$version/" ../gen/pyproject.toml
 
       - name: Bump gen version
         working-directory: packages/gen
