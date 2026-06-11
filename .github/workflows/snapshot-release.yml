@@ -13,8 +13,8 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           fetch-depth: 0
-          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Bump base version
         id: bump-base

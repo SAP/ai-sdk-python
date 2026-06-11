@@ -10,11 +10,11 @@ inputs:
   python-version:
     description: 'Python version'
     default: '3.13'
-  registry-username:
-    description: 'Username for the PyPI registry'
+  index-username:
+    description: 'Username for the PyPI index'
     default: ''
-  registry-token:
-    description: 'Auth token for the PyPI registry'
+  index-token:
+    description: 'Auth token for the PyPI index'
     default: ''
 
 runs:
@@ -37,8 +37,8 @@ runs:
     - name: Install dependencies
       shell: bash
       env:
-        REGISTRY_USERNAME: ${{ inputs.registry-username }}
-        REGISTRY_TOKEN: ${{ inputs.registry-token }}
+        INDEX_USERNAME: ${{ inputs.index-username }}
+        INDEX_TOKEN: ${{ inputs.index-token }}
         IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
       run: |
         if [[ "$IS_FORK" == "true" ]]; then
@@ -46,7 +46,7 @@ runs:
           UV_INDEX_URL="https://pypi.org/simple/" \
             uv sync --all-packages --all-extras
         else
-          UV_INDEX_ARTIFACTORY_USERNAME="${REGISTRY_USERNAME}" \
-          UV_INDEX_ARTIFACTORY_PASSWORD="${REGISTRY_TOKEN}" \
+          UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
+          UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
             uv sync --all-packages --all-extras --locked
         fi
