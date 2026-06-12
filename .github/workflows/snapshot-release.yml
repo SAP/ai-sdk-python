@@ -1,10 +1,8 @@
 name: snapshot-release
 
 on:
-  push:
-    branches:
-      - main
-      - os-migration
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
@@ -19,6 +17,8 @@ jobs:
     env:
       UV_INDEX_ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
       UV_INDEX_ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_TOKEN }}
+    outputs:
+      has_changes: ${{ steps.check_changes.outputs.has_changes }}
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
@@ -26,7 +26,19 @@ jobs:
           index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
+      - name: Check for changes since last run
+        id: check_changes
+        run: |
+          if git log --oneline --since="24 hours ago" | grep -q .; then
+            echo "Commits found in the past 24 hours, proceeding."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No commits in the past 24 hours, skipping release."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Bump versions
+        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           now=$(date +%s)
 
@@ -75,12 +87,14 @@ jobs:
           bump gen
 
       - name: Build packages
+        if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           for pkg in base core gen; do
             uv build --package sap-ai-sdk-$pkg --out-dir packages/$pkg/dist
           done
 
       # - name: Release packages
+      #.  if: steps.check_changes.outputs.has_changes == 'true'
       #   run: |
       #     for pkg in base core gen; do
       #       uv publish packages/$pkg/dist/
