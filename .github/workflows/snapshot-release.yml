@@ -23,9 +23,11 @@ jobs:
         run: |
           bump() (
             local pkg=$1
+
             echo "Bumping $pkg..."
             cd packages/$pkg
             uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
+
             # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
             if [ $code -eq 3 ]; then
               echo "No commits found for $pkg, falling back to patch bump..."
@@ -34,49 +36,33 @@ jobs:
               echo "cz bump failed for $pkg with exit code $code"
               exit $code
             fi
-            echo "Applying timestamp suffix for $pkg..."
-            sed -i "s/a0\"/a$(date +%s)\"/" pyproject.toml
+
+            # Replace the a0 pre-release suffix with a timestamp to ensure uniqueness
+            local ts; ts=$(date +%s)
+            sed -i "s/a0\"/a${ts}\"/" pyproject.toml
+
             echo "$pkg version: $(uv run cz version --project)"
           )
 
+          pin_dep() (
+            local short=$1 target=$2
+            local pkg="sap-ai-sdk-${short}"
+            local version; version=$(uv run --directory packages/$short cz version --project)
+            local project_toml="packages/${target}/pyproject.toml"
+
+            # Replace any ~= or >= version constraint with an exact pin
+            sed -i "s/${pkg}[~>]=[^ ,\"]*/${pkg}==${version}/" "$project_toml"
+            echo "Pinned ${pkg}==${version} in ${target}"
+          )
+
           bump base
-          version=$(cd packages/base && uv run cz version --project)
-          sed -i "s/sap-ai-sdk-base~=[^ ,\"]*/sap-ai-sdk-base==$version/" packages/core/pyproject.toml
-          echo "Pinned sap-ai-sdk-base==$version in core"
+          pin_dep base core
 
           bump core
-          version=$(cd packages/core && uv run cz version --project)
-          sed -i "s/sap-ai-sdk-core>=[^ ,\"]*/sap-ai-sdk-core==$version/" packages/gen/pyproject.toml
-          echo "Pinned sap-ai-sdk-core==$version in gen"
+          pin_dep core gen
 
           bump gen
 
-      - name: Build base
-        run: uv build --package sap-ai-sdk-base --out-dir packages/base/dist
-
-      - name: Build core
-        run: uv build --package sap-ai-sdk-core --out-dir packages/core/dist
-
-      - name: Build gen
-        run: uv build --package sap-ai-sdk-gen --out-dir packages/gen/dist
-
-      # - name: Release base to Artifactory #(TODO: currently not working)
-      #   working-directory: packages/base
-      #   run: |
-      #     uv publish \
-      #       --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
-      #       --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
-      #       --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
-      #       dist/
-
-      # - name: Release core to Artifactory #(TODO: currently not working)
-      #   working-directory: packages/core
-      #   run: |
-      #     uv publish \
-      #       --index-url https://common.repositories.cloud.sap/artifactory/api/pypi/build.snapshots.pypi/legacy/ \
-      #       --username ${{ secrets.ARTIFACTORY_USERNAME }} \ # TODO: use separate credentials for internal artifactory
-      #       --password ${{ secrets.ARTIFACTORY_TOKEN }} \ # TODO: use separate credentials for internal artifactory
-      #       dist/
 
       # - name: Release gen to Artifactory #(TODO: currently not working)
       #   working-directory: packages/gen
