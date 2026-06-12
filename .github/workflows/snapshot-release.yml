@@ -5,10 +5,14 @@ on:
     branches:
       - main
       - os-migration
+  workflow_dispatch:
 
 jobs:
   snapshot-release:
     runs-on: ubuntu-latest
+    concurrency:
+      group: snapshot-release-${{ github.ref }}
+      cancel-in-progress: true
     permissions:
       id-token: write
       contents: read
