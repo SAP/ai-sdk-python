@@ -4,3 +4,4 @@
 - [ ] replace Artifactory tokens with ones from the team
 - [ ] make repo compliant
 - [ ] update status checks in branch protection rules
+- [ ] create initial version tags (and delete old incorrect ones)
