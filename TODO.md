@@ -1,4 +1,5 @@
 - [ ] remove all "requires more effort to fix" from zizmor
 - [ ] setup trusted publishing with PyPI
+  - [ ] reenable snapshot publishing step
 - [ ] replace Artifactory tokens with ones from the team
 - [ ] make repo compliant
