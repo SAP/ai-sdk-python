@@ -1,7 +1,11 @@
 import os
 import random
 import requests
+from pathlib import Path
 from time import sleep
+
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent / '.env')
 
 from ai_api_client_sdk.helpers.authenticator import Authenticator
 

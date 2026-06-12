@@ -173,12 +173,14 @@ class TestAICoreV2Client(TestCase):
         AICoreV2Client.__init__ = init_mock
         mock_env = self.get_x509_str_dict()
 
-        with patch.dict(os.environ, mock_env):
-            AICoreV2Client.from_env()
-            AICoreV2Client.__init__.assert_called_once_with(base_url=self.base_url, auth_url=self.auth_url,
-                                                            client_id=self.client_id,
-                                                            cert_str=self.cert_str,
-                                                            key_str=self.key_str)
+        with tempfile.TemporaryDirectory() as temp_dir:
+            mock_env[HOME_PATH_ENV_VAR] = temp_dir
+            with patch.dict(os.environ, mock_env):
+                AICoreV2Client.from_env()
+                AICoreV2Client.__init__.assert_called_once_with(base_url=self.base_url, auth_url=self.auth_url,
+                                                                client_id=self.client_id,
+                                                                cert_str=self.cert_str,
+                                                                key_str=self.key_str)
 
         AICoreV2Client.__init__ = aicv2c_init
 
@@ -205,21 +207,23 @@ class TestAICoreV2Client(TestCase):
 
         AICoreV2Client.__init__ = aicv2c_init
 
-    @patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_X509_ENV_VALUE})
     def test_x509_from_vcap(self):
         vcap_dict_credentials = VCAP_SERVICE_X509_DICT[VCAP_AICORE_SERVICE_NAME][0]['credentials']
         init_mock = MagicMock(return_value=None)
         aicv2c_init = AICoreV2Client.__init__
         AICoreV2Client.__init__ = init_mock
 
-        AICoreV2Client.from_env()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_X509_ENV_VALUE,
+                                         HOME_PATH_ENV_VAR: temp_dir}):
+                AICoreV2Client.from_env()
 
-        AICoreV2Client.__init__.assert_called_once_with(
-            base_url=f'{vcap_dict_credentials["serviceurls"]["AI_API_URL"]}/v2',
-            auth_url=f'{vcap_dict_credentials["certurl"]}/oauth/token',
-            client_id=vcap_dict_credentials['clientid'],
-            cert_str=vcap_dict_credentials['certificate'],
-            key_str=vcap_dict_credentials['key'])
+                AICoreV2Client.__init__.assert_called_once_with(
+                    base_url=f'{vcap_dict_credentials["serviceurls"]["AI_API_URL"]}/v2',
+                    auth_url=f'{vcap_dict_credentials["certurl"]}/oauth/token',
+                    client_id=vcap_dict_credentials['clientid'],
+                    cert_str=vcap_dict_credentials['certificate'],
+                    key_str=vcap_dict_credentials['key'])
 
         AICoreV2Client.__init__ = aicv2c_init
 

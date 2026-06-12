@@ -35,7 +35,12 @@ dev = [
     "pytest-cov==7.1.0",
     "pylint==4.0.5",
     "pyhamcrest==2.1.0",
+    "pytest-dotenv>=0.5.2",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["integration_tests"]
 
 [project.scripts]
 aicore = "ai_core_sdk.cli:cli"

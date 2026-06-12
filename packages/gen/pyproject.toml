@@ -67,7 +67,11 @@ dev = [
     "sphinx<9.0.0",
     "myst_nb",
     "sphinxawesome-theme",
+    "pytest-dotenv>=0.5.2",
 ]
+
+[tool.pytest.ini_options]
+env_files = [".env"]
 
 [project.urls]
 Homepage = "https://www.sap.com/"
