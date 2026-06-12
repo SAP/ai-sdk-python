@@ -120,6 +120,19 @@ jobs:
           AICORE_CLIENT_SECRET: ${{ secrets.AICORE_CLIENT_SECRET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          XSUAA_AUTH_URL: ${{ secrets.XSUAA_AUTH_URL }}
+          XSUAA_CLIENT_ID: ${{ secrets.XSUAA_CLIENT_ID }}
+          XSUAA_CLIENT_SECRET: ${{ secrets.XSUAA_CLIENT_SECRET }}
+          XSUAA_X509_CERT_URL: ${{ secrets.XSUAA_X509_CERT_URL }}
+          XSUAA_X509_CERT: ${{ secrets.XSUAA_X509_CERT }}
+          XSUAA_X509_KEY: ${{ secrets.XSUAA_X509_KEY }}
+          CLUSTER_BASE_URL: ${{ secrets.CLUSTER_BASE_URL }}
+          TEST_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+          OSS_KEY: ${{ secrets.OSS_KEY }}
+          OSS_SECRET: ${{ secrets.OSS_SECRET }}
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_REGION: ${{ secrets.OSS_REGION }}
         run: |
           uv run pytest ${{ matrix.package.path }} \
             --cov=${{ matrix.package.source }} \
