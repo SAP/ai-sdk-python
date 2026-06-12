@@ -23,13 +23,15 @@ jobs:
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Bump versions
-        id: bump
         run: |
+          now=$(date +%s)
+
           bump() (
             local pkg=$1
 
             echo "Bumping $pkg..."
             cd packages/$pkg
+            local old_version; old_version=$(uv run cz version --project)
             uv run cz bump --version-files-only --prerelease alpha && code=0 || code=$?
 
             # exit code 3 = NO_COMMITS_FOUND; fall back to patch bump
@@ -42,12 +44,11 @@ jobs:
             fi
 
             # Replace the a0 pre-release suffix with a timestamp to ensure uniqueness
-            local ts; ts=$(date +%s)
-            sed -i "s/a0\"/a${ts}\"/" pyproject.toml
+            sed -i "s/a0\"/a${now}\"/" pyproject.toml
 
             local version; version=$(uv run cz version --project)
-            echo "$pkg version: $version"
-            echo "${pkg}-version=$version" >> "$GITHUB_OUTPUT"
+            echo "$pkg version: $old_version -> $version"
+            echo "- **sap-ai-sdk-${pkg}**: \`${old_version}\` → \`${version}\`" >> "$GITHUB_STEP_SUMMARY"
           )
 
           pin_dep() (
