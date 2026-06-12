@@ -20,6 +20,7 @@ jobs:
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Bump versions
+        id: bump
         run: |
           bump() (
             local pkg=$1
@@ -41,7 +42,9 @@ jobs:
             local ts; ts=$(date +%s)
             sed -i "s/a0\"/a${ts}\"/" pyproject.toml
 
-            echo "$pkg version: $(uv run cz version --project)"
+            local version; version=$(uv run cz version --project)
+            echo "$pkg version: $version"
+            echo "${pkg}-version=$version" >> "$GITHUB_OUTPUT"
           )
 
           pin_dep() (
