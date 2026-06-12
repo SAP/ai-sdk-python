@@ -4,14 +4,17 @@ inputs:
   ref:
     description: 'Git ref to checkout'
     default: ''
+  fetch-depth:
+    description: 'Number of commits to fetch (0 = full history)'
+    default: '1'
   python-version:
     description: 'Python version'
     default: '3.13'
-  registry-username:
-    description: 'Username for the PyPI registry'
+  index-username:
+    description: 'Username for the PyPI index'
     default: ''
-  registry-token:
-    description: 'Auth token for the PyPI registry'
+  index-token:
+    description: 'Auth token for the PyPI index'
     default: ''
 
 runs:
@@ -21,6 +24,8 @@ runs:
       uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       with:
         ref: ${{ inputs.ref }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: false
 
     - name: Set up Python ${{ inputs.python-version }}
       uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
@@ -28,21 +33,21 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: Install uv
-      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-
+      uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 #v8.2.0
     - name: Install dependencies
       shell: bash
       env:
-        REGISTRY_USERNAME: ${{ inputs.registry-username }}
-        REGISTRY_TOKEN: ${{ inputs.registry-token }}
+        INDEX_USERNAME: ${{ inputs.index-username }}
+        INDEX_TOKEN: ${{ inputs.index-token }}
         IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
       run: |
         if [[ "$IS_FORK" == "true" ]]; then
-          # forks don't have access to the artifactory registry, so we skip --locked and fall back to PyPI
+          echo "Fork detected — syncing from PyPI without lockfile"
           UV_INDEX_URL="https://pypi.org/simple/" \
             uv sync --all-packages --all-extras
         else
-          UV_INDEX_ARTIFACTORY_USERNAME="${REGISTRY_USERNAME}" \
-          UV_INDEX_ARTIFACTORY_PASSWORD="${REGISTRY_TOKEN}" \
+          echo "Syncing from Artifactory with lockfile"
+          UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
+          UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
             uv sync --all-packages --all-extras --locked
         fi

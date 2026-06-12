@@ -56,9 +56,12 @@ sap-ai-sdk-base = { workspace = true }
 exclude = ["*test*"]
 
 [tool.commitizen]
-tag_format = "core-v$version"
+name = "cz_customize"
+tag_format = "core-v${version}"
+ignored_tag_formats = ["*-v${version}"]
 version_provider = "pep621"
 changelog_file = "RELEASE_NOTES.md"
-update_changelog_on_bump = true
-bump_pattern = '^(BREAKING CHANGE|feat|fix|refactor|perf)\(core\)(!)?:'
-changelog_pattern = '^(BREAKING CHANGE|feat|fix|refactor|perf)\(core\)(!)?:'
+
+[tool.commitizen.customize]
+bump_pattern = '^(feat|fix)\(core\)'
+changelog_pattern = '^(feat|fix)\(core\)'

@@ -3,48 +3,25 @@ name: documentation
 on:
   push:
     tags:
-      - 'base-v*'
-      - 'core-v*'
       - 'gen-v*'
   workflow_dispatch:
-    inputs:
-      package:
-        description: 'Package to build documentation for'
-        required: true
-        type: choice
-        options:
-          - base
-          - core
-          - gen
 
 jobs:
   build-and-deploy:
     runs-on: self-hosted
 
     steps:
-      - name: Determine package from tag
-        id: meta
-        env:
-          INPUT_PACKAGE: ${{ inputs.package }}
-        run: |
-          PACKAGE="${INPUT_PACKAGE}"
-          if [[ -z "$PACKAGE" ]]; then
-            TAG="${GITHUB_REF_NAME}"
-            PACKAGE="${TAG%%-v*}"
-          fi
-          echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
-
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           ref: ${{ github.ref_name }}
 
       - name: Make HTML
-        working-directory: packages/${{ steps.meta.outputs.package }}/docs
+        working-directory: packages/gen/docs
         run: uv run make
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: docs-${{ github.ref_name }}
-          path: packages/${{ steps.meta.outputs.package }}/docs/build/html
+          path: packages/gen/docs/build/html

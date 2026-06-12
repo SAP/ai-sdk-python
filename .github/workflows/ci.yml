@@ -21,8 +21,8 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
-          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run pylint
         run: |
@@ -54,8 +54,8 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
           python-version: ${{ matrix.python-version }}
-          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run unit tests with coverage
         id: run-tests
@@ -107,8 +107,8 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
         with:
-          registry-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          registry-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run integration tests
         id: run-tests

@@ -10,9 +10,6 @@ rules:
   # requires more effort to fix
   excessive-permissions:
     disable: true
-  dangerous-triggers:
-    ignore:
-      - lint-pr.yml # TODO: investigate if this really needs pull_request_target
   # allow unpinned references to own repositories
   unpinned-uses:
     config:
