@@ -3,3 +3,4 @@
   - [ ] reenable snapshot publishing step
 - [ ] replace Artifactory tokens with ones from the team
 - [ ] make repo compliant
+- [ ] update status checks in branch protection rules
