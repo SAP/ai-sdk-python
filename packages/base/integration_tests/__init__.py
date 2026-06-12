@@ -68,9 +68,9 @@ def get_token():
 
 def write_x509_credentials_into_files():
     with open(X509_CERT_FILE_PATH, 'w') as f:
-        f.write(X509_CERT_STR)
+        f.write(X509_CERT_STR.replace('\\n', '\n'))
     with open(X509_KEY_FILE_PATH, 'w') as f:
-        f.write(X509_KEY_STR)
+        f.write(X509_KEY_STR.replace('\\n', '\n'))
 
 
 def remove_x509_credentials():
