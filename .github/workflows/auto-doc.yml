@@ -39,7 +39,7 @@ jobs:
           generate_docs() {
             rm -f packages/$1/docs/*.html
             cd packages/$1/docs
-            uv run python -m pydoc -w ../
+            uv run python -m pydoc -w ../ || true
           }
 
           generate_docs base
