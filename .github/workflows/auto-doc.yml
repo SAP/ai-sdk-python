@@ -37,7 +37,9 @@ jobs:
       - name: Generate docs
         run: |
           generate_docs() {
+            ls -la packages/$1/docs/
             rm -f packages/$1/docs/*.html
+            ls -la packages/$1/docs/
             cd packages/$1/docs
             uv run python -m pydoc -w ../ || true
           }
