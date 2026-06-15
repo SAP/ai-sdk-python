@@ -1,0 +1,52 @@
+name: auto-doc
+
+on:
+  pull_request:
+
+jobs:
+  generate-and-commit:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.fork == false
+
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.SAP_AI_SDK_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.SAP_AI_SDK_BOT_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Setup
+        uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+          ref: ${{ github.head_ref }}
+
+      - name: Configure git
+        run: |
+          git config --local user.email "${{ vars.SAP_AI_SDK_BOT_EMAIL }}"
+          git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
+
+      - name: Generate docs
+        run: |
+          generate_docs() {
+            rm -f packages/$1/docs/*.html
+            cd packages/$1/docs
+            uv run python -m pydoc -w ../
+          }
+
+          generate_docs base
+          generate_docs core
+          generate_docs gen
+
+      - name: Commit and push
+        run: |
+          git add packages/base/docs packages/core/docs packages/gen/docs
+          if git diff --cached --quiet; then
+            echo "No documentation changes to commit"
+          else
+            git commit -m "docs: update pydoc3 documentation"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
