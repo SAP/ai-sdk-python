@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  generate-and-commit:
+  doc:
     runs-on: ubuntu-latest
     if: github.event.pull_request.head.repo.fork == false
 
@@ -23,6 +23,8 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
           ref: ${{ github.head_ref }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Configure git
         env:
