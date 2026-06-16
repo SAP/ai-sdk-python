@@ -10,9 +10,14 @@ def get_attr(obj, attr):
         return getattr(obj, attr, None)
 
 
-get_labels = partial(get_attr, attr='labels')
-get_key = partial(get_attr, attr='key')
-get_value = partial(get_attr, attr='value')
+class _NamedPartial(partial):
+    def __repr__(self):
+        return f"functools.partial(get_attr, attr={self.keywords['attr']!r})"
+
+
+get_labels = _NamedPartial(get_attr, attr='labels')
+get_key = _NamedPartial(get_attr, attr='key')
+get_value = _NamedPartial(get_attr, attr='value')
 
 
 def check_if_llm_scenario(scenario):

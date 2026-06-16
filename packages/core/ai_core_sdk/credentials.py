@@ -66,7 +66,12 @@ class VCAPEnvironment:
             return services
 
 
-NoDefault = object()
+class _NoDefault:
+    def __repr__(self):
+        return "NoDefault"
+
+
+NoDefault = _NoDefault()
 
 
 class Service:

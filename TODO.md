@@ -4,7 +4,7 @@
 - [ ] replace Artifactory tokens with ones from the team
 - [x] make repo compliant
 - [ ] update status checks in branch protection rules
-- [ ] add `__repr__` function after code is freshly moved:
+- [ ] add `__repr__` function after code is freshly moved + `_NamedPartial` + `NoDefault`
 
 ```py
 @dataclass
