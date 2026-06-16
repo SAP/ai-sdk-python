@@ -66,11 +66,9 @@ jobs:
             -ra \
             --disable-warnings
 
-      - name: Summarize results
-        if: always()
-        run: |
-          echo "${{ steps.run-tests.outcome == 'success' && '✅ passed' || '❌ failed' }}" >> $GITHUB_STEP_SUMMARY
-          uv run coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+      - name: Summarize coverage
+        if: matrix.python-version == '3.13'
+        run: uv run coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
 
   integration-tests:
     name: 'integration tests'
