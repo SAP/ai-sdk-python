@@ -17,7 +17,7 @@ env:
 
 jobs:
   blackduck-scan:
-    name: Black Duck Detect Scan
+    name: blackduck scan
     runs-on: ubuntu-latest
     permissions:
       contents: read
