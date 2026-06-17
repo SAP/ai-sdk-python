@@ -1,9 +1,9 @@
 - [ ] remove all "requires more effort to fix" from zizmor
 - [ ] setup trusted publishing with PyPI
-  - [ ] reenable snapshot publishing step
 - [ ] replace Artifactory tokens with ones from the team
 - [x] make repo compliant
 - [ ] update status checks in branch protection rules
+- [ ] ensure tear down always runs
 - [ ] add `__repr__` function after code is freshly moved + `_NamedPartial` + `NoDefault`
 
 ```py
