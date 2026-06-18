@@ -1,16 +1,7 @@
 rules:
-  # already following SAP policies
   dependabot-cooldown:
     config:
       days: 4
-  # requires more effort to fix
-  secrets-inherit:
-    ignore:
-      - publish.yml
-  # requires more effort to fix
-  excessive-permissions:
-    disable: true
-  # allow unpinned references to own repositories
   unpinned-uses:
     config:
       policies:

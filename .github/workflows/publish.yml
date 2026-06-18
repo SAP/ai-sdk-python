@@ -48,9 +48,12 @@ jobs:
           git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
 
       - name: Commit and push
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          PACKAGE: ${{ steps.meta.outputs.package }}
         run: |
-          git add "packages/${{ steps.meta.outputs.package }}/RELEASE_NOTES.md"
-          git diff --cached --quiet || git commit -m "docs: sync release notes for ${{ github.event.release.tag_name }} [skip ci]"
+          git add "packages/${PACKAGE}/RELEASE_NOTES.md"
+          git diff --cached --quiet || git commit -m "docs: sync release notes for ${TAG} [skip ci]"
           git push origin main
 
   build:
