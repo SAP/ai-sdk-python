@@ -1,7 +1,8 @@
 name: auto-doc
 
 on:
-  pull_request:
+  pull_request: ~
+  workflow_dispatch: ~
 
 jobs:
   doc:
