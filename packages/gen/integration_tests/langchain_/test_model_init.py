@@ -4,9 +4,7 @@ from typing import Callable
 from langchain_classic.chains import LLMChain
 from langchain_classic.prompts import PromptTemplate
 
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.langchain.amazon import AMAZON_MODEL_NAME_MAP, transform_to_model_id
-from gen_ai_hub.proxy.langchain.init_models import ModelType, catalog, init_embedding_model, init_llm
+from gen_ai_hub.proxy.langchain.init_models import ModelType, init_embedding_model, init_llm, _get_init_func
 from integration_tests.constants import (OPENAI_GPT_4O_MINI_TEST_MODEL,
                                          AMAZON_TITAN_EMBEDDING_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
                                          GEMINI_2_5_FLASH_LITE_TEST_MODEL)
@@ -14,12 +12,6 @@ from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 
 
 class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        cls.llm = catalog.models['gen-ai-hub'][ModelType.LLM]
-        cls.emb = catalog.models['gen-ai-hub'][ModelType.EMBEDDINGS]
 
     def test_init_llm(self):
         template = """Question: {question}
@@ -46,19 +38,9 @@ class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
             except ValueError:
                 # skip if deployment is not available
                 continue
-            # delete model entry from catalog
-            catalog_entry = catalog.models['gen-ai-hub'][model_type][model_name]
-            del catalog.models['gen-ai-hub'][model_type][model_name]
-            prediction_url_entry = Deployment.prediction_urls._suffixes[model_name]
-            del Deployment.prediction_urls._suffixes[model_name]
 
-            init_func = catalog_entry.init_func
-            if model_name in AMAZON_MODEL_NAME_MAP:
-                model_id = transform_to_model_id(model_name)
-                model = init_model(model_name, max_tokens=24, proxy_client=self.proxy_client, init_func=init_func,
-                               model_id=model_id)
-            else:
-                model = init_model(model_name, max_tokens=24, proxy_client=self.proxy_client, init_func=init_func)
+            init_func = _get_init_func(model_name, model_type)
+            model = init_model(model_name, max_tokens=24, proxy_client=self.proxy_client, init_func=init_func)
             if model_type == ModelType.EMBEDDINGS:
                 response = model.embed_query(question)
                 self.assertIsInstance(response, list)
@@ -66,10 +48,6 @@ class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
             else:
                 answer = model.invoke(question)
                 self.assertTrue(len(str(answer)) > 0, msg=f"Model {model_name} failed to generate a response")
-
-            # reinstate model entry to catalog
-            catalog.models['gen-ai-hub'][model_type][model_name] = catalog_entry
-            Deployment.prediction_urls._suffixes[model_name] = prediction_url_entry
 
     def test_init_custom_model(self):
         """
@@ -88,7 +66,7 @@ class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     def test_init_embedding_model(self):
         text = 'What is a supernova?'
-        for model in self.emb.keys():
+        for model in [AMAZON_TITAN_EMBEDDING_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL]:
             try:
                 self.proxy_client.select_deployment(model_name=model)
             except ValueError:

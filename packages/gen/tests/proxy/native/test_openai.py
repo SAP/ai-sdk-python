@@ -52,8 +52,6 @@ class TestOpenAIModels(unittest.TestCase):
 
     def test_completion(self):
         deployment = self.proxy_client.select_deployment(model_name='gpt-4-instruct')
-        deployment.prediction_urls.register({'gpt-4-instruct':
-                                                 '/completions'})  # Add it to test completion model
         with openai_chat_completion_mocker(deployment.prediction_url):
             openai_client = OpenAI(proxy_client=self.proxy_client)
             kwargs = {'model_name': 'gpt-4-instruct', 'prompt': 'Say this is a test', 'max_tokens': 7, 'temperature': 0}

@@ -1,10 +1,6 @@
 import os
 import random
-from pathlib import Path
 from time import sleep
-
-from dotenv import load_dotenv
-load_dotenv(Path(__file__).parent.parent / '.env')
 
 import requests
 

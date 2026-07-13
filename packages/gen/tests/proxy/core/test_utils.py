@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from gen_ai_hub.proxy.core.utils import PredictionURLs, lru_cache_extended
+from gen_ai_hub.proxy.core.utils import lru_cache_extended
 
 
 class TestLRUCacheDecorators(unittest.TestCase):
@@ -109,29 +109,6 @@ class TestLRUCacheDecorators(unittest.TestCase):
         self.assertEqual(test_func.counter, 2)
         self.assertEqual(test_func(2), 4)
         self.assertEqual(test_func.counter, 2)
-
-
-class TestPredictionURLs(unittest.TestCase):
-
-    def setUp(self):
-        self.prediction_urls = PredictionURLs({'model1': '/predict1', 'model2': '/predict2'})
-
-    def test_register_and_call(self):
-        self.prediction_urls.register({'model3': '/predict3'})
-        url = self.prediction_urls('model3', 'http://example.com')
-        self.assertEqual(url, 'http://example.com/predict3')
-
-    def test_call_with_fixed_suffix(self):
-        url = self.prediction_urls('model1', 'http://example.com', fixed_suffix='/custom')
-        self.assertEqual(url, 'http://example.com/custom')
-
-    def test_call_with_unknown_model(self):
-        url = self.prediction_urls('unknown_model', 'http://example.com')
-        self.assertIsNone(url)
-
-    def test_call_with_no_suffix(self):
-        url = self.prediction_urls('model1', 'http://example.com', fixed_suffix='')
-        self.assertEqual(url, 'http://example.com')
 
 
 if __name__ == '__main__':

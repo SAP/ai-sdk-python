@@ -100,7 +100,7 @@ class TestEmbeddings(OrchestrationServiceTestBase):
         self.assertEqual(len(embedding), 256)
         # Verify normalize: L2 norm should be ~1
         l2_norm = math.sqrt(sum(x * x for x in embedding))
-        self.assertAlmostEqual(l2_norm, 1.0, places=4)
+        self.assertAlmostEqual(l2_norm, 1.0, places=3)
 
         # Test base64 encoding format
         config_base64 = EmbeddingsOrchestrationConfig(

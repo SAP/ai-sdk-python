@@ -76,8 +76,6 @@ class TestOpenAILangchain(unittest.TestCase):
 
     def test_completion_model(self):
         deployment = self.proxy_client.select_deployment(model_name='gpt-4-instruct')
-        deployment.prediction_urls.register({'gpt-4-instruct':
-                                                 '/completions'})  # Add it to test completion model
         with openai_completion_mocker(deployment.prediction_url):
             llm = OpenAI(proxy_client=self.proxy_client, proxy_model_name='gpt-4-instruct')
             self.assertIsNotNone(llm.model_name)

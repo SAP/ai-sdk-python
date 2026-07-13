@@ -101,11 +101,6 @@ class TestConfigHandling(unittest.TestCase):
         # Create a temporary directory
         cls.temp_dir = pathlib.Path(tempfile.mkdtemp())
 
-        # Separate empty dir used as AICORE_HOME to prevent ~/.aicore/config.json from leaking in
-        cls.empty_home_dir = pathlib.Path(tempfile.mkdtemp())
-        cls._aicore_home_patcher = patch.dict(os.environ, {HOME_PATH_ENV_VAR: str(cls.empty_home_dir)})
-        cls._aicore_home_patcher.start()
-
         # Define the file name and content
         cls.file_name = 'config.json'
         cls.profile = 'test'
@@ -130,10 +125,8 @@ class TestConfigHandling(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls._aicore_home_patcher.stop()
-        # Clean up the directories after all tests
+        # Clean up the directory after all tests
         shutil.rmtree(str(cls.temp_dir))
-        shutil.rmtree(str(cls.empty_home_dir))
 
     @patch('ai_core_sdk.credentials.logger')
     def test_init_conf(self, mock_logger):

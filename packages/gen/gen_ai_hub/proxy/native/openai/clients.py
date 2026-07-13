@@ -10,6 +10,7 @@ from openai import AsyncOpenAI as AsyncOpenAI_
 from openai import OpenAI as OpenAI_
 from openai import resources
 from openai._streaming import Stream, AsyncStream
+from openai._types import Omit
 from openai.lib._parsing._responses import TextFormatT
 from openai.resources.chat import AsyncChat as AsyncChat_
 from openai.resources.chat import Chat as Chat_
@@ -29,7 +30,7 @@ from openai.types.responses import Response, ResponseStreamEvent, ResponseInputP
 
 from gen_ai_hub.proxy.core import get_proxy_client
 from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.core.utils import NOT_GIVEN, NotGiven, Omit, if_set, kwargs_if_set
+from gen_ai_hub.proxy.core.utils import NOT_GIVEN, NotGiven, if_set, kwargs_if_set
 
 DEFAULT_API_VERSION = '2025-03-01-preview'  # https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key#api-evolution
 

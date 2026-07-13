@@ -124,14 +124,14 @@ class TestService(OrchestrationServiceTestBase):
         service = OrchestrationService(api_url=self.api_url)
         config = OrchestrationConfig(modules=self.module_config)
 
-        config.modules.prompt_templating.model.name = "gemini-2.0-flash"
+        config.modules.prompt_templating.model.name = "gemini-2.5-flash"
 
         response = service.run(
             config=config, placeholder_values={"name": "World"}
         )
 
         self.assertTrue(
-            response.final_result.model.startswith("gemini-2.0-flash")
+            response.final_result.model.startswith("gemini-2.5-flash")
         )
         self.assertEqual(response.intermediate_results.templating[1].content, "Hello, World!")
 

@@ -6,14 +6,28 @@ import pytest
 
 from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.langchain import amazon, google_genai
+from gen_ai_hub.proxy.langchain import amazon, google_genai, openai
 from gen_ai_hub.proxy.langchain.init_models import (
     ModelType,
-    catalog,
-    get_model_class,
     init_embedding_model,
     init_llm,
 )
+
+EMBEDDING_TEST_MODELS_TO_MODEL_CLASS_MAP = {
+    "gemini-embedding": google_genai.GoogleGenerativeAIEmbeddings,
+    "text-embedding-3-small": openai.OpenAIEmbeddings,
+    "nvidia--llama-3.2-nv-embedqa-1b": openai.OpenAIEmbeddings
+}
+
+LLM_TEST_MODELS_MODEL_CLASS_MAP = {
+    "amazon--nova-micro": amazon.ChatBedrock,
+    "anthropic--claude-4-sonnet": amazon.ChatBedrock,
+    "gemini-2.5-flash-lite": google_genai.ChatGoogleGenerativeAI,
+    "gpt-5": openai.ChatOpenAI,
+    "mistralai--mistral-small-instruct": openai.ChatOpenAI
+}
+
+TEST_MODELS = list(EMBEDDING_TEST_MODELS_TO_MODEL_CLASS_MAP.keys()) + list(LLM_TEST_MODELS_MODEL_CLASS_MAP.keys())
 
 
 class TestInitModels(unittest.TestCase):
@@ -34,9 +48,8 @@ class TestInitModels(unittest.TestCase):
     @staticmethod
     def create_gen_ai_hub_deployments():
         deployments = []
-        for model_type, models in catalog.models['gen-ai-hub'].items():
-            for model in models.keys():
-                deployments.append(TestInitModels.create_deployment(model_name=model))
+        for model in TEST_MODELS:
+            deployments.append(TestInitModels.create_deployment(model_name=model))
         return deployments
 
     @classmethod
@@ -51,32 +64,27 @@ class TestInitModels(unittest.TestCase):
             )
         cls.proxy_client._deployments = cls.create_gen_ai_hub_deployments()
         cls.proxy_client._get_scenario_deployments = MagicMock()
-        cls.llm = catalog.models['gen-ai-hub'][ModelType.LLM]
-        cls.emb = catalog.models['gen-ai-hub'][ModelType.EMBEDDINGS]
+        cls.llm = LLM_TEST_MODELS_MODEL_CLASS_MAP
+        cls.emb = EMBEDDING_TEST_MODELS_TO_MODEL_CLASS_MAP
 
     def setUp(self):
         self.proxy_client._get_scenario_deployments.reset_mock()
 
     def test_init_embedding_model(self):
-        for model, entry in self.emb.items():
-            model = init_embedding_model(model, proxy_client=self.proxy_client)
-            self.assertIsInstance(model, entry.model)
+        for model_name, model_class in self.emb.items():
+            model = init_embedding_model(model_name, proxy_client=self.proxy_client)
+            self.assertIsInstance(model, model_class)
 
     def test_init_llm(self):
         model_kwargs = {'top_k': 3}
-        for model, entry in self.llm.items():
-            model = init_llm(model, proxy_client=self.proxy_client, **model_kwargs)
-            self.assertIsInstance(model, entry.model)
-
-    def test_get_model_class(self):
-        for model, entry in self.llm.items():
-            model_cls = get_model_class(model, proxy_client=self.proxy_client)
-            self.assertEqual(model_cls, entry.model)
+        for model_name, model_class in self.llm.items():
+            initiated_model = init_llm(model_name, proxy_client=self.proxy_client, **model_kwargs)
+            self.assertIsInstance(initiated_model, model_class)
 
     def test_non_existing_model(self):
-        with pytest.raises(KeyError):
+        with pytest.raises(ValueError):
             init_llm('michelangelo-1475', proxy_client=self.proxy_client)
-        with pytest.raises(KeyError):
+        with pytest.raises(ValueError):
             init_embedding_model('michelangelo-1475', proxy_client=self.proxy_client)
 
     def test_custom_model(self):

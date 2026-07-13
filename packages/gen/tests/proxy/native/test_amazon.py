@@ -12,7 +12,6 @@ from tests.mock import (AMAZON_BEDROCK_RESPONSE,
                         AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE,
                         get_mocked_ai_core_client,
                         )
-from tests.proxy.langchain_.test_init_models import TestInitModels
 
 
 def get_bedrock_messages_inference_config():
@@ -78,50 +77,6 @@ class TestAmazonModels(unittest.TestCase):
             mock_make_request.call_args.args[1]["url"],
             deployment.url + "/invoke",
         )
-
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
-    def test_completion_with_custom_model(self, mock_make_request):
-        mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
-        model_name = 'test-custom-model'
-        custom_deployment = TestInitModels.create_deployment(model_name)
-        self.proxy_client._deployments.append(custom_deployment)
-        bedrock = Session().client(model_name=model_name, proxy_client=self.proxy_client)
-        bedrock.invoke_model(body=get_bedrock_prompt())
-        mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "invoke")
-        deployment = self.proxy_client.select_deployment(
-            model_name=model_name
-        )
-        self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/invoke",
-        )
-
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
-    def test_update_deployments_called_for_custom_model(self, mock_make_request):
-        mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
-        model_name = 'test-custom-model-1'
-        custom_deployment = TestInitModels.create_deployment(model_name)
-        deployments = TestInitModels.create_gen_ai_hub_deployments()
-        deployments.append(custom_deployment)
-        deployments_dict = {}
-        for i in range(len(deployments)):
-            deployments_dict[i] = deployments[i]
-        self.proxy_client._get_scenario_deployments.return_value = deployments_dict
-
-        bedrock = Session().client(model_name=model_name, proxy_client=self.proxy_client)
-        bedrock.invoke_model(body=get_bedrock_prompt())
-        mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "invoke")
-        deployment = self.proxy_client.select_deployment(
-            model_name=model_name
-        )
-        self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/invoke",
-        )
-        self.proxy_client._get_scenario_deployments.assert_called_once_with(
-            self.proxy_client.foundational_model_scenarios[0])
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
     def test_completion_streaming(self, mock_make_request):

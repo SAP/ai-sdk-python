@@ -75,7 +75,7 @@ class TestAmazonLangchain(unittest.TestCase):
 
     def test_no_model_name(self):
         with self.assertRaises(ValueError):
-            ChatBedrock.get_corresponding_model_id(model_name="")
+            ChatBedrock.get_corresponding_model_id(full_model_name="")
 
     def test_model_id_not_empty(self):
         with self.assertRaises(ValueError):

@@ -8,30 +8,7 @@ from pydantic import BaseModel, ConfigDict, model_validator
 
 from gen_ai_hub.proxy.core.base import BaseProxyClient
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.langchain.init_models import catalog
 from gen_ai_hub.proxy.native.amazon.clients import Session
-
-AMAZON_MODEL_NAME_MAP = [
-    "amazon--titan-embed-image",
-    "amazon--titan-embed-text",
-    "anthropic--claude-3-haiku",
-    "anthropic--claude-4-opus",
-    "anthropic--claude-3.5-sonnet",
-    "anthropic--claude-3.7-sonnet",
-    "anthropic--claude-4-sonnet",
-    "anthropic--claude-4.5-sonnet",
-    "anthropic--claude-4.5-haiku",
-    "amazon--nova-micro",
-    "amazon--nova-lite",
-    "amazon--nova-pro",
-    "amazon--nova-premier",
-    "anthropic--claude-4.6-sonnet",
-    "anthropic--claude-4.6-opus",
-]
-
-_BEDROCK_CLAUDE_SUFFIX_OVERRIDES = {
-    "anthropic--claude-4.6-opus": "-v1",
-}
 
 
 def _parse_minor_version(raw: str) -> tuple:
@@ -41,27 +18,6 @@ def _parse_minor_version(raw: str) -> tuple:
         return int(major), int(minor)
     return int(raw), 0
 
-
-def transform_to_model_id(model_name):
-    """Transforms an SAP AI Core model name (e.g. ``anthropic--claude-4.6-sonnet``)
-    into the corresponding Amazon Bedrock model ID.
-
-    For Claude 4.x models the ``{name}`` and ``{version}`` parts are reordered
-    to match the Bedrock convention (``claude-{name}-{major}-{minor}``).
-    """
-    full_name = model_name
-    model_provider, model_name = model_name.split('--', maxsplit=1)
-    model_name_parts = model_name.split('-')
-
-    if model_name_parts[0] == "claude":
-        version_tuple = _parse_minor_version(model_name_parts[1])
-        if version_tuple >= (4, 0):
-            # Reorder: claude-{name}-{major}-{minor}
-            model_name = '-'.join([model_name_parts[0], model_name_parts[2], model_name_parts[1]])
-            suffix = _BEDROCK_CLAUDE_SUFFIX_OVERRIDES.get(full_name, "")
-            return '.'.join([model_provider, model_name.replace(".", "-")]) + suffix
-
-    return '.'.join([model_provider, model_name.replace(".", "-")])
 
 class AICoreBedrockBaseModel(BaseModel):
     """AICoreBedrockBaseModel provides all adjustments
@@ -107,19 +63,25 @@ class AICoreBedrockBaseModel(BaseModel):
         kwargs["client_params"] = client_params
         super().__init__(*args, model_id=model_id, **kwargs)
 
-    @classmethod
-    def get_corresponding_model_id(cls, model_name):
+    @staticmethod
+    def get_corresponding_model_id(full_model_name, model_version='latest'):
         """Gets the corresponding model ID for a given model name.
-
-        :param model_name: the model name
-        :type model_name: str
-        :raises ValueError: if the model name is not supported
+        :param full_model_name: the model name
+        :type full_model_name: str
+        :param model_version: the model version
+        :type model_version: str
         :return: the corresponding model ID
         :rtype: str
         """
-        if model_name not in AMAZON_MODEL_NAME_MAP:
-            raise ValueError("Model specified is not supported.")
-        return transform_to_model_id(model_name)
+        provider, model_name = full_model_name.split("--", maxsplit=1)
+        if model_name.startswith('claude'):
+            claude, base_model_version, base_model_name = model_name.split('-')
+            base_model_version_major, base_model_version_minor = _parse_minor_version(base_model_version)
+            if base_model_version_major >= 4:
+                # Reorder: claude-{name}-{major}-{minor}
+                model_name = '-'.join([claude, base_model_name, str(base_model_version_major), str(base_model_version_minor)])
+                return '.'.join([provider, model_name])
+        return f"{provider}.{model_name}-{model_version}"
 
     # pylint: disable=no-self-argument
     @model_validator(mode='before')
@@ -141,8 +103,10 @@ class AICoreBedrockBaseModel(BaseModel):
             values["client"] = Session().client(**client_params)
         
         if values.get('model_id') in (None, ''):
-            values["model_id"] = AICoreBedrockBaseModel.get_corresponding_model_id(
-                values["client"].aicore_deployment.model_name
+            deployment = values["client"].aicore_deployment
+            values["model_id"] = cls.get_corresponding_model_id(
+                deployment.model_name,
+                deployment.model_version
             )
         
         # Remove client_params from model_kwargs to prevent it from being passed to AWS API
@@ -237,19 +201,6 @@ def _build_bedrock_model_kwargs(
 
     return model_kwargs
 
-@catalog.register(
-    "gen-ai-hub",
-    ChatBedrock,
-    "anthropic--claude-3-haiku",
-    "anthropic--claude-4.5-haiku",
-    "anthropic--claude-4-opus",
-    "anthropic--claude-3.5-sonnet",
-    "anthropic--claude-3.7-sonnet",
-    "anthropic--claude-4-sonnet",
-    "anthropic--claude-4.6-sonnet",
-    "anthropic--claude-4.6-opus",
-    "amazon--nova-premier",
-)
 def init_chat_model(
         proxy_client: BaseProxyClient,
         deployment: Deployment,
@@ -303,16 +254,6 @@ def init_chat_model(
         model_kwargs=model_kwargs
     )
 
-@catalog.register(
-    "gen-ai-hub",
-    ChatBedrockConverse,
-    "anthropic--claude-3.7-sonnet",
-    "anthropic--claude-4-sonnet",
-    "anthropic--claude-4.5-sonnet",
-    "anthropic--claude-4.5-haiku",
-    "anthropic--claude-4.6-sonnet",
-    "anthropic--claude-4.6-opus",
-)
 def init_chat_converse_model(
         proxy_client: BaseProxyClient,
         deployment: Deployment,
@@ -366,12 +307,6 @@ def init_chat_converse_model(
         config = config
     )
 
-@catalog.register(
-    "gen-ai-hub",
-    BedrockEmbeddings,
-    "amazon--titan-embed-image",
-    "amazon--titan-embed-text",
-)
 def init_embedding_model(proxy_client: BaseProxyClient, deployment: Deployment, model_id: Optional[str] = ''):
     """Initializes an embedding model using BedrockEmbeddings.
 

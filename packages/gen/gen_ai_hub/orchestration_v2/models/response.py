@@ -3,13 +3,31 @@ Response models for orchestration v2
 """
 
 from typing import List, Optional, Any, Literal, Union
-from pydantic import Field
+from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
 
-class PromptTokensDetails(BaseModel):
+
+class ResponseBaseModel(BaseModel):
+    """
+    Abstract base model that extends Pydantic's BaseModel and ABC.
+
+    - `extra="allow"` allows unexpected fields in responses to be accepted,
+      since the external API might introduce new attributes in the response.
+
+    This enforces consistent and safe serialization behavior across all
+    derived models.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=False,
+    )
+
+
+class PromptTokensDetails(ResponseBaseModel):
     """
     Represents the details of prompt tokens used in a specific operation.
 
@@ -20,7 +38,7 @@ class PromptTokensDetails(BaseModel):
     audio_tokens: Optional[int] = None
     cached_tokens: Optional[int] = None
 
-class CompletionTokensDetails(BaseModel):
+class CompletionTokensDetails(ResponseBaseModel):
     """
     Breakdown of tokens used in a completion.
 
@@ -39,7 +57,7 @@ class CompletionTokensDetails(BaseModel):
     reasoning_tokens: Optional[int] = None
     rejected_prediction_tokens: Optional[int] = None
 
-class TokenUsage(BaseModel):
+class TokenUsage(ResponseBaseModel):
     """
     Usage of tokens in the response
     """
@@ -50,7 +68,7 @@ class TokenUsage(BaseModel):
     completion_tokens_details: Optional[CompletionTokensDetails] = None
 
 
-class GenericModuleResult(BaseModel):
+class GenericModuleResult(ResponseBaseModel):
     """
     Generic module result
     Args:
@@ -62,7 +80,7 @@ class GenericModuleResult(BaseModel):
     data: Optional[Any] = None
 
 
-class TopLogprob(BaseModel):
+class TopLogprob(ResponseBaseModel):
     """
     Represents one of the most likely tokens and its log probability
     at a given token position.
@@ -79,7 +97,7 @@ class TopLogprob(BaseModel):
     bytes: Optional[List[int]] = None
 
 
-class ChatCompletionTokenLogprob(BaseModel):
+class ChatCompletionTokenLogprob(ResponseBaseModel):
     """
     Represents a token in the message content along with its
     log probability and alternative top log probabilities.
@@ -100,7 +118,7 @@ class ChatCompletionTokenLogprob(BaseModel):
     top_logprobs: Optional[List[TopLogprob]] = None
 
 
-class ChoiceLogprobs(BaseModel):
+class ChoiceLogprobs(ResponseBaseModel):
     """
     Log probabilities for the choice.
     """
@@ -108,7 +126,7 @@ class ChoiceLogprobs(BaseModel):
     refusal: Optional[List[ChatCompletionTokenLogprob]] = None
 
 
-class LLMChoice(BaseModel):
+class LLMChoice(ResponseBaseModel):
     """
     Args:
         index: Index of the choice
@@ -146,11 +164,16 @@ class StreamFunctionObject(FunctionCall):
                hallucinate parameters not defined by your function schema. Validate the
                arguments in your code before calling your function.
        """
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=False,
+    )
+
     name: Optional[str] = None
     arguments: Optional[str] = None
 
 
-class StreamToolCall(BaseModel):
+class StreamToolCall(ResponseBaseModel):
     type_: Literal["function"] = Field(default="function",
                                        alias="type",
                                        description="The type of the tool. Currently, only function is supported.")
@@ -159,20 +182,20 @@ class StreamToolCall(BaseModel):
     function: Optional[StreamFunctionObject] = None
 
 
-class StreamDelta(BaseModel):
+class StreamDelta(ResponseBaseModel):
     role: Optional[str] = None
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
 
 
-class StreamLLMChoice(BaseModel):
+class StreamLLMChoice(ResponseBaseModel):
     index: int
     delta: StreamDelta
     logprobs: Optional[ChoiceLogprobs] = None
     finish_reason: Optional[str] = None
 
 
-class Citation(BaseModel):
+class Citation(ResponseBaseModel):
     """
     Represents a citation with related metadata.
 
@@ -192,7 +215,7 @@ class Citation(BaseModel):
     end_index: Optional[int] = None
 
 
-class LLMModuleResult(BaseModel):
+class LLMModuleResult(ResponseBaseModel):
     """
     Output from LLM. Follows the OpenAI spec.
 
@@ -228,7 +251,7 @@ class StreamLLMModuleResult(LLMModuleResult):
     usage: Optional[TokenUsage] = None
 
 
-class ModuleResults(BaseModel):
+class ModuleResults(ResponseBaseModel):
     """Represents the results of each module used in a processing pipeline.
 
     Attributes:
@@ -268,7 +291,7 @@ class StreamModuleResults(ModuleResults):
     output_unmasking: Optional[List[StreamLLMChoice]] = None
 
 
-class SAPAPIError(BaseModel):
+class SAPAPIError(ResponseBaseModel):
     """
     Represents an error returned from an SAP API.
 
@@ -295,7 +318,7 @@ class SAPAPIError(BaseModel):
     intermediate_results: Optional[ModuleResults] = None
     headers: Optional[dict[str, str]] = None
 
-class SAPAPIErrorStreaming(BaseModel):
+class SAPAPIErrorStreaming(ResponseBaseModel):
     """
         Represents an error returned from an SAP API.
 
@@ -322,7 +345,7 @@ class SAPAPIErrorStreaming(BaseModel):
     intermediate_results: Optional[ModuleResultsStreaming] = None
     headers: Optional[dict[str, str]] = None
 
-class CompletionPostResponse(BaseModel):
+class CompletionPostResponse(ResponseBaseModel):
     """
     Represents the response for a completion post request.
 
@@ -339,16 +362,16 @@ class CompletionPostResponse(BaseModel):
     intermediate_failures: Optional[List[SAPAPIError]] = None
 
 
-class StreamCompletionPostResponse(BaseModel):
+class StreamCompletionPostResponse(ResponseBaseModel):
     request_id: str
     intermediate_results: Optional[StreamModuleResults]
     final_result: Optional[StreamLLMModuleResult]
     intermediate_failures: Optional[List[SAPAPIError]] = None
 
-class ErrorResponse(BaseModel):
+class ErrorResponse(ResponseBaseModel):
     error: Union[SAPAPIError, list[SAPAPIError]]
 
-class ErrorResponseStreaming(BaseModel):
+class ErrorResponseStreaming(ResponseBaseModel):
     error: Union[SAPAPIErrorStreaming, list[SAPAPIErrorStreaming]]
 
 class OrchestrationResponseWithRetries(CompletionPostResponse):

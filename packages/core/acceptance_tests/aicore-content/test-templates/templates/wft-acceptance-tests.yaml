@@ -277,6 +277,16 @@ spec:
           memory: 128Mi
           cpu: 100m
       env:
+        - name: "FIPS_MODE"
+          value: {{ required "fipsMode" $.Values.sovereignCloud.fipsMode | quote }}
+        {{- if $.Values.sovereignCloud.fipsMode }}
+        - name: "OPENSSL_FORCE_FIPS_MODE"
+          value: "1"
+        - name: "OPENSSL_FIPS"
+          value: "1"
+        - name: "GOLANG_FIPS"
+          value: "1"
+        {{- end }}
         - name: DEPLOYMENT_ENDPOINT
           value: {{ printf "https://%s.%s" $.Values.unifiedApiSubdomain $.Values.clusterDomain }}
         - name: DOCKER_REGISTRY_FOR_TESTS_HOST

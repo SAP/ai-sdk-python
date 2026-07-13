@@ -14,7 +14,6 @@ from gen_ai_hub.proxy.native.openai import AsyncOpenAI as AsyncOpenAIClient
 from gen_ai_hub.proxy.native.openai import OpenAI as OpenAIClient
 from gen_ai_hub.proxy.native.openai.clients import DEFAULT_API_VERSION
 from .base import BaseAuth
-from .init_models import catalog
 
 
 def get_client_params(values):
@@ -317,31 +316,6 @@ class OpenAIEmbeddings(ProxyOpenAI, OpenAIEmbeddings_):
         }
 
 
-@catalog.register(
-    "gen-ai-hub",
-    ChatOpenAI,
-    "gpt-4o",
-    "gpt-4o-mini",
-    "gpt-4.1",
-    "gpt-4.1-mini",
-    "gpt-4.1-nano",
-    "gpt-5",
-    "gpt-5-mini",
-    "gpt-5-nano",
-    "gpt-5.2",
-    "gpt-5.3-codex",
-    "gpt-5.4",
-    "gpt-5.4-nano",
-    "o1",
-    "o3",
-    "o3-mini",
-    "o4-mini",
-    "mistralai--mistral-small-instruct",
-    "mistralai--mistral-medium-instruct",
-    "mistralai--mistral-large-instruct",
-    "cohere--command-a-reasoning",
-    "cohere--reranker",
-)
 def init_chat_model(
         proxy_client: BaseProxyClient,
         deployment: BaseDeployment,
@@ -376,14 +350,6 @@ def init_chat_model(
     )
 
 
-@catalog.register(
-    "gen-ai-hub",
-    OpenAIEmbeddings,
-    "text-embedding-3-small",
-    "text-embedding-3-large",
-    "text-embedding-ada-002",
-    "nvidia--llama-3.2-nv-embedqa-1b",
-)
 def init_embedding_model(proxy_client: BaseProxyClient, deployment: BaseDeployment):
     """Initialize the OpenAIEmbeddings model.
 

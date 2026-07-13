@@ -9,7 +9,6 @@ from pydantic import model_validator, ConfigDict
 from gen_ai_hub.proxy.core.base import BaseProxyClient
 from gen_ai_hub.proxy.core.utils import if_str_set
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.langchain.init_models import catalog
 from gen_ai_hub.proxy.native.google_genai.clients import Client as GenAIHubNativeClient
 
 
@@ -123,15 +122,6 @@ class GoogleGenerativeAIEmbeddings(_BaseGoogleGenerativeAI, GoogleGenerativeAIEm
     def _init_parent(self, **kwargs):
         GoogleGenerativeAIEmbeddings_.__init__(self, **kwargs)
 
-@catalog.register(
-    "gen-ai-hub",
-    ChatGoogleGenerativeAI,
-    "gemini-2.0-flash",
-    "gemini-2.0-flash-lite",
-    "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-2.5-pro",
-)
 def init_chat_model(
         proxy_client: BaseProxyClient,
         deployment: Deployment,
@@ -167,11 +157,6 @@ def init_chat_model(
         top_p=top_p,
     )
 
-@catalog.register(
-    "gen-ai-hub",
-    GoogleGenerativeAIEmbeddings,
-    "google--gemini-embedding",
-)
 def init_embedding_model(proxy_client: BaseProxyClient, deployment: Deployment):
     return GoogleGenerativeAIEmbeddings(
         model=deployment.model_name,

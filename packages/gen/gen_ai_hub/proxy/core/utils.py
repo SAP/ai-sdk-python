@@ -80,53 +80,9 @@ def lru_cache_extended(timeout: Optional[int] = None,
     return decorator
 
 
-class PredictionURLs:
-    """Generate prediction URLs with dynamic suffixes for different models."""
-
-    def __init__(self, suffixes: Optional[Dict[str, str]] = None) -> None:
-        """Initialize the PredictionURLs with optional suffixes.
-
-        :param suffixes: A dictionary of model names and their corresponding URL suffixes.
-        :type suffixes: Optional[Dict[str, str]], optional
-        """
-        self._suffixes: Dict[str, str] = {}
-        if suffixes:
-            self.register(suffixes)
-
-    def register(self, suffixes: Dict[str, str | Omit]) -> None:
-        """Register new model suffixes.
-
-        :param suffixes: A dictionary of model names and their corresponding URL suffixes.
-        :type suffixes: Dict[str, str  |  Omit]
-        """
-
-        cleaned_suffixes = {model_name: '/' + suffix.lstrip('/') if suffix is not OMIT else OMIT for
-                            model_name, suffix in suffixes.items()}
-        self._suffixes.update(cleaned_suffixes)
-
-    def __call__(self, model_name: str, url: str, fixed_suffix: Optional[str] = None) -> str:
-        """Generate a complete URL for a given model.
-
-        :param model_name: the name of the model.
-        :type model_name: str
-        :param url: the base URL.
-        :type url: str
-        :param fixed_suffix: A fixed suffix to override the registered one.
-        :type fixed_suffix: Optional[str], optional
-        :return: The complete URL for the model. None means there is no suffix registered for the model 
-                 and usally the url should be used.
-        :rtype: str
-        """
-        suffix = fixed_suffix if fixed_suffix is not None else self._suffixes.get(model_name)
-        if suffix is OMIT or suffix is None:
-            return None
-        else:
-            return url.rstrip('/?') + suffix if url else ''
-
-
 try:
     # Don't duplicate the definition if openai offers it
-    from openai._types import NOT_GIVEN, NotGiven, Omit, OMIT
+    from openai._types import NOT_GIVEN, NotGiven
 except ImportError:
     class NotGiven:
 
@@ -134,12 +90,6 @@ except ImportError:
             return False
 
     NOT_GIVEN = NotGiven()
-    class Omit:
-
-        def __bool__(self) -> Literal[False]:
-            return False
-
-    OMIT = Omit()
 
 
 def if_set(value, alternative=NOT_GIVEN):

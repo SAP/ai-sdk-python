@@ -12,3 +12,6 @@ tenantTests:
 testsuite:
   testWorkerEnabledTenant: false
   customTestTenantEnabled: false
+
+sovereignCloud:
+  fipsMode: false

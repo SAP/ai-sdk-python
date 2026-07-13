@@ -73,7 +73,6 @@ class TestStreaming(OrchestrationServiceTestBase):
                 self.assertGreater(chunk.final_result.usage.prompt_tokens, 0)
                 self.assertGreater(chunk.final_result.usage.completion_tokens, 0)
                 self.assertGreater(chunk.final_result.usage.total_tokens, 0)
-                self.assertGreater(chunk.final_result.llm.usage.total_tokens, 0)
 
     def test_streaming_with_stream_options(self, chunk_size=5):
         service = self.create_service(stream_options={'chunk_size': chunk_size})

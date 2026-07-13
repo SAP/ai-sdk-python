@@ -18,7 +18,7 @@ from pydantic import BaseModel, PrivateAttr, model_validator, Field, ConfigDict,
 
 from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
 from gen_ai_hub.proxy.core.proxy_clients import proxy_clients
-from gen_ai_hub.proxy.core.utils import PredictionURLs, OMIT, warn_once
+from gen_ai_hub.proxy.core.utils import warn_once
 
 _temporary_headers_addition = ContextVar('temporary_headers_addition', default={})
 
@@ -125,9 +125,6 @@ class Deployment(BaseDeployment):
     additonal_parameters: Dict[str, str] = Field(default_factory=dict)
     custom_prediction_suffix: Optional[str] = None
 
-    # class variables
-    prediction_urls: ClassVar[PredictionURLs] = PredictionURLs()
-
     def __getattr__(self, name):
         """Get attribute from additional parameters if not found in the Deployment instance.
 
@@ -161,72 +158,9 @@ class Deployment(BaseDeployment):
 
     @property
     def prediction_url(self):
-        return self.prediction_urls(self.model_name, self.url, self.custom_prediction_suffix)
-
-
-# 'OMIT' is a special value that will lead to deployment.prediction_url being None. This is useful to indicate to use
-# the .url attribute of the deployment instead and let the llm client handle the suffix
-AMAZON_CHAT_COMPLETION = OMIT
-AMAZON_EMBEDDING = OMIT
-OPEN_AI_CHAT_COMPLETION = OMIT
-OPEN_AI_EMBEDDING = OMIT
-OPENSOURCE_COMPLETION = OMIT
-GOOGLE_GENAI = OMIT
-GOOGLE_GEMINI_EMBEDDING = OMIT
-COHERE_CHAT = "/chat"
-
-Deployment.prediction_urls.register(
-    {
-        "amazon--titan-embed-image": AMAZON_EMBEDDING,
-        "amazon--titan-embed-text": AMAZON_EMBEDDING,
-        "amazon--nova-micro": AMAZON_CHAT_COMPLETION,
-        "amazon--nova-lite": AMAZON_CHAT_COMPLETION,
-        "amazon--nova-pro": AMAZON_CHAT_COMPLETION,
-        "amazon--nova-premier": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-3-haiku": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4.5-haiku": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4-opus": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-3.5-sonnet": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-3.7-sonnet": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4-sonnet": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4.5-sonnet": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4.6-sonnet": AMAZON_CHAT_COMPLETION,
-        "anthropic--claude-4.6-opus": AMAZON_CHAT_COMPLETION,
-        "gpt-4o": OPEN_AI_CHAT_COMPLETION,
-        "gpt-4o-mini": OPEN_AI_CHAT_COMPLETION,
-        "gpt-4.1": OPEN_AI_CHAT_COMPLETION,
-        "gpt-4.1-mini": OPEN_AI_CHAT_COMPLETION,
-        "gpt-4.1-nano": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5-mini": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5-nano": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5.2": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5.3-codex": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5.4": OPEN_AI_CHAT_COMPLETION,
-        "gpt-5.4-nano": OPEN_AI_CHAT_COMPLETION,
-        "o1": OPEN_AI_CHAT_COMPLETION,
-        "o3": OPEN_AI_CHAT_COMPLETION,
-        "o3-mini": OPEN_AI_CHAT_COMPLETION,
-        "o4-mini": OPEN_AI_CHAT_COMPLETION,
-        "mistralai--mistral-medium-instruct": OPEN_AI_CHAT_COMPLETION,
-        "mistralai--mistral-large-instruct": OPEN_AI_CHAT_COMPLETION,
-        "nvidia--llama-3.2-nv-embedqa-1b": OPEN_AI_EMBEDDING,
-        "text-embedding-3-small": OPEN_AI_EMBEDDING,
-        "text-embedding-3-large": OPEN_AI_EMBEDDING,
-        "text-embedding-ada-002": OPEN_AI_EMBEDDING,
-        "gemini-2.0-flash": GOOGLE_GENAI,
-        "gemini-2.0-flash-lite": GOOGLE_GENAI,
-        "gemini-2.5-flash": GOOGLE_GENAI,
-        "gemini-2.5-flash-lite": GOOGLE_GENAI,
-        "gemini-2.5-pro": GOOGLE_GENAI,
-        "gemini-embedding": GOOGLE_GEMINI_EMBEDDING,
-        "sonar": OPEN_AI_CHAT_COMPLETION,
-        "sonar-pro": OPEN_AI_CHAT_COMPLETION,
-        "sonar-deep-research": OPEN_AI_CHAT_COMPLETION,
-        "cohere--command-a-reasoning": COHERE_CHAT,
-        "cohere--reranker": COHERE_CHAT,
-    }
-)
+        if self.model_name.startswith("cohere"):
+            return self.url.rstrip('/?') + '/chat' if self.url else ''
+        return None
 
 
 class FoundationalModelScenario(BaseModel):

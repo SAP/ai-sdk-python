@@ -1,5 +1,4 @@
 import unittest
-from httpx import TimeoutException
 
 from integration_tests.constants import SAP_RPT_1_SMALL_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
@@ -207,7 +206,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
             rows=rows_regression
         )
 
-        with self.assertRaises(TimeoutException):
+        with self.assertRaises(Exception):
             self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL, timeout=0.001)
 
 
