@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sap-ai-sdk-gen"
-version = "7.0.0"
+version = "7.1.1"
 description = "SAP Cloud SDK for AI (Python): generative AI SDK"
 readme = "PYPIDESCRIPTION.md"
 license = "Apache-2.0"

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sap-ai-sdk-core"
-version = "3.3.0"
+version = "3.3.1"
 description = "SAP Cloud SDK for AI (Python): Core SDK"
 readme = "PYPIDESCRIPTION.md"
 license = "Apache-2.0"
