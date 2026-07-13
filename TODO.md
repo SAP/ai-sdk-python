@@ -1,9 +1,9 @@
-- [ ] remove all "requires more effort to fix" from zizmor
+- [x] remove all "requires more effort to fix" from zizmor
+- [x] make repo compliant
 - [ ] setup trusted publishing with PyPI
 - [ ] replace Artifactory tokens with ones from the team
-- [x] make repo compliant
-- [ ] update status checks in branch protection rules
 - [ ] ensure tear down always runs
+- [ ] update status checks in branch protection rules
 - [ ] add `__repr__` function after code is freshly moved + `_NamedPartial` + `NoDefault`
 
 ```py
