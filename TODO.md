@@ -22,3 +22,4 @@ after os-migration PR is merged:
 
 - [ ] create initial version tags (and delete old incorrect ones)
 - [ ] use setup action from main not os-migration
+- [ ] update gen version + release notes after internal version is published
