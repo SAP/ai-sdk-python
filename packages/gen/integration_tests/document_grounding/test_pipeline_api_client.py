@@ -19,8 +19,10 @@ from gen_ai_hub.document_grounding.models.pipeline import (
     GetPipelineExecutionsResponse,
 )
 from gen_ai_hub.proxy import get_proxy_client
+from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
+@retry_on_429_or_503_class()
 class TestPipelinesAPIIntegration(unittest.TestCase):
     """
     Test the document-grounding API: pipelines section

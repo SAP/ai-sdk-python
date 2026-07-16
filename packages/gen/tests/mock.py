@@ -660,8 +660,31 @@ def ai_core_ai_api_mocker(auth_url, base_url):
                    json=GET_ORCHESTRATION_COMPLETION_RESPONSE)
         mocker.get(f'{base_url.rstrip("/")}/inference/deployments/d7f9c215310f5a11/v2/completion',
                    json=GET_ORCHESTRATION_V2_COMPLETION_RESPONSE)
+        mocker.post(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches',
+                    json=BATCH_CREATE_RESPONSE)
+        mocker.get(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches',
+                   json=BATCH_LIST_RESPONSE)
+        mocker.get(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID}',
+                   json=BATCH_DETAIL_RESPONSE)
+        mocker.get(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID_2}',
+                   json=BATCH_DETAIL_RESPONSE)
+        mocker.delete(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID}',
+                   json=BATCH_DELETE_RESPONSE)
+        mocker.delete(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID_2}',
+                      json=BATCH_DELETE_RESPONSE)
+        mocker.get(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID}/status',
+                   json=BATCH_STATUS_RESPONSE)
+        mocker.get(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID_2}/status',
+                   json=BATCH_STATUS_RESPONSE)
+        mocker.patch(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID}/cancel',
+                   json=BATCH_CANCEL_RESPONSE)
+        mocker.patch(f'{base_url.rstrip("/")}/llm-batch-service/v1/batches/{BATCH_ID_2}/cancel',
+                     json=BATCH_CANCEL_RESPONSE)
         yield
 
+
+MOCK_BASE_URL = 'https://base_url/v2'
+MOCK_AUTH_URL = 'https://auth_url/oauth/token'
 
 def get_mocked_ai_core_client(client_id='XXX'):
     from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient
@@ -671,8 +694,8 @@ def get_mocked_ai_core_client(client_id='XXX'):
         kwargs = dict(
             client_id=client_id,
             client_secret='YYY',
-            auth_url='https://auth_url/oauth/token',
-            base_url='https://base_url/v2',
+            auth_url=MOCK_AUTH_URL,
+            base_url=MOCK_BASE_URL,
         )
         proxy_client: GenAIHubProxyClient = get_proxy_client(**kwargs)
         with ai_core_ai_api_mocker(auth_url=kwargs['auth_url'], base_url=kwargs['base_url']):
@@ -2163,3 +2186,177 @@ class AsyncIteratorWrapper:
 
     def __aiter__(self):
         return self.async_generator
+
+
+# ---------------------------------------------------------------------------
+# Batch service mock data and helpers
+# ---------------------------------------------------------------------------
+
+BATCH_ID = "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+BATCH_ID_2 = "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+BATCHES_URL = f"{MOCK_BASE_URL}/llm-batch-service/v1/batches"
+
+BATCH_CREATE_RESPONSE = {
+    "id": BATCH_ID,
+    "created_at": "2026-04-30T10:00:00Z",
+    "status": "PENDING",
+    "message": "Batch job scheduled",
+}
+
+BATCH_LIST_RESPONSE = {
+    "count": 2,
+    "resources": [
+        {
+            "id": BATCH_ID,
+            "type": "llm-native",
+            "provider": "azure-openai",
+            "created_at": "2026-04-30T10:00:00Z",
+            "status": "COMPLETED",
+        },
+        {
+            "id": BATCH_ID_2,
+            "type": "llm-native",
+            "provider": "azure-openai",
+            "created_at": "2026-04-30T11:00:00Z",
+            "status": "RUNNING",
+        },
+    ],
+}
+
+BATCH_DETAIL_RESPONSE = {
+    "id": BATCH_ID,
+    "type": "llm-native",
+    "provider": "azure-openai",
+    "created_at": "2026-04-30T10:00:00Z",
+    "input": {"uri": "ai://my-store/input/batch-input.jsonl"},
+    "output": {"uri": "ai://my-store/output/"},
+    "spec": {"model": "gpt-4.1-mini"},
+    "status": {
+        "current_status": "COMPLETED",
+        "target_status": "COMPLETED",
+        "updated_at": "2026-04-30T12:00:00Z",
+        "message": None,
+    },
+}
+
+BATCH_STATUS_RESPONSE = {
+    "current_status": "RUNNING",
+    "target_status": "COMPLETED",
+    "updated_at": "2026-04-30T11:30:00Z",
+    "message": None,
+}
+
+BATCH_CANCEL_RESPONSE = {
+    "id": BATCH_ID,
+    "created_at": "2026-04-30T10:00:00Z",
+    "message": "Batch job scheduled for cancellation",
+}
+
+BATCH_DELETE_RESPONSE = {
+    "id": BATCH_ID,
+    "created_at": "2026-04-30T10:00:00Z",
+    "message": "Batch job deleted successfully",
+}
+
+BATCH_ERROR_RESPONSE = {
+    "request_id": "d4a67ea1-2bf9-4df7-8105-d48203ccff76",
+    "message": "Batch job not found",
+}
+
+
+@contextmanager
+def batch_create_mocker():
+    with respx.mock:
+        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_list_mocker():
+    with respx.mock:
+        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_get_mocker(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_status_mocker(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_cancel_mocker(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_delete_mocker(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_not_found_mocker(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(404, json=BATCH_ERROR_RESPONSE))
+        yield
+
+
+@contextmanager
+def batch_create_error_mocker():
+    with respx.mock:
+        respx.post(BATCHES_URL).mock(return_value=Response(400, json=BATCH_ERROR_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_create_mocker_async():
+    with respx.mock:
+        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_list_mocker_async():
+    with respx.mock:
+        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_get_mocker_async(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_status_mocker_async(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_cancel_mocker_async(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+        yield
+
+
+@asynccontextmanager
+async def batch_delete_mocker_async(batch_id: str = BATCH_ID):
+    with respx.mock:
+        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+        yield

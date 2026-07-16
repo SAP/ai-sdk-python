@@ -38,11 +38,12 @@ def retry_on_429_or_503(max_retries: int = 3, initial_delay: float = 2.0, backof
                     # Check if it's a retryable error
                     is_rate_limit = '429' in str(e) or 'too many requests' in error_message
                     is_service_unavailable = '503' in str(e) or 'service unavailable' in error_message
+                    is_gateway_timeout = '504' in str(e) or 'gateway' in error_message
 
                     if is_rate_limit:
                         was_rate_limited = True
 
-                    if not (is_rate_limit or is_service_unavailable):
+                    if not (is_rate_limit or is_service_unavailable or is_gateway_timeout):
                         # Not a retryable error, raise immediately
                         raise
 

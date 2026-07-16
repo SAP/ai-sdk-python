@@ -21,8 +21,10 @@ from gen_ai_hub.document_grounding.models.vector import (
     VectorSearchConfiguration,
     VectorSearchDocumentKeyValueListPair,
 )
+from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
+@retry_on_429_or_503_class()
 class TestVectorAPIIntegration(unittest.TestCase):
     """
     Integration test suite for the Vector API.

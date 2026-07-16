@@ -30,8 +30,10 @@ from gen_ai_hub.document_grounding.models.vector import (
     DocumentsCreateRequest,
 )
 from gen_ai_hub.proxy import get_proxy_client
+from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
+@retry_on_429_or_503_class()
 class TestRetrievalAPIIntegration(unittest.TestCase):
     """
     Integration test suite for the Retrieval API.
