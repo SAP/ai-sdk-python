@@ -18,7 +18,7 @@ inputs:
     default: '3.13'
   index-username:
     description: 'Username for the PyPI index'
-    default: ''
+    default: '__token__'
   index-token:
     description: 'Auth token for the PyPI index'
     default: ''

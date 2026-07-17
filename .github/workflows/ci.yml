@@ -21,7 +21,6 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run pylint
@@ -54,7 +53,6 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           python-version: ${{ matrix.python-version }}
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run unit tests with coverage
@@ -79,7 +77,6 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run base integration tests
@@ -115,7 +112,6 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run core integration tests
@@ -156,7 +152,6 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run gen integration tests

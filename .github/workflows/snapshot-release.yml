@@ -15,14 +15,12 @@ jobs:
       id-token: write
       contents: read
     env:
-      UV_INDEX_ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-      UV_INDEX_ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_TOKEN }}
+      UV_INDEX_ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
 
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           fetch-depth: 0
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Bump versions

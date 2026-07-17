@@ -3,8 +3,7 @@ registries:
   sap-artifactory:
     type: python-index
     url: https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/
-    username: ${{secrets.DBOT_ARTIFACTORY_USERNAME}}
-    password: ${{secrets.DBOT_ARTIFACTORY_TOKEN}}
+    token: ${{secrets.ARTIFACTORY_TOKEN}}
     replaces-base: true
 updates:
   - package-ecosystem: uv
@@ -18,6 +17,8 @@ updates:
     cooldown:
       default-days: 5
     open-pull-requests-limit: 10
+    commit-message:
+      prefix: 'chore(deps)'
 
   - package-ecosystem: github-actions
     target-branch: 'main'
@@ -27,3 +28,5 @@ updates:
       time: '22:00'
     cooldown:
       default-days: 5
+    commit-message:
+      prefix: 'chore(deps)'

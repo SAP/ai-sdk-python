@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    if: github.event.pull_request.head.repo.fork == false
+    if: github.event.pull_request.head.repo.fork == false && github.event.pull_request.user.login != 'dependabot[bot]'
 
     steps:
       - name: Generate GitHub App token
@@ -26,7 +26,6 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
           ref: ${{ github.head_ref }}
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Configure git
