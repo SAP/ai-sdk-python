@@ -12,7 +12,7 @@ jobs:
   teardown:
     runs-on: ubuntu-latest
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+      - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
           index-token: ${{ secrets.ARTIFACTORY_TOKEN }}

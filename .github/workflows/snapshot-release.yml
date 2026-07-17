@@ -19,7 +19,7 @@ jobs:
       UV_INDEX_ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_TOKEN }}
 
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+      - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           fetch-depth: 0
           index-username: ${{ secrets.ARTIFACTORY_USERNAME }}

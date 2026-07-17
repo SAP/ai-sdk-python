@@ -21,7 +21,7 @@ jobs:
           permission-contents: write
 
       - name: Setup
-        uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
