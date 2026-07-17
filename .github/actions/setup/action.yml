@@ -1,6 +1,7 @@
 name: setup
 description: Checkout repo, set up Python and uv, and install dependencies.
 inputs:
+
   token:
     description: 'GitHub token for checkout (defaults to GITHUB_TOKEN)'
     default: ${{ github.token }}
