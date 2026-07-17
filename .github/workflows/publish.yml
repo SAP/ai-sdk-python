@@ -8,6 +8,7 @@ jobs:
   sync-changelog:
     name: Write release notes back to RELEASE_NOTES.md
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Generate GitHub App token
         id: app-token

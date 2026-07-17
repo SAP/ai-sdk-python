@@ -15,6 +15,7 @@ on:
 jobs:
   bump:
     runs-on: ubuntu-latest
+    permissions: {}
     steps:
       - name: Generate GitHub App token
         id: app-token
