@@ -1,0 +1,60 @@
+name: setup
+description: Checkout repo, set up Python and uv, and install dependencies.
+inputs:
+  token:
+    description: 'GitHub token for checkout (defaults to GITHUB_TOKEN)'
+    default: ${{ github.token }}
+  persist-credentials:
+    description: 'Whether to persist the token in git config after checkout'
+    default: 'false'
+  ref:
+    description: 'Git ref to checkout'
+    default: ''
+  fetch-depth:
+    description: 'Number of commits to fetch (0 = full history)'
+    default: '1'
+  python-version:
+    description: 'Python version'
+    default: '3.13'
+  index-username:
+    description: 'Username for the PyPI index'
+    default: ''
+  index-token:
+    description: 'Auth token for the PyPI index'
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        token: ${{ inputs.token }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+        ref: ${{ inputs.ref }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 #v8.2.0
+    - name: Install dependencies
+      shell: bash
+      env:
+        INDEX_USERNAME: ${{ inputs.index-username }}
+        INDEX_TOKEN: ${{ inputs.index-token }}
+        IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
+      run: |
+        if [[ "$IS_FORK" == "true" ]]; then
+          echo "Fork detected — syncing from PyPI without lockfile"
+          UV_INDEX_URL="https://pypi.org/simple/" \
+            uv sync --all-packages --all-extras
+        else
+          echo "Syncing from Artifactory with lockfile"
+          UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
+          UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
+            uv sync --all-packages --all-extras --locked
+        fi

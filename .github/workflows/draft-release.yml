@@ -1,0 +1,45 @@
+name: draft-release
+
+on:
+  push:
+    tags:
+      - 'base-v*'
+      - 'core-v*'
+      - 'gen-v*'
+
+jobs:
+  draft-github-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Get version from tag
+        id: get-version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PACKAGE="${TAG%%-v*}"
+          VERSION="${TAG#${PACKAGE}-v}"
+          echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog
+        id: get-changelog
+        run: |
+          CHANGELOG=$(python3 .github/scripts/extract_changelog.py "${{ steps.get-version.outputs.package }}" "${{ steps.get-version.outputs.version }}")
+          echo "changelog<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CHANGELOG" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Create Draft Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHANGELOG: ${{ steps.get-changelog.outputs.changelog }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --verify-tag \
+            --notes "$CHANGELOG" \
+            --draft

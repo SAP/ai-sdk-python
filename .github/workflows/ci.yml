@@ -1,0 +1,176 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request: ~
+  workflow_dispatch: ~
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # reenable once teardown is implemented
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run pylint
+        run: |
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub \
+            --errors-only \
+            --output-format=json \
+
+      - name: Check dependency licenses
+        run: uv run pip-licenses
+
+  unit-tests:
+    name: 'unit tests (${{ matrix.package.name }}, ${{ matrix.python-version }})'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.13', '3.14']
+        package:
+          - name: base
+            path: packages/base/tests
+            source: packages/base/ai_api_client_sdk
+          - name: core
+            path: packages/core/tests
+            source: packages/core/ai_core_sdk
+          - name: gen
+            path: packages/gen/tests
+            source: packages/gen/gen_ai_hub
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          python-version: ${{ matrix.python-version }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run unit tests with coverage
+        id: run-tests
+        run: |
+          uv run pytest ${{ matrix.package.path }} \
+            --cov=${{ matrix.package.source }} \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings
+
+      - name: Summarize coverage
+        if: matrix.python-version == '3.13'
+        run: uv run coverage report --format=markdown >> $GITHUB_STEP_SUMMARY
+
+  integration-tests-base:
+    name: 'integration tests (base)'
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run base integration tests
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          XSUAA_AUTH_URL: ${{ secrets.XSUAA_AUTH_URL }}
+          XSUAA_CLIENT_ID: ${{ secrets.XSUAA_CLIENT_ID }}
+          XSUAA_CLIENT_SECRET: ${{ secrets.XSUAA_CLIENT_SECRET }}
+          XSUAA_X509_CERT_URL: ${{ secrets.XSUAA_X509_CERT_URL }}
+          XSUAA_X509_CERT: ${{ secrets.XSUAA_X509_CERT }}
+          XSUAA_X509_KEY: ${{ secrets.XSUAA_X509_KEY }}
+          CLUSTER_BASE_URL: ${{ secrets.CLUSTER_BASE_URL }}
+          TEST_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+          OSS_KEY: ${{ secrets.OSS_KEY }}
+          OSS_SECRET: ${{ secrets.OSS_SECRET }}
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_REGION: ${{ secrets.OSS_REGION }}
+        run: |
+          uv run pytest packages/base/integration_tests \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            -m "not bedrock"
+
+  integration-tests-core:
+    name: 'integration tests (core)'
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run core integration tests
+        env:
+          AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
+          AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
+          AICORE_AUTH_URL: ${{ secrets.AICORE_AUTH_URL }}
+          AICORE_CLIENT_ID: ${{ secrets.AICORE_CLIENT_ID }}
+          AICORE_CLIENT_SECRET: ${{ secrets.AICORE_CLIENT_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          XSUAA_AUTH_URL: ${{ secrets.XSUAA_AUTH_URL }}
+          XSUAA_CLIENT_ID: ${{ secrets.XSUAA_CLIENT_ID }}
+          XSUAA_CLIENT_SECRET: ${{ secrets.XSUAA_CLIENT_SECRET }}
+          XSUAA_X509_CERT_URL: ${{ secrets.XSUAA_X509_CERT_URL }}
+          XSUAA_X509_CERT: ${{ secrets.XSUAA_X509_CERT }}
+          XSUAA_X509_KEY: ${{ secrets.XSUAA_X509_KEY }}
+          CLUSTER_BASE_URL: ${{ secrets.CLUSTER_BASE_URL }}
+          TEST_TENANT_ID: ${{ secrets.TEST_TENANT_ID }}
+          OSS_KEY: ${{ secrets.OSS_KEY }}
+          OSS_SECRET: ${{ secrets.OSS_SECRET }}
+          OSS_BUCKET: ${{ secrets.OSS_BUCKET }}
+          OSS_ENDPOINT: ${{ secrets.OSS_ENDPOINT }}
+          OSS_REGION: ${{ secrets.OSS_REGION }}
+        run: |
+          uv run pytest packages/core/integration_tests \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            -m "not bedrock"
+
+  integration-tests-gen:
+    name: 'integration tests (gen)'
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Run gen integration tests
+        env:
+          AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
+          AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
+          AICORE_AUTH_URL: ${{ secrets.AICORE_AUTH_URL }}
+          AICORE_CLIENT_ID: ${{ secrets.AICORE_CLIENT_ID }}
+          AICORE_CLIENT_SECRET: ${{ secrets.AICORE_CLIENT_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          uv run pytest packages/gen/integration_tests \
+            --verbosity=2 \
+            -ra \
+            --disable-warnings \
+            -m "not bedrock"

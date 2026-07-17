@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module ai_api_client_sdk.resource_clients.meta_client</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="ai_api_client_sdk.html" class="white">ai_api_client_sdk</a>.<a href="ai_api_client_sdk.resource_clients.html" class="white">resource_clients</a>.meta_client</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/resource_clients/meta_client.py">/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/resource_clients/meta_client.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.resource_clients.meta_client.html#MetaClient">MetaClient</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="MetaClient">class <strong>MetaClient</strong></a>(<a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#MetaClient">MetaClient</a>(rest_client:&nbsp;ai_api_client_sdk.helpers.rest_client.RestClient)<br>
+&nbsp;<br>
+<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="ai_api_client_sdk.resource_clients.meta_client.html#MetaClient">MetaClient</a></dd>
+<dd><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="MetaClient-get"><strong>get</strong></a>(self) -&gt; ai_api_client_sdk.models.capabilities.Capabilities</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-get_versions"><strong>get_versions</strong></a>(self) -&gt; ai_api_client_sdk.models.version_list.VersionList</dt></dl>
+
+<hr>
+Methods inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><a name="MetaClient-__init__"><strong>__init__</strong></a>(self, rest_client: ai_api_client_sdk.helpers.rest_client.RestClient)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="MetaClient-bulk_modify"><strong>bulk_modify</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Modifies&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-count"><strong>count</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Counts&nbsp;the&nbsp;relevant&nbsp;resources.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-create"><strong>create</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Creates&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-delete"><strong>delete</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Deletes&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-modify"><strong>modify</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Modifies&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-query"><strong>query</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Queries&nbsp;the&nbsp;relevant&nbsp;resources.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="MetaClient-query_logs"><strong>query_logs</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Queries&nbsp;the&nbsp;relevant&nbsp;logs.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

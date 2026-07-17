@@ -1,0 +1,21 @@
+name: teardown-integration-env
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch: ~
+
+permissions:
+  contents: read
+
+jobs:
+  teardown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: SAP/ai-sdk-python/.github/actions/setup@os-migration
+        with:
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Tear down integration test environment
+        run: bash scripts/teardown-integration-env.sh

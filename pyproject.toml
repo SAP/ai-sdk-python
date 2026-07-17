@@ -1,0 +1,39 @@
+[project]
+name = "ai-sdk-python"
+version = "0.0.0"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+
+[dependency-groups]
+dev = ["pip-licenses>=5.5.5", "commitizen>=4"]
+
+[[tool.uv.index]]
+name = "artifactory"
+url = "https://common.repositories.cloud.sap/artifactory/api/pypi/pypi-proxy/simple/"
+default = true
+
+# currently not working
+# [[tool.uv.index]]
+# name = "artifactory-int"
+# publish-url = "https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi"
+# url = "https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi/simple"
+
+[tool.uv.sources]
+sap-ai-sdk-base = { workspace = true }
+sap-ai-sdk-core = { workspace = true }
+sap-ai-sdk-gen = { workspace = true }
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.pip-licenses]
+# Blue Oak Council Bronze+ permissive licenses (https://blueoakcouncil.org/list)
+# --partial-match is enabled, so each entry matches as a substring of the reported license string
+allow-only = "Apache;MIT;BSD;ISC;Python Software Foundation;PSF;MPL-2.0;Mozilla Public License 2.0;CC0-1.0;Zlib;0BSD;CNRI-Python;Unlicense;Public Domain"
+partial-match = true
+ignore-packages = ["pylint", "astroid"]
+
+[tool.pytest]
+markers = [
+    "bedrock: mark a test as a bedrock test running in a different environment",
+]

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module ai_core_sdk.resource_clients.repositories_client</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="ai_core_sdk.html" class="white">ai_core_sdk</a>.<a href="ai_core_sdk.resource_clients.html" class="white">resource_clients</a>.repositories_client</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/home/runner/work/ai-sdk-python/ai-sdk-python/packages/core/ai_core_sdk/resource_clients/repositories_client.py">/home/runner/work/ai-sdk-python/ai-sdk-python/packages/core/ai_core_sdk/resource_clients/repositories_client.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="ai_core_sdk.resource_clients.repositories_client.html#RepositoriesClient">RepositoriesClient</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="RepositoriesClient">class <strong>RepositoriesClient</strong></a>(<a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#RepositoriesClient">RepositoriesClient</a>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;rest_client:&nbsp;ai_api_client_sdk.helpers.rest_client.RestClient<br>
+)<br>
+&nbsp;<br>
+<a href="#RepositoriesClient">RepositoriesClient</a>&nbsp;is&nbsp;a&nbsp;class&nbsp;implemented&nbsp;for&nbsp;interacting&nbsp;with&nbsp;the&nbsp;repositories&nbsp;related<br>
+endpoints&nbsp;of&nbsp;the&nbsp;server.&nbsp;It&nbsp;implements&nbsp;the&nbsp;base&nbsp;class<br>
+:class:`ai_api_client_sdk.resource_clients.base_client.<a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">BaseClient</a>`<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="ai_core_sdk.resource_clients.repositories_client.html#RepositoriesClient">RepositoriesClient</a></dd>
+<dd><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="RepositoriesClient-create"><strong>create</strong></a>(self, name: str, url: str, username: str, password: str) -&gt; ai_core_sdk.models.base_models.Message</dt><dd><span class="code">On-boards&nbsp;a&nbsp;new&nbsp;GitOps&nbsp;repository<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;name&nbsp;of&nbsp;the&nbsp;GitOps&nbsp;repository<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;url:&nbsp;url&nbsp;of&nbsp;the&nbsp;GitOps&nbsp;repository<br>
+:type&nbsp;url:&nbsp;str<br>
+:param&nbsp;username:&nbsp;username&nbsp;to&nbsp;the&nbsp;GitOps&nbsp;repository<br>
+:type&nbsp;username:&nbsp;str<br>
+:param&nbsp;password:&nbsp;password&nbsp;to&nbsp;the&nbsp;GitOps&nbsp;repository<br>
+:type&nbsp;password:&nbsp;str<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException`&nbsp;if&nbsp;a&nbsp;400&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIAuthorizationException`&nbsp;if&nbsp;a&nbsp;401&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIServerException`&nbsp;if&nbsp;a&nbsp;non-2XX&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:return:&nbsp;An&nbsp;object&nbsp;representing&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;server<br>
+:rtype:&nbsp;class:`ai_core_sdk.models.base_models.BasicNameResponse`</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-delete"><strong>delete</strong></a>(self, name: str) -&gt; ai_api_client_sdk.models.base_models.BasicResponse</dt><dd><span class="code">Off-boards&nbsp;a&nbsp;GitOps&nbsp;repository.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;name&nbsp;of&nbsp;the&nbsp;repository&nbsp;to&nbsp;be&nbsp;deleted<br>
+:type&nbsp;name:&nbsp;str<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException`&nbsp;if&nbsp;a&nbsp;400&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIAuthorizationException`&nbsp;if&nbsp;a&nbsp;401&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPINotFoundException`&nbsp;if&nbsp;a&nbsp;404&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIPreconditionFailedException`&nbsp;if&nbsp;a&nbsp;412&nbsp;response&nbsp;is&nbsp;received&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIServerException`&nbsp;if&nbsp;a&nbsp;non-2XX&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:return:&nbsp;An&nbsp;object&nbsp;representing&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;server<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.base_models.BasicResponse`</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-get"><strong>get</strong></a>(self, name: str) -&gt; ai_core_sdk.models.repository.Repository</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;access&nbsp;details&nbsp;for&nbsp;a&nbsp;repository&nbsp;if&nbsp;it&nbsp;exists.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;name&nbsp;of&nbsp;the&nbsp;repository&nbsp;to&nbsp;be&nbsp;retrieved<br>
+:type&nbsp;name:&nbsp;str<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException`&nbsp;if&nbsp;a&nbsp;400&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIAuthorizationException`&nbsp;if&nbsp;a&nbsp;401&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPINotFoundException`&nbsp;if&nbsp;a&nbsp;404&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIServerException`&nbsp;if&nbsp;a&nbsp;non-2XX&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:return:&nbsp;The&nbsp;access&nbsp;details&nbsp;for&nbsp;a&nbsp;repository<br>
+:rtype:&nbsp;class:`ai_core_client_sdk.models.docker_registry_secret.DockerRegistrySecret`</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-modify"><strong>modify</strong></a>(self, name: str, username: str, password: str) -&gt; ai_api_client_sdk.models.base_models.BasicResponse</dt><dd><span class="code">Updates&nbsp;the&nbsp;referenced&nbsp;repository&nbsp;credentials&nbsp;to&nbsp;synchronize&nbsp;repository.<br>
+&nbsp;<br>
+:param&nbsp;name:&nbsp;name&nbsp;of&nbsp;the&nbsp;repository&nbsp;to&nbsp;be&nbsp;modified<br>
+:type&nbsp;name:&nbsp;str<br>
+:param&nbsp;username:&nbsp;username&nbsp;to&nbsp;the&nbsp;repository<br>
+:type&nbsp;username:&nbsp;str<br>
+:param&nbsp;password:&nbsp;password&nbsp;to&nbsp;the&nbsp;repository<br>
+:type&nbsp;password:&nbsp;str<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException`&nbsp;if&nbsp;a&nbsp;400&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIAuthorizationException`&nbsp;if&nbsp;a&nbsp;401&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPINotFoundException`&nbsp;if&nbsp;a&nbsp;404&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIPreconditionFailedException`&nbsp;if&nbsp;a&nbsp;412&nbsp;response&nbsp;is&nbsp;received&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;server<br>
+:return:&nbsp;An&nbsp;object&nbsp;representing&nbsp;the&nbsp;response&nbsp;from&nbsp;the&nbsp;server<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.base_models.BasicResponse`</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-query"><strong>query</strong></a>(self) -&gt; ai_core_sdk.models.repository_query_response.RepositoryQueryResponse</dt><dd><span class="code">Retrieves&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;GitOps&nbsp;repositories&nbsp;for&nbsp;a&nbsp;tenant.<br>
+&nbsp;<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException`&nbsp;if&nbsp;a&nbsp;400&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIAuthorizationException`&nbsp;if&nbsp;a&nbsp;401&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIServerException`&nbsp;if&nbsp;a&nbsp;non-2XX&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:return:&nbsp;A&nbsp;list&nbsp;all&nbsp;GitOps&nbsp;repositories&nbsp;for&nbsp;a&nbsp;tenant<br>
+:rtype:&nbsp;class:`ai_core_client_sdk.models.repository_query_response.RepositoryQueryResponse`</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><a name="RepositoriesClient-__init__"><strong>__init__</strong></a>(self, rest_client: ai_api_client_sdk.helpers.rest_client.RestClient)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-bulk_modify"><strong>bulk_modify</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Modifies&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-count"><strong>count</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Counts&nbsp;the&nbsp;relevant&nbsp;resources.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="RepositoriesClient-query_logs"><strong>query_logs</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Queries&nbsp;the&nbsp;relevant&nbsp;logs.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>
