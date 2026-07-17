@@ -3,7 +3,8 @@ registries:
   sap-artifactory:
     type: python-index
     url: https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/
-    token: ${{secrets.ARTIFACTORY_TOKEN}}
+    username: ${{secrets.ARTIFACTORY_USERNAME}}
+    password: ${{secrets.ARTIFACTORY_TOKEN}}
     replaces-base: true
 updates:
   - package-ecosystem: uv
