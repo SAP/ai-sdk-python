@@ -23,6 +23,7 @@ jobs:
         with:
           ref: main
           token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
 
       - name: Get package and version from tag
         id: meta
