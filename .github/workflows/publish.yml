@@ -37,10 +37,12 @@ jobs:
       - name: Update RELEASE_NOTES.md
         env:
           BODY: ${{ github.event.release.body }}
+          PACKAGE: ${{ steps.meta.outputs.package }}
+          VERSION: ${{ steps.meta.outputs.version }}
         run: |
           python3 .github/scripts/update_changelog.py \
-            "${{ steps.meta.outputs.package }}" \
-            "${{ steps.meta.outputs.version }}" \
+            "$PACKAGE" \
+            "$VERSION" \
             "$BODY"
 
       - name: Configure git
@@ -81,8 +83,10 @@ jobs:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Build package
+        env:
+          PACKAGE: ${{ steps.meta.outputs.package }}
         run: |
-          uv build --package sap-ai-sdk-${{ steps.meta.outputs.package }} --out-dir packages/${{ steps.meta.outputs.package }}/dist
+          uv build --package sap-ai-sdk-$PACKAGE --out-dir packages/$PACKAGE/dist
 
       - name: Upload distribution artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
