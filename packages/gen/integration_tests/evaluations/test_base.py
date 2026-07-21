@@ -22,6 +22,7 @@ class EvaluationClientTestBase(unittest.TestCase):
         cls.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
         cls.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         cls.input_object_store_secret_name = "sdk-data"
+        cls.dataset_path = os.path.abspath(os.path.join(os.curdir, 'evaluations', 'eval-data', 'testdata', 'medicalqna_dataset.csv'))
 
     def setUp(self):
         """Set up each test with a fresh evaluation client instance and object store secrets."""
