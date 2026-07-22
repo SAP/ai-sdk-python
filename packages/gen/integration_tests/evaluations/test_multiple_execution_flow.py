@@ -10,7 +10,7 @@ from gen_ai_hub.evaluations.models.dataset_config import Dataset
 from gen_ai_hub.evaluations.models.metric_config import MetricConfig, MetricRef
 from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef, TemplateRefByID
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
-from integration_tests.evaluations.test_base import EvaluationClientTestBase
+from .test_base import EvaluationClientTestBase
 
 
 def get_auth_token(auth_url, client_id, client_secret):
@@ -273,7 +273,7 @@ class TestMultipleExecutionFlow(EvaluationClientTestBase):
                 llm=LLM(name="gpt-4o", version="latest"),
                 template=TemplateRef(template_ref=TemplateRefByID(id=self.prompt_template_id)),
                 template_variable_mapping={"question": "topic"},
-                dataset_config=Dataset("integration_tests/evaluations/eval-data/testdata/medicalqna_dataset.csv"),
+                dataset_config=Dataset(self.dataset_path),
                 metrics=[
                     MetricConfig(
                         reference=MetricRef(id="3ea07c1f-5b10-4b12-bf46-6d429faf8010"),
@@ -285,7 +285,7 @@ class TestMultipleExecutionFlow(EvaluationClientTestBase):
             EvaluationConfig(
                 orchestration_registry_reference=self.orchestration_registry_id,
                 template_variable_mapping={"question": "topic"},
-                dataset_config=Dataset("integration_tests/evaluations/eval-data/testdata/medicalqna_dataset.csv"),
+                dataset_config=Dataset(self.dataset_path),
                 metrics=[
                     MetricConfig(
                         reference=MetricRef(id=self.custom_metric_id),

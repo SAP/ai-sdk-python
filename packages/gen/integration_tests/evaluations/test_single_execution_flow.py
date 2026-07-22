@@ -11,7 +11,7 @@ from gen_ai_hub.prompt_registry.models.prompt_template import (
     PromptTemplate,
 )
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
-from integration_tests.evaluations.test_base import EvaluationClientTestBase
+from .test_base import EvaluationClientTestBase
 
 
 class TestSingleExecutionFlow(EvaluationClientTestBase):
@@ -30,7 +30,7 @@ class TestSingleExecutionFlow(EvaluationClientTestBase):
                 ]
             ),
             template_variable_mapping={"question": "topic"},
-            dataset_config=Dataset("integration_tests/evaluations/eval-data/testdata/medicalqna_dataset.csv"),
+            dataset_config=Dataset(self.dataset_path),
             metrics=[
                 MetricConfig(
                     reference=MetricRef(id="3ea07c1f-5b10-4b12-bf46-6d429faf8010"),

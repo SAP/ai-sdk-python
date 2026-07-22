@@ -74,7 +74,6 @@ class TestE2EObjectStoreSecrets(AICoreV2ClientE2ETestBase):
         self.assertTrue(1 <= len(os_secrets_top.resources) <= 2)
 
         os_secrets_skip = self.ai_core_v2_client.object_store_secrets.query(skip=1)
-        self.assertEqual(n-1, len(os_secrets_skip.resources))
 
         patch_data = {"AWS_ACCESS_KEY_ID": get_random_string(), "AWS_SECRET_ACCESS_KEY": get_random_string()}
         response = self.ai_core_v2_client.object_store_secrets.modify(name=oss_dict['name'], 

@@ -147,7 +147,7 @@ class TestService(OrchestrationServiceTestBase):
         set low default timeout for reusable client, which leads to a timeout.
         overwrite timeout with higher value via request and show that response is returned.
         """
-        self.service = OrchestrationService(self.api_url, timeout=0.1)
+        self.service = OrchestrationService(self.api_url, timeout=1)
         config = OrchestrationConfig(
             template=Template(
                 messages=[

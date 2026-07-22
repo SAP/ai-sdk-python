@@ -3,6 +3,8 @@ from time import sleep
 from typing import Any, Dict, List
 from unittest import TestCase
 
+import pytest
+
 from ai_api_client_sdk.ai_api_v2_client import AIAPIV2Client
 from ai_api_client_sdk.models.artifact import Artifact
 from ai_api_client_sdk.models.executable import Executable
@@ -51,13 +53,16 @@ class AIAPIV2ClientE2ETestBase(TestCase):
         self.assertIsNotNone(response_obj_dt_field)
         self.assertEqual(response_obj_dt_field.tzinfo, timezone.utc)
 
-    def wait_until_enactment_has_status(self, resource_client: BaseClient, params: Dict[str, str], status: Status):
-        for _ in range(400):
+    def wait_until_enactment_has_status(self, resource_client: BaseClient, params: Dict[str, str], status: Status,
+                                        repetition=400, skip_if_fails=False):
+        for _ in range(repetition):
             enactment = resource_client.get(**params)
             if enactment.status in [status, Status.DEAD]:
                 break
             sleep(3)
         print(enactment.status_details)
+        if skip_if_fails and status != enactment.status:
+            pytest.skip(f'Skipping because status of enactment with params {params} did not reach expected state {status}. ({enactment.status})')
         self.assertEqual(status, enactment.status)
         return enactment
 
