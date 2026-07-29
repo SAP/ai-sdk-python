@@ -51,7 +51,7 @@ dependencies = [
 
 [project.optional-dependencies]
 google = ["google-genai~=1.73.1", "langchain-google-genai~=4.2.0"]
-amazon = ["boto3>=1.40.61", "aiobotocore>=3.2.0", "langchain-aws~=1.4.0"]
+amazon = ["boto3>=1.40.61", "aiobotocore>=3.2.0", "langchain-aws~=1.6.3"]
 all = ["sap-ai-sdk-gen[google,amazon]"]
 
 [dependency-groups]
