@@ -528,7 +528,7 @@ GET_CONFIGURATIONS_RESPONSE_ORCHESTRATION_CONFIG_2 = {
 
 GET_CONFIGURATIONS_RESPONSE_CINDERELLA_INSTRUCT = {
     "createdAt": "2023-12-01T14:53:09Z",
-    "executableId": "dox-vllm-serve",
+    "executableId": "test-deployable-serve",
     "id": "cdcf4374-ba3e-4aa3-9f32-86b90ac57506",
     "inputArtifactBindings": [
         {
@@ -536,11 +536,11 @@ GET_CONFIGURATIONS_RESPONSE_CINDERELLA_INSTRUCT = {
             "key": "textmodel"
         }
     ],
-    "name": "dox-llm-cinderella-infer2.l-v0.2.7",
+    "name": "test-inference",
     "parameterBindings": [
         {
             "key": "image",
-            "value": "dl-coe.common.repositories.cloud.sap/dox-vllm:0.0.2"
+            "value": "test-deployable-serve:0.0.2"
         },
         {
             "key": "resourcePlan",
