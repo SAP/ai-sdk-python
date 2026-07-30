@@ -64,10 +64,12 @@ dev = [
     "respx==0.23.1",
     "parameterized==0.9.0",
     "pillow==12.2.0",
+    "pytest-dotenv>=0.5.2",
+]
+docs = [
     "sphinx<9.0.0",
     "myst_nb",
     "sphinxawesome-theme",
-    "pytest-dotenv>=0.5.2",
 ]
 
 [tool.pytest.ini_options]

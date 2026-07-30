@@ -53,10 +53,10 @@ runs:
         if [[ "$IS_FORK" == "true" ]]; then
           echo "Fork detected — syncing from PyPI without lockfile"
           UV_INDEX_URL="https://pypi.org/simple/" \
-            uv sync --all-packages --all-extras
+            uv sync --all-packages --all-extras --no-group docs
         else
           echo "Syncing from Artifactory with lockfile"
           UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
           UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
-            uv sync --all-packages --all-extras --locked
+            uv sync --all-packages --all-extras --locked --no-group docs
         fi
