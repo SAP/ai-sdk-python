@@ -36,6 +36,8 @@ dev = [
     "pylint==4.0.5",
     "pyhamcrest==2.1.0",
     "pytest-dotenv>=0.5.2",
+    "sphinx<9.0.0",
+    "sphinxawesome-theme",
 ]
 
 [tool.pytest.ini_options]

@@ -1,4 +1,5 @@
 # Minimal makefile for Sphinx documentation
+SHELL := /bin/bash
 
 # Define the source files and destination directory
 FILES := ../README_sphynx.md ../RELEASE_NOTES.md ./gen_ai_hub/examples/gen_ai_hub.ipynb \
@@ -29,11 +30,11 @@ copy_files: check_files
 
 # Generate API documentation with depth 1, force overwrite and no module index
 api_doc:
-	sphinx-apidoc -o source/_api_doc ../gen_ai_hub -d 1 -T -f -M
+	python -m sphinx.ext.apidoc -o source/_api_doc ../gen_ai_hub -d 1 -T -f -M
 
 # Build the documentation with Sphinx
 build: copy_files
-	sphinx-build -b html ./source ./build/html
+	python -m sphinx -b html ./source ./build/html
 
 # Open generated documentation in browser
 preview_html: all

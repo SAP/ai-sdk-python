@@ -42,8 +42,7 @@ jobs:
           generate_docs() {
             (
               cd packages/$1/docs
-              rm -f *.html
-              uv run python -m pydoc -w ../ || true
+              uv run make
             )
           }
 
@@ -59,6 +58,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No documentation changes to commit"
           else
-            git commit -m "docs: update pydoc3 documentation [skip ci]"
+            git commit -m "docs: update sphinx documentation [skip ci]"
             git push origin HEAD:"$HEAD_REF"
           fi
