@@ -1,0 +1,12 @@
+{
+  "pythonVersion": "3.11",
+  "venvPath": ".",
+  "venv": ".venv",
+  "extraPaths": [
+    "packages/gen",
+    "packages/core",
+    "packages/base",
+    "sample_code",
+    "packages/gen/gen_ai_hub/proxy/native/rpt_1_5/generated"
+  ]
+}

@@ -6,6 +6,7 @@ license = "Apache-2.0"
 
 [dependency-groups]
 dev = ["pip-licenses>=5.5.5", "commitizen>=4"]
+sample = ["fastapi>=0.115", "uvicorn>=0.30", "python-dotenv>=1.0"]
 
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
