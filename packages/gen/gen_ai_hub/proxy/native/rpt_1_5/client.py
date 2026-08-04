@@ -3,17 +3,17 @@ from __future__ import annotations
 
 from typing import Self
 
-from rpt_1_5_generated.api.default_api import DefaultApi
-from rpt_1_5_generated.api_client import ApiClient
-from rpt_1_5_generated.configuration import Configuration
-from rpt_1_5_generated.models.predict_request_payload import PredictRequestPayload
-from rpt_1_5_generated.models.predict_request_payload_one_of import (
+from generated.api.default_api import DefaultApi
+from generated.api_client import ApiClient
+from generated.configuration import Configuration
+from generated.models.predict_request_payload import PredictRequestPayload
+from generated.models.predict_request_payload_one_of import (
     PredictRequestPayloadOneOf as RowsRequest,
 )
-from rpt_1_5_generated.models.predict_request_payload_one_of1 import (
+from generated.models.predict_request_payload_one_of1 import (
     PredictRequestPayloadOneOf1 as ColumnsRequest,
 )
-from rpt_1_5_generated.rest import RESTClientObject
+from generated.rest import RESTClientObject
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy.native.utils import (

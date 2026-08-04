@@ -10,21 +10,21 @@ them under descriptive names alongside all other public model types.
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from rpt_1_5_generated.models.predict_request_payload_one_of import (
+from generated.models.predict_request_payload_one_of import (
     PredictRequestPayloadOneOf as RowsRequest,
 )
-from rpt_1_5_generated.models.predict_request_payload_one_of1 import (
+from generated.models.predict_request_payload_one_of1 import (
     PredictRequestPayloadOneOf1 as ColumnsRequest,
 )
-from rpt_1_5_generated.models.predict_response_metadata import PredictResponseMetadata
-from rpt_1_5_generated.models.predict_response_payload import PredictResponsePayload
-from rpt_1_5_generated.models.predict_response_status import PredictResponseStatus
-from rpt_1_5_generated.models.prediction_config import PredictionConfig
-from rpt_1_5_generated.models.prediction_placeholder import PredictionPlaceholder
-from rpt_1_5_generated.models.prediction_result import PredictionResult
-from rpt_1_5_generated.models.rows_inner_value import RowsInnerValue
-from rpt_1_5_generated.models.schema_field_config import SchemaFieldConfig
-from rpt_1_5_generated.models.target_column_config import TargetColumnConfig
+from generated.models.predict_response_metadata import PredictResponseMetadata
+from generated.models.predict_response_payload import PredictResponsePayload
+from generated.models.predict_response_status import PredictResponseStatus
+from generated.models.prediction_config import PredictionConfig
+from generated.models.prediction_placeholder import PredictionPlaceholder
+from generated.models.prediction_result import PredictionResult
+from generated.models.rows_inner_value import RowsInnerValue
+from generated.models.schema_field_config import SchemaFieldConfig
+from generated.models.target_column_config import TargetColumnConfig
 
 CellValue = str | float | int | None
 

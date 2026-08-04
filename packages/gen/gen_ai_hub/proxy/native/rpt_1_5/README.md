@@ -11,7 +11,8 @@ packages/gen/
 ├── openapi_specs/
 │   └── sap-rpt-1.5_openapi.json               # vendored spec snapshot
 ├── codegen/
-│   └── rpt_1_5_generate.sh                    # Docker regeneration command
+│   ├── rpt_1_5_generate.sh                    # Docker regeneration command
+│   └── .openapi-generator-ignore              # excludes docs/tests from generator output
 └── gen_ai_hub/proxy/native/
     ├── utils.py                                # shared proxy/auth utilities
     └── rpt_1_5/
@@ -22,7 +23,9 @@ packages/gen/
             ├── api/
             │   └── default_api.py
             ├── models/
-            └── ...
+            ├── api_client.py
+            ├── configuration.py
+            └── rest.py
 ```
 
 ## Usage

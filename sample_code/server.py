@@ -30,7 +30,7 @@ for _pkg in (
     "packages/gen",
     "packages/core",
     "packages/base",
-    "packages/gen/gen_ai_hub/proxy/native/rpt_1_5/generated",
+    "packages/gen/gen_ai_hub/proxy/native/rpt_1_5",
 ):
     _path = os.path.join(_REPO_ROOT, _pkg)
     if _path not in sys.path:

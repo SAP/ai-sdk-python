@@ -30,7 +30,7 @@ markers = [
 
 [tool.pylint.main]
 ignore-paths = ["packages/gen/gen_ai_hub/proxy/native/rpt_1_5/generated"]
-init-hook = "import sys; sys.path.insert(0, 'packages/gen/gen_ai_hub/proxy/native/rpt_1_5/generated'); sys.path.insert(0, 'packages/gen'); sys.path.insert(0, 'packages/core'); sys.path.insert(0, 'packages/base')"
+init-hook = "import sys; sys.path.insert(0, 'packages/gen/gen_ai_hub/proxy/native/rpt_1_5'); sys.path.insert(0, 'packages/gen'); sys.path.insert(0, 'packages/core'); sys.path.insert(0, 'packages/base')"
 extension-pkg-allow-list = ["httpx"]
 
 [tool.pylint.design]
