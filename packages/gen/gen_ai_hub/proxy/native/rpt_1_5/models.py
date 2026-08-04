@@ -7,28 +7,33 @@ which gives users no hint about when to use which.  This module re-exports
 them under descriptive names alongside all other public model types.
 """
 
-from typing import Any, Mapping, Optional, Sequence, Union
+from collections.abc import Mapping, Sequence
+from typing import Any
 
-from rpt_1_5_generated.models.predict_request_payload_one_of import PredictRequestPayloadOneOf as RowsRequest
-from rpt_1_5_generated.models.predict_request_payload_one_of1 import PredictRequestPayloadOneOf1 as ColumnsRequest
-from rpt_1_5_generated.models.prediction_config import PredictionConfig
-from rpt_1_5_generated.models.target_column_config import TargetColumnConfig
-from rpt_1_5_generated.models.prediction_placeholder import PredictionPlaceholder
-from rpt_1_5_generated.models.rows_inner_value import RowsInnerValue
-from rpt_1_5_generated.models.schema_field_config import SchemaFieldConfig
-from rpt_1_5_generated.models.prediction_result import PredictionResult
+from rpt_1_5_generated.models.predict_request_payload_one_of import (
+    PredictRequestPayloadOneOf as RowsRequest,
+)
+from rpt_1_5_generated.models.predict_request_payload_one_of1 import (
+    PredictRequestPayloadOneOf1 as ColumnsRequest,
+)
+from rpt_1_5_generated.models.predict_response_metadata import PredictResponseMetadata
 from rpt_1_5_generated.models.predict_response_payload import PredictResponsePayload
 from rpt_1_5_generated.models.predict_response_status import PredictResponseStatus
-from rpt_1_5_generated.models.predict_response_metadata import PredictResponseMetadata
+from rpt_1_5_generated.models.prediction_config import PredictionConfig
+from rpt_1_5_generated.models.prediction_placeholder import PredictionPlaceholder
+from rpt_1_5_generated.models.prediction_result import PredictionResult
+from rpt_1_5_generated.models.rows_inner_value import RowsInnerValue
+from rpt_1_5_generated.models.schema_field_config import SchemaFieldConfig
+from rpt_1_5_generated.models.target_column_config import TargetColumnConfig
 
-CellValue = Union[str, float, int, None]
+CellValue = str | float | int | None
 
 
 def rows_request(
     prediction_config: PredictionConfig,
     rows: Sequence[Mapping[str, Any]],
-    index_column: Optional[str] = None,
-    parse_data_types: Optional[bool] = True,
+    index_column: str | None = None,
+    parse_data_types: bool | None = True,
 ) -> RowsRequest:
     """Build a :class:`RowsRequest` from plain dicts.
 
@@ -56,8 +61,8 @@ def rows_request(
 def columns_request(
     prediction_config: PredictionConfig,
     columns: dict[str, list[CellValue]],
-    index_column: Optional[str] = None,
-    parse_data_types: Optional[bool] = True,
+    index_column: str | None = None,
+    parse_data_types: bool | None = True,
 ) -> ColumnsRequest:
     """Build a :class:`ColumnsRequest` from plain column lists.
 
@@ -83,19 +88,18 @@ def columns_request(
 
 
 __all__ = [
-    "RowsRequest",
-    "ColumnsRequest",
-    "rows_request",
-    "columns_request",
     "CellValue",
-    "PredictionConfig",
-    "TargetColumnConfig",
-    "PredictionPlaceholder",
-    "RowsInnerValue",
-    "SchemaFieldConfig",
-    "PredictionResult",
+    "ColumnsRequest",
+    "PredictResponseMetadata",
     "PredictResponsePayload",
     "PredictResponseStatus",
-    "PredictResponseMetadata",
+    "PredictionConfig",
+    "PredictionPlaceholder",
+    "PredictionResult",
+    "RowsInnerValue",
+    "RowsRequest",
+    "SchemaFieldConfig",
+    "TargetColumnConfig",
+    "columns_request",
+    "rows_request",
 ]
-

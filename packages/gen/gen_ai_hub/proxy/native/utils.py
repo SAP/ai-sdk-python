@@ -1,13 +1,15 @@
 """Shared utilities for spec-generated native proxy clients."""
-from typing import Any, Optional, Union
+from typing import Any, Union
 
-import httpx
+import httpx  # pylint: disable=import-error
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 
 
-def get_proxy_client_instance(proxy_client: Optional[GenAIHubProxyClient] = None) -> GenAIHubProxyClient:
+def get_proxy_client_instance(
+    proxy_client: GenAIHubProxyClient | None = None,
+) -> GenAIHubProxyClient:
     """Return the provided proxy client, or the process-default one."""
     return proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
 
@@ -15,7 +17,7 @@ def get_proxy_client_instance(proxy_client: Optional[GenAIHubProxyClient] = None
 def resolve_deployment_url(
     proxy_client: GenAIHubProxyClient,
     model_name: str,
-    model_version: Optional[str] = None,
+    model_version: str | None = None,
 ) -> str:
     """Resolve a deployment base URL from model identity via the proxy client."""
     filters = {"model_name": model_name}
@@ -23,8 +25,10 @@ def resolve_deployment_url(
         filters["model_version"] = model_version
     try:
         return proxy_client.select_deployment(**filters).url
-    except ValueError:
-        raise ValueError(f"No deployment found for the given parameters: {filters}.")
+    except ValueError as exc:
+        raise ValueError(
+            f"No deployment found for the given parameters: {filters}."
+        ) from exc
 
 
 def _make_auth_hook(proxy_client: GenAIHubProxyClient):
@@ -36,7 +40,7 @@ def _make_auth_hook(proxy_client: GenAIHubProxyClient):
 
 def build_sap_async_httpx_client(
     proxy_client: GenAIHubProxyClient,
-    timeout: Union[int, float, "httpx.Timeout", None] = None,
+    timeout: Union[float, "httpx.Timeout", None] = None,
 ) -> "httpx.AsyncClient":
     """httpx.AsyncClient with SAP auth injected via event hook."""
     kwargs: dict[str, Any] = {"event_hooks": {"request": [_make_auth_hook(proxy_client)]}}
@@ -45,13 +49,13 @@ def build_sap_async_httpx_client(
     return httpx.AsyncClient(**kwargs)
 
 
-def build_sap_api_client(
+def build_sap_api_client(  # pylint: disable=too-many-arguments,too-many-positional-arguments
     base_url: str,
     proxy_client: GenAIHubProxyClient,
     api_client_class: Any,
     configuration_class: Any,
     rest_client_class: Any,
-    timeout: Union[int, float, None] = None,
+    timeout: float | None = None,
 ) -> Any:
     """Build a generated ApiClient subclassed with SAP auth and deployment URL.
 
@@ -68,7 +72,7 @@ def build_sap_api_client(
     """
     _build_sap_async_httpx_client = build_sap_async_httpx_client  # capture for closure
 
-    class _SapRESTClientObject(rest_client_class):
+    class _SapRESTClientObject(rest_client_class):  # pylint: disable=too-few-public-methods
         def __init__(self, configuration: Any) -> None:
             super().__init__(configuration)
             self._sap_proxy = proxy_client
@@ -77,7 +81,7 @@ def build_sap_api_client(
         def _create_pool_manager(self) -> Any:
             return _build_sap_async_httpx_client(self._sap_proxy, self._sap_timeout)
 
-    class _SapApiClient(api_client_class):
+    class _SapApiClient(api_client_class):  # pylint: disable=too-few-public-methods
         def __init__(self) -> None:
             config = configuration_class(host=base_url)
             super().__init__(configuration=config)
