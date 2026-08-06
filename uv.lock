@@ -55,7 +55,7 @@ dev = [
 
 [[package]]
 name = "aiobotocore"
-version = "3.8.0"
+version = "3.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -67,9 +67,9 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d8/a7/bc31b7046c610471f0630819ca5d2a57ac4efa8d47135cb53e43f2785390/aiobotocore-3.8.0.tar.gz", hash = "sha256:80a1eb64ea915f3af3c1518669975bae74a17b2f37c14eb0fa2f83b915974670", size = 131368, upload-time = "2026-07-17T03:10:30.258Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/c0/18abcb7e4e504a68714c280853fd180afe376a4a55e5511fb04ba76702e4/aiobotocore-3.9.0.tar.gz", hash = "sha256:5d344e97c518b010bea167c7f7ba4f9e785f9d2b8ac7af4fd00846c62f2c0a10", size = 514972, upload-time = "2026-08-01T11:54:07.673Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6d/f4/5a7d76dc844d3ff8ed1f1a043158aa393794aebb787d3e2f8c0fe87f674f/aiobotocore-3.8.0-py3-none-any.whl", hash = "sha256:8bc605132cadfe844a3f334635a0a64fa5e360a4a206e915d99d53db5b6deeba", size = 91169, upload-time = "2026-07-17T03:10:28.771Z" },
+    { url = "https://files.pythonhosted.org/packages/30/c5/6290519dec32f3cdf6827e3bbcbf7a9f4fb29a55a9204199901fed69957b/aiobotocore-3.9.0-py3-none-any.whl", hash = "sha256:7354659eac9ba6034675b3ea178330b7de97c45989d6fda1bf01d3da167b6135", size = 100764, upload-time = "2026-08-01T11:54:06.128Z" },
 ]
 
 [[package]]
@@ -4194,7 +4194,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiobotocore", marker = "extra == 'amazon'", specifier = ">=3.2.0" },
+    { name = "aiobotocore", marker = "extra == 'amazon'", specifier = ">=3.9.0" },
     { name = "boto3", marker = "extra == 'amazon'", specifier = ">=1.40.61" },
     { name = "click", specifier = ">=8.1.7" },
     { name = "dacite", specifier = ">=1.8.1" },
