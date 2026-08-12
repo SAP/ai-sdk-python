@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module ai_api_client_sdk.resource_clients.healthz_client</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="ai_api_client_sdk.html" class="white">ai_api_client_sdk</a>.<a href="ai_api_client_sdk.resource_clients.html" class="white">resource_clients</a>.healthz_client</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/resource_clients/healthz_client.py">/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/resource_clients/healthz_client.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.resource_clients.healthz_client.html#HealthzClient">HealthzClient</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="HealthzClient">class <strong>HealthzClient</strong></a>(<a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#HealthzClient">HealthzClient</a>(rest_client:&nbsp;ai_api_client_sdk.helpers.rest_client.RestClient)<br>
+&nbsp;<br>
+<a href="#HealthzClient">HealthzClient</a>&nbsp;is&nbsp;a&nbsp;class&nbsp;implemented&nbsp;for&nbsp;interacting&nbsp;with&nbsp;the&nbsp;healthz&nbsp;endpoint&nbsp;of&nbsp;the&nbsp;server.&nbsp;It&nbsp;implements&nbsp;the<br>
+base&nbsp;class&nbsp;:class:`ai_api_client_sdk.resource_clients.base_client.<a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">BaseClient</a>`<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="ai_api_client_sdk.resource_clients.healthz_client.html#HealthzClient">HealthzClient</a></dd>
+<dd><a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="HealthzClient-get"><strong>get</strong></a>(self) -&gt; ai_api_client_sdk.models.healthz_status.HealthzStatus</dt><dd><span class="code">Retrieves&nbsp;the&nbsp;health&nbsp;status&nbsp;of&nbsp;the&nbsp;server.<br>
+&nbsp;<br>
+:raises:&nbsp;class:`ai_api_client_sdk.exception.AIAPIServerException`&nbsp;if&nbsp;a&nbsp;non-2XX&nbsp;response&nbsp;is&nbsp;received&nbsp;from&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;server<br>
+:return:&nbsp;The&nbsp;health&nbsp;status&nbsp;of&nbsp;the&nbsp;server<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.healthz_status.HealthzStatus`</span></dd></dl>
+
+<hr>
+Methods inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><a name="HealthzClient-__init__"><strong>__init__</strong></a>(self, rest_client: ai_api_client_sdk.helpers.rest_client.RestClient)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-bulk_modify"><strong>bulk_modify</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Modifies&nbsp;multiple&nbsp;instances&nbsp;of&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-count"><strong>count</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Counts&nbsp;the&nbsp;relevant&nbsp;resources.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-create"><strong>create</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Creates&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-delete"><strong>delete</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Deletes&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-modify"><strong>modify</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Modifies&nbsp;the&nbsp;relevant&nbsp;resource.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-query"><strong>query</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Queries&nbsp;the&nbsp;relevant&nbsp;resources.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<dl><dt><a name="HealthzClient-query_logs"><strong>query_logs</strong></a>(self, *args, **kwargs)</dt><dd><span class="code">Queries&nbsp;the&nbsp;relevant&nbsp;logs.&nbsp;Will&nbsp;be&nbsp;implemented&nbsp;by&nbsp;the&nbsp;respective&nbsp;resource&nbsp;clients</span></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="ai_api_client_sdk.resource_clients.base_client.html#BaseClient">ai_api_client_sdk.resource_clients.base_client.BaseClient</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

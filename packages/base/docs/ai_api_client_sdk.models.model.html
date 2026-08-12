@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module ai_api_client_sdk.models.model</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="ai_api_client_sdk.html" class="white">ai_api_client_sdk</a>.<a href="ai_api_client_sdk.models.html" class="white">models</a>.model</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/models/model.py">/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/models/model.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.models.model.html#Model">Model</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Model">class <strong>Model</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Model">Model</a>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;executable_id:&nbsp;str,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;str,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;description:&nbsp;str&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;versions:&nbsp;List[ai_api_client_sdk.models.model_version.ModelVersion]&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;display_name:&nbsp;str&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;access_type:&nbsp;str&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;provider:&nbsp;str&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;allowed_scenarios:&nbsp;List[ai_api_client_sdk.models.model_base_data_allowed_scenarios.ModelBaseDataAllowedScenarios]&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;**kwargs<br>
+)<br>
+&nbsp;<br>
+The&nbsp;<a href="#Model">Model</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;defines&nbsp;a&nbsp;model<br>
+:param&nbsp;executable_id:&nbsp;ID&nbsp;of&nbsp;the&nbsp;executable<br>
+:type&nbsp;executable_id:&nbsp;str<br>
+:param&nbsp;model:&nbsp;Unique&nbsp;name&nbsp;of&nbsp;the&nbsp;model<br>
+:type&nbsp;model:&nbsp;str<br>
+:param&nbsp;description:&nbsp;Description&nbsp;of&nbsp;the&nbsp;model,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;description:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;versions:&nbsp;List&nbsp;of&nbsp;available&nbsp;model&nbsp;versions,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;versions:&nbsp;List[class:`ai_api_client_sdk.models.model_version.ModelVersion`],&nbsp;optional<br>
+:param&nbsp;display_name:&nbsp;Display&nbsp;name&nbsp;of&nbsp;the&nbsp;model,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;display_name:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;access_type:&nbsp;Access&nbsp;type&nbsp;of&nbsp;the&nbsp;model,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;access_type:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;provider:&nbsp;Provider&nbsp;of&nbsp;the&nbsp;model,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;provider:&nbsp;str,&nbsp;optional<br>
+:param&nbsp;allowed_scenarios:&nbsp;List&nbsp;of&nbsp;allowed&nbsp;scenarios&nbsp;for&nbsp;the&nbsp;model,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;allowed_scenarios:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;List[ai_api_client_sdk.models.model_base_data_allowed_scenarios.ModelBaseDataAllowedScenarios],&nbsp;optional<br>
+:param&nbsp;`**kwargs`:&nbsp;The&nbsp;keyword&nbsp;arguments&nbsp;are&nbsp;there&nbsp;in&nbsp;case&nbsp;there&nbsp;are&nbsp;additional&nbsp;attributes&nbsp;returned&nbsp;from&nbsp;server<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Model-__init__"><strong>__init__</strong></a>(
+    self,
+    executable_id: str,
+    model: str,
+    description: str = None,
+    versions: List[ai_api_client_sdk.models.model_version.ModelVersion] = None,
+    display_name: str = None,
+    access_type: str = None,
+    provider: str = None,
+    allowed_scenarios: List[ai_api_client_sdk.models.model_base_data_allowed_scenarios.ModelBaseDataAllowedScenarios] = None,
+    **kwargs
+)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="Model-from_dict"><strong>from_dict</strong></a>(model_dict: Dict[str, Any])</dt><dd><span class="code">Returns&nbsp;a&nbsp;:class:`ai_api_client_sdk.models.model.<a href="#Model">Model</a>`&nbsp;<a href="builtins.html#object">object</a>,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;dict<br>
+provided&nbsp;as&nbsp;parameter<br>
+&nbsp;<br>
+:param&nbsp;model_dict:&nbsp;Dict&nbsp;which&nbsp;includes&nbsp;the&nbsp;necessary&nbsp;values&nbsp;to&nbsp;create&nbsp;the&nbsp;<a href="builtins.html#object">object</a><br>
+:type&nbsp;model_dict:&nbsp;Dict[str,&nbsp;Any]<br>
+:return:&nbsp;An&nbsp;<a href="builtins.html#object">object</a>,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;provided<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.model.<a href="#Model">Model</a>`</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict<br>
+<strong>List</strong> = typing.List</td></tr></table>
+</body></html>

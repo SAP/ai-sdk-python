@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module ai_api_client_sdk.models.deployment_get_status_response</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="ai_api_client_sdk.html" class="white">ai_api_client_sdk</a>.<a href="ai_api_client_sdk.models.html" class="white">models</a>.deployment_get_status_response</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/models/deployment_get_status_response.py">/home/runner/work/ai-sdk-python/ai-sdk-python/packages/base/ai_api_client_sdk/models/deployment_get_status_response.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.models.enactment_get_status_response.html#EnactmentGetStatusResponse">ai_api_client_sdk.models.enactment_get_status_response.EnactmentGetStatusResponse</a>(<a href="builtins.html#object">builtins.object</a>)
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="ai_api_client_sdk.models.deployment_get_status_response.html#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="DeploymentGetStatusResponse">class <strong>DeploymentGetStatusResponse</strong></a>(<a href="ai_api_client_sdk.models.enactment_get_status_response.html#EnactmentGetStatusResponse">ai_api_client_sdk.models.enactment_get_status_response.EnactmentGetStatusResponse</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;id:&nbsp;str,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;configuration_id:&nbsp;str,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;status:&nbsp;ai_api_client_sdk.models.status.Status,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;created_at:&nbsp;datetime.datetime,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modified_at:&nbsp;datetime.datetime,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;status_details:&nbsp;Dict[str,&nbsp;Any]&nbsp;=&nbsp;None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;details:&nbsp;Dict[str,&nbsp;Any]&nbsp;=&nbsp;None<br>
+)<br>
+&nbsp;<br>
+The&nbsp;<a href="#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a>&nbsp;object&nbsp;defines&nbsp;the&nbsp;response&nbsp;of&nbsp;the&nbsp;deployment&nbsp;get&nbsp;status<br>
+:param&nbsp;id:&nbsp;ID&nbsp;of&nbsp;the&nbsp;deployment<br>
+:type&nbsp;id:&nbsp;str<br>
+:param&nbsp;configuration_id:&nbsp;ID&nbsp;of&nbsp;the&nbsp;configuration&nbsp;which&nbsp;configured&nbsp;the&nbsp;deployment<br>
+:type&nbsp;configuration_id:&nbsp;str<br>
+:param&nbsp;status:&nbsp;Status&nbsp;of&nbsp;the&nbsp;deployment<br>
+:type&nbsp;status:&nbsp;class:`ai_api_client_sdk.models.status.Status`<br>
+:param&nbsp;created_at:&nbsp;Time&nbsp;when&nbsp;the&nbsp;deployment&nbsp;was&nbsp;created<br>
+:type&nbsp;created_at:&nbsp;datetime<br>
+:param&nbsp;modified_at:&nbsp;Time&nbsp;when&nbsp;the&nbsp;deployment&nbsp;was&nbsp;last&nbsp;modified<br>
+:type&nbsp;modified_at:&nbsp;datetime<br>
+:param&nbsp;status_details:&nbsp;A&nbsp;dict,&nbsp;which&nbsp;gives&nbsp;detailed&nbsp;information&nbsp;about&nbsp;the&nbsp;status&nbsp;of&nbsp;the&nbsp;deployment,&nbsp;defaults&nbsp;to&nbsp;None<br>
+:type&nbsp;status_details:&nbsp;Dict[str,&nbsp;Any],&nbsp;optional<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt>Method resolution order:</dt>
+<dd><a href="ai_api_client_sdk.models.deployment_get_status_response.html#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a></dd>
+<dd><a href="ai_api_client_sdk.models.enactment_get_status_response.html#EnactmentGetStatusResponse">ai_api_client_sdk.models.enactment_get_status_response.EnactmentGetStatusResponse</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="DeploymentGetStatusResponse-__init__"><strong>__init__</strong></a>(
+    self,
+    id: str,
+    configuration_id: str,
+    status: ai_api_client_sdk.models.status.Status,
+    created_at: datetime.datetime,
+    modified_at: datetime.datetime,
+    status_details: Dict[str, Any] = None,
+    details: Dict[str, Any] = None
+)</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="DeploymentGetStatusResponse-__str__"><strong>__str__</strong></a>(self)</dt><dd><span class="code">Return&nbsp;str(self).</span></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="DeploymentGetStatusResponse-from_dict"><strong>from_dict</strong></a>(deployment_dict: Dict[str, Any])</dt><dd><span class="code">Returns&nbsp;a&nbsp;:class:`ai_api_client_sdk.models.deployment_get_status_response.<a href="#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a>`<br>
+object,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;in&nbsp;the&nbsp;dict&nbsp;provided&nbsp;as&nbsp;parameter<br>
+:param&nbsp;deployment_dict:&nbsp;Dict&nbsp;which&nbsp;includes&nbsp;the&nbsp;necessary&nbsp;values&nbsp;to&nbsp;create&nbsp;the&nbsp;object<br>
+:type&nbsp;deployment_dict:&nbsp;Dict[str,&nbsp;Any]<br>
+:return:&nbsp;An&nbsp;object,&nbsp;created&nbsp;from&nbsp;the&nbsp;values&nbsp;provided<br>
+:rtype:&nbsp;class:`ai_api_client_sdk.models.deployment_get_status_response.<a href="#DeploymentGetStatusResponse">DeploymentGetStatusResponse</a>`</span></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="ai_api_client_sdk.models.enactment_get_status_response.html#EnactmentGetStatusResponse">ai_api_client_sdk.models.enactment_get_status_response.EnactmentGetStatusResponse</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict</td></tr></table>
+</body></html>
