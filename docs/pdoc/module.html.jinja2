@@ -1,0 +1,20 @@
+{% extends "default/module.html.jinja2" %}
+{% block nav_submodules %}
+    {% set known_names = module.submodules | map(attribute='modulename') | list %}
+    {% set prefix = module.modulename + "." %}
+    {% set extra = [] %}
+    {% for m in all_modules if m.startswith(prefix) and "." not in m[prefix|length:] and m not in known_names %}
+        {% set _ = extra.append(m) %}
+    {% endfor %}
+    {% if module.submodules or extra %}
+        <h2>Submodules</h2>
+        <ul>
+            {% for submodule in module.submodules if is_public(submodule) | trim %}
+                <li>{{ submodule.taken_from | link(text=submodule.name) }}</li>
+            {% endfor %}
+            {% for m in extra %}
+                <li><a href="{{ module.modulename.split(".")[-1] + "/" + m.split(".")[-1] + ".html" }}">{{ m.split(".")[-1] }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

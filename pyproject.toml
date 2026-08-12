@@ -5,7 +5,7 @@ requires-python = ">=3.10"
 license = "Apache-2.0"
 
 [dependency-groups]
-dev = ["pip-licenses>=5.5.5", "commitizen>=4"]
+dev = ["pip-licenses>=5.5.5", "commitizen>=4", "pdoc>=14.0.0"]
 
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
