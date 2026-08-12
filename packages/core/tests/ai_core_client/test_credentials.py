@@ -15,7 +15,7 @@ from ai_core_sdk.credentials import (
     init_conf, CORE_CREDENTIAL_VALUES,
 )
 from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, HOME_PATH_ENV_VAR, PROFILE_ENV_VAR, VCAP_SERVICES_ENV_VAR,
-                                           VCAP_AICORE_SERVICE_NAME, CONFIG_FILE_ENV_VAR)
+                                           VCAP_AICORE_SERVICE_NAME, CONFIG_FILE_ENV_VAR, SERVICE_KEY_ENV_VAR)
 
 VCAP_SERVICE_DICT = {
     VCAP_AICORE_SERVICE_NAME: [{
@@ -289,6 +289,77 @@ class TestConfigHandling(unittest.TestCase):
         finally:
             # Restore permissions for cleanup in teardown
             config_file.chmod(0o644)
+
+    @patch('ai_core_sdk.credentials.logger')
+    def test_fetch_credentials_from_service_key(self, mock_logger):
+        mock_logger.debug = MagicMock()
+
+        service_key = {
+            'clientid': 'sk-client-id',
+            'clientsecret': 'sk-client-secret',
+            'url': 'https://sk-auth-url',
+            'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
+        }
+        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: json.dumps(service_key)}):
+            credentials = fetch_credentials()
+
+        self.assertEqual(credentials['client_id'], 'sk-client-id')
+        self.assertEqual(credentials['client_secret'], 'sk-client-secret')
+        self.assertEqual(credentials['auth_url'], 'https://sk-auth-url/oauth/token')
+        self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
+        mock_logger.debug.assert_any_call(f"Using credentials from: {SERVICE_KEY_ENV_VAR}")
+
+    @patch('ai_core_sdk.credentials.logger')
+    def test_fetch_credentials_from_service_key_x509(self, mock_logger):
+        mock_logger.debug = MagicMock()
+
+        service_key = {
+            'clientid': 'sk-client-id',
+            'certurl': 'https://sk-cert-url',
+            'certificate': 'sk-cert-content',
+            'key': 'sk-key-content',
+            'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
+        }
+        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: json.dumps(service_key)}):
+            credentials = fetch_credentials()
+
+        self.assertEqual(credentials['client_id'], 'sk-client-id')
+        self.assertEqual(credentials['cert_str'], 'sk-cert-content')
+        self.assertEqual(credentials['key_str'], 'sk-key-content')
+        self.assertEqual(credentials['auth_url'], 'https://sk-cert-url/oauth/token')
+        self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
+        mock_logger.debug.assert_any_call(f"Using credentials from: {SERVICE_KEY_ENV_VAR}")
+
+    @patch('ai_core_sdk.credentials.logger')
+    def test_service_key_lower_precedence_than_env_vars(self, mock_logger):
+        mock_logger.debug = MagicMock()
+
+        service_key = {
+            'clientid': 'sk-client-id',
+            'clientsecret': 'sk-client-secret',
+            'url': 'https://sk-auth-url',
+            'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
+        }
+        with patch.dict(os.environ, {
+            SERVICE_KEY_ENV_VAR: json.dumps(service_key),
+            f'{AI_CORE_PREFIX}_CLIENT_ID': 'env-client-id',
+            f'{AI_CORE_PREFIX}_CLIENT_SECRET': 'env-client-secret',
+            f'{AI_CORE_PREFIX}_AUTH_URL': 'https://env-auth-url',
+            f'{AI_CORE_PREFIX}_BASE_URL': 'https://env-base-url',
+        }):
+            credentials = fetch_credentials()
+
+        # env vars win
+        self.assertEqual(credentials['client_id'], 'env-client-id')
+        self.assertEqual(credentials['client_secret'], 'env-client-secret')
+        mock_logger.debug.assert_any_call("Using credentials from: environment variables")
+
+    def test_service_key_invalid_json_raises(self):
+        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: 'not-valid-json'}):
+            with self.assertRaises(ValueError) as ctx:
+                fetch_credentials()
+        self.assertIn(SERVICE_KEY_ENV_VAR, str(ctx.exception))
+        self.assertIn('invalid JSON', str(ctx.exception))
 
     @patch('ai_core_sdk.credentials.logger')
     def test_injecting_credential_values(self, mock_logger):
