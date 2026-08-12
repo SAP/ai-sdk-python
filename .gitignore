@@ -134,3 +134,4 @@ dmypy.json
 
 # Claude Code local config
 .claude/
+/docs/agents/*.md
