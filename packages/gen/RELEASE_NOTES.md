@@ -1,4 +1,18 @@
 # Release Notes
+## 7.2.0
+
+### Features
+- Added Support for LLM Batch Service, see [](batch_service)
+
+### Bugfixes
+- Upgraded langchain
+- Upgraded langchain-aws
+- Upgraded langchain-google-genai
+- Upgraded langchain-openai
+- Upgraded google-genai to v2
+- Fixed OrchestrationV2 response handling
+- Removed hard-coded model lists. New versions of existing models will be automatically supported.
+
 ## 6.10.0
 
 ### Features

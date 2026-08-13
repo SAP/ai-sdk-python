@@ -1,17 +1,8 @@
 version: 2
-registries:
-  sap-artifactory:
-    type: python-index
-    url: https://common.repositories.cloud.sap/artifactory/api/pypi/build.releases.pypi/
-    username: ${{secrets.ARTIFACTORY_USERNAME}}
-    password: ${{secrets.ARTIFACTORY_TOKEN}}
-    replaces-base: true
 updates:
   - package-ecosystem: uv
     target-branch: 'main'
     directory: /
-    registries:
-      - sap-artifactory
     schedule:
       interval: daily
       time: '22:00'
@@ -31,3 +22,7 @@ updates:
       default-days: 5
     commit-message:
       prefix: 'chore(deps)'
+    groups:
+      codeql:
+        patterns:
+          - 'github/codeql-action/*'

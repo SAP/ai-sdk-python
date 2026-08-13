@@ -131,3 +131,7 @@ dmypy.json
 
 # Certificates
 *.pem
+
+# Claude Code local config
+.claude/
+/docs/agents/*.md

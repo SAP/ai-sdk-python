@@ -9,6 +9,7 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+import importlib.metadata
 import pathlib
 import sys
 sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
@@ -19,15 +20,7 @@ project = 'SAP Cloud SDK for AI (Python) - generative'
 copyright = '2026, SAP SE'
 author = 'SAP SE'
 
-# The full version, including alpha/beta/rc tags
-VERSION_FILE = '../../version.txt'
-
-def get_version(version_file=VERSION_FILE):
-    with open(version_file, encoding='utf-8-sig', mode='r') as ver_file:
-        version_str = ver_file.readline().rstrip()
-    return version_str
-
-release = get_version()
+release = importlib.metadata.version('sap-ai-sdk-gen')
 
 
 # -- General configuration ---------------------------------------------------

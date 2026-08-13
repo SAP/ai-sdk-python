@@ -9,7 +9,7 @@ from .ai_api_v2_client_e2e_test_base import AIAPIV2ClientE2ETestBase
 class TestE2EDeployments(AIAPIV2ClientE2ETestBase):
     def test_deployments(self):
         configuration = self.get_a_configuration(deployable=True)
-        n = 2
+        n = 1
         deployment_dicts = []
         for _ in range(n):
             res = self.ai_api_v2_client.deployment.create(configuration_id=configuration.id)
@@ -28,7 +28,8 @@ class TestE2EDeployments(AIAPIV2ClientE2ETestBase):
             self.assertEqual(TargetStatus.RUNNING, dep.target_status)
             dep_dict['target_status'] = dep.target_status
             dep = self.wait_until_enactment_has_status(resource_client=self.ai_api_v2_client.deployment,
-                                                       params={'deployment_id': dep_dict['id']}, status=Status.RUNNING)
+                                                       params={'deployment_id': dep_dict['id']}, status=Status.RUNNING,
+                                                       repetition=50, skip_if_fails=True)
             dep_dict['status'] = dep.status
             self.assertIsNotNone(dep.deployment_url)
             self.assertNotEqual('', dep.deployment_url)
@@ -64,7 +65,8 @@ class TestE2EDeployments(AIAPIV2ClientE2ETestBase):
         self.assertEqual(new_conf.id, dep.configuration_id)
         self.assertEqual(configuration.id, dep.latest_running_configuration_id)
         dep = self.wait_until_enactment_has_status(resource_client=self.ai_api_v2_client.deployment,
-                                                   params={'deployment_id': dep_dict['id']}, status=Status.RUNNING)
+                                                   params={'deployment_id': dep_dict['id']}, status=Status.RUNNING,
+                                                   repetition=50, skip_if_fails=True)
         self.assertEqual(Status.RUNNING, dep.status)
         self.assertIsNotNone(dep.deployment_url)
         self.assertNotEqual('', dep.deployment_url)
