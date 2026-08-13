@@ -6,13 +6,11 @@
         ":semanticCommits",
         ":semanticCommitTypeAll(chore)",
         ":pinOnlyDevDependencies",
-        ":enableVulnerabilityAlerts", // Handle vulnerability alerts from dependabot
+        ":enableVulnerabilityAlerts",
         ":automergeMinor"
     ],
     "ignorePresets": [
-        // not needed
         ":dependencyDashboard",
-        // chore is configured above
         ":semanticPrefixFixDepsChoreOthers"
     ],
     "minimumReleaseAge": "4 days",
