@@ -1,0 +1,41 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:best-practices",
+        "security:openssf-scorecard",
+        ":semanticCommits",
+        ":semanticCommitTypeAll(chore)",
+        ":pinOnlyDevDependencies",
+        ":enableVulnerabilityAlerts", // Handle vulnerability alerts from dependabot
+        ":automergeMinor"
+    ],
+    "ignorePresets": [
+        // not needed
+        ":dependencyDashboard",
+        // chore is configured above
+        ":semanticPrefixFixDepsChoreOthers"
+    ],
+    "minimumReleaseAge": "4 days",
+    "timezone": "Europe/Berlin",
+    "packageRules": [
+        {
+            "matchManagers": ["github-actions", "custom.regex"],
+            "schedule": ["every weekend"]
+        },
+        {
+            "matchPackageNames": ["sap/ai-sdk-python", "sap/ai-sdk-python/**"],
+            "groupName": "sap-ai-sdk",
+            "minimumReleaseAge": null,
+            "pinDigests": false
+        },
+        {
+            "matchPackageNames": ["langchain", "langchain/**"],
+            "groupName": "langchain"
+        },
+        {
+            "description": "Group CodeQL actions into a single PR",
+            "matchPackagePatterns": ["github/codeql-action/*"],
+            "groupName": "codeql"
+        }
+    ]
+}
