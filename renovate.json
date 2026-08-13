@@ -1,0 +1,20 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "baseBranches": ["main"],
+  "schedule": ["after 10pm"],
+  "prConcurrentLimit": 10,
+  "commitMessagePrefix": "chore(deps):",
+  "packageRules": [
+    {
+      "description": "Group CodeQL actions",
+      "matchPackagePatterns": ["github/codeql-action/*"],
+      "groupName": "codeql"
+    },
+    {
+      "description": "Wait 5 days after release before opening a PR",
+      "matchUpdateTypes": ["minor", "patch"],
+      "minimumReleaseAge": "5 days"
+    }
+  ]
+}
