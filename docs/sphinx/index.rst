@@ -5,9 +5,9 @@ SAP AI SDK Python
    :maxdepth: 1
    :caption: Packages
 
-   _autogen/ai_api_client_sdk
-   _autogen/ai_core_sdk
-   _autogen/gen_ai_hub
+   _autogen/base/ai_api_client_sdk
+   _autogen/core/ai_core_sdk
+   _autogen/gen/gen_ai_hub
 
 Indices
 -------

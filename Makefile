@@ -5,16 +5,16 @@ install:
 
 docs:
 	uv run sphinx-apidoc -e -M -f -T \
-		-o docs/sphinx/_autogen \
+		-o docs/sphinx/_autogen/base \
 		packages/base/ai_api_client_sdk \
 		packages/base/ai_api_client_sdk/helpers
 	uv run sphinx-apidoc -e -M -f -T \
-		-o docs/sphinx/_autogen \
+		-o docs/sphinx/_autogen/core \
 		packages/core/ai_core_sdk \
 		packages/core/ai_core_sdk/helpers \
 		packages/core/ai_core_sdk/cli.py
 	uv run sphinx-apidoc -e -M -f -T \
-		-o docs/sphinx/_autogen \
+		-o docs/sphinx/_autogen/gen \
 		packages/gen/gen_ai_hub \
 		packages/gen/gen_ai_hub/evaluations/_internal \
 		packages/gen/gen_ai_hub/evaluations/helpers

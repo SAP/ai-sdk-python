@@ -4,7 +4,7 @@ extensions = [
     "sphinx.ext.napoleon",
 ]
 html_theme = "furo"
-exclude_patterns = ["_autogen/modules.rst"]
+exclude_patterns = ["_autogen/*/modules.rst"]
 autodoc_default_options = {
     "members": True,
     "undoc-members": True,
