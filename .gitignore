@@ -129,6 +129,9 @@ dmypy.json
 # VS Code
 .vscode/
 
+# pyright
+pyrightconfig.json
+
 # Certificates
 *.pem
 
