@@ -14,8 +14,8 @@ from ai_core_sdk.credentials import (
     fetch_credentials,
     init_conf, CORE_CREDENTIAL_VALUES,
 )
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, HOME_PATH_ENV_VAR, PROFILE_ENV_VAR, VCAP_SERVICES_ENV_VAR,
-                                           VCAP_AICORE_SERVICE_NAME, CONFIG_FILE_ENV_VAR, SERVICE_KEY_ENV_VAR)
+from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, ENV_VAR_AICORE_HOME_PATH, ENV_VAR_AICORE_PROFILE, ENV_VAR_VCAP_SERVICES,
+                                           VCAP_AICORE_SERVICE_NAME, ENV_VAR_AICORE_CONFIG_FILE, ENV_VAR_AICORE_SERVICE_KEY)
 
 VCAP_SERVICE_DICT = {
     VCAP_AICORE_SERVICE_NAME: [{
@@ -60,7 +60,7 @@ class TestVCAPServices(unittest.TestCase):
         cls.vcap_dict = VCAP_SERVICE_DICT[VCAP_AICORE_SERVICE_NAME][0]
 
     def test_vcap_services(self):
-        with patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_ENV_VALUE}):
+        with patch.dict(os.environ, {ENV_VAR_VCAP_SERVICES: VCAP_SERVICE_ENV_VALUE}):
             vcap_services = VCAPEnvironment.from_env()
         self.assertTrue(all(isinstance(srv, Service) for srv in vcap_services.services))
         self.assertEqual(len(vcap_services.services), 1)
@@ -141,26 +141,26 @@ class TestConfigHandling(unittest.TestCase):
             conf = init_conf('MOCK_LLM')
 
         # load default config
-        with patch.dict(os.environ, {HOME_PATH_ENV_VAR: str(self.temp_dir)}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: str(self.temp_dir)}):
             conf = init_conf()
             self.assertDictEqual(conf, self.default_config)
             mock_logger.debug.assert_called_with('Config file path %s', self.temp_dir / 'config.json')
 
         # load profile config
-        with patch.dict(os.environ, {HOME_PATH_ENV_VAR: str(self.temp_dir), PROFILE_ENV_VAR: self.profile}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: str(self.temp_dir), ENV_VAR_AICORE_PROFILE: self.profile}):
             conf = init_conf()
             self.assertDictEqual(conf, self.profile_config)
             mock_logger.debug.assert_called_with('Config file path %s', self.temp_dir / self.file_name_profile)
 
         # load profile config with profile param
-        with patch.dict(os.environ, {HOME_PATH_ENV_VAR: str(self.temp_dir)}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: str(self.temp_dir)}):
             conf = init_conf(profile=self.profile)
             self.assertDictEqual(conf, self.profile_config)
             mock_logger.debug.assert_called_with('Config file path %s', self.temp_dir / self.file_name_profile)
 
         # load profile config via env variable
         with patch.dict(os.environ, {f'{AI_CORE_PREFIX}_PROFILE': self.profile,
-                                     HOME_PATH_ENV_VAR: str(self.temp_dir)}):
+                                     ENV_VAR_AICORE_HOME_PATH: str(self.temp_dir)}):
             conf = init_conf()
             self.assertDictEqual(conf, self.profile_config)
             # overwrite env variable with explicit profile
@@ -168,7 +168,7 @@ class TestConfigHandling(unittest.TestCase):
             self.assertDictEqual(conf, self.default_config)
             mock_logger.debug.assert_called_with('Config file path %s', self.temp_dir / 'config.json')
 
-    @patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_ENV_VALUE})
+    @patch.dict(os.environ, {ENV_VAR_VCAP_SERVICES: VCAP_SERVICE_ENV_VALUE})
     @patch('ai_core_sdk.credentials.logger')
     def test_fetch_credentials_from_vcap_services(self, mock_logger):
         mock_logger.debug = MagicMock()
@@ -183,7 +183,7 @@ class TestConfigHandling(unittest.TestCase):
         mock_logger.debug.assert_any_call("Using credentials from: VCAP service")
         mock_logger.debug.assert_any_call("No resource_group found in any source")
 
-    @patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_X509_ENV_VALUE})
+    @patch.dict(os.environ, {ENV_VAR_VCAP_SERVICES: VCAP_SERVICE_X509_ENV_VALUE})
     @patch('ai_core_sdk.credentials.logger')
     def test_fetch_credentials_from_vcap_services_with_x509_env_var(self, mock_logger):
         mock_logger.debug = MagicMock()
@@ -224,7 +224,7 @@ class TestConfigHandling(unittest.TestCase):
     @patch('ai_core_sdk.credentials.logger')
     def test_fetch_credentials_from_config_file(self, mock_logger):
         mock_logger.debug = MagicMock()
-        with patch.dict(os.environ, {CONFIG_FILE_ENV_VAR: str(self.temp_dir / 'config.json')}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_CONFIG_FILE: str(self.temp_dir / 'config.json')}):
             fetch_credentials()
 
             mock_logger.debug.assert_any_call("Using credentials from: config file")
@@ -276,7 +276,7 @@ class TestConfigHandling(unittest.TestCase):
         config_file.chmod(0o000)
 
         try:
-            with patch.dict(os.environ, {CONFIG_FILE_ENV_VAR: str(config_file)}):
+            with patch.dict(os.environ, {ENV_VAR_AICORE_CONFIG_FILE: str(config_file)}):
                 conf = init_conf()
                 # Should return empty config when permission is denied
                 self.assertDictEqual(conf, {})
@@ -300,14 +300,14 @@ class TestConfigHandling(unittest.TestCase):
             'url': 'https://sk-auth-url',
             'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
         }
-        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: json.dumps(service_key)}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_SERVICE_KEY: json.dumps(service_key)}):
             credentials = fetch_credentials()
 
         self.assertEqual(credentials['client_id'], 'sk-client-id')
         self.assertEqual(credentials['client_secret'], 'sk-client-secret')
         self.assertEqual(credentials['auth_url'], 'https://sk-auth-url/oauth/token')
         self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
-        mock_logger.debug.assert_any_call(f"Using credentials from: {SERVICE_KEY_ENV_VAR}")
+        mock_logger.debug.assert_any_call(f"Using credentials from: {ENV_VAR_AICORE_SERVICE_KEY}")
 
     @patch('ai_core_sdk.credentials.logger')
     def test_fetch_credentials_from_service_key_x509(self, mock_logger):
@@ -320,7 +320,7 @@ class TestConfigHandling(unittest.TestCase):
             'key': 'sk-key-content',
             'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
         }
-        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: json.dumps(service_key)}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_SERVICE_KEY: json.dumps(service_key)}):
             credentials = fetch_credentials()
 
         self.assertEqual(credentials['client_id'], 'sk-client-id')
@@ -328,7 +328,7 @@ class TestConfigHandling(unittest.TestCase):
         self.assertEqual(credentials['key_str'], 'sk-key-content')
         self.assertEqual(credentials['auth_url'], 'https://sk-cert-url/oauth/token')
         self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
-        mock_logger.debug.assert_any_call(f"Using credentials from: {SERVICE_KEY_ENV_VAR}")
+        mock_logger.debug.assert_any_call(f"Using credentials from: {ENV_VAR_AICORE_SERVICE_KEY}")
 
     @patch('ai_core_sdk.credentials.logger')
     def test_service_key_lower_precedence_than_env_vars(self, mock_logger):
@@ -341,7 +341,7 @@ class TestConfigHandling(unittest.TestCase):
             'serviceurls': {'AI_API_URL': 'https://sk-api-url'},
         }
         with patch.dict(os.environ, {
-            SERVICE_KEY_ENV_VAR: json.dumps(service_key),
+            ENV_VAR_AICORE_SERVICE_KEY: json.dumps(service_key),
             f'{AI_CORE_PREFIX}_CLIENT_ID': 'env-client-id',
             f'{AI_CORE_PREFIX}_CLIENT_SECRET': 'env-client-secret',
             f'{AI_CORE_PREFIX}_AUTH_URL': 'https://env-auth-url',
@@ -355,10 +355,10 @@ class TestConfigHandling(unittest.TestCase):
         mock_logger.debug.assert_any_call("Using credentials from: environment variables")
 
     def test_service_key_invalid_json_raises(self):
-        with patch.dict(os.environ, {SERVICE_KEY_ENV_VAR: 'not-valid-json'}):
+        with patch.dict(os.environ, {ENV_VAR_AICORE_SERVICE_KEY: 'not-valid-json'}):
             with self.assertRaises(ValueError) as ctx:
                 fetch_credentials()
-        self.assertIn(SERVICE_KEY_ENV_VAR, str(ctx.exception))
+        self.assertIn(ENV_VAR_AICORE_SERVICE_KEY, str(ctx.exception))
         self.assertIn('invalid JSON', str(ctx.exception))
 
     @patch('ai_core_sdk.credentials.logger')

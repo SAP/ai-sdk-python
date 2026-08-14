@@ -8,8 +8,8 @@ import pathlib
 from dataclasses import dataclass
 
 from ai_core_sdk.helpers import get_home
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, AUTH_ENDPOINT_SUFFIX, CONFIG_FILE_ENV_VAR, PROFILE_ENV_VAR,
-                                           SERVICE_KEY_ENV_VAR, VCAP_AICORE_SERVICE_NAME, VCAP_SERVICES_ENV_VAR)
+from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, AUTH_ENDPOINT_SUFFIX, ENV_VAR_AICORE_CONFIG_FILE, ENV_VAR_AICORE_PROFILE,
+                                           ENV_VAR_AICORE_SERVICE_KEY, VCAP_AICORE_SERVICE_NAME, ENV_VAR_VCAP_SERVICES)
 from ai_core_sdk.helpers.logging import get_logger
 
 logger = get_logger()
@@ -35,7 +35,7 @@ class VCAPEnvironment:
 
     @classmethod
     def from_env(cls, env_var: Optional[str] = None):
-        env_var = env_var or VCAP_SERVICES_ENV_VAR
+        env_var = env_var or ENV_VAR_VCAP_SERVICES
         env = json.loads(os.environ.get(env_var, '{}'))
         return cls.from_dict(env)
 
@@ -148,9 +148,9 @@ CORE_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = [
 def init_conf(profile: str = None):
     # Read configuration from ${AICORE_HOME}/config_<profile>.json.
     home = pathlib.Path(get_home())
-    profile = profile or os.environ.get(PROFILE_ENV_VAR)
+    profile = profile or os.environ.get(ENV_VAR_AICORE_PROFILE)
     profile_config_file = f'config_{profile}.json'
-    direct_config_file = pathlib.Path(os.getenv(CONFIG_FILE_ENV_VAR)) if os.getenv(CONFIG_FILE_ENV_VAR) else None
+    direct_config_file = pathlib.Path(os.getenv(ENV_VAR_AICORE_CONFIG_FILE)) if os.getenv(ENV_VAR_AICORE_CONFIG_FILE) else None
     path_to_config = (direct_config_file or
                       (home / ('config.json' if profile in ('default', '', None) else profile_config_file)))
     config = {}
@@ -249,14 +249,14 @@ def _parse_service_key(credential_values: List[CredentialsValue]) -> Optional[Ca
     fields are extracted using the ``vcap_key`` paths already defined on each ``CredentialsValue``,
     but with the leading ``'credentials'`` segment stripped (same as the CLI's load_service_key).
     """
-    raw = os.environ.get(SERVICE_KEY_ENV_VAR)
+    raw = os.environ.get(ENV_VAR_AICORE_SERVICE_KEY)
     if not raw:
         return None
     try:
         service_key = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise ValueError(
-            f"{SERVICE_KEY_ENV_VAR} is set but contains invalid JSON: {exc}"
+            f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
         ) from exc
 
     def _get(cv: CredentialsValue) -> Optional[str]:
@@ -303,7 +303,7 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
         Source("environment variables",
                lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         *(
-            [Source(SERVICE_KEY_ENV_VAR, service_key_getter)]
+            [Source(ENV_VAR_AICORE_SERVICE_KEY, service_key_getter)]
             if service_key_getter is not None else []
         ),
         Source("config file",
