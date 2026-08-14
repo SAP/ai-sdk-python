@@ -241,38 +241,29 @@ def _str_or_none(value) -> Optional[str]:
     return str(value) if value else None
 
 
-def _parse_service_key(credential_values: List[CredentialsValue]) -> Optional[Callable[[CredentialsValue], Optional[str]]]:
-    """Return a source getter for AICORE_SERVICE_KEY if the env var is set and valid JSON, else None.
+def _get_nested_safe(data: Dict, keys) -> Optional[Any]:
+    try:
+        return get_nested_value(data, keys)
+    except KeyError:
+        return None
 
-    AICORE_SERVICE_KEY is expected to be the raw JSON string of a BTP service key, i.e. the
-    ``credentials`` object from a VCAP_SERVICES binding without the outer envelope. Credential
-    fields are extracted using the ``vcap_key`` paths already defined on each ``CredentialsValue``,
-    but with the leading ``'credentials'`` segment stripped (same as the CLI's load_service_key).
+
+def _load_service_key() -> Dict[str, Any]:
+    """Read and parse AICORE_SERVICE_KEY from the environment.
+
+    :return: Parsed service key dict, or an empty dict if the env var is not set.
+    :raises ValueError: If the env var is set but contains invalid JSON.
     """
     raw = os.environ.get(ENV_VAR_AICORE_SERVICE_KEY)
     if not raw:
-        return None
+        return {}
     try:
-        service_key = json.loads(raw)
+        return json.loads(raw)
     except json.JSONDecodeError as exc:
         raise ValueError(
             f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
         ) from exc
 
-    def _get(cv: CredentialsValue) -> Optional[str]:
-        if not cv.vcap_key:
-            return None
-        # `vcap_key` is a tuple representing the access path to properties such as
-        # `clientid` and `clientsecret` in the `aicore` service binding, e.g.
-        # `('credentials', 'clientid')`. Skip the leading path element `credentials` to 
-        # access the nested value in the JSON object.
-        key_path = cv.vcap_key[1:]
-        try:
-            return _str_or_none(get_nested_value(service_key, key_path))
-        except KeyError:
-            return None
-
-    return _get
 
 
 def fetch_credentials(profile: str = None, credential_values: List[CredentialsValue] = CORE_CREDENTIAL_VALUES,
@@ -295,17 +286,15 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     except KeyError:
         vcap_service = None
 
-    service_key_getter = _parse_service_key(credential_values)
+    service_key = _load_service_key()
 
     sources = [
         Source("kwargs",
                lambda cv: _str_or_none(kwargs.get(cv.name))),
         Source("environment variables",
                lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
-        *(
-            [Source(ENV_VAR_AICORE_SERVICE_KEY, service_key_getter)]
-            if service_key_getter is not None else []
-        ),
+        Source("service key",
+               lambda cv: _str_or_none(_get_nested_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
         Source("config file",
                lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("VCAP service",

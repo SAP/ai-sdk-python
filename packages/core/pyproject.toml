@@ -37,10 +37,6 @@ dev = [
     "pyhamcrest==2.1.0",
     "pytest-dotenv>=0.5.2",
 ]
-docs = [
-    "sphinx<9.0.0",
-    "sphinxawesome-theme",
-]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

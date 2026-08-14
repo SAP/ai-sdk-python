@@ -307,7 +307,7 @@ class TestConfigHandling(unittest.TestCase):
         self.assertEqual(credentials['client_secret'], 'sk-client-secret')
         self.assertEqual(credentials['auth_url'], 'https://sk-auth-url/oauth/token')
         self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
-        mock_logger.debug.assert_any_call(f"Using credentials from: {ENV_VAR_AICORE_SERVICE_KEY}")
+        mock_logger.debug.assert_any_call("Using credentials from: service key")
 
     @patch('ai_core_sdk.credentials.logger')
     def test_fetch_credentials_from_service_key_x509(self, mock_logger):
@@ -328,7 +328,7 @@ class TestConfigHandling(unittest.TestCase):
         self.assertEqual(credentials['key_str'], 'sk-key-content')
         self.assertEqual(credentials['auth_url'], 'https://sk-cert-url/oauth/token')
         self.assertEqual(credentials['base_url'], 'https://sk-api-url/v2')
-        mock_logger.debug.assert_any_call(f"Using credentials from: {ENV_VAR_AICORE_SERVICE_KEY}")
+        mock_logger.debug.assert_any_call("Using credentials from: service key")
 
     @patch('ai_core_sdk.credentials.logger')
     def test_service_key_lower_precedence_than_env_vars(self, mock_logger):
@@ -352,6 +352,8 @@ class TestConfigHandling(unittest.TestCase):
         # env vars win
         self.assertEqual(credentials['client_id'], 'env-client-id')
         self.assertEqual(credentials['client_secret'], 'env-client-secret')
+        self.assertEqual(credentials['auth_url'], 'https://env-auth-url/oauth/token')
+        self.assertEqual(credentials['base_url'], 'https://env-base-url/v2')
         mock_logger.debug.assert_any_call("Using credentials from: environment variables")
 
     def test_service_key_invalid_json_raises(self):
