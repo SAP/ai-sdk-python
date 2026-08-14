@@ -262,7 +262,10 @@ def _parse_service_key(credential_values: List[CredentialsValue]) -> Optional[Ca
     def _get(cv: CredentialsValue) -> Optional[str]:
         if not cv.vcap_key:
             return None
-        # vcap_key is e.g. ('credentials', 'clientid') — drop the 'credentials' prefix
+        # `vcap_key` is a tuple representing the access path to properties such as
+        # `clientid` and `clientsecret` in the `aicore` service binding, e.g.
+        # `('credentials', 'clientid')`. Skip the leading path element `credentials` to 
+        # access the nested value in the JSON object.
         key_path = cv.vcap_key[1:]
         try:
             return _str_or_none(get_nested_value(service_key, key_path))
