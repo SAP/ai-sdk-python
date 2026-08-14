@@ -1,0 +1,89 @@
+name: api-doc
+
+on:
+  push:
+    tags:
+      - 'gen-v*'
+      - 'base-v*'
+      - 'core-v*'
+  workflow_dispatch: ~
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.SAP_AI_SDK_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.SAP_AI_SDK_BOT_PRIVATE_KEY }}
+          repositories: |
+            ai-sdk-python
+            ai-sdk
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Setup
+        uses: SAP/ai-sdk-python/.github/actions/setup@main
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.ref }}
+          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
+          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
+
+      - name: Generate docs
+        run: uv run make docs
+
+      - name: Checkout sap/ai-sdk
+        uses: actions/checkout@v4
+        with:
+          repository: SAP/ai-sdk
+          token: ${{ steps.app-token.outputs.token }}
+          path: ai-sdk
+
+      - name: Configure git
+        env:
+          BOT_EMAIL: ${{ vars.SAP_AI_SDK_BOT_EMAIL }}
+          BOT_NAME: ${{ vars.SAP_AI_SDK_BOT_NAME }}
+        run: |
+          git -C ai-sdk config user.email "$BOT_EMAIL"
+          git -C ai-sdk config user.name "$BOT_NAME"
+
+      - name: Update api docs
+        id: update-docs
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          BRANCH="api-docs-python-$TAG-$(date +%Y%m%d)"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          cd ai-sdk
+          git checkout -b "$BRANCH"
+          rm -rf static/api-python
+          cp -r ../api-docs/ static/api-python
+          git add static/api-python
+          if git diff --cached --quiet; then
+            echo "No documentation changes to commit"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: update Python API docs ($TAG)"
+            git push origin "$BRANCH"
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request
+        if: steps.update-docs.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          TAG: ${{ github.ref_name }}
+          TAG_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+        run: |
+          gh pr create \
+            --repo SAP/ai-sdk \
+            --base main \
+            --head "${{ steps.update-docs.outputs.branch }}" \
+            --title "chore: update Python API docs ($TAG)" \
+            --body "Automated update of Python API docs from [$TAG]($TAG_URL) in SAP/ai-sdk-python."
