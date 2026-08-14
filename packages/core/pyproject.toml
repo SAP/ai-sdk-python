@@ -41,9 +41,6 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 norecursedirs = ["integration_tests"]
-# Prevent pytest-dotenv from loading the repo-root .env (which contains real credentials)
-# into unit tests. Integration tests load it explicitly via conftest.
-env_files = []
 
 [project.scripts]
 aicore = "ai_core_sdk.cli:cli"

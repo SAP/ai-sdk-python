@@ -14,7 +14,6 @@ from ai_core_sdk.helpers.logging import get_logger
 
 logger = get_logger()
 
-
 def get_nested_value(data_dict, keys: List[str]):
     """
     Retrieve a nested value from a dictionary using a list of strings.
@@ -28,6 +27,12 @@ def get_nested_value(data_dict, keys: List[str]):
         current_value = current_value[key]
     return current_value
 
+def _get_nested_value_safe(data: Dict, keys) -> Optional[Any]:
+    try:
+        return get_nested_value(data, keys)
+    except KeyError:
+        logger.debug("Key path %s not found in service key.", keys)
+        return None
 
 @dataclass
 class VCAPEnvironment:
@@ -241,24 +246,17 @@ def _str_or_none(value) -> Optional[str]:
     return str(value) if value else None
 
 
-def _get_nested_safe(data: Dict, keys) -> Optional[Any]:
-    try:
-        return get_nested_value(data, keys)
-    except KeyError:
-        return None
-
-
 def _load_service_key() -> Dict[str, Any]:
     """Read and parse AICORE_SERVICE_KEY from the environment.
 
     :return: Parsed service key dict, or an empty dict if the env var is not set.
     :raises ValueError: If the env var is set but contains invalid JSON.
     """
-    raw = os.environ.get(ENV_VAR_AICORE_SERVICE_KEY)
-    if not raw:
+    service_key_json_string = os.environ.get(ENV_VAR_AICORE_SERVICE_KEY)
+    if not service_key_json_string:
         return {}
     try:
-        return json.loads(raw)
+        return json.loads(service_key_json_string)
     except json.JSONDecodeError as exc:
         raise ValueError(
             f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
@@ -271,7 +269,7 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     """
     Fetch credentials from a single source based on precedence.
 
-    Precedence order: kwargs > environment variables > config file > VCAP service
+    Precedence order: kwargs > environment variables > service key > config file > VCAP service
 
     Once a source is selected (first one with any credential), all credentials
     come from that source only. Resource group is an exception and follows
@@ -288,13 +286,16 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
 
     service_key = _load_service_key()
 
+    # `cv.vcap_key` describes the full path inside a VCAP_SERVICES entry, starting with
+    # `credentials` (e.g. `('credentials', 'clientid')`)
     sources = [
         Source("kwargs",
                lambda cv: _str_or_none(kwargs.get(cv.name))),
         Source("environment variables",
                lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
+        # A service key is already the inner credentials object, so the leading `credentials` segment is stripped.
         Source("service key",
-               lambda cv: _str_or_none(_get_nested_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
+               lambda cv: _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
         Source("config file",
                lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("VCAP service",
