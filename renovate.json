@@ -19,21 +19,6 @@
         {
             "matchManagers": ["github-actions", "custom.regex"],
             "schedule": ["every weekend"]
-        },
-        {
-            "matchPackageNames": ["sap/ai-sdk-python", "sap/ai-sdk-python/**"],
-            "groupName": "sap-ai-sdk",
-            "minimumReleaseAge": null,
-            "pinDigests": false
-        },
-        {
-            "matchPackageNames": ["langchain", "langchain/**"],
-            "groupName": "langchain"
-        },
-        {
-            "description": "Group CodeQL actions into a single PR",
-            "matchPackagePatterns": ["github/codeql-action/*"],
-            "groupName": "codeql"
         }
     ]
 }
