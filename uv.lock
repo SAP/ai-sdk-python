@@ -65,7 +65,7 @@ dev = [
 [package.metadata.requires-dev]
 dev = [
     { name = "commitizen", specifier = ">=4" },
-    { name = "furo" },
+    { name = "furo", specifier = ">=2025.12.19" },
     { name = "pip-licenses", specifier = ">=5.5.5" },
     { name = "sphinx", specifier = ">=7.0.0" },
 ]
