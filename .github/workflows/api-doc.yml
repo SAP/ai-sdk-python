@@ -44,6 +44,7 @@ jobs:
           repository: SAP/ai-sdk
           token: ${{ steps.app-token.outputs.token }}
           path: ai-sdk
+          persist-credentials: false
 
       - name: Configure git
         env:
@@ -80,10 +81,11 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           TAG: ${{ github.ref_name }}
           TAG_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+          BRANCH: ${{ steps.update-docs.outputs.branch }}
         run: |
           gh pr create \
             --repo SAP/ai-sdk \
             --base main \
-            --head "${{ steps.update-docs.outputs.branch }}" \
+            --head "$BRANCH" \
             --title "chore: update Python API docs ($TAG)" \
             --body "Automated update of Python API docs from [$TAG]($TAG_URL) in SAP/ai-sdk-python."
