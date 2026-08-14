@@ -16,20 +16,6 @@ The class names have not changed i.e., you can continue to use existing code.
 > [!NOTE]  
 > Please refer to the [Generative AI Hub SDK Documentation](https://github.wdf.sap.corp/pages/AI/generative-ai-hub-sdk)
 
-### For SAP Internal Teams
-
-For internal SAP teams, the latest version of the SDK is available in our private artifactory. You will need to modify your pip.conf file to point to our internal repository. Here's how your pip.conf should look like :
-
-```conf
-[global]
-index-url = https://int.repositories.cloud.sap/artifactory/api/pypi/build-snapshots-pypi/simple
-trusted-host = int.repositories.cloud.sap
-```
-
-This will ensure pip looks for packages in the SAP internal repository.
-
-After setting up the pip.conf file, you can install the SDK using the same pip command mentioned in the documentation.
-
 ## Development
 
 The main modules are located in the subfolder [proxy](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy):
