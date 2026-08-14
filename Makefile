@@ -16,7 +16,8 @@ docs:
 	uv run sphinx-apidoc -e -M -f -T \
 		-o docs/sphinx/_autogen \
 		packages/gen/gen_ai_hub \
-		packages/gen/gen_ai_hub/evaluations/_internal
+		packages/gen/gen_ai_hub/evaluations/_internal \
+		packages/gen/gen_ai_hub/evaluations/helpers
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
 lint:
