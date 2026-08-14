@@ -1611,7 +1611,7 @@ wheels = [
 
 [[package]]
 name = "langchain-aws"
-version = "1.6.4"
+version = "1.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -1621,9 +1621,9 @@ dependencies = [
     { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a7/f5/df923afd1844d38a6e6f3fa7c566ac83a192e9f7b55f1b369c8858ed7953/langchain_aws-1.6.4.tar.gz", hash = "sha256:1ff9769b8177973bb0345af92b667e460285418914b918a117649558335461bb", size = 583492, upload-time = "2026-07-28T12:03:43.148Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/64/ca/88fd983e4ffb2b0a765efdd57da75b99be9f2077bedf75e57a7b7d6ac843/langchain_aws-1.7.0.tar.gz", hash = "sha256:e4e8d578b4be8fd3ad970373fc72c3e321fea7f955cb6c075464e30636ec583d", size = 609279, upload-time = "2026-08-05T18:45:38.166Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/4d/1a/1a6822a4a5f7412667df6b62a9cc53c6547650dd910b6b16d3ecbc48603d/langchain_aws-1.6.4-py3-none-any.whl", hash = "sha256:db8aeda35dbdfab543398f78cd792059a2ed917ebe0943ff3012f43aeaaee9b4", size = 209733, upload-time = "2026-07-28T12:03:42.007Z" },
+    { url = "https://files.pythonhosted.org/packages/e1/4c/85e6c625b04c2637ad053c28ed7eda9aa4b89f77e6763b3a41f126427ded/langchain_aws-1.7.0-py3-none-any.whl", hash = "sha256:25ccaebeec0bd718df4a1dce44c725591e177690bc19df7caa0cd2d601df27a0", size = 214878, upload-time = "2026-08-05T18:45:36.583Z" },
 ]
 
 [[package]]
@@ -4202,7 +4202,7 @@ requires-dist = [
     { name = "h11", specifier = ">=0.16.0" },
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "langchain", specifier = "~=1.3.14" },
-    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.6.3" },
+    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
     { name = "langchain-classic", specifier = "~=1.0.0" },
     { name = "langchain-community", specifier = "~=0.4.1" },
     { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.3.1" },
