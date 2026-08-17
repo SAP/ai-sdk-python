@@ -54,9 +54,9 @@ jobs:
       - name: Update api docs
         id: update-docs
         env:
-          TAG: ${{ github.ref_name }}
+          REF: ${{ github.ref_name }}
         run: |
-          BRANCH="api-docs-python-$TAG-$(date +%Y%m%d%H%M%S)"
+          BRANCH="api-docs-python-$REF-$(date +%Y%m%d%H%M%S)"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           cd ai-sdk
           git checkout -b "$BRANCH"
@@ -67,7 +67,7 @@ jobs:
             echo "No documentation changes to commit"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "chore: update Python API docs ($TAG)"
+            git commit -m "chore: update Python API docs ($REF)"
             git push origin "$BRANCH"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
@@ -76,13 +76,17 @@ jobs:
         if: steps.update-docs.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          TAG: ${{ github.ref_name }}
-          TAG_URL: ${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}
+          REF: ${{ github.ref_name }}
           BRANCH: ${{ steps.update-docs.outputs.branch }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            REF_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$REF"
+          else
+            REF_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$REF"
+          fi
           gh pr create \
             --repo SAP/ai-sdk \
             --base main \
             --head "$BRANCH" \
-            --title "chore: update Python API docs ($TAG)" \
-            --body "Automated update of Python API docs from [$TAG]($TAG_URL) in SAP/ai-sdk-python."
+            --title "chore: update Python API docs ($REF)" \
+            --body "Automated update of Python API docs from [$REF]($REF_URL) in SAP/ai-sdk-python."
