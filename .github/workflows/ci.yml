@@ -20,9 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run pylint
         run: |
@@ -54,8 +51,6 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           python-version: ${{ matrix.python-version }}
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run unit tests with coverage
         id: run-tests
@@ -78,9 +73,6 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run base integration tests
         env:
@@ -114,9 +106,6 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run core integration tests
         env:
@@ -155,9 +144,6 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run gen integration tests
         env:

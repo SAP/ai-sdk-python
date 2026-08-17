@@ -16,13 +16,6 @@ inputs:
   python-version:
     description: 'Python version'
     default: '3.13'
-  index-username:
-    description: 'Username for the PyPI index'
-    default: ''
-  index-token:
-    description: 'Auth token for the PyPI index'
-    default: ''
-
 runs:
   using: composite
   steps:
@@ -43,18 +36,4 @@ runs:
       uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 #v8.2.0
     - name: Install dependencies
       shell: bash
-      env:
-        INDEX_USERNAME: ${{ inputs.index-username }}
-        INDEX_TOKEN: ${{ inputs.index-token }}
-        IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
-      run: |
-        if [[ "$IS_FORK" == "true" ]]; then
-          echo "Fork detected — syncing from PyPI without lockfile"
-          UV_INDEX_URL="https://pypi.org/simple/" \
-            uv sync --all-packages --all-extras
-        else
-          echo "Syncing from Artifactory with lockfile"
-          UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
-          UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
-            uv sync --all-packages --all-extras --locked
-        fi
+      run: uv sync --all-packages --all-extras --locked
