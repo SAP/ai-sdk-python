@@ -32,6 +32,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.ref }}
+
       - name: Generate docs
         run: uv run make docs
 
@@ -41,7 +42,7 @@ jobs:
           repository: SAP/ai-sdk
           token: ${{ steps.app-token.outputs.token }}
           path: ai-sdk
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Configure git
         env:
@@ -51,33 +52,39 @@ jobs:
           git -C ai-sdk config user.email "$BOT_EMAIL"
           git -C ai-sdk config user.name "$BOT_NAME"
 
-      - name: Update api docs
-        id: update-docs
+      - name: Prepare docs branch
+        id: prepare-docs
         env:
           REF: ${{ github.ref_name }}
         run: |
           BRANCH="api-docs-python-$REF"
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
-          cd ai-sdk
-          git checkout -b "$BRANCH"
-          rm -rf static/api-python
-          cp -r ../api-docs/ static/api-python
-          git add static/api-python
-          if git diff --cached --quiet; then
+          git -C ai-sdk checkout -b "$BRANCH"
+          rm -rf ai-sdk/static/api-python
+          cp -r api-docs/ ai-sdk/static/api-python
+          git -C ai-sdk add static/api-python
+          if git -C ai-sdk diff --cached --quiet; then
             echo "No documentation changes to commit"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            git commit -m "chore: update Python API docs ($REF)"
-            git push --force origin "$BRANCH"
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Push docs branch
+        if: steps.prepare-docs.outputs.changed == 'true'
+        env:
+          REF: ${{ github.ref_name }}
+          BRANCH: ${{ steps.prepare-docs.outputs.branch }}
+        run: |
+          git -C ai-sdk commit -m "chore: update Python API docs ($REF)"
+          git -C ai-sdk push --force origin "$BRANCH"
+
       - name: Create pull request
-        if: steps.update-docs.outputs.changed == 'true'
+        if: steps.prepare-docs.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REF: ${{ github.ref_name }}
-          BRANCH: ${{ steps.update-docs.outputs.branch }}
+          BRANCH: ${{ steps.prepare-docs.outputs.branch }}
         run: |
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
             REF_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$REF"
