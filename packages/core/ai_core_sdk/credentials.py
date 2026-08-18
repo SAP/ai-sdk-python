@@ -269,7 +269,7 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     """
     Fetch credentials from a single source based on precedence.
 
-    Precedence order: kwargs > environment variables > service key > config file > VCAP service
+    Precedence order: kwargs > separate environment variables > service key > config file > VCAP service
 
     Once a source is selected (first one with any credential), all credentials
     come from that source only. Resource group is an exception and follows
