@@ -68,8 +68,12 @@ instance/
 # Scrapy stuff:
 .scrapy
 
+# Generated API docs
+api-docs/
+
 # Sphinx documentation
 **/docs/_build/
+docs/sphinx/_autogen/
 **/docs/source/_reference
 **/docs/source/_api_doc
 
