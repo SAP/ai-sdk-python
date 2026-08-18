@@ -13,3 +13,4 @@ autodoc_default_options = {
     "special-members": "__init__",
 }
 autodoc_member_order = "bysource"
+html_copy_source = False
