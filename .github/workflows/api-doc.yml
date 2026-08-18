@@ -61,7 +61,7 @@ jobs:
           echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
           git -C ai-sdk checkout -b "$BRANCH"
           rm -rf ai-sdk/static/api-python
-          cp -r api-docs/ ai-sdk/static/api-python
+          rsync -a --exclude='.*' api-docs/ ai-sdk/static/api-python/
           git -C ai-sdk add static/api-python
           if git -C ai-sdk diff --cached --quiet; then
             echo "No documentation changes to commit"
