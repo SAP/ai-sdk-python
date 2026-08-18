@@ -32,6 +32,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.ref }}
+
       - name: Generate docs
         run: uv run make docs
 
