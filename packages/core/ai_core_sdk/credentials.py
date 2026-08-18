@@ -8,12 +8,11 @@ import pathlib
 from dataclasses import dataclass
 
 from ai_core_sdk.helpers import get_home
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, AUTH_ENDPOINT_SUFFIX, CONFIG_FILE_ENV_VAR, PROFILE_ENV_VAR,
-                                           VCAP_AICORE_SERVICE_NAME, VCAP_SERVICES_ENV_VAR)
+from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, AUTH_ENDPOINT_SUFFIX, ENV_VAR_AICORE_CONFIG_FILE, ENV_VAR_AICORE_PROFILE,
+                                           ENV_VAR_AICORE_SERVICE_KEY, VCAP_AICORE_SERVICE_NAME, ENV_VAR_VCAP_SERVICES)
 from ai_core_sdk.helpers.logging import get_logger
 
 logger = get_logger()
-
 
 def get_nested_value(data_dict, keys: List[str]):
     """
@@ -28,6 +27,12 @@ def get_nested_value(data_dict, keys: List[str]):
         current_value = current_value[key]
     return current_value
 
+def _get_nested_value_safe(data: Dict, keys) -> Optional[Any]:
+    try:
+        return get_nested_value(data, keys)
+    except KeyError:
+        logger.debug("Key path %s not found in service key.", keys)
+        return None
 
 @dataclass
 class VCAPEnvironment:
@@ -35,7 +40,7 @@ class VCAPEnvironment:
 
     @classmethod
     def from_env(cls, env_var: Optional[str] = None):
-        env_var = env_var or VCAP_SERVICES_ENV_VAR
+        env_var = env_var or ENV_VAR_VCAP_SERVICES
         env = json.loads(os.environ.get(env_var, '{}'))
         return cls.from_dict(env)
 
@@ -148,9 +153,9 @@ CORE_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = [
 def init_conf(profile: str = None):
     # Read configuration from ${AICORE_HOME}/config_<profile>.json.
     home = pathlib.Path(get_home())
-    profile = profile or os.environ.get(PROFILE_ENV_VAR)
+    profile = profile or os.environ.get(ENV_VAR_AICORE_PROFILE)
     profile_config_file = f'config_{profile}.json'
-    direct_config_file = pathlib.Path(os.getenv(CONFIG_FILE_ENV_VAR)) if os.getenv(CONFIG_FILE_ENV_VAR) else None
+    direct_config_file = pathlib.Path(os.getenv(ENV_VAR_AICORE_CONFIG_FILE)) if os.getenv(ENV_VAR_AICORE_CONFIG_FILE) else None
     path_to_config = (direct_config_file or
                       (home / ('config.json' if profile in ('default', '', None) else profile_config_file)))
     config = {}
@@ -241,12 +246,30 @@ def _str_or_none(value) -> Optional[str]:
     return str(value) if value else None
 
 
+def _load_service_key() -> Dict[str, Any]:
+    """Read and parse AICORE_SERVICE_KEY from the environment.
+
+    :return: Parsed service key dict, or an empty dict if the env var is not set.
+    :raises ValueError: If the env var is set but contains invalid JSON.
+    """
+    service_key_json_string = os.environ.get(ENV_VAR_AICORE_SERVICE_KEY)
+    if not service_key_json_string:
+        return {}
+    try:
+        return json.loads(service_key_json_string)
+    except json.JSONDecodeError as exc:
+        raise ValueError(
+            f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
+        ) from exc
+
+
+
 def fetch_credentials(profile: str = None, credential_values: List[CredentialsValue] = CORE_CREDENTIAL_VALUES,
                       validate: bool = True, **kwargs) -> Dict[str, str]:
     """
     Fetch credentials from a single source based on precedence.
 
-    Precedence order: kwargs > environment variables > config file > VCAP service
+    Precedence order: kwargs > separate environment variables > service key > config file > VCAP service
 
     Once a source is selected (first one with any credential), all credentials
     come from that source only. Resource group is an exception and follows
@@ -261,11 +284,18 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     except KeyError:
         vcap_service = None
 
+    service_key = _load_service_key()
+
+    # `cv.vcap_key` describes the full path inside a VCAP_SERVICES entry, starting with
+    # `credentials` (e.g. `('credentials', 'clientid')`)
     sources = [
         Source("kwargs",
                lambda cv: _str_or_none(kwargs.get(cv.name))),
         Source("environment variables",
                lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
+        # A service key is already the inner credentials object, so the leading `credentials` segment is stripped.
+        Source("service key",
+               lambda cv: _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
         Source("config file",
                lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("VCAP service",
