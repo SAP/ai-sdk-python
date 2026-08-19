@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import core, openai
+from sample_code import core, openai, orchestration
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -39,3 +39,54 @@ app.get("/openai/chat-completion-structured-stream")(
 app.get("/openai/responses")(openai.responses_simple)
 app.get("/openai/responses-structured")(openai.responses_structured)
 app.get("/openai/embedding")(openai.embedding)
+
+# FEATURE PLAN
+
+# Orchestration
+# - completion --> with resource group and with fallback
+# - stream completion --> also with json response and tools
+# - template --> from registry
+# - messages history
+# - image
+
+app.get("/orchestration/completion")(orchestration.completion)
+app.get("/orchestration/completion-stream")(orchestration.completion_stream)
+app.get("/orchestration/completion-template")(orchestration.completion_template)
+app.get("/orchestration/message-history")(orchestration.message_history)
+app.get("/orchestration/completion-image")(orchestration.completion_image)
+
+# - reasoning
+# - multi turn reasoning
+# - stream reasoning
+# - multi string
+# - file input (url, local, base 64, other input formats?)
+# - input filtering with multiple policies
+# - output filtering with multiple policies
+# - llama guard (why separate?)
+# - masking anonymiyation/pseudonymization/regex (embedding with masking?)
+# - grounding (sharepoint/helpsap/parameter)
+# - response format json (schema/object)
+# - translation
+# - embedding
+# - citations
+# - config (?) from registry
+# - from json (?)
+# - SAP ABAP
+# - cache control (?)
+
+# LangChain
+# - max tokens
+# - structured output
+# - orchestration
+# - input filter
+# - output filter
+# - masking
+# - rag
+# - toolchain
+# - stateful chain
+# - invoke dynamic model agent
+# - prompt caching agent
+# - retrieve documents
+# - streaming
+
+# Further native stuff...
