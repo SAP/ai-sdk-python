@@ -1,11 +1,29 @@
 from fastapi.responses import StreamingResponse
 from gen_ai_hub.orchestration_v2 import (
+    AzureContentSafetyInput,
+    AzureContentSafetyInputFilterConfig,
+    AzureContentSafetyOutput,
+    AzureContentSafetyOutputFilterConfig,
+    AzureThreshold,
+    DPICustomEntity,
+    DPIMethodConstant,
+    DPIStandardEntity,
+    FilteringModuleConfig,
     GlobalStreamOptions,
     ImageItem,
+    InputFiltering,
+    LlamaGuard38bFilter,
+    LlamaGuard38bFilterConfig,
     LLMModelDetails,
+    MaskingMethod,
+    MaskingModuleConfig,
+    MaskingProviderConfig,
     ModuleConfig,
     OrchestrationConfig,
+    OrchestrationError,
     OrchestrationService,
+    OutputFiltering,
+    ProfileEntity,
     PromptTemplatingModuleConfig,
     Template,
     UserMessage,
@@ -154,71 +172,126 @@ def completion_image():
     return {"result": result.final_result.choices[0].message.content}
 
 
-# from fastapi.responses import StreamingResponse
-# from gen_ai_hub.orchestration.models.azure_content_filter import (
-#     AzureContentFilter,
-#     AzureThreshold,
-# )
-# from gen_ai_hub.orchestration.models.config import OrchestrationConfig
+def input_filtering():
+    content_filter_config = FilteringModuleConfig(
+        input=InputFiltering(
+            filters=[
+                AzureContentSafetyInputFilterConfig(
+                    # only safe content allowed for hate and violence
+                    config=AzureContentSafetyInput(
+                        hate=AzureThreshold.ALLOW_SAFE,
+                        violence=AzureThreshold.ALLOW_SAFE,
+                    )
+                ),
+                # category 'privacy' enabled
+                LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
+            ]
+        )
+    )
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            # should be filtered by Llama Guard
+                            content="My social insurance number is ABC123456789."
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            ),
+            filtering=content_filter_config,
+        )
+    )
+    service = OrchestrationService(config=config)
+    try:
+        service.run()
+        raise RuntimeError("Input was not filtered as expected")
+    except OrchestrationError as e:
+        if e.code == 400:
+            service.close_http_connection()
+            return {"info": "input was filtered as expected"}
+        else:
+            raise
 
-# from gen_ai_hub.orchestration.models.content_filtering import (
-#     ContentFiltering,
-#     InputFiltering,
-#     OutputFiltering,
-# )
-# from gen_ai_hub.orchestration.models.llm import LLM
-# from gen_ai_hub.orchestration.models.message import (
-#     AssistantMessage,
-#    SystemMessage,
-#    UserMessage,
-# )
 
-# from gen_ai_hub.orchestration.models.template import Template, TemplateValue
-# from gen_ai_hub.orchestration.service import OrchestrationService
+def output_filtering():
+    content_filter_config = FilteringModuleConfig(
+        output=OutputFiltering(
+            filters=[
+                AzureContentSafetyOutputFilterConfig(
+                    # only safe content allowed for hate and violence
+                    config=AzureContentSafetyOutput(
+                        hate=AzureThreshold.ALLOW_SAFE,
+                        violence=AzureThreshold.ALLOW_SAFE,
+                    )
+                ),
+                # category 'privacy' enabled
+                LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
+            ]
+        )
+    )
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            # should be filtered by Azure content filter
+                            content="Reparaphrase the sentence in 30 ways with strong feelings: 'I hate you!'."
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(name="anthropic--claude-4.5-haiku"),
+            ),
+            filtering=content_filter_config,
+        )
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    # should be filtered by the Azure content filter, hence content should be empty
+    if result.final_result.choices[0].message.content:
+        raise RuntimeError("Output was not filtered as expected")
+    else:
+        return {"info": "output was filtered as expected"}
 
-# def input_filtering():
-#     azure_filter = AzureContentFilter(
-#         hate=AzureThreshold.ALLOW_SAFE,
-#         sexual=AzureThreshold.ALLOW_SAFE,
-#         violence=AzureThreshold.ALLOW_SAFE,
-#         self_harm=AzureThreshold.ALLOW_SAFE,
-#     )
-#     config = OrchestrationConfig(
-#         template=Template(
-#             messages=[
-#                 SystemMessage("You are a helpful assistant."),
-#                 UserMessage("Tell me a fun fact about elephants."),
-#             ]
-#         ),
-#         llm=_LLM,
-#         filtering=ContentFiltering(
-#             input_filtering=InputFiltering(filters=[azure_filter])
-#         ),
-#     )
-#     service = OrchestrationService(config=config)
-#     response = service.run()
-#     return {"content": response.content}
-#
-#
-# def output_filtering():
-#     azure_filter = AzureContentFilter(
-#         hate=AzureThreshold.ALLOW_SAFE,
-#         sexual=AzureThreshold.ALLOW_SAFE,
-#         violence=AzureThreshold.ALLOW_SAFE,
-#         self_harm=AzureThreshold.ALLOW_SAFE,
-#     )
-#     config = OrchestrationConfig(
-#         template=Template(
-#             messages=[
-#                 SystemMessage("You are a helpful assistant."),
-#                 UserMessage("Tell me a fun fact about dolphins."),
-#             ]
-#         ),
-#         llm=_LLM,
-#         filtering=ContentFiltering(
-#             output_filtering=OutputFiltering(filters=[azure_filter])
-#         ),
-#     )
-#     service = OrchestrationService(config=config)
-#     response = service.run()
-#     return {"content": response.content}
+
+def completion_masking():
+    data_masking_config = MaskingModuleConfig(
+        providers=[
+            MaskingProviderConfig(
+                method=MaskingMethod.PSEUDONYMIZATION,
+                entities=[
+                    DPIStandardEntity(type=ProfileEntity.ADDRESS),
+                    DPIStandardEntity(type=ProfileEntity.EMAIL),
+                    DPIStandardEntity(type=ProfileEntity.PHONE),
+                    DPIStandardEntity(type=ProfileEntity.PERSON),
+                    DPICustomEntity(
+                        regex="[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}",
+                        replacement_strategy=DPIMethodConstant(value="MASKED_DATE"),
+                    ),
+                ],
+            )
+        ]
+    )
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            content="Generate HTML that shows the contact info for Jane Doe, born on 1975-03-05, living at 10 Downing Street, London UK with email 'jane.doe@mailprovider.com' and phone number +4902044123221."
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            ),
+            masking=data_masking_config,
+        )
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return {"result": result.final_result.choices[0].message.content}

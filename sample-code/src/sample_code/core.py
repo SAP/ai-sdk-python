@@ -4,6 +4,8 @@ from ai_api_client_sdk.models.parameter_binding import ParameterBinding
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 from fastapi import Body
 
+# TODO: add missing configuration and deployment options
+
 
 def get_configurations():
     client = AICoreV2Client.from_env()
