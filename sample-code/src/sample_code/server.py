@@ -43,35 +43,30 @@ app.get("/openai/embedding")(openai.embedding)
 app.get("/orchestration/completion")(orchestration.completion)
 app.get("/orchestration/completion-stream")(orchestration.completion_stream)
 app.get("/orchestration/completion-template")(orchestration.completion_template)
+app.get("/orchestration/completion-json")(orchestration.completion_json)
 app.get("/orchestration/message-history")(orchestration.message_history)
 app.get("/orchestration/completion-image")(orchestration.completion_image)
 app.get("/orchestration/input-filtering")(orchestration.input_filtering)
 app.get("/orchestration/output-filtering")(orchestration.output_filtering)
 app.get("/orchestration/completion-masking")(orchestration.completion_masking)
+app.get("/orchestration/translation")(orchestration.translation)
+app.get("/orchestration/citations")(orchestration.sonar_with_citations)
+app.get("/orchestration/embedding")(orchestration.embedding)
+app.get("/orchestration/embedding-batched")(orchestration.embedding_batched)
+app.get("/orchestration/embedding-masked")(orchestration.embedding_masked)
 
 # PARTIALLY MISSING
 # Orchestration
 # - completion --> with resource group and with fallback
 # - stream completion --> also with json response and tools
 # - template --> from registry
-# - masking anonymiyation/pseudonymization/regex --> embedding and grounding with masking
 
 # FULLY MISSING
 # Orchestration
-# - reasoning
-# - multi turn reasoning
-# - stream reasoning
-# - multi string
-# - file input (url, local, base 64, other input formats?)
-# - grounding (sharepoint/helpsap/parameter)
-# - response format json (schema/object)
-# - translation
-# - embedding
-# - citations
+# - tool calling
+# - async
 # - config (?) from registry
 # - from json (?)
-# - SAP ABAP
-# - cache control (?)
 
 # LangChain
 # - max tokens

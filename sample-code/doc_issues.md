@@ -5,3 +5,4 @@ List of documentation issues I noticed. Overlaps with <https://github.com/orgs/S
 - OpenAI Completions example in docs doesn't work (API seeems unsupported)
 - For streaming, is the chat.beta.chat.completions example still needed?
 - Orchestration Service Documentation link is broken
+- Is there an example for citations?
