@@ -28,7 +28,7 @@ jobs:
           permission-pull-requests: write
 
       - name: Setup
-        uses: SAP/ai-sdk-python/.github/actions/setup@main
+        uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.ref }}

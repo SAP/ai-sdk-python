@@ -12,7 +12,7 @@ jobs:
   teardown:
     runs-on: ubuntu-latest
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
 
       - name: Tear down integration test environment
         run: bash scripts/teardown-integration-env.sh
