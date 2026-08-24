@@ -262,7 +262,21 @@ def _load_service_key() -> Dict[str, Any]:
             f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
         ) from exc
 
+def _load_vcap_service_key() -> Optional[Dict[str, Any]]:
+    """Read the AI Core service credentials from the ``VCAP_SERVICES`` environment variable.
 
+    Parses ``VCAP_SERVICES``, looks up the entry named ``'aicore'``, and returns
+    its credentials dict.  Returns ``None`` if ``VCAP_SERVICES`` is not set or
+    does not contain an ``'aicore'`` binding.
+
+    :return: Credentials dict from the ``aicore`` VCAP binding, or ``None`` if absent.
+    :rtype: Optional[Dict[str, Any]]
+    """
+    try:
+        vcap_service = VCAPEnvironment.from_env()[VCAP_AICORE_SERVICE_NAME]
+    except KeyError:
+        vcap_service = None
+    return vcap_service
 
 def fetch_credentials(profile: str = None, credential_values: List[CredentialsValue] = CORE_CREDENTIAL_VALUES,
                       validate: bool = True, **kwargs) -> Dict[str, str]:
@@ -279,13 +293,6 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     """
     config = init_conf(profile=profile)
 
-    try:
-        vcap_service = VCAPEnvironment.from_env()[VCAP_AICORE_SERVICE_NAME]
-    except KeyError:
-        vcap_service = None
-
-    service_key = _load_service_key()
-
     # `cv.vcap_key` describes the full path inside a VCAP_SERVICES entry, starting with
     # `credentials` (e.g. `('credentials', 'clientid')`)
     sources = [
@@ -295,11 +302,11 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
                lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         # A service key is already the inner credentials object, so the leading `credentials` segment is stripped.
         Source("service key",
-               lambda cv: _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
+               lambda cv, service_key = _load_service_key(): _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
         Source("config file",
                lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("VCAP service",
-               lambda cv: _str_or_none(vcap_service.get(cv.vcap_key, None) if vcap_service and cv.vcap_key else None)),
+               lambda cv, vcap_service = _load_vcap_service_key(): _str_or_none(vcap_service.get(cv.vcap_key, None) if vcap_service and cv.vcap_key else None)),
     ]
 
     credentials = _resolve_credentials(sources, credential_values)
