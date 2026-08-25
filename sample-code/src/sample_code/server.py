@@ -33,8 +33,10 @@ app.get("/core/models")(core.get_models)
 app.get("/openai/chat-completion")(openai.chat_completion)
 app.get("/openai/chat-completion-stream")(openai.chat_completion_stream)
 app.get("/openai/chat-completion-structured")(openai.chat_completion_structured)
+app.get("/openai/chat-completion-async")(openai.chat_completion_async)
 app.get("/openai/responses")(openai.responses_simple)
 app.get("/openai/responses-structured")(openai.responses_structured)
+app.get("/openai/responses-async")(openai.responses_simple_async)
 app.get("/openai/embedding")(openai.embedding)
 
 # Google
