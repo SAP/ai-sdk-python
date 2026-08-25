@@ -23,6 +23,7 @@ def create_configuration():
     The configuration is created for the resource group specified in the .env file.
     """
     client = AICoreV2Client.from_env()
+    # for illustrative purposes the example config is hardcoded
     parameter_bindings = [
         ParameterBinding.from_dict({"key": "modelName", "value": "gpt-5.4-nano"}),
         ParameterBinding.from_dict({"key": "modelVersion", "value": "latest"}),

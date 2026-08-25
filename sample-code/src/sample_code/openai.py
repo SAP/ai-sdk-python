@@ -70,7 +70,7 @@ def chat_completion_stream():
                 if content:
                     yield content
 
-    return StreamingResponse(generate(), media_type="text/event-stream")
+    return StreamingResponse(generate(), media_type="text/plain")
 
 
 def responses_simple():

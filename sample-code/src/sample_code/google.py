@@ -40,7 +40,7 @@ def generate_stream():
             if chunk.text:
                 yield chunk.text
 
-    return StreamingResponse(stream(), media_type="text/event-stream")
+    return StreamingResponse(stream(), media_type="text/plain")
 
 
 def tool_call():

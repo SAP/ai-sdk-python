@@ -97,7 +97,7 @@ async def completion_async():
     )
     service = OrchestrationService(config=config)
     result = await service.arun()
-    service.close_http_connection()
+    await service.aclose_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
@@ -134,7 +134,7 @@ def completion_stream():
                     yield content
         service.close_http_connection()
 
-    return StreamingResponse(generate(), media_type="text/event-stream")
+    return StreamingResponse(generate(), media_type="text/plain")
 
 
 def completion_json():
@@ -299,7 +299,7 @@ def message_history():
     )
 
     first_response = service.run(config=first_config)
-    # first_response.intermediate_results.templating contains the history including the one that was passed in (here this part is still empty)
+    # first_response.intermediate_results.templating contains the history
     history = first_response.intermediate_results.templating or []
     history.append(first_response.final_result.choices[0].message)
 
@@ -405,10 +405,11 @@ def input_filtering():
         raise RuntimeError("Input was not filtered as expected")
     except OrchestrationError as e:
         if e.code == 400:
-            service.close_http_connection()
             return {"result": "Input was filtered as expected."}
         else:
             raise
+    finally:
+        service.close_http_connection()
 
 
 def output_filtering():
@@ -585,7 +586,7 @@ def embedding():
     Returns:
         JSON object containing the embedding as result.
     """
-    embdding_config = EmbeddingsOrchestrationConfig(
+    embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
             embeddings=EmbeddingsModelConfig(
                 model=EmbeddingsModelDetails(name="text-embedding-3-small")
@@ -595,19 +596,20 @@ def embedding():
 
     service = OrchestrationService()
     response = service.embed(
-        config=embdding_config, input=EmbeddingsInput(text="Hello World!")
+        config=embedding_config, input=EmbeddingsInput(text="Hello World!")
     )
+    service.close_http_connection()
     return {"result": response.final_result.data[0].embedding}
 
 
 def embedding_batched():
     """
-    Run masked (anonymized )embedding example through the Orchestration Service API.
+    Run batched embedding example through the Orchestration Service API.
 
     Returns:
         JSON object containing the embedding as result.
     """
-    embdding_config = EmbeddingsOrchestrationConfig(
+    embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
             embeddings=EmbeddingsModelConfig(
                 model=EmbeddingsModelDetails(name="text-embedding-3-small")
@@ -619,19 +621,26 @@ def embedding_batched():
 
     service = OrchestrationService()
     response = service.embed(
-        config=embdding_config, input=EmbeddingsInput(text=input_list)
+        config=embedding_config, input=EmbeddingsInput(text=input_list)
     )
+    service.close_http_connection()
     return {"result": response.final_result.data}
 
 
 def embedding_masked():
-    embdding_config = EmbeddingsOrchestrationConfig(
+    """
+    Run masked (anonymized )embedding example through the Orchestration Service API.
+
+    Returns:
+        JSON object containing the embedding as result.
+    """
+    embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
             embeddings=EmbeddingsModelConfig(
                 model=EmbeddingsModelDetails(name="text-embedding-3-small")
             ),
             masking=MaskingModuleConfig(
-                masking_providers=[
+                providers=[
                     MaskingProviderConfig(
                         method=MaskingMethod.ANONYMIZATION,
                         entities=[
@@ -647,11 +656,12 @@ def embedding_masked():
 
     service = OrchestrationService()
     response = service.embed(
-        config=embdding_config,
+        config=embedding_config,
         input=EmbeddingsInput(
             text="Contact John Smith at john.smith@example.com or call 555-123-4567."
         ),
     )
+    service.close_http_connection()
     return {"result": response.final_result.data[0].embedding}
 
 
@@ -690,7 +700,7 @@ def tool_call_decorator():
     service = OrchestrationService()
     result = service.run(config=config)
     tool_calls = result.final_result.choices[0].message.tool_calls
-    if tool_calls is None:
+    if not tool_calls:
         raise RuntimeError("Unexpectedly no tool calls in response")
 
     history = list(result.intermediate_results.templating or [])
@@ -705,6 +715,7 @@ def tool_call_decorator():
         history.append(tool_message)
 
     result = service.run(config=config, history=history)
+    service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
@@ -780,6 +791,7 @@ def tool_call_function_tool():
         history.append(tool_message)
 
     result = service.run(config=config, history=history)
+    service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
@@ -851,4 +863,5 @@ def tool_call_json():
         history.append(tool_message)
 
     result = service.run(config=config, history=history)
+    service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
