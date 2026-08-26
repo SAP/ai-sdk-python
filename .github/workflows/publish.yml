@@ -1,4 +1,4 @@
-name: publish-testpypi
+name: publish-pypi
 
 on:
   release:
@@ -96,7 +96,7 @@ jobs:
           path: packages/${{ steps.meta.outputs.package }}/dist/
 
   publish-pypi:
-    name: Publish to TestPyPI
+    name: Publish to PyPI
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -110,9 +110,8 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Publish package distributions to TestPyPI
+      - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
-          repository-url: https://test.pypi.org/legacy/
           skip-existing: false
           packages-dir: dist/
