@@ -69,6 +69,8 @@ jobs:
     needs: sync-changelog
     permissions:
       contents: read
+    outputs:
+      package: ${{ steps.meta.outputs.package }}
     steps:
       - name: Get package from tag
         id: meta
@@ -100,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: pypi:sap-ai-sdk-gen
+      name: pypi:sap-ai-sdk-${{ needs.build.outputs.package }}
     permissions:
       id-token: write
     steps:
