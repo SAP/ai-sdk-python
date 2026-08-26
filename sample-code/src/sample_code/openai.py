@@ -1,4 +1,5 @@
 from fastapi.responses import StreamingResponse
+from gen_ai_hub.proxy.core import get_proxy_client
 from gen_ai_hub.proxy.native.openai import AsyncOpenAI, chat, embeddings, responses
 from openai.types.responses import Response
 from pydantic import BaseModel
@@ -24,33 +25,6 @@ def chat_completion():
         },
     ]
     response = chat.completions.create(model_name="gpt-5.4-nano", messages=messages)
-    return {"result": response.choices[0].message.content}
-
-
-async def chat_completion_async():
-    """
-    Run async chat example for GPT-5.4-nano with the ChatCompletions API.
-
-    Returns:
-        JSON object containing the model response as result.
-    """
-    client = AsyncOpenAI()
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Does Azure OpenAI support customer managed keys?"},
-        {
-            "role": "assistant",
-            "content": "Yes, customer managed keys are supported by Azure OpenAI.",
-        },
-        {
-            "role": "user",
-            "content": "Do other Azure Cognitive Services support this too?",
-        },
-    ]
-    response = await client.chat.completions.create(
-        model_name="gpt-5.4-nano", messages=messages
-    )
-    await client.close()
     return {"result": response.choices[0].message.content}
 
 
@@ -114,23 +88,6 @@ def responses_simple():
         input="What is the capital of France?",
     )
     return {"result": response.output[0].content[0].text}
-
-
-async def responses_simple_async():
-    """
-    Run async chat example for GPT-5.4-nano with the Responses API.
-
-    Returns:
-        JSON object containing the model response as result.
-    """
-    client = AsyncOpenAI()
-    response: Response = await client.responses.create(  # type: ignore[assignment]
-        model="gpt-5.4-nano",
-        instructions="You are a helpful assistant.",
-        input="What is the capital of France?",
-    )
-    await client.close()
-    return {"result": response.output[0].content[0].text}  # type: ignore[union-attr]
 
 
 def responses_structured():
