@@ -3,6 +3,8 @@ name = "sample-code"
 version = "0.1.0"
 description = "Sample code for using the AI Core Python SDK"
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
