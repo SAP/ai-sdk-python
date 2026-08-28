@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sap-openapi-generator"
+version = "0.1.0"
+description = "SAP Cloud SDK for AI (Python): OpenAPI code generation tooling"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "SAP SE" }]
+requires-python = ">=3.10"
+dependencies = [
+    "PyYAML>=6.0",
+]
+
+[project.scripts]
+sap-preprocess-spec = "sap_openapi_generator.preprocess_spec:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,43 @@
+# openapi-generator-cli configuration for the Python generator (Pydantic v2, Python 3.10+).
+#
+# Usage (from repository root or package directory):
+#
+#   # 1. Pre-process the spec
+#   sap-preprocess-spec --input path/to/spec.yaml --output .cache/processed.yaml
+#
+#   # 2. Run the generator
+#   npx @openapitools/openapi-generator-cli generate \
+#     -g python \
+#     -i .cache/processed.yaml \
+#     -o path/to/output \
+#     -c packages/openapi-generator/config/python-config.yaml \
+#     --additional-properties packageName=<your_package_name>
+#
+# The openapitools.json at the repository root pins the generator version.
+
+generatorName: python
+
+# Override at call site with --additional-properties packageName=<name>
+packageName: generated_client
+packageVersion: "1.0.0"
+
+# HTTP backend: urllib3 (sync, default), asyncio (async), httpx (sync+async)
+library: httpx
+
+additionalProperties:
+  # Suppress timestamp comment in generated files for clean VCS diffs
+  hideGenerationTimestamp: true
+  # SAP APIs often include additional properties — allow them in models
+  disallowAdditionalPropertiesIfNotPresent: false
+  # Resolve discriminator lookups for oneOf/anyOf
+  useOneOfDiscriminatorLookup: true
+  # Emit only Python source files; the parent package owns pyproject.toml/setup.py
+  generateSourceCodeOnly: true
+
+# Ensure only the first tag drives API class assignment.
+# The pre-processor sets exactly one tag per operation, so this is a safety net.
+openapiNormalizer:
+  KEEP_ONLY_FIRST_TAG_IN_OPERATION: "true"
+
+# Uncomment to use custom Mustache templates (only needed for non-standard output):
+# templateDir: packages/openapi-generator/config/custom-templates
