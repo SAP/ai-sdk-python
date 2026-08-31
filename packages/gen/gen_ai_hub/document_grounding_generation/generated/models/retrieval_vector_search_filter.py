@@ -43,6 +43,7 @@ class RetrievalVectorSearchFilter(BaseModel):
     chunk_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", alias="chunkMetadata")
     filter: Optional[RetrievalVectorSearchFilterFilter] = None
     scoring_configuration: Optional[VectorScoringConfiguration] = Field(default=None, alias="scoringConfiguration")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "searchConfiguration", "dataRepositories", "dataRepositoryType", "remoteName", "dataRepositoryMetadata", "documentMetadata", "chunkMetadata", "filter", "scoringConfiguration"]
 
     model_config = ConfigDict(
@@ -75,8 +76,10 @@ class RetrievalVectorSearchFilter(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -111,6 +114,11 @@ class RetrievalVectorSearchFilter(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of scoring_configuration
         if self.scoring_configuration:
             _dict['scoringConfiguration'] = self.scoring_configuration.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if search_configuration (nullable) is None
         # and model_fields_set contains the field
         if self.search_configuration is None and "search_configuration" in self.model_fields_set:
@@ -149,6 +157,11 @@ class RetrievalVectorSearchFilter(BaseModel):
             "filter": RetrievalVectorSearchFilterFilter.from_dict(obj["filter"]) if obj.get("filter") is not None else None,
             "scoringConfiguration": VectorScoringConfiguration.from_dict(obj["scoringConfiguration"]) if obj.get("scoringConfiguration") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

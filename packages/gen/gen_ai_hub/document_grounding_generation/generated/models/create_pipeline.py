@@ -138,6 +138,52 @@ class CreatePipeline(BaseModel):
         error_messages = []
         match = 0
 
+        # use oneOf discriminator to lookup the data type
+        _discriminator_property = "type"
+        _data_type = json.loads(json_str).get(_discriminator_property)
+        if not _data_type:
+            raise ValueError(f"Failed to lookup data type from the field `{_discriminator_property}` in the input.")
+
+        # check if data type is `GoogleDrivePipelineCreateRequest`
+        if _data_type == "GoogleDrive":
+            instance.actual_instance = GoogleDrivePipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `MSSharePointPipelineCreateRequest`
+        if _data_type == "MSSharePoint":
+            instance.actual_instance = MSSharePointPipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `S3PipelineCreateRequest`
+        if _data_type == "S3":
+            instance.actual_instance = S3PipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `SDMPipelineCreateRequest`
+        if _data_type == "SDM":
+            instance.actual_instance = SDMPipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `SFTPPipelineCreateRequest`
+        if _data_type == "SFTP":
+            instance.actual_instance = SFTPPipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `ServiceNowPipelineCreateRequest`
+        if _data_type == "ServiceNow":
+            instance.actual_instance = ServiceNowPipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `WorkZonePipelineCreateRequest`
+        if _data_type == "WorkZone":
+            instance.actual_instance = WorkZonePipelineCreateRequest.from_json(json_str)
+            return instance
+
+        # check if data type is `MetadataConfiguration`
+        if _data_type == "metadata":
+            instance.actual_instance = MetadataConfiguration.from_json(json_str)
+            return instance
+
         # deserialize data into MSSharePointPipelineCreateRequest
         try:
             instance.actual_instance = MSSharePointPipelineCreateRequest.from_json(json_str)

@@ -43,7 +43,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repositories(
+    async def get_data_repositories(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -111,11 +111,11 @@ class RetrievalApi:
             '200': "DataRepositories",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -123,7 +123,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repositories_with_http_info(
+    async def get_data_repositories_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -191,11 +191,11 @@ class RetrievalApi:
             '200': "DataRepositories",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -203,7 +203,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repositories_without_preload_content(
+    async def get_data_repositories_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -271,7 +271,7 @@ class RetrievalApi:
             '200': "DataRepositories",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -357,7 +357,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repository_by_id(
+    async def get_data_repository_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         repository_id: Annotated[UUID, Field(description="Repository ID")],
@@ -423,11 +423,11 @@ class RetrievalApi:
             '422': "GetAllPipelines400Response",
             '404': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -435,7 +435,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repository_by_id_with_http_info(
+    async def get_data_repository_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         repository_id: Annotated[UUID, Field(description="Repository ID")],
@@ -501,11 +501,11 @@ class RetrievalApi:
             '422': "GetAllPipelines400Response",
             '404': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -513,7 +513,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def get_data_repository_by_id_without_preload_content(
+    async def get_data_repository_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         repository_id: Annotated[UUID, Field(description="Repository ID")],
@@ -579,7 +579,7 @@ class RetrievalApi:
             '422': "GetAllPipelines400Response",
             '404': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -658,7 +658,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def search(
+    async def search(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         retrieval_search_input: RetrievalSearchInput,
@@ -719,11 +719,11 @@ class RetrievalApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -731,7 +731,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def search_with_http_info(
+    async def search_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         retrieval_search_input: RetrievalSearchInput,
@@ -792,11 +792,11 @@ class RetrievalApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -804,7 +804,7 @@ class RetrievalApi:
 
 
     @validate_call
-    def search_without_preload_content(
+    async def search_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         retrieval_search_input: RetrievalSearchInput,
@@ -865,7 +865,7 @@ class RetrievalApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )

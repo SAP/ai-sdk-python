@@ -30,6 +30,7 @@ class DocumentMetadataBatchRequest(BaseModel):
     DocumentMetadataBatchRequest
     """ # noqa: E501
     value: Annotated[List[DocumentMetadataUpdate], Field(max_length=1000)] = Field(description="List of document metadata updates to be applied in batch.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["value"]
 
     model_config = ConfigDict(
@@ -62,8 +63,10 @@ class DocumentMetadataBatchRequest(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -77,6 +80,11 @@ class DocumentMetadataBatchRequest(BaseModel):
             for _item_value in self.value:
                 _items.append(_item_value.to_dict() if _item_value is not None else None)
             _dict['value'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -91,6 +99,11 @@ class DocumentMetadataBatchRequest(BaseModel):
         _obj = cls.model_validate({
             "value": [DocumentMetadataUpdate.from_dict(_item) for _item in obj["value"]] if obj.get("value") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

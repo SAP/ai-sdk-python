@@ -31,6 +31,7 @@ class MetadataUpdateItem(BaseModel):
     """ # noqa: E501
     ids: List[UUID] = Field(description="List of collection or document or chunk ids for which the metadata should be updated")
     metadata_updates: List[MetadataKeyUpdate] = Field(description="List of metadata updates for the given resource ids", alias="metadataUpdates")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["ids", "metadataUpdates"]
 
     model_config = ConfigDict(
@@ -63,8 +64,10 @@ class MetadataUpdateItem(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -78,6 +81,11 @@ class MetadataUpdateItem(BaseModel):
             for _item_metadata_updates in self.metadata_updates:
                 _items.append(_item_metadata_updates.to_dict() if _item_metadata_updates is not None else None)
             _dict['metadataUpdates'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -93,6 +101,11 @@ class MetadataUpdateItem(BaseModel):
             "ids": obj.get("ids"),
             "metadataUpdates": [MetadataKeyUpdate.from_dict(_item) for _item in obj["metadataUpdates"]] if obj.get("metadataUpdates") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

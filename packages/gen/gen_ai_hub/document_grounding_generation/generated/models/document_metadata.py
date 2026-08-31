@@ -30,6 +30,7 @@ class DocumentMetadata(BaseModel):
     key: StrictStr = Field(description="Metadata key name.", json_schema_extra={"examples": ["contentObjectId"]})
     value: Optional[List[StrictStr]] = Field(description="An array of string values associated with the metadata key. If the key already exists, its values will be overwritten. Setting the value to null will delete the metadata key-value pair.")
     match_mode: Optional[StrictStr] = Field(default=None, description="Match mode for the metadata key (ANY or ALL).", alias="matchMode")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["key", "value", "matchMode"]
 
     @field_validator('match_mode')
@@ -72,8 +73,10 @@ class DocumentMetadata(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -81,6 +84,11 @@ class DocumentMetadata(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if value (nullable) is None
         # and model_fields_set contains the field
         if self.value is None and "value" in self.model_fields_set:
@@ -107,6 +115,11 @@ class DocumentMetadata(BaseModel):
             "value": obj.get("value"),
             "matchMode": obj.get("matchMode")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

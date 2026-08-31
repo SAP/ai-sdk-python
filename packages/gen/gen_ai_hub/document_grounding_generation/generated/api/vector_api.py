@@ -55,7 +55,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_collection(
+    async def create_collection(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_request: CollectionRequest,
@@ -116,11 +116,11 @@ class VectorApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -128,7 +128,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_collection_with_http_info(
+    async def create_collection_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_request: CollectionRequest,
@@ -189,11 +189,11 @@ class VectorApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -201,7 +201,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_collection_without_preload_content(
+    async def create_collection_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_request: CollectionRequest,
@@ -262,7 +262,7 @@ class VectorApi:
             '400': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -349,7 +349,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_documents(
+    async def create_documents(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -415,11 +415,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -427,7 +427,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_documents_with_http_info(
+    async def create_documents_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -493,11 +493,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -505,7 +505,7 @@ class VectorApi:
 
 
     @validate_call
-    def create_documents_without_preload_content(
+    async def create_documents_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -571,7 +571,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -661,7 +661,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_all_documents(
+    async def delete_all_documents(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         document_bulk_delete_request: DocumentBulkDeleteRequest,
@@ -723,11 +723,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -735,7 +735,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_all_documents_with_http_info(
+    async def delete_all_documents_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         document_bulk_delete_request: DocumentBulkDeleteRequest,
@@ -797,11 +797,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -809,7 +809,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_all_documents_without_preload_content(
+    async def delete_all_documents_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         document_bulk_delete_request: DocumentBulkDeleteRequest,
@@ -871,7 +871,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -958,7 +958,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_collection_by_id(
+    async def delete_collection_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[StrictStr, Field(description="Collection ID")],
@@ -1020,11 +1020,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1032,7 +1032,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_collection_by_id_with_http_info(
+    async def delete_collection_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[StrictStr, Field(description="Collection ID")],
@@ -1094,11 +1094,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1106,7 +1106,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_collection_by_id_without_preload_content(
+    async def delete_collection_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[StrictStr, Field(description="Collection ID")],
@@ -1168,7 +1168,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1242,7 +1242,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_document_by_id(
+    async def delete_document_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -1308,11 +1308,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1320,7 +1320,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_document_by_id_with_http_info(
+    async def delete_document_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -1386,11 +1386,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1398,7 +1398,7 @@ class VectorApi:
 
 
     @validate_call
-    def delete_document_by_id_without_preload_content(
+    async def delete_document_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -1464,7 +1464,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1541,7 +1541,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_collections(
+    async def get_all_collections(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -1609,11 +1609,11 @@ class VectorApi:
             '200': "CollectionsListResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1621,7 +1621,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_collections_with_http_info(
+    async def get_all_collections_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -1689,11 +1689,11 @@ class VectorApi:
             '200': "CollectionsListResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1701,7 +1701,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_collections_without_preload_content(
+    async def get_all_collections_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
@@ -1769,7 +1769,7 @@ class VectorApi:
             '200': "CollectionsListResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1855,7 +1855,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_documents(
+    async def get_all_documents(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -1929,11 +1929,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1941,7 +1941,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_documents_with_http_info(
+    async def get_all_documents_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -2015,11 +2015,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2027,7 +2027,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_all_documents_without_preload_content(
+    async def get_all_documents_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -2101,7 +2101,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2190,7 +2190,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_by_id(
+    async def get_collection_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -2252,11 +2252,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2264,7 +2264,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_by_id_with_http_info(
+    async def get_collection_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -2326,11 +2326,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2338,7 +2338,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_by_id_without_preload_content(
+    async def get_collection_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -2400,7 +2400,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2474,7 +2474,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_creation_status(
+    async def get_collection_creation_status(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2536,11 +2536,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2548,7 +2548,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_creation_status_with_http_info(
+    async def get_collection_creation_status_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2610,11 +2610,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2622,7 +2622,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_creation_status_without_preload_content(
+    async def get_collection_creation_status_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2684,7 +2684,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2758,7 +2758,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_deletion_status(
+    async def get_collection_deletion_status(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2820,11 +2820,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2832,7 +2832,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_deletion_status_with_http_info(
+    async def get_collection_deletion_status_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2894,11 +2894,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2906,7 +2906,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_collection_deletion_status_without_preload_content(
+    async def get_collection_deletion_status_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         id: Annotated[UUID, Field(description="Collection ID")],
@@ -2968,7 +2968,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3042,7 +3042,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_document_by_id(
+    async def get_document_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -3108,11 +3108,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3120,7 +3120,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_document_by_id_with_http_info(
+    async def get_document_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -3186,11 +3186,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3198,7 +3198,7 @@ class VectorApi:
 
 
     @validate_call
-    def get_document_by_id_without_preload_content(
+    async def get_document_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -3264,7 +3264,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3341,7 +3341,7 @@ class VectorApi:
 
 
     @validate_call
-    def search(
+    async def search(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         text_search_request: TextSearchRequest,
@@ -3403,11 +3403,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3415,7 +3415,7 @@ class VectorApi:
 
 
     @validate_call
-    def search_with_http_info(
+    async def search_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         text_search_request: TextSearchRequest,
@@ -3477,11 +3477,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3489,7 +3489,7 @@ class VectorApi:
 
 
     @validate_call
-    def search_without_preload_content(
+    async def search_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         text_search_request: TextSearchRequest,
@@ -3551,7 +3551,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3638,7 +3638,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_chunks_metadata(
+    async def update_chunks_metadata(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -3700,11 +3700,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3712,7 +3712,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_chunks_metadata_with_http_info(
+    async def update_chunks_metadata_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -3774,11 +3774,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3786,7 +3786,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_chunks_metadata_without_preload_content(
+    async def update_chunks_metadata_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -3848,7 +3848,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3935,7 +3935,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_collections_metadata(
+    async def update_collections_metadata(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -3997,11 +3997,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4009,7 +4009,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_collections_metadata_with_http_info(
+    async def update_collections_metadata_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -4071,11 +4071,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4083,7 +4083,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_collections_metadata_without_preload_content(
+    async def update_collections_metadata_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -4145,7 +4145,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -4232,7 +4232,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents(
+    async def update_documents(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -4298,11 +4298,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4310,7 +4310,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents_with_http_info(
+    async def update_documents_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -4376,11 +4376,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4388,7 +4388,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents_without_preload_content(
+    async def update_documents_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         collection_id: Annotated[UUID, Field(description="Collection ID")],
@@ -4454,7 +4454,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -4544,7 +4544,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents_metadata(
+    async def update_documents_metadata(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -4606,11 +4606,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4618,7 +4618,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents_metadata_with_http_info(
+    async def update_documents_metadata_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -4680,11 +4680,11 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4692,7 +4692,7 @@ class VectorApi:
 
 
     @validate_call
-    def update_documents_metadata_without_preload_content(
+    async def update_documents_metadata_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_updates: MetadataUpdates,
@@ -4754,7 +4754,7 @@ class VectorApi:
             '404': "GetAllPipelines400Response",
             '422': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )

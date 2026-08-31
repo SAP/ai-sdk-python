@@ -39,6 +39,7 @@ class RetrievalSearchFilter(BaseModel):
     data_repository_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict DataRepositories considered during search to those annotated with the given metadata. Useful when combined with dataRepositories=['*']", alias="dataRepositoryMetadata")
     document_metadata: Optional[List[RetrievalSearchDocumentKeyValueListPair]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", alias="documentMetadata")
     chunk_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", alias="chunkMetadata")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "searchConfiguration", "dataRepositories", "dataRepositoryType", "remoteName", "dataRepositoryMetadata", "documentMetadata", "chunkMetadata"]
 
     model_config = ConfigDict(
@@ -71,8 +72,10 @@ class RetrievalSearchFilter(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -101,6 +104,11 @@ class RetrievalSearchFilter(BaseModel):
             for _item_chunk_metadata in self.chunk_metadata:
                 _items.append(_item_chunk_metadata.to_dict() if _item_chunk_metadata is not None else None)
             _dict['chunkMetadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if search_configuration (nullable) is None
         # and model_fields_set contains the field
         if self.search_configuration is None and "search_configuration" in self.model_fields_set:
@@ -132,6 +140,11 @@ class RetrievalSearchFilter(BaseModel):
             "documentMetadata": [RetrievalSearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
             "chunkMetadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

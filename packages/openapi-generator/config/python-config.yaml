@@ -17,8 +17,6 @@
 
 generatorName: python
 
-# Override at call site with --additional-properties packageName=<name>
-packageName: generated_client
 packageVersion: "1.0.0"
 
 # HTTP backend: urllib3 (sync, default), asyncio (async), httpx (sync+async)
@@ -33,6 +31,12 @@ additionalProperties:
   useOneOfDiscriminatorLookup: true
   # Emit only Python source files; the parent package owns pyproject.toml/setup.py
   generateSourceCodeOnly: true
+
+globalProperties:
+  apiDocs: "false"
+  modelDocs: "false"
+  apiTests: "false"
+  modelTests: "false"
 
 # Ensure only the first tag drives API class assignment.
 # The pre-processor sets exactly one tag per operation, so this is a safety net.

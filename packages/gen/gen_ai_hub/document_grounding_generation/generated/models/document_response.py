@@ -33,6 +33,7 @@ class DocumentResponse(BaseModel):
     chunks: List[TextOnlyBaseChunk]
     metadata: Optional[List[VectorDocumentKeyValueListPair]] = None
     id: UUID = Field(description="Unique identifier of a document.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["chunks", "metadata", "id"]
 
     model_config = ConfigDict(
@@ -65,8 +66,10 @@ class DocumentResponse(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -86,6 +89,11 @@ class DocumentResponse(BaseModel):
             for _item_metadata in self.metadata:
                 _items.append(_item_metadata.to_dict() if _item_metadata is not None else None)
             _dict['metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -102,6 +110,11 @@ class DocumentResponse(BaseModel):
             "metadata": [VectorDocumentKeyValueListPair.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None,
             "id": obj.get("id")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

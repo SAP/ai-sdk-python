@@ -37,6 +37,7 @@ class DocumentsStatusResponseResourcesInner(BaseModel):
     metadata_id: Optional[StrictStr] = Field(default=None, alias="metadataId")
     created_timestamp: Optional[StrictStr] = Field(default=None, alias="createdTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
     last_updated_timestamp: Optional[StrictStr] = Field(default=None, alias="lastUpdatedTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "status", "viewLocation", "downloadLocation", "absoluteUrl", "title", "metadataId", "createdTimestamp", "lastUpdatedTimestamp"]
 
     model_config = ConfigDict(
@@ -69,8 +70,10 @@ class DocumentsStatusResponseResourcesInner(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -78,6 +81,11 @@ class DocumentsStatusResponseResourcesInner(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if status (nullable) is None
         # and model_fields_set contains the field
         if self.status is None and "status" in self.model_fields_set:
@@ -130,6 +138,11 @@ class DocumentsStatusResponseResourcesInner(BaseModel):
             "createdTimestamp": obj.get("createdTimestamp"),
             "lastUpdatedTimestamp": obj.get("lastUpdatedTimestamp")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

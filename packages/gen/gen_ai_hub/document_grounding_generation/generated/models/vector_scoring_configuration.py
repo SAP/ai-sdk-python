@@ -36,6 +36,7 @@ class VectorScoringConfiguration(BaseModel):
     boosting: Optional[BoostingScoringConfiguration] = None
     score_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Minimum chunk score threshold.", alias="scoreThreshold")
     aggregation_strategy: Optional[ScoresAggregationStrategy] = Field(default=None, alias="aggregationStrategy")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["denseRetrieval", "keywordRetrieval", "boosting", "scoreThreshold", "aggregationStrategy"]
 
     model_config = ConfigDict(
@@ -68,8 +69,10 @@ class VectorScoringConfiguration(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -86,6 +89,11 @@ class VectorScoringConfiguration(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of boosting
         if self.boosting:
             _dict['boosting'] = self.boosting.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if score_threshold (nullable) is None
         # and model_fields_set contains the field
         if self.score_threshold is None and "score_threshold" in self.model_fields_set:
@@ -109,6 +117,11 @@ class VectorScoringConfiguration(BaseModel):
             "scoreThreshold": obj.get("scoreThreshold"),
             "aggregationStrategy": obj.get("aggregationStrategy")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

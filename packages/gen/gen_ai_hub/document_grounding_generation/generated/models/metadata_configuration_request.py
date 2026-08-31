@@ -35,6 +35,7 @@ class MetadataConfigurationRequest(BaseModel):
     data_repository_type: StrictStr = Field(description="The data repository type for which this configuration is being created.", alias="dataRepositoryType", json_schema_extra={"examples": ["MSSharePoint"]})
     include_paths: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, alias="includePaths", json_schema_extra={"examples": [["/site/documents", "/shared/team"]]})
     labels: Optional[List[MetadataConfigurationRequestLabelsInner]] = None
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "name", "destinationName", "dataRepositoryType", "includePaths", "labels"]
 
     @field_validator('data_repository_type')
@@ -74,8 +75,10 @@ class MetadataConfigurationRequest(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -89,6 +92,11 @@ class MetadataConfigurationRequest(BaseModel):
             for _item_labels in self.labels:
                 _items.append(_item_labels.to_dict() if _item_labels is not None else None)
             _dict['labels'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -108,6 +116,11 @@ class MetadataConfigurationRequest(BaseModel):
             "includePaths": obj.get("includePaths"),
             "labels": [MetadataConfigurationRequestLabelsInner.from_dict(_item) for _item in obj["labels"]] if obj.get("labels") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

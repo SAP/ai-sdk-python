@@ -30,6 +30,7 @@ class SearchScores(BaseModel):
     """ # noqa: E501
     aggregated_score: SearchScoresAggregatedScore = Field(alias="aggregatedScore")
     dense_retrieval_score: SearchScoresAggregatedScore = Field(alias="denseRetrievalScore")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["aggregatedScore", "denseRetrievalScore"]
 
     model_config = ConfigDict(
@@ -62,8 +63,10 @@ class SearchScores(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -77,6 +80,11 @@ class SearchScores(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of dense_retrieval_score
         if self.dense_retrieval_score:
             _dict['denseRetrievalScore'] = self.dense_retrieval_score.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -92,6 +100,11 @@ class SearchScores(BaseModel):
             "aggregatedScore": SearchScoresAggregatedScore.from_dict(obj["aggregatedScore"]) if obj.get("aggregatedScore") is not None else None,
             "denseRetrievalScore": SearchScoresAggregatedScore.from_dict(obj["denseRetrievalScore"]) if obj.get("denseRetrievalScore") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

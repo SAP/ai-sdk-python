@@ -29,6 +29,7 @@ class MSSharePointConfigurationMinimal(BaseModel):
     MSSharePointConfigurationMinimal
     """ # noqa: E501
     share_point: SharePointSiteDetail = Field(alias="sharePoint")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["sharePoint"]
 
     model_config = ConfigDict(
@@ -61,8 +62,10 @@ class MSSharePointConfigurationMinimal(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -73,6 +76,11 @@ class MSSharePointConfigurationMinimal(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of share_point
         if self.share_point:
             _dict['sharePoint'] = self.share_point.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -87,6 +95,11 @@ class MSSharePointConfigurationMinimal(BaseModel):
         _obj = cls.model_validate({
             "sharePoint": SharePointSiteDetail.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

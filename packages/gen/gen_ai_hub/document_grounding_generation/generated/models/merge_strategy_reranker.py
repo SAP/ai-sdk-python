@@ -33,6 +33,7 @@ class MergeStrategyReranker(BaseModel):
     model: Optional[StrictStr] = Field(default='cohere-3.5', description="The RerankerModel to use.")
     boosting: Optional[List[MergeStrategyRerankerBoostingInner]] = Field(default=None, description="Key-value pairs to be included in the ranking process, to boost related chunks according to chunk content and metadata, if includeMetaData is true.")
     include_all_meta_data: Optional[StrictBool] = Field(default=False, description="If true, document and chunk metadata are sent to the reranker LLM along with the text content of the chunk.", alias="includeAllMetaData")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type", "model", "boosting", "includeAllMetaData"]
 
     @field_validator('model')
@@ -75,8 +76,10 @@ class MergeStrategyReranker(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -90,6 +93,11 @@ class MergeStrategyReranker(BaseModel):
             for _item_boosting in self.boosting:
                 _items.append(_item_boosting.to_dict() if _item_boosting is not None else None)
             _dict['boosting'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if model (nullable) is None
         # and model_fields_set contains the field
         if self.model is None and "model" in self.model_fields_set:
@@ -122,6 +130,11 @@ class MergeStrategyReranker(BaseModel):
             "boosting": [MergeStrategyRerankerBoostingInner.from_dict(_item) for _item in obj["boosting"]] if obj.get("boosting") is not None else None,
             "includeAllMetaData": obj.get("includeAllMetaData") if "includeAllMetaData" in obj else False
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

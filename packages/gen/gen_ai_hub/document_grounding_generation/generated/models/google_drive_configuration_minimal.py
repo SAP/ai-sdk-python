@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict
 from gen_ai_hub.document_grounding_generation.generated.models.google_drive_resource_detail import GoogleDriveResourceDetail
 from typing import Optional, Set
 from typing_extensions import Self

@@ -31,6 +31,7 @@ class RetrievalPerFilterSearchResult(BaseModel):
     filter_id: StrictStr = Field(alias="filterId")
     results: Optional[List[RetrievalDataRepositorySearchResult]] = Field(default=None, description="List of returned results.")
     remote_grounding_name: Optional[StrictStr] = Field(default=None, description="Friendly Destination Name of remote instance (grounding.name). Only present if dataRepositoryType = remote:dg.", alias="remoteGroundingName")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["filterId", "results", "remoteGroundingName"]
 
     model_config = ConfigDict(
@@ -63,8 +64,10 @@ class RetrievalPerFilterSearchResult(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -78,6 +81,11 @@ class RetrievalPerFilterSearchResult(BaseModel):
             for _item_results in self.results:
                 _items.append(_item_results.to_dict() if _item_results is not None else None)
             _dict['results'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if remote_grounding_name (nullable) is None
         # and model_fields_set contains the field
         if self.remote_grounding_name is None and "remote_grounding_name" in self.model_fields_set:
@@ -99,6 +107,11 @@ class RetrievalPerFilterSearchResult(BaseModel):
             "results": [RetrievalDataRepositorySearchResult.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None,
             "remoteGroundingName": obj.get("remoteGroundingName")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

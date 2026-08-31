@@ -33,6 +33,7 @@ class BoostingScoringConfiguration(BaseModel):
     metadata: Optional[List[BoostingScoringConfigurationMetadataInner]] = None
     weight: Optional[StrictInt] = Field(default=1, description="Contribution to final score.")
     score_computation_strategy: Optional[BoostingScoreComputationStrategy] = Field(default=None, alias="scoreComputationStrategy")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["enabled", "metadata", "weight", "scoreComputationStrategy"]
 
     model_config = ConfigDict(
@@ -65,8 +66,10 @@ class BoostingScoringConfiguration(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -80,6 +83,11 @@ class BoostingScoringConfiguration(BaseModel):
             for _item_metadata in self.metadata:
                 _items.append(_item_metadata.to_dict() if _item_metadata is not None else None)
             _dict['metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if enabled (nullable) is None
         # and model_fields_set contains the field
         if self.enabled is None and "enabled" in self.model_fields_set:
@@ -112,6 +120,11 @@ class BoostingScoringConfiguration(BaseModel):
             "weight": obj.get("weight") if "weight" in obj else 1,
             "scoreComputationStrategy": obj.get("scoreComputationStrategy")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

@@ -130,6 +130,47 @@ class PipelineMinimalResponse(BaseModel):
         error_messages = []
         match = 0
 
+        # use oneOf discriminator to lookup the data type
+        _discriminator_property = "type"
+        _data_type = json.loads(json_str).get(_discriminator_property)
+        if not _data_type:
+            raise ValueError(f"Failed to lookup data type from the field `{_discriminator_property}` in the input.")
+
+        # check if data type is `GoogleDrivePipelineMinimalResponse`
+        if _data_type == "GoogleDrive":
+            instance.actual_instance = GoogleDrivePipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `MSSharePointPipelineMinimalResponse`
+        if _data_type == "MSSharePoint":
+            instance.actual_instance = MSSharePointPipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `S3PipelineMinimalResponse`
+        if _data_type == "S3":
+            instance.actual_instance = S3PipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `SDMPipelineMinimalResponse`
+        if _data_type == "SDM":
+            instance.actual_instance = SDMPipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `SFTPPipelineMinimalResponse`
+        if _data_type == "SFTP":
+            instance.actual_instance = SFTPPipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `ServiceNowPipelineMinimalResponse`
+        if _data_type == "ServiceNow":
+            instance.actual_instance = ServiceNowPipelineMinimalResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `WorkZonePipelineMinimalResponse`
+        if _data_type == "WorkZone":
+            instance.actual_instance = WorkZonePipelineMinimalResponse.from_json(json_str)
+            return instance
+
         # deserialize data into MSSharePointPipelineMinimalResponse
         try:
             instance.actual_instance = MSSharePointPipelineMinimalResponse.from_json(json_str)

@@ -29,6 +29,7 @@ class MetadataResponse(BaseModel):
     MetadataResponse
     """ # noqa: E501
     current_metadata: Optional[List[MetadataItem]] = Field(default=None, description="List of metadata after updates.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["current_metadata"]
 
     model_config = ConfigDict(
@@ -61,8 +62,10 @@ class MetadataResponse(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -76,6 +79,11 @@ class MetadataResponse(BaseModel):
             for _item_current_metadata in self.current_metadata:
                 _items.append(_item_current_metadata.to_dict() if _item_current_metadata is not None else None)
             _dict['current_metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if current_metadata (nullable) is None
         # and model_fields_set contains the field
         if self.current_metadata is None and "current_metadata" in self.model_fields_set:
@@ -95,6 +103,11 @@ class MetadataResponse(BaseModel):
         _obj = cls.model_validate({
             "current_metadata": [MetadataItem.from_dict(_item) for _item in obj["current_metadata"]] if obj.get("current_metadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

@@ -37,6 +37,7 @@ class SearchFilter(BaseModel):
     collection_metadata: Optional[Annotated[List[KeyValueListPair], Field(max_length=2000)]] = Field(default=None, description="Restrict collections considered during search to those annotated with the given metadata. Useful when combined with collections=['*']", alias="collectionMetadata")
     document_metadata: Optional[Annotated[List[SearchDocumentKeyValueListPair], Field(max_length=2000)]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", alias="documentMetadata")
     chunk_metadata: Optional[Annotated[List[KeyValueListPair], Field(max_length=2000)]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", alias="chunkMetadata")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "collectionIds", "configuration", "collectionMetadata", "documentMetadata", "chunkMetadata"]
 
     model_config = ConfigDict(
@@ -69,8 +70,10 @@ class SearchFilter(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -99,6 +102,11 @@ class SearchFilter(BaseModel):
             for _item_chunk_metadata in self.chunk_metadata:
                 _items.append(_item_chunk_metadata.to_dict() if _item_chunk_metadata is not None else None)
             _dict['chunkMetadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -118,6 +126,11 @@ class SearchFilter(BaseModel):
             "documentMetadata": [SearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
             "chunkMetadata": [KeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

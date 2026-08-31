@@ -30,6 +30,7 @@ class RetrievalBinaryBooleanFilter(BaseModel):
     operator: StrictStr
     left: Left
     right: Right
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["operator", "left", "right"]
 
     @field_validator('operator')
@@ -69,8 +70,10 @@ class RetrievalBinaryBooleanFilter(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -84,6 +87,11 @@ class RetrievalBinaryBooleanFilter(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of right
         if self.right:
             _dict['right'] = self.right.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -100,6 +108,11 @@ class RetrievalBinaryBooleanFilter(BaseModel):
             "left": Left.from_dict(obj["left"]) if obj.get("left") is not None else None,
             "right": Right.from_dict(obj["right"]) if obj.get("right") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 from gen_ai_hub.document_grounding_generation.generated.models.left import Left

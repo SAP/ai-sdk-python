@@ -77,12 +77,13 @@ def _snake_case(name: str) -> str:
 def apply_operation_name_extension(spec: dict) -> dict:
     """Overwrite operationId with x-sap-cloud-sdk-operation-name when present.
 
-    When two operations share the same desired name (valid in JS since they live in
-    different API classes), disambiguates by prefixing with the operation's tag:
-      e.g. both want "search" → "vector_search" and "retrieval_search"
+    When two operations in different tags share the same desired name (e.g. both
+    VectorApi and RetrievalApi want a method called "search"), the OAS spec requires
+    globally unique operationIds. The operationId is scoped to tag+name to satisfy
+    this, and operationIdNameMappings are returned so the generator renames the
+    Python method back to the desired short name within its class.
 
-    Returns an operationIdNameMappings dict (may be empty) that the generator config
-    should merge in, mapping the scoped operationId back to the desired method name.
+    Returns an operationIdNameMappings dict (may be empty).
     """
     # First pass: collect all desired (tag, name) pairs to detect cross-tag collisions
     desired: list[tuple[dict, str, str]] = []  # (op_dict, desired_name, tag)
@@ -193,10 +194,14 @@ def preprocess(
     mappings = apply_operation_name_extension(spec)
     validate_unique_operation_ids(spec)
     dump_spec(spec, output_path)
-    if mappings and mappings_output_path:
+    if mappings_output_path:
         mappings_output_path.parent.mkdir(parents=True, exist_ok=True)
-        with mappings_output_path.open("w") as f:
-            yaml.dump({"operationIdNameMappings": mappings}, f, sort_keys=True)
+        # Write as newline-separated key=value pairs for --operation-id-name-mappings.
+        lines = "\n".join(
+            f"{scoped}={desired}"
+            for scoped, desired in sorted(mappings.items())
+        )
+        mappings_output_path.write_text(lines)
 
 
 def main() -> None:

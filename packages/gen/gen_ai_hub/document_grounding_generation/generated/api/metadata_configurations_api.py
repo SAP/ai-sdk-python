@@ -45,7 +45,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def batch_update_documents_metadata(
+    async def batch_update_documents_metadata(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_metadata_batch_request: DocumentMetadataBatchRequest,
@@ -105,11 +105,11 @@ class MetadataConfigurationsApi:
             '200': "List[BatchUpdateDocumentsResponseInner]",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -117,7 +117,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def batch_update_documents_metadata_with_http_info(
+    async def batch_update_documents_metadata_with_http_info(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_metadata_batch_request: DocumentMetadataBatchRequest,
@@ -177,11 +177,11 @@ class MetadataConfigurationsApi:
             '200': "List[BatchUpdateDocumentsResponseInner]",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -189,7 +189,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def batch_update_documents_metadata_without_preload_content(
+    async def batch_update_documents_metadata_without_preload_content(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_metadata_batch_request: DocumentMetadataBatchRequest,
@@ -249,7 +249,7 @@ class MetadataConfigurationsApi:
             '200': "List[BatchUpdateDocumentsResponseInner]",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -336,7 +336,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def create_metadata_configuration(
+    async def create_metadata_configuration(
         self,
         metadata_configuration_request: MetadataConfigurationRequest,
         _request_timeout: Union[
@@ -392,11 +392,11 @@ class MetadataConfigurationsApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -404,7 +404,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def create_metadata_configuration_with_http_info(
+    async def create_metadata_configuration_with_http_info(
         self,
         metadata_configuration_request: MetadataConfigurationRequest,
         _request_timeout: Union[
@@ -460,11 +460,11 @@ class MetadataConfigurationsApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -472,7 +472,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def create_metadata_configuration_without_preload_content(
+    async def create_metadata_configuration_without_preload_content(
         self,
         metadata_configuration_request: MetadataConfigurationRequest,
         _request_timeout: Union[
@@ -528,7 +528,7 @@ class MetadataConfigurationsApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -612,7 +612,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def delete_metadata_configuration_by_id(
+    async def delete_metadata_configuration_by_id(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -670,11 +670,11 @@ class MetadataConfigurationsApi:
             '500': "ErrorResponse",
             '409': "ErrorResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -682,7 +682,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def delete_metadata_configuration_by_id_with_http_info(
+    async def delete_metadata_configuration_by_id_with_http_info(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -740,11 +740,11 @@ class MetadataConfigurationsApi:
             '500': "ErrorResponse",
             '409': "ErrorResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -752,7 +752,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def delete_metadata_configuration_by_id_without_preload_content(
+    async def delete_metadata_configuration_by_id_without_preload_content(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -810,7 +810,7 @@ class MetadataConfigurationsApi:
             '500': "ErrorResponse",
             '409': "ErrorResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -881,7 +881,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_configuration_by_id(
+    async def get_metadata_configuration_by_id(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -938,11 +938,11 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -950,7 +950,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_configuration_by_id_with_http_info(
+    async def get_metadata_configuration_by_id_with_http_info(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -1007,11 +1007,11 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1019,7 +1019,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_configuration_by_id_without_preload_content(
+    async def get_metadata_configuration_by_id_without_preload_content(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         _request_timeout: Union[
@@ -1076,7 +1076,7 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1147,7 +1147,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_document_details(
+    async def get_metadata_document_details(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_id: Annotated[StrictStr, Field(description="Document ID")],
@@ -1208,11 +1208,11 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1220,7 +1220,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_document_details_with_http_info(
+    async def get_metadata_document_details_with_http_info(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_id: Annotated[StrictStr, Field(description="Document ID")],
@@ -1281,11 +1281,11 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1293,7 +1293,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def get_metadata_document_details_without_preload_content(
+    async def get_metadata_document_details_without_preload_content(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         document_id: Annotated[StrictStr, Field(description="Document ID")],
@@ -1354,7 +1354,7 @@ class MetadataConfigurationsApi:
             '404': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1428,7 +1428,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configuration_documents(
+    async def list_metadata_configuration_documents(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
@@ -1499,11 +1499,11 @@ class MetadataConfigurationsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "ListConfigurationDocuments",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1511,7 +1511,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configuration_documents_with_http_info(
+    async def list_metadata_configuration_documents_with_http_info(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
@@ -1582,11 +1582,11 @@ class MetadataConfigurationsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "ListConfigurationDocuments",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1594,7 +1594,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configuration_documents_without_preload_content(
+    async def list_metadata_configuration_documents_without_preload_content(
         self,
         metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
         absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
@@ -1665,7 +1665,7 @@ class MetadataConfigurationsApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "ListConfigurationDocuments",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1756,7 +1756,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configurations(
+    async def list_metadata_configurations(
         self,
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -1820,11 +1820,11 @@ class MetadataConfigurationsApi:
             '200': "ListMetadataConfigurations",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1832,7 +1832,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configurations_with_http_info(
+    async def list_metadata_configurations_with_http_info(
         self,
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -1896,11 +1896,11 @@ class MetadataConfigurationsApi:
             '200': "ListMetadataConfigurations",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1908,7 +1908,7 @@ class MetadataConfigurationsApi:
 
 
     @validate_call
-    def list_metadata_configurations_without_preload_content(
+    async def list_metadata_configurations_without_preload_content(
         self,
         top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -1972,7 +1972,7 @@ class MetadataConfigurationsApi:
             '200': "ListMetadataConfigurations",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )

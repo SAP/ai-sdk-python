@@ -42,6 +42,7 @@ class ConfigurationDocumentFullDetails(BaseModel):
     mime_type: Optional[StrictStr] = Field(default=None, description="MIME type of the document.", alias="mimeType", json_schema_extra={"examples": ["application/pdf"]})
     file_size_mb: Optional[StrictStr] = Field(default=None, description="File size of the document in megabytes.", alias="fileSizeMb", json_schema_extra={"examples": ["1.5"]})
     metadata: Optional[List[DocumentMetadata]] = Field(default=None, description="Metadata key-value pairs associated with the document.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "title", "absoluteFilePath", "createdTimestamp", "resourceUri", "webUrl", "documentEtag", "fileSuffix", "viewLocation", "downloadLocation", "mimeType", "fileSizeMb", "metadata"]
 
     model_config = ConfigDict(
@@ -74,8 +75,10 @@ class ConfigurationDocumentFullDetails(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -89,6 +92,11 @@ class ConfigurationDocumentFullDetails(BaseModel):
             for _item_metadata in self.metadata:
                 _items.append(_item_metadata.to_dict() if _item_metadata is not None else None)
             _dict['metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -115,6 +123,11 @@ class ConfigurationDocumentFullDetails(BaseModel):
             "fileSizeMb": obj.get("fileSizeMb"),
             "metadata": [DocumentMetadata.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

@@ -16,6 +16,7 @@ dependencies = [
 
 [project.scripts]
 sap-preprocess-spec = "sap_openapi_generator.preprocess_spec:main"
+sap-generate = "sap_openapi_generator.generate:main"
 
 [dependency-groups]
 dev = [

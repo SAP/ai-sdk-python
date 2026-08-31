@@ -51,7 +51,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def create_pipeline(
+    async def create_pipeline(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         create_pipeline: CreatePipeline,
@@ -111,11 +111,11 @@ class PipelinesApi:
             '201': "PipelineId",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -123,7 +123,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def create_pipeline_with_http_info(
+    async def create_pipeline_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         create_pipeline: CreatePipeline,
@@ -183,11 +183,11 @@ class PipelinesApi:
             '201': "PipelineId",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -195,7 +195,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def create_pipeline_without_preload_content(
+    async def create_pipeline_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         create_pipeline: CreatePipeline,
@@ -255,7 +255,7 @@ class PipelinesApi:
             '201': "PipelineId",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -342,7 +342,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def delete_pipeline_by_id(
+    async def delete_pipeline_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
@@ -402,11 +402,11 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -414,7 +414,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def delete_pipeline_by_id_with_http_info(
+    async def delete_pipeline_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
@@ -474,11 +474,11 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -486,7 +486,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def delete_pipeline_by_id_without_preload_content(
+    async def delete_pipeline_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
@@ -546,7 +546,7 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -620,7 +620,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_documents_for_pipeline(
+    async def get_all_documents_for_pipeline(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -691,11 +691,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -703,7 +703,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_documents_for_pipeline_with_http_info(
+    async def get_all_documents_for_pipeline_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -774,11 +774,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -786,7 +786,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_documents_for_pipeline_without_preload_content(
+    async def get_all_documents_for_pipeline_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -857,7 +857,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -946,7 +946,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_executions_for_pipeline(
+    async def get_all_executions_for_pipeline(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -1021,11 +1021,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutions",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1033,7 +1033,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_executions_for_pipeline_with_http_info(
+    async def get_all_executions_for_pipeline_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -1108,11 +1108,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutions",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1120,7 +1120,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_executions_for_pipeline_without_preload_content(
+    async def get_all_executions_for_pipeline_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -1195,7 +1195,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutions",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1289,7 +1289,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_pipelines(
+    async def get_all_pipelines(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
@@ -1361,11 +1361,11 @@ class PipelinesApi:
             '200': "GetPipelines",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1373,7 +1373,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_pipelines_with_http_info(
+    async def get_all_pipelines_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
@@ -1445,11 +1445,11 @@ class PipelinesApi:
             '200': "GetPipelines",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1457,7 +1457,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_all_pipelines_without_preload_content(
+    async def get_all_pipelines_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
@@ -1529,7 +1529,7 @@ class PipelinesApi:
             '200': "GetPipelines",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1620,7 +1620,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline(
+    async def get_document_by_id_for_pipeline(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -1683,11 +1683,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1695,7 +1695,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline_with_http_info(
+    async def get_document_by_id_for_pipeline_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -1758,11 +1758,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1770,7 +1770,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline_without_preload_content(
+    async def get_document_by_id_for_pipeline_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -1833,7 +1833,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -1910,7 +1910,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline_execution(
+    async def get_document_by_id_for_pipeline_execution(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -1977,11 +1977,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1989,7 +1989,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline_execution_with_http_info(
+    async def get_document_by_id_for_pipeline_execution_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2056,11 +2056,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2068,7 +2068,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_document_by_id_for_pipeline_execution_without_preload_content(
+    async def get_document_by_id_for_pipeline_execution_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2135,7 +2135,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "PipelineDocumentResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2215,7 +2215,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_documents_for_pipeline_execution(
+    async def get_documents_for_pipeline_execution(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2290,11 +2290,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2302,7 +2302,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_documents_for_pipeline_execution_with_http_info(
+    async def get_documents_for_pipeline_execution_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2377,11 +2377,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2389,7 +2389,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_documents_for_pipeline_execution_without_preload_content(
+    async def get_documents_for_pipeline_execution_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2464,7 +2464,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "DocumentsStatusResponse",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2556,7 +2556,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_execution_details_by_id_for_pipeline_execution(
+    async def get_execution_details_by_id_for_pipeline_execution(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2619,11 +2619,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutionById",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2631,7 +2631,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_execution_details_by_id_for_pipeline_execution_with_http_info(
+    async def get_execution_details_by_id_for_pipeline_execution_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2694,11 +2694,11 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutionById",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2706,7 +2706,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_execution_details_by_id_for_pipeline_execution_without_preload_content(
+    async def get_execution_details_by_id_for_pipeline_execution_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
@@ -2769,7 +2769,7 @@ class PipelinesApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "GetPipelineExecutionById",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -2846,7 +2846,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_by_id(
+    async def get_pipeline_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -2906,11 +2906,11 @@ class PipelinesApi:
             '200': "GetPipeline",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2918,7 +2918,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_by_id_with_http_info(
+    async def get_pipeline_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -2978,11 +2978,11 @@ class PipelinesApi:
             '200': "GetPipeline",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -2990,7 +2990,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_by_id_without_preload_content(
+    async def get_pipeline_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
@@ -3050,7 +3050,7 @@ class PipelinesApi:
             '200': "GetPipeline",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3124,7 +3124,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_status(
+    async def get_pipeline_status(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
@@ -3184,11 +3184,11 @@ class PipelinesApi:
             '200': "GetPipelineStatus",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3196,7 +3196,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_status_with_http_info(
+    async def get_pipeline_status_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
@@ -3256,11 +3256,11 @@ class PipelinesApi:
             '200': "GetPipelineStatus",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3268,7 +3268,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def get_pipeline_status_without_preload_content(
+    async def get_pipeline_status_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
@@ -3328,7 +3328,7 @@ class PipelinesApi:
             '200': "GetPipelineStatus",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3402,7 +3402,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def manual_trigger_pipeline(
+    async def manual_trigger_pipeline(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         manual_pipeline_trigger: ManualPipelineTrigger,
@@ -3462,11 +3462,11 @@ class PipelinesApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3474,7 +3474,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def manual_trigger_pipeline_with_http_info(
+    async def manual_trigger_pipeline_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         manual_pipeline_trigger: ManualPipelineTrigger,
@@ -3534,11 +3534,11 @@ class PipelinesApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3546,7 +3546,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def manual_trigger_pipeline_without_preload_content(
+    async def manual_trigger_pipeline_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         manual_pipeline_trigger: ManualPipelineTrigger,
@@ -3606,7 +3606,7 @@ class PipelinesApi:
             '202': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3693,7 +3693,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def patch_pipeline_by_id(
+    async def patch_pipeline_by_id(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
@@ -3757,11 +3757,11 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3769,7 +3769,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def patch_pipeline_by_id_with_http_info(
+    async def patch_pipeline_by_id_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
@@ -3833,11 +3833,11 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -3845,7 +3845,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def patch_pipeline_by_id_without_preload_content(
+    async def patch_pipeline_by_id_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
@@ -3909,7 +3909,7 @@ class PipelinesApi:
             '204': None,
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
@@ -3999,7 +3999,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def search_pipelines_by_metadata(
+    async def search_pipelines_by_metadata(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_pipeline: SearchPipeline,
@@ -4071,11 +4071,11 @@ class PipelinesApi:
             '200': "SearchPipelinesResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4083,7 +4083,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def search_pipelines_by_metadata_with_http_info(
+    async def search_pipelines_by_metadata_with_http_info(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_pipeline: SearchPipeline,
@@ -4155,11 +4155,11 @@ class PipelinesApi:
             '200': "SearchPipelinesResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )
-        response_data.read()
+        await response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -4167,7 +4167,7 @@ class PipelinesApi:
 
 
     @validate_call
-    def search_pipelines_by_metadata_without_preload_content(
+    async def search_pipelines_by_metadata_without_preload_content(
         self,
         ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_pipeline: SearchPipeline,
@@ -4239,7 +4239,7 @@ class PipelinesApi:
             '200': "SearchPipelinesResponse",
             '400': "GetAllPipelines400Response",
         }
-        response_data = self.api_client.call_api(
+        response_data = await self.api_client.call_api(
             *_param,
             _request_timeout=_request_timeout
         )

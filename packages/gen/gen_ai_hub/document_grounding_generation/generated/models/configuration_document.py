@@ -35,6 +35,7 @@ class ConfigurationDocument(BaseModel):
     created_timestamp: Optional[datetime] = Field(default=None, description="UTC timestamp when the document was created (RFC 3339 format, e.g., 2025-08-28T06:15:30Z)", alias="createdTimestamp", json_schema_extra={"examples": ["2025-08-28T06:15:30Z"]})
     type: Optional[StrictStr] = Field(default=None, description="Type of the resource. Can be FOLDER, DOCUMENT.")
     metadata: Optional[List[DocumentMetadata]] = Field(default=None, description="Metadata key-value pairs associated with the document.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "title", "absoluteFilePath", "createdTimestamp", "type", "metadata"]
 
     @field_validator('type')
@@ -77,8 +78,10 @@ class ConfigurationDocument(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -92,6 +95,11 @@ class ConfigurationDocument(BaseModel):
             for _item_metadata in self.metadata:
                 _items.append(_item_metadata.to_dict() if _item_metadata is not None else None)
             _dict['metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if type (nullable) is None
         # and model_fields_set contains the field
         if self.type is None and "type" in self.model_fields_set:
@@ -116,6 +124,11 @@ class ConfigurationDocument(BaseModel):
             "type": obj.get("type"),
             "metadata": [DocumentMetadata.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

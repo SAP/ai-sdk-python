@@ -23,6 +23,7 @@ members = [
     "sap-ai-sdk-base",
     "sap-ai-sdk-core",
     "sap-ai-sdk-gen",
+    "sap-openapi-generator",
 ]
 
 [[package]]
@@ -4268,6 +4269,29 @@ dev = [
     { name = "respx", specifier = "==0.23.1" },
     { name = "sphinx", specifier = "<9.0.0" },
     { name = "sphinxawesome-theme" },
+]
+
+[[package]]
+name = "sap-openapi-generator"
+version = "0.1.0"
+source = { editable = "packages/openapi-generator" }
+dependencies = [
+    { name = "pyyaml" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pyyaml", specifier = ">=6.0" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.0" },
+    { name = "pytest-cov", specifier = ">=5.0" },
 ]
 
 [[package]]

@@ -31,6 +31,7 @@ class BaseDocument(BaseModel):
     """ # noqa: E501
     chunks: List[TextOnlyBaseChunkCreate]
     metadata: Optional[List[VectorDocumentKeyValueListPair]] = None
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["chunks", "metadata"]
 
     model_config = ConfigDict(
@@ -63,8 +64,10 @@ class BaseDocument(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -84,6 +87,11 @@ class BaseDocument(BaseModel):
             for _item_metadata in self.metadata:
                 _items.append(_item_metadata.to_dict() if _item_metadata is not None else None)
             _dict['metadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -99,6 +107,11 @@ class BaseDocument(BaseModel):
             "chunks": [TextOnlyBaseChunkCreate.from_dict(_item) for _item in obj["chunks"]] if obj.get("chunks") is not None else None,
             "metadata": [VectorDocumentKeyValueListPair.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

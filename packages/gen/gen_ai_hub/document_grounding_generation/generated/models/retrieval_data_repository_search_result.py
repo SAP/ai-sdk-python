@@ -29,6 +29,7 @@ class RetrievalDataRepositorySearchResult(BaseModel):
     RetrievalDataRepositorySearchResult
     """ # noqa: E501
     data_repository: DataRepositoryWithDocuments = Field(alias="dataRepository")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["dataRepository"]
 
     model_config = ConfigDict(
@@ -61,8 +62,10 @@ class RetrievalDataRepositorySearchResult(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -73,6 +76,11 @@ class RetrievalDataRepositorySearchResult(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of data_repository
         if self.data_repository:
             _dict['dataRepository'] = self.data_repository.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -87,6 +95,11 @@ class RetrievalDataRepositorySearchResult(BaseModel):
         _obj = cls.model_validate({
             "dataRepository": DataRepositoryWithDocuments.from_dict(obj["dataRepository"]) if obj.get("dataRepository") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

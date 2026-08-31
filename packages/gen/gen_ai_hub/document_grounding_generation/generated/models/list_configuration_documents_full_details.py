@@ -30,6 +30,7 @@ class ListConfigurationDocumentsFullDetails(BaseModel):
     """ # noqa: E501
     count: Optional[StrictInt] = Field(default=None, description="Total number of documents returned.", json_schema_extra={"examples": [1]})
     resources: Optional[List[ConfigurationDocumentFullDetails]] = Field(default=None, description="List of document objects. It will be empty array if no records found.")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["count", "resources"]
 
     model_config = ConfigDict(
@@ -62,8 +63,10 @@ class ListConfigurationDocumentsFullDetails(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -77,6 +80,11 @@ class ListConfigurationDocumentsFullDetails(BaseModel):
             for _item_resources in self.resources:
                 _items.append(_item_resources.to_dict() if _item_resources is not None else None)
             _dict['resources'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -92,6 +100,11 @@ class ListConfigurationDocumentsFullDetails(BaseModel):
             "count": obj.get("count"),
             "resources": [ConfigurationDocumentFullDetails.from_dict(_item) for _item in obj["resources"]] if obj.get("resources") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

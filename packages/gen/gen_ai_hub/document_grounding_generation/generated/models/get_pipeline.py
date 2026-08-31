@@ -130,6 +130,47 @@ class GetPipeline(BaseModel):
         error_messages = []
         match = 0
 
+        # use oneOf discriminator to lookup the data type
+        _discriminator_property = "type"
+        _data_type = json.loads(json_str).get(_discriminator_property)
+        if not _data_type:
+            raise ValueError(f"Failed to lookup data type from the field `{_discriminator_property}` in the input.")
+
+        # check if data type is `GoogleDrivePipelineGetResponse`
+        if _data_type == "GoogleDrive":
+            instance.actual_instance = GoogleDrivePipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `MSSharePointPipelineGetResponse`
+        if _data_type == "MSSharePoint":
+            instance.actual_instance = MSSharePointPipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `S3PipelineGetResponse`
+        if _data_type == "S3":
+            instance.actual_instance = S3PipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `SDMPipelineGetResponse`
+        if _data_type == "SDM":
+            instance.actual_instance = SDMPipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `SFTPPipelineGetResponse`
+        if _data_type == "SFTP":
+            instance.actual_instance = SFTPPipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `ServiceNowPipelineGetResponse`
+        if _data_type == "ServiceNow":
+            instance.actual_instance = ServiceNowPipelineGetResponse.from_json(json_str)
+            return instance
+
+        # check if data type is `WorkZonePipelineGetResponse`
+        if _data_type == "WorkZone":
+            instance.actual_instance = WorkZonePipelineGetResponse.from_json(json_str)
+            return instance
+
         # deserialize data into MSSharePointPipelineGetResponse
         try:
             instance.actual_instance = MSSharePointPipelineGetResponse.from_json(json_str)

@@ -33,6 +33,7 @@ class ValidationError(BaseModel):
     type: StrictStr
     input: Optional[Any] = None
     ctx: Optional[Dict[str, Any]] = None
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["loc", "msg", "type", "input", "ctx"]
 
     model_config = ConfigDict(
@@ -65,8 +66,10 @@ class ValidationError(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -80,6 +83,11 @@ class ValidationError(BaseModel):
             for _item_loc in self.loc:
                 _items.append(_item_loc.to_dict() if _item_loc is not None else None)
             _dict['loc'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         # set to None if input (nullable) is None
         # and model_fields_set contains the field
         if self.input is None and "input" in self.model_fields_set:
@@ -103,6 +111,11 @@ class ValidationError(BaseModel):
             "input": obj.get("input"),
             "ctx": obj.get("ctx")
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

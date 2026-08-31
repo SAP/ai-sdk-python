@@ -29,6 +29,7 @@ class MetadataConfigurationMetadata(BaseModel):
     MetadataConfigurationMetadata
     """ # noqa: E501
     data_repository_metadata: List[MetaDataKeyValuePairStrict] = Field(alias="dataRepositoryMetadata", json_schema_extra={"examples": [[{"key": "purpose", "value": ["demonstration"]}, {"key": "sample-key", "value": ["sample-value1", "sample-value2"]}]]})
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["dataRepositoryMetadata"]
 
     model_config = ConfigDict(
@@ -61,8 +62,10 @@ class MetadataConfigurationMetadata(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -76,6 +79,11 @@ class MetadataConfigurationMetadata(BaseModel):
             for _item_data_repository_metadata in self.data_repository_metadata:
                 _items.append(_item_data_repository_metadata.to_dict() if _item_data_repository_metadata is not None else None)
             _dict['dataRepositoryMetadata'] = _items
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -90,6 +98,11 @@ class MetadataConfigurationMetadata(BaseModel):
         _obj = cls.model_validate({
             "dataRepositoryMetadata": [MetaDataKeyValuePairStrict.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 

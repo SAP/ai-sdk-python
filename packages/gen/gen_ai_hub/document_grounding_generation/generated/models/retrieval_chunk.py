@@ -35,6 +35,7 @@ class RetrievalChunk(BaseModel):
     metadata: Optional[List[RetrievalKeyValueListPair]] = None
     search_scores: Optional[SearchScores] = Field(default=None, alias="searchScores")
     post_processing_score: Optional[Score] = Field(default=None, alias="postProcessingScore")
+    additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "content", "metadata", "searchScores", "postProcessingScore"]
 
     model_config = ConfigDict(
@@ -67,8 +68,10 @@ class RetrievalChunk(BaseModel):
         * `None` is only added to the output dict for nullable fields that
           were set at model initialization. Other fields with value `None`
           are ignored.
+        * Fields in `self.additional_properties` are added to the output dict.
         """
         excluded_fields: Set[str] = set([
+            "additional_properties",
         ])
 
         _dict = self.model_dump(
@@ -88,6 +91,11 @@ class RetrievalChunk(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of post_processing_score
         if self.post_processing_score:
             _dict['postProcessingScore'] = self.post_processing_score.to_dict()
+        # puts key-value pairs in additional_properties in the top level
+        if self.additional_properties is not None:
+            for _key, _value in self.additional_properties.items():
+                _dict[_key] = _value
+
         return _dict
 
     @classmethod
@@ -106,6 +114,11 @@ class RetrievalChunk(BaseModel):
             "searchScores": SearchScores.from_dict(obj["searchScores"]) if obj.get("searchScores") is not None else None,
             "postProcessingScore": Score.from_dict(obj["postProcessingScore"]) if obj.get("postProcessingScore") is not None else None
         })
+        # store additional fields in additional_properties
+        for _key in obj.keys():
+            if _key not in cls.__properties:
+                _obj.additional_properties[_key] = obj.get(_key)
+
         return _obj
 
 
