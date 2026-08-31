@@ -31,6 +31,8 @@ additionalProperties:
   useOneOfDiscriminatorLookup: true
   # Emit only Python source files; the parent package owns pyproject.toml/setup.py
   generateSourceCodeOnly: true
+  # Emit _sync variants of each async method (httpx library only)
+  supportHttpxSync: true
 
 globalProperties:
   apiDocs: "false"

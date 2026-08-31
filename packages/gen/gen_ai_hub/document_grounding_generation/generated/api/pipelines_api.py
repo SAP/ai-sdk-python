@@ -35,6 +35,7 @@ from gen_ai_hub.document_grounding_generation.generated.models.search_pipelines_
 from gen_ai_hub.document_grounding_generation.generated.api_client import ApiClient, RequestSerialized
 from gen_ai_hub.document_grounding_generation.generated.api_response import ApiResponse
 from gen_ai_hub.document_grounding_generation.generated.rest import RESTResponseType
+from gen_ai_hub.document_grounding_generation.generated.sync_helper import run_sync
 
 
 class PipelinesApi:
@@ -260,6 +261,114 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def create_pipeline_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        create_pipeline: CreatePipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PipelineId:
+        """Pipeline Creation (synchronous)
+
+        Synchronous variant of :meth:`create_pipeline`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_pipeline(
+                ai_resource_group=ai_resource_group,
+                create_pipeline=create_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_pipeline_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        create_pipeline: CreatePipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PipelineId]:
+        """Pipeline Creation (synchronous)
+
+        Synchronous variant of :meth:`create_pipeline_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_pipeline_with_http_info(
+                ai_resource_group=ai_resource_group,
+                create_pipeline=create_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_pipeline_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        create_pipeline: CreatePipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Pipeline Creation (synchronous)
+
+        Synchronous variant of :meth:`create_pipeline_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_pipeline_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                create_pipeline=create_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _create_pipeline_serialize(
@@ -551,6 +660,114 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def delete_pipeline_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Delete pipeline (synchronous)
+
+        Synchronous variant of :meth:`delete_pipeline_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_pipeline_by_id(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_pipeline_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Delete pipeline (synchronous)
+
+        Synchronous variant of :meth:`delete_pipeline_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_pipeline_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_pipeline_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to delete.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete pipeline (synchronous)
+
+        Synchronous variant of :meth:`delete_pipeline_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_pipeline_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _delete_pipeline_by_id_serialize(
@@ -862,6 +1079,132 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_all_documents_for_pipeline_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentsStatusResponse:
+        """Get Documents for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents_for_pipeline`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents_for_pipeline(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_documents_for_pipeline_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentsStatusResponse]:
+        """Get Documents for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents_for_pipeline_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents_for_pipeline_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_documents_for_pipeline_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Documents for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents_for_pipeline_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents_for_pipeline_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_all_documents_for_pipeline_serialize(
@@ -1202,6 +1545,138 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_all_executions_for_pipeline_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        last_execution: Annotated[Optional[StrictBool], Field(description="Filter to get the last execution")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetPipelineExecutions:
+        """Get Pipeline Executions (synchronous)
+
+        Synchronous variant of :meth:`get_all_executions_for_pipeline`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_executions_for_pipeline(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                last_execution=last_execution,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_executions_for_pipeline_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        last_execution: Annotated[Optional[StrictBool], Field(description="Filter to get the last execution")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetPipelineExecutions]:
+        """Get Pipeline Executions (synchronous)
+
+        Synchronous variant of :meth:`get_all_executions_for_pipeline_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_executions_for_pipeline_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                last_execution=last_execution,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_executions_for_pipeline_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        last_execution: Annotated[Optional[StrictBool], Field(description="Filter to get the last execution")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Pipeline Executions (synchronous)
+
+        Synchronous variant of :meth:`get_all_executions_for_pipeline_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_executions_for_pipeline_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                last_execution=last_execution,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_all_executions_for_pipeline_serialize(
         self,
         ai_resource_group,
@@ -1536,6 +2011,132 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_all_pipelines_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetPipelines:
+        """Get Pipelines (synchronous)
+
+        Synchronous variant of :meth:`get_all_pipelines`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_pipelines(
+                ai_resource_group=ai_resource_group,
+                metadata_config_id=metadata_config_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_pipelines_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetPipelines]:
+        """Get Pipelines (synchronous)
+
+        Synchronous variant of :meth:`get_all_pipelines_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_pipelines_with_http_info(
+                ai_resource_group=ai_resource_group,
+                metadata_config_id=metadata_config_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_pipelines_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_config_id: Annotated[Optional[StrictStr], Field(description="Filter pipelines based on metadataConfigId")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Pipelines (synchronous)
+
+        Synchronous variant of :meth:`get_all_pipelines_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_pipelines_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                metadata_config_id=metadata_config_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_all_pipelines_serialize(
         self,
         ai_resource_group,
@@ -1840,6 +2441,120 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_document_by_id_for_pipeline_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PipelineDocumentResponse:
+        """Get Document by ID for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_for_pipeline_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PipelineDocumentResponse]:
+        """Get Document by ID for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_for_pipeline_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Document by ID for a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_document_by_id_for_pipeline_serialize(
         self,
         ai_resource_group,
@@ -2140,6 +2855,126 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_document_by_id_for_pipeline_execution_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> PipelineDocumentResponse:
+        """Get Document by ID for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline_execution`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline_execution(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_for_pipeline_execution_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[PipelineDocumentResponse]:
+        """Get Document by ID for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline_execution_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline_execution_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_for_pipeline_execution_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        document_id: Annotated[StrictStr, Field(description="The ID of the document to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Document by ID for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_for_pipeline_execution_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_for_pipeline_execution_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_document_by_id_for_pipeline_execution_serialize(
@@ -2471,6 +3306,138 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_documents_for_pipeline_execution_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentsStatusResponse:
+        """Get Documents for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_documents_for_pipeline_execution`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_documents_for_pipeline_execution(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_documents_for_pipeline_execution_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentsStatusResponse]:
+        """Get Documents for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_documents_for_pipeline_execution_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_documents_for_pipeline_execution_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_documents_for_pipeline_execution_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Documents for a Pipeline Execution (synchronous)
+
+        Synchronous variant of :meth:`get_documents_for_pipeline_execution_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_documents_for_pipeline_execution_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_documents_for_pipeline_execution_serialize(
         self,
         ai_resource_group,
@@ -2776,6 +3743,120 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_execution_details_by_id_for_pipeline_execution_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetPipelineExecutionById:
+        """Get Pipeline Execution by ID (synchronous)
+
+        Synchronous variant of :meth:`get_execution_details_by_id_for_pipeline_execution`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_execution_details_by_id_for_pipeline_execution(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_execution_details_by_id_for_pipeline_execution_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetPipelineExecutionById]:
+        """Get Pipeline Execution by ID (synchronous)
+
+        Synchronous variant of :meth:`get_execution_details_by_id_for_pipeline_execution_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_execution_details_by_id_for_pipeline_execution_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_execution_details_by_id_for_pipeline_execution_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline")],
+        execution_id: Annotated[StrictStr, Field(description="The ID of the execution")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Pipeline Execution by ID (synchronous)
+
+        Synchronous variant of :meth:`get_execution_details_by_id_for_pipeline_execution_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_execution_details_by_id_for_pipeline_execution_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                execution_id=execution_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_execution_details_by_id_for_pipeline_execution_serialize(
         self,
         ai_resource_group,
@@ -3057,6 +4138,114 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_pipeline_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetPipeline:
+        """Get details of a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_by_id(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_pipeline_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetPipeline]:
+        """Get details of a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_pipeline_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get details of a Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_pipeline_by_id_serialize(
         self,
         ai_resource_group,
@@ -3335,6 +4524,114 @@ class PipelinesApi:
         return response_data.response
 
 
+    @validate_call
+    def get_pipeline_status_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetPipelineStatus:
+        """Get status of Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_status`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_status(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_pipeline_status_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetPipelineStatus]:
+        """Get status of Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_status_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_status_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_pipeline_status_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to get status.")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get status of Pipeline (synchronous)
+
+        Synchronous variant of :meth:`get_pipeline_status_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_pipeline_status_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_pipeline_status_serialize(
         self,
         ai_resource_group,
@@ -3611,6 +4908,114 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def manual_trigger_pipeline_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        manual_pipeline_trigger: ManualPipelineTrigger,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Pipeline Trigger (synchronous)
+
+        Synchronous variant of :meth:`manual_trigger_pipeline`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.manual_trigger_pipeline(
+                ai_resource_group=ai_resource_group,
+                manual_pipeline_trigger=manual_pipeline_trigger,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def manual_trigger_pipeline_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        manual_pipeline_trigger: ManualPipelineTrigger,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Pipeline Trigger (synchronous)
+
+        Synchronous variant of :meth:`manual_trigger_pipeline_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.manual_trigger_pipeline_with_http_info(
+                ai_resource_group=ai_resource_group,
+                manual_pipeline_trigger=manual_pipeline_trigger,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def manual_trigger_pipeline_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        manual_pipeline_trigger: ManualPipelineTrigger,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Pipeline Trigger (synchronous)
+
+        Synchronous variant of :meth:`manual_trigger_pipeline_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.manual_trigger_pipeline_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                manual_pipeline_trigger=manual_pipeline_trigger,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _manual_trigger_pipeline_serialize(
@@ -3914,6 +5319,120 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def patch_pipeline_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
+        patch_pipeline: PatchPipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Patch pipeline (synchronous)
+
+        Synchronous variant of :meth:`patch_pipeline_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.patch_pipeline_by_id(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                patch_pipeline=patch_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def patch_pipeline_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
+        patch_pipeline: PatchPipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Patch pipeline (synchronous)
+
+        Synchronous variant of :meth:`patch_pipeline_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.patch_pipeline_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                patch_pipeline=patch_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def patch_pipeline_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        pipeline_id: Annotated[StrictStr, Field(description="The ID of the pipeline to patch.")],
+        patch_pipeline: PatchPipeline,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Patch pipeline (synchronous)
+
+        Synchronous variant of :meth:`patch_pipeline_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.patch_pipeline_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                pipeline_id=pipeline_id,
+                patch_pipeline=patch_pipeline,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _patch_pipeline_by_id_serialize(
@@ -4244,6 +5763,132 @@ class PipelinesApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def search_pipelines_by_metadata_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        search_pipeline: SearchPipeline,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> SearchPipelinesResponse:
+        """Pipeline Search by Metadata (synchronous)
+
+        Synchronous variant of :meth:`search_pipelines_by_metadata`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_pipelines_by_metadata(
+                ai_resource_group=ai_resource_group,
+                search_pipeline=search_pipeline,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_pipelines_by_metadata_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        search_pipeline: SearchPipeline,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[SearchPipelinesResponse]:
+        """Pipeline Search by Metadata (synchronous)
+
+        Synchronous variant of :meth:`search_pipelines_by_metadata_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_pipelines_by_metadata_with_http_info(
+                ai_resource_group=ai_resource_group,
+                search_pipeline=search_pipeline,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_pipelines_by_metadata_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        search_pipeline: SearchPipeline,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Pipeline Search by Metadata (synchronous)
+
+        Synchronous variant of :meth:`search_pipelines_by_metadata_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_pipelines_by_metadata_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                search_pipeline=search_pipeline,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _search_pipelines_by_metadata_serialize(

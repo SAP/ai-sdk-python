@@ -29,6 +29,7 @@ from gen_ai_hub.document_grounding_generation.generated.models.metadata_configur
 from gen_ai_hub.document_grounding_generation.generated.api_client import ApiClient, RequestSerialized
 from gen_ai_hub.document_grounding_generation.generated.api_response import ApiResponse
 from gen_ai_hub.document_grounding_generation.generated.rest import RESTResponseType
+from gen_ai_hub.document_grounding_generation.generated.sync_helper import run_sync
 
 
 class MetadataConfigurationsApi:
@@ -254,6 +255,114 @@ class MetadataConfigurationsApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def batch_update_documents_metadata_sync(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_metadata_batch_request: DocumentMetadataBatchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[BatchUpdateDocumentsResponseInner]:
+        """Batch update metadata for multiple documents (synchronous)
+
+        Synchronous variant of :meth:`batch_update_documents_metadata`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.batch_update_documents_metadata(
+                metadata_config_id=metadata_config_id,
+                document_metadata_batch_request=document_metadata_batch_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def batch_update_documents_metadata_sync_with_http_info(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_metadata_batch_request: DocumentMetadataBatchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[BatchUpdateDocumentsResponseInner]]:
+        """Batch update metadata for multiple documents (synchronous)
+
+        Synchronous variant of :meth:`batch_update_documents_metadata_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.batch_update_documents_metadata_with_http_info(
+                metadata_config_id=metadata_config_id,
+                document_metadata_batch_request=document_metadata_batch_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def batch_update_documents_metadata_sync_without_preload_content(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_metadata_batch_request: DocumentMetadataBatchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Batch update metadata for multiple documents (synchronous)
+
+        Synchronous variant of :meth:`batch_update_documents_metadata_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.batch_update_documents_metadata_without_preload_content(
+                metadata_config_id=metadata_config_id,
+                document_metadata_batch_request=document_metadata_batch_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _batch_update_documents_metadata_serialize(
@@ -533,6 +642,108 @@ class MetadataConfigurationsApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def create_metadata_configuration_sync(
+        self,
+        metadata_configuration_request: MetadataConfigurationRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Create a metadata configuration (synchronous)
+
+        Synchronous variant of :meth:`create_metadata_configuration`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_metadata_configuration(
+                metadata_configuration_request=metadata_configuration_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_metadata_configuration_sync_with_http_info(
+        self,
+        metadata_configuration_request: MetadataConfigurationRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Create a metadata configuration (synchronous)
+
+        Synchronous variant of :meth:`create_metadata_configuration_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_metadata_configuration_with_http_info(
+                metadata_configuration_request=metadata_configuration_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_metadata_configuration_sync_without_preload_content(
+        self,
+        metadata_configuration_request: MetadataConfigurationRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create a metadata configuration (synchronous)
+
+        Synchronous variant of :meth:`create_metadata_configuration_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_metadata_configuration_without_preload_content(
+                metadata_configuration_request=metadata_configuration_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _create_metadata_configuration_serialize(
@@ -817,6 +1028,108 @@ class MetadataConfigurationsApi:
         return response_data.response
 
 
+    @validate_call
+    def delete_metadata_configuration_by_id_sync(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Delete a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_metadata_configuration_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_metadata_configuration_by_id(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_metadata_configuration_by_id_sync_with_http_info(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Delete a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_metadata_configuration_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_metadata_configuration_by_id_with_http_info(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_metadata_configuration_by_id_sync_without_preload_content(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_metadata_configuration_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_metadata_configuration_by_id_without_preload_content(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _delete_metadata_configuration_by_id_serialize(
         self,
         metadata_config_id,
@@ -1081,6 +1394,108 @@ class MetadataConfigurationsApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_metadata_configuration_by_id_sync(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> MetadataConfigurationResponse:
+        """Get a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_configuration_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_configuration_by_id(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_metadata_configuration_by_id_sync_with_http_info(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[MetadataConfigurationResponse]:
+        """Get a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_configuration_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_configuration_by_id_with_http_info(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_metadata_configuration_by_id_sync_without_preload_content(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get a configuration by ID (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_configuration_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_configuration_by_id_without_preload_content(
+                metadata_config_id=metadata_config_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_metadata_configuration_by_id_serialize(
@@ -1359,6 +1774,114 @@ class MetadataConfigurationsApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_metadata_document_details_sync(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_id: Annotated[StrictStr, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ConfigurationDocument:
+        """Get document details (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_document_details`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_document_details(
+                metadata_config_id=metadata_config_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_metadata_document_details_sync_with_http_info(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_id: Annotated[StrictStr, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ConfigurationDocument]:
+        """Get document details (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_document_details_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_document_details_with_http_info(
+                metadata_config_id=metadata_config_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_metadata_document_details_sync_without_preload_content(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        document_id: Annotated[StrictStr, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get document details (synchronous)
+
+        Synchronous variant of :meth:`get_metadata_document_details_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_metadata_document_details_without_preload_content(
+                metadata_config_id=metadata_config_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_metadata_document_details_serialize(
@@ -1672,6 +2195,132 @@ class MetadataConfigurationsApi:
         return response_data.response
 
 
+    @validate_call
+    def list_metadata_configuration_documents_sync(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ListConfigurationDocuments:
+        """List documents of a configuration (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configuration_documents`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configuration_documents(
+                metadata_config_id=metadata_config_id,
+                absolute_path=absolute_path,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def list_metadata_configuration_documents_sync_with_http_info(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ListConfigurationDocuments]:
+        """List documents of a configuration (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configuration_documents_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configuration_documents_with_http_info(
+                metadata_config_id=metadata_config_id,
+                absolute_path=absolute_path,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def list_metadata_configuration_documents_sync_without_preload_content(
+        self,
+        metadata_config_id: Annotated[StrictStr, Field(description="Metadata Configuration ID")],
+        absolute_path: Annotated[Optional[StrictStr], Field(description="Absolute path of the resource. Supports wildcard values (e.g., `/folder/*`). ")] = None,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List documents of a configuration (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configuration_documents_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configuration_documents_without_preload_content(
+                metadata_config_id=metadata_config_id,
+                absolute_path=absolute_path,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _list_metadata_configuration_documents_serialize(
         self,
         metadata_config_id,
@@ -1977,6 +2626,120 @@ class MetadataConfigurationsApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def list_metadata_configurations_sync(
+        self,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ListMetadataConfigurations:
+        """List metadata configurations (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configurations`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configurations(
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def list_metadata_configurations_sync_with_http_info(
+        self,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[ListMetadataConfigurations]:
+        """List metadata configurations (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configurations_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configurations_with_http_info(
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def list_metadata_configurations_sync_without_preload_content(
+        self,
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List metadata configurations (synchronous)
+
+        Synchronous variant of :meth:`list_metadata_configurations_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.list_metadata_configurations_without_preload_content(
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _list_metadata_configurations_serialize(

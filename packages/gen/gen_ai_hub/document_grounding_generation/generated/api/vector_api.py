@@ -39,6 +39,7 @@ from gen_ai_hub.document_grounding_generation.generated.models.vector_search_res
 from gen_ai_hub.document_grounding_generation.generated.api_client import ApiClient, RequestSerialized
 from gen_ai_hub.document_grounding_generation.generated.api_response import ApiResponse
 from gen_ai_hub.document_grounding_generation.generated.rest import RESTResponseType
+from gen_ai_hub.document_grounding_generation.generated.sync_helper import run_sync
 
 
 class VectorApi:
@@ -267,6 +268,114 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def create_collection_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_request: CollectionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Create collection (synchronous)
+
+        Synchronous variant of :meth:`create_collection`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_collection(
+                ai_resource_group=ai_resource_group,
+                collection_request=collection_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_collection_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_request: CollectionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Create collection (synchronous)
+
+        Synchronous variant of :meth:`create_collection_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_collection_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_request=collection_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_collection_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_request: CollectionRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create collection (synchronous)
+
+        Synchronous variant of :meth:`create_collection_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_collection_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_request=collection_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _create_collection_serialize(
@@ -578,6 +687,120 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def create_documents_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_create_request: DocumentCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentsListResponse:
+        """Create documents in collection (synchronous)
+
+        Synchronous variant of :meth:`create_documents`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_documents(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_create_request=document_create_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_documents_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_create_request: DocumentCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentsListResponse]:
+        """Create documents in collection (synchronous)
+
+        Synchronous variant of :meth:`create_documents_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_documents_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_create_request=document_create_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def create_documents_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_create_request: DocumentCreateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Create documents in collection (synchronous)
+
+        Synchronous variant of :meth:`create_documents_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.create_documents_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_create_request=document_create_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _create_documents_serialize(
         self,
         ai_resource_group,
@@ -878,6 +1101,114 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def delete_all_documents_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        document_bulk_delete_request: DocumentBulkDeleteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentBulkDeleteResponse:
+        """Delete list of documents across collections (synchronous)
+
+        Synchronous variant of :meth:`delete_all_documents`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_all_documents(
+                ai_resource_group=ai_resource_group,
+                document_bulk_delete_request=document_bulk_delete_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_all_documents_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        document_bulk_delete_request: DocumentBulkDeleteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentBulkDeleteResponse]:
+        """Delete list of documents across collections (synchronous)
+
+        Synchronous variant of :meth:`delete_all_documents_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_all_documents_with_http_info(
+                ai_resource_group=ai_resource_group,
+                document_bulk_delete_request=document_bulk_delete_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_all_documents_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        document_bulk_delete_request: DocumentBulkDeleteRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete list of documents across collections (synchronous)
+
+        Synchronous variant of :meth:`delete_all_documents_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_all_documents_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                document_bulk_delete_request=document_bulk_delete_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _delete_all_documents_serialize(
         self,
         ai_resource_group,
@@ -1175,6 +1506,114 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def delete_collection_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[StrictStr, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Delete collection by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_collection_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_collection_by_id(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_collection_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[StrictStr, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Delete collection by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_collection_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_collection_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_collection_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[StrictStr, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete collection by ID (synchronous)
+
+        Synchronous variant of :meth:`delete_collection_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_collection_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _delete_collection_by_id_serialize(
         self,
         ai_resource_group,
@@ -1469,6 +1908,120 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def delete_document_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> None:
+        """Delete a document (synchronous)
+
+        Synchronous variant of :meth:`delete_document_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_document_by_id(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_document_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[None]:
+        """Delete a document (synchronous)
+
+        Synchronous variant of :meth:`delete_document_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_document_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def delete_document_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Delete a document (synchronous)
+
+        Synchronous variant of :meth:`delete_document_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.delete_document_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _delete_document_by_id_serialize(
@@ -1774,6 +2327,126 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_all_collections_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> CollectionsListResponse:
+        """Get collections (synchronous)
+
+        Synchronous variant of :meth:`get_all_collections`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_collections(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_collections_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[CollectionsListResponse]:
+        """Get collections (synchronous)
+
+        Synchronous variant of :meth:`get_all_collections_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_collections_with_http_info(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_collections_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get collections (synchronous)
+
+        Synchronous variant of :meth:`get_all_collections_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_collections_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_all_collections_serialize(
@@ -2108,6 +2781,132 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def get_all_documents_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Documents:
+        """Get documents (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_documents_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Documents]:
+        """Get documents (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_all_documents_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get documents (synchronous)
+
+        Synchronous variant of :meth:`get_all_documents_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_all_documents_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_all_documents_serialize(
         self,
         ai_resource_group,
@@ -2407,6 +3206,114 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def get_collection_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Collection:
+        """Get collection by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_by_id(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[Collection]:
+        """Get collection by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get collection by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_collection_by_id_serialize(
         self,
         ai_resource_group,
@@ -2691,6 +3598,114 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def get_collection_creation_status_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetCollectionCreationStatus200Response:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_creation_status`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_creation_status(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_creation_status_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetCollectionCreationStatus200Response]:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_creation_status_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_creation_status_with_http_info(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_creation_status_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_creation_status_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_creation_status_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_collection_creation_status_serialize(
         self,
         ai_resource_group,
@@ -2973,6 +3988,114 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_collection_deletion_status_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetCollectionDeletionStatus200Response:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_deletion_status`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_deletion_status(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_deletion_status_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[GetCollectionDeletionStatus200Response]:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_deletion_status_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_deletion_status_with_http_info(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_collection_deletion_status_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        id: Annotated[UUID, Field(description="Collection ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get collection status by ID (synchronous)
+
+        Synchronous variant of :meth:`get_collection_deletion_status_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_collection_deletion_status_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                id=id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_collection_deletion_status_serialize(
@@ -3271,6 +4394,120 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def get_document_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentResponse:
+        """Get document by ID (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentResponse]:
+        """Get document by ID (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_document_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_id: Annotated[UUID, Field(description="Document ID")],
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get document by ID (synchronous)
+
+        Synchronous variant of :meth:`get_document_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_document_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_id=document_id,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_document_by_id_serialize(
         self,
         ai_resource_group,
@@ -3556,6 +4793,114 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def search_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        text_search_request: TextSearchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> VectorSearchResults:
+        """Search chunk by vector (synchronous)
+
+        Synchronous variant of :meth:`search`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search(
+                ai_resource_group=ai_resource_group,
+                text_search_request=text_search_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        text_search_request: TextSearchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[VectorSearchResults]:
+        """Search chunk by vector (synchronous)
+
+        Synchronous variant of :meth:`search_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_with_http_info(
+                ai_resource_group=ai_resource_group,
+                text_search_request=text_search_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        text_search_request: TextSearchRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Search chunk by vector (synchronous)
+
+        Synchronous variant of :meth:`search_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                text_search_request=text_search_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _search_serialize(
@@ -3855,6 +5200,114 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def update_chunks_metadata_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> MetadataResponse:
+        """Patch chunks metadata (synchronous)
+
+        Synchronous variant of :meth:`update_chunks_metadata`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_chunks_metadata(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_chunks_metadata_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[MetadataResponse]:
+        """Patch chunks metadata (synchronous)
+
+        Synchronous variant of :meth:`update_chunks_metadata_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_chunks_metadata_with_http_info(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_chunks_metadata_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Patch chunks metadata (synchronous)
+
+        Synchronous variant of :meth:`update_chunks_metadata_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_chunks_metadata_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _update_chunks_metadata_serialize(
         self,
         ai_resource_group,
@@ -4150,6 +5603,114 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def update_collections_metadata_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> MetadataResponse:
+        """Patch collections metadata (synchronous)
+
+        Synchronous variant of :meth:`update_collections_metadata`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_collections_metadata(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_collections_metadata_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[MetadataResponse]:
+        """Patch collections metadata (synchronous)
+
+        Synchronous variant of :meth:`update_collections_metadata_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_collections_metadata_with_http_info(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_collections_metadata_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Patch collections metadata (synchronous)
+
+        Synchronous variant of :meth:`update_collections_metadata_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_collections_metadata_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _update_collections_metadata_serialize(
@@ -4461,6 +6022,120 @@ class VectorApi:
         return response_data.response
 
 
+    @validate_call
+    def update_documents_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_update_request: DocumentUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DocumentsListResponse:
+        """Upsert documents in collection (synchronous)
+
+        Synchronous variant of :meth:`update_documents`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_update_request=document_update_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_documents_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_update_request: DocumentUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DocumentsListResponse]:
+        """Upsert documents in collection (synchronous)
+
+        Synchronous variant of :meth:`update_documents_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents_with_http_info(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_update_request=document_update_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_documents_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        collection_id: Annotated[UUID, Field(description="Collection ID")],
+        document_update_request: DocumentUpdateRequest,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Upsert documents in collection (synchronous)
+
+        Synchronous variant of :meth:`update_documents_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                collection_id=collection_id,
+                document_update_request=document_update_request,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _update_documents_serialize(
         self,
         ai_resource_group,
@@ -4759,6 +6434,114 @@ class VectorApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def update_documents_metadata_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> MetadataResponse:
+        """Patch documents metadata (synchronous)
+
+        Synchronous variant of :meth:`update_documents_metadata`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents_metadata(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_documents_metadata_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[MetadataResponse]:
+        """Patch documents metadata (synchronous)
+
+        Synchronous variant of :meth:`update_documents_metadata_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents_metadata_with_http_info(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def update_documents_metadata_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        metadata_updates: MetadataUpdates,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Patch documents metadata (synchronous)
+
+        Synchronous variant of :meth:`update_documents_metadata_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.update_documents_metadata_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                metadata_updates=metadata_updates,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _update_documents_metadata_serialize(

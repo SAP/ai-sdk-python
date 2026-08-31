@@ -1,34 +1,61 @@
 """End-to-end OpenAPI generation pipeline for SAP Cloud SDK Python packages.
 
-Runs the full pipeline in one command:
-  1. Pre-process the spec (vendor extension resolution, base-path injection)
-  2. Invoke openapi-generator-cli via npx
-  3. Rewrite bare `generated.*` imports to a fully-qualified package path
-  4. Touch py.typed (httpx template omits it)
+Mirrors the SAP Cloud SDK JS generator interface:
 
-Usage:
-    sap-generate \\
-        --spec path/to/api.yaml \\
-        --output path/to/output/dir \\
-        --package-name my_pkg.sub.generated \\
-        [--options path/to/options-per-service.json] \\
-        [--spec-key src/spec/api.yaml] \\
-        [--config path/to/python-config.yaml]
+    sap-generate -i <inputDir> -o <outputDir> [-s <optionsPerService>]
+
+For each spec file found under <inputDir>:
+  1. Reads per-service options from options-per-service.json (directoryName, basePath)
+  2. Pre-processes the spec (vendor extension resolution, base-path injection)
+  3. Invokes openapi-generator-cli via npx
+  4. Rewrites bare 'generated.*' imports to the fully-qualified package path
+  5. Touches py.typed (httpx template omits it)
+
+options-per-service.json keys are paths relative to <inputDir>. Supported fields:
+  directoryName  - output subdirectory under <outputDir> (required)
+  basePath       - overrides the servers[0].url baked into Configuration (optional)
+  packageName    - ignored (JS npm name, not used in Python)
 """
 
 from __future__ import annotations
 
 import argparse
-import os
+import json
 import shutil
 import subprocess
 import sys
 import tempfile
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 from sap_openapi_generator.preprocess_spec import preprocess
 
 _DEFAULT_CONFIG = Path(__file__).parent.parent.parent / "config" / "python-config.yaml"
+_SPEC_EXTENSIONS = {".yaml", ".yml", ".json"}
+
+
+_EXCLUDED_FILENAMES = {"options-per-service.json"}
+
+
+def _find_specs(input_path: Path) -> list[Path]:
+    if input_path.is_file():
+        return [input_path]
+    return sorted(
+        p for p in input_path.rglob("*")
+        if p.suffix in _SPEC_EXTENSIONS and p.is_file() and p.name not in _EXCLUDED_FILENAMES
+    )
+
+
+def _load_options_per_service(options_path: Path) -> dict:
+    if options_path.is_dir():
+        options_path = options_path / "options-per-service.json"
+    if not options_path.exists():
+        return {}
+    return json.loads(options_path.read_text())
+
+
+def _service_key(spec_path: Path, input_dir: Path) -> str:
+    """Return the options-per-service.json key for a spec (POSIX relative path from input_dir)."""
+    return PurePosixPath(spec_path.relative_to(input_dir)).as_posix()
 
 
 def _build_opid_flags(mappings_path: Path) -> list[str]:
@@ -43,7 +70,6 @@ def _build_opid_flags(mappings_path: Path) -> list[str]:
 
 
 def _rewrite_imports(output_dir: Path, package_name: str) -> None:
-    """Rewrite bare 'generated' imports to the fully-qualified package path."""
     for py_file in output_dir.rglob("*.py"):
         src = py_file.read_text()
         updated = (
@@ -56,7 +82,7 @@ def _rewrite_imports(output_dir: Path, package_name: str) -> None:
             py_file.write_text(updated)
 
 
-def generate(
+def generate_one(
     spec_path: Path,
     output_dir: Path,
     package_name: str,
@@ -65,7 +91,6 @@ def generate(
     config_path: Path | None = None,
 ) -> None:
     config_path = config_path or _DEFAULT_CONFIG
-    # The leaf package name used internally by the generator (always "generated")
     leaf = "generated"
 
     with tempfile.TemporaryDirectory(prefix="sap-openapi-") as tmp:
@@ -98,10 +123,7 @@ def generate(
 
         generated_src = gen_tmp / leaf
         if not generated_src.exists():
-            print(
-                f"ERROR: expected generated output at {generated_src} but it was not found.",
-                file=sys.stderr,
-            )
+            print(f"ERROR: expected generated output at {generated_src}", file=sys.stderr)
             sys.exit(1)
 
         if output_dir.exists():
@@ -112,26 +134,62 @@ def generate(
     (output_dir / "py.typed").touch()
 
 
+def generate(
+    input_path: Path,
+    output_dir: Path,
+    options_per_service_path: Path | None = None,
+    config_path: Path | None = None,
+) -> None:
+    specs = _find_specs(input_path)
+    if not specs:
+        print(f"ERROR: no spec files found under {input_path}", file=sys.stderr)
+        sys.exit(1)
+
+    input_dir = input_path if input_path.is_dir() else input_path.parent
+    service_options = _load_options_per_service(options_per_service_path) if options_per_service_path else {}
+
+    for spec in specs:
+        key = _service_key(spec, input_dir)
+        opts = service_options.get(key, {})
+
+        directory_name = opts.get("directoryName")
+        if not directory_name:
+            print(
+                f"ERROR: no 'directoryName' for spec '{key}' in options-per-service.json.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+        service_output = output_dir / directory_name
+        # Derive the Python import path from directoryName (slashes → dots)
+        python_package_name = directory_name.replace("/", ".")
+
+        generate_one(
+            spec_path=spec,
+            output_dir=service_output,
+            package_name=python_package_name,
+            options_path=options_per_service_path,
+            spec_key=key,
+            config_path=config_path,
+        )
+        print(f"Generated: {key} → {service_output}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Run the full SAP OpenAPI generation pipeline."
-    )
-    parser.add_argument("--spec", required=True, type=Path, help="Source spec file (.yaml or .json)")
-    parser.add_argument(
-        "--output", required=True, type=Path,
-        help="Output directory for generated Python files",
+        description="Generate Python API clients from OpenAPI specs (SAP Cloud SDK style)."
     )
     parser.add_argument(
-        "--package-name", required=True,
-        help="Fully-qualified Python package name for import rewriting (e.g. my_pkg.sub.generated)",
+        "-i", "--input", required=True, type=Path,
+        help="Input directory or spec file (.yaml/.yml/.json)",
     )
     parser.add_argument(
-        "--options", type=Path, default=None,
-        help="Path to options-per-service.json",
+        "-o", "--outputDir", required=True, type=Path,
+        help="Output base directory; each service is placed in a subdirectory per directoryName",
     )
     parser.add_argument(
-        "--spec-key", default=None,
-        help="Key in options-per-service.json for this spec (e.g. 'src/spec/api.yaml')",
+        "-s", "--optionsPerService", type=Path, default=None,
+        help="Path to options-per-service.json (or directory containing it)",
     )
     parser.add_argument(
         "--config", type=Path, default=None,
@@ -139,11 +197,9 @@ def main() -> None:
     )
     args = parser.parse_args()
     generate(
-        spec_path=args.spec,
-        output_dir=args.output,
-        package_name=args.package_name,
-        options_path=args.options,
-        spec_key=args.spec_key,
+        input_path=args.input,
+        output_dir=args.outputDir,
+        options_per_service_path=args.optionsPerService,
         config_path=args.config,
     )
 

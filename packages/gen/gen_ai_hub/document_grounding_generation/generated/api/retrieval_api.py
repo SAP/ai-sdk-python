@@ -27,6 +27,7 @@ from gen_ai_hub.document_grounding_generation.generated.models.retrieval_search_
 from gen_ai_hub.document_grounding_generation.generated.api_client import ApiClient, RequestSerialized
 from gen_ai_hub.document_grounding_generation.generated.api_response import ApiResponse
 from gen_ai_hub.document_grounding_generation.generated.rest import RESTResponseType
+from gen_ai_hub.document_grounding_generation.generated.sync_helper import run_sync
 
 
 class RetrievalApi:
@@ -276,6 +277,126 @@ class RetrievalApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def get_data_repositories_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DataRepositories:
+        """List all DataRepository objects. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repositories`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repositories(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_data_repositories_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DataRepositories]:
+        """List all DataRepository objects. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repositories_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repositories_with_http_info(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_data_repositories_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        top: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to display")] = None,
+        skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
+        count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List all DataRepository objects. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repositories_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repositories_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                top=top,
+                skip=skip,
+                count=count,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _get_data_repositories_serialize(
@@ -586,6 +707,120 @@ class RetrievalApi:
         return response_data.response
 
 
+    @validate_call
+    def get_data_repository_by_id_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        repository_id: Annotated[UUID, Field(description="Repository ID")],
+        remote_name: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="Remote name if DataRepository is from remote DG.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> DataRepository:
+        """List single DataRepository object. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repository_by_id`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repository_by_id(
+                ai_resource_group=ai_resource_group,
+                repository_id=repository_id,
+                remote_name=remote_name,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_data_repository_by_id_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        repository_id: Annotated[UUID, Field(description="Repository ID")],
+        remote_name: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="Remote name if DataRepository is from remote DG.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[DataRepository]:
+        """List single DataRepository object. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repository_by_id_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repository_by_id_with_http_info(
+                ai_resource_group=ai_resource_group,
+                repository_id=repository_id,
+                remote_name=remote_name,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def get_data_repository_by_id_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        repository_id: Annotated[UUID, Field(description="Repository ID")],
+        remote_name: Annotated[Optional[Annotated[str, Field(min_length=1, strict=True)]], Field(description="Remote name if DataRepository is from remote DG.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """List single DataRepository object. (synchronous)
+
+        Synchronous variant of :meth:`get_data_repository_by_id_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.get_data_repository_by_id_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                repository_id=repository_id,
+                remote_name=remote_name,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
     def _get_data_repository_by_id_serialize(
         self,
         ai_resource_group,
@@ -870,6 +1105,114 @@ class RetrievalApi:
             _request_timeout=_request_timeout
         )
         return response_data.response
+
+
+    @validate_call
+    def search_sync(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        retrieval_search_input: RetrievalSearchInput,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RetrievalSearchResults:
+        """Retrieve relevant content (synchronous)
+
+        Synchronous variant of :meth:`search`. It calls the asynchronous
+        method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search(
+                ai_resource_group=ai_resource_group,
+                retrieval_search_input=retrieval_search_input,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_sync_with_http_info(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        retrieval_search_input: RetrievalSearchInput,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[RetrievalSearchResults]:
+        """Retrieve relevant content (synchronous)
+
+        Synchronous variant of :meth:`search_with_http_info`. It calls the
+        asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_with_http_info(
+                ai_resource_group=ai_resource_group,
+                retrieval_search_input=retrieval_search_input,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
+
+
+    @validate_call
+    def search_sync_without_preload_content(
+        self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
+        retrieval_search_input: RetrievalSearchInput,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Retrieve relevant content (synchronous)
+
+        Synchronous variant of :meth:`search_without_preload_content`. It calls
+        the asynchronous method and blocks until it completes.
+        """ # noqa: E501
+        return run_sync(
+            self.search_without_preload_content(
+                ai_resource_group=ai_resource_group,
+                retrieval_search_input=retrieval_search_input,
+                _request_timeout=_request_timeout,
+                _request_auth=_request_auth,
+                _content_type=_content_type,
+                _headers=_headers,
+                _host_index=_host_index,
+            )
+        )
 
 
     def _search_serialize(

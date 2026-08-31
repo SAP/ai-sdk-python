@@ -1,7 +1,6 @@
 {
-  "src/spec/api.yaml": {
-    "packageName": "document_grounding",
-    "directoryName": "document_grounding",
+  "api.yaml": {
+    "directoryName": "gen_ai_hub/document_grounding_generation/generated",
     "basePath": "/lm/document-grounding"
   }
 }
