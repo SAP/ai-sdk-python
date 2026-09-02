@@ -17,8 +17,6 @@ jobs:
         uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           ref: ${{ github.ref_name }}
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Make HTML
         working-directory: packages/gen/docs

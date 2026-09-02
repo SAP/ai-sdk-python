@@ -16,18 +16,11 @@ inputs:
   python-version:
     description: 'Python version'
     default: '3.13'
-  index-username:
-    description: 'Username for the PyPI index'
-    default: ''
-  index-token:
-    description: 'Auth token for the PyPI index'
-    default: ''
-
 runs:
   using: composite
   steps:
     - name: Checkout repository
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         token: ${{ inputs.token }}
         persist-credentials: ${{ inputs.persist-credentials }}
@@ -35,26 +28,12 @@ runs:
         fetch-depth: ${{ inputs.fetch-depth }}
 
     - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
       with:
         python-version: ${{ inputs.python-version }}
 
     - name: Install uv
-      uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 #v8.2.0
+      uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
     - name: Install dependencies
       shell: bash
-      env:
-        INDEX_USERNAME: ${{ inputs.index-username }}
-        INDEX_TOKEN: ${{ inputs.index-token }}
-        IS_FORK: ${{ github.event.pull_request.head.repo.fork == true }}
-      run: |
-        if [[ "$IS_FORK" == "true" ]]; then
-          echo "Fork detected — syncing from PyPI without lockfile"
-          UV_INDEX_URL="https://pypi.org/simple/" \
-            uv sync --all-packages --all-extras
-        else
-          echo "Syncing from Artifactory with lockfile"
-          UV_INDEX_ARTIFACTORY_USERNAME="${INDEX_USERNAME}" \
-          UV_INDEX_ARTIFACTORY_PASSWORD="${INDEX_TOKEN}" \
-            uv sync --all-packages --all-extras --locked
-        fi
+      run: uv sync --all-packages --all-extras --locked

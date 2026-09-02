@@ -1,0 +1,103 @@
+name: api-doc
+
+on:
+  push:
+    tags:
+      - 'gen-v*'
+      - 'base-v*'
+      - 'core-v*'
+  workflow_dispatch: ~
+
+jobs:
+  doc:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ secrets.SAP_AI_SDK_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.SAP_AI_SDK_BOT_PRIVATE_KEY }}
+          repositories: |
+            ai-sdk-python
+            ai-sdk
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Setup
+        uses: SAP/ai-sdk-python/.github/actions/setup@main
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.ref }}
+
+      - name: Generate docs
+        run: uv run make docs
+
+      - name: Checkout sap/ai-sdk
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: SAP/ai-sdk
+          token: ${{ steps.app-token.outputs.token }}
+          path: ai-sdk
+          persist-credentials: true
+
+      - name: Configure git
+        env:
+          BOT_EMAIL: ${{ vars.SAP_AI_SDK_BOT_EMAIL }}
+          BOT_NAME: ${{ vars.SAP_AI_SDK_BOT_NAME }}
+        run: |
+          git -C ai-sdk config user.email "$BOT_EMAIL"
+          git -C ai-sdk config user.name "$BOT_NAME"
+
+      - name: Prepare docs branch
+        id: prepare-docs
+        env:
+          REF: ${{ github.ref_name }}
+        run: |
+          BRANCH="api-docs-python-$REF"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          git -C ai-sdk checkout -b "$BRANCH"
+          rm -rf ai-sdk/static/api-python
+          rsync -a --exclude='.*' api-docs/ ai-sdk/static/api-python/
+          git -C ai-sdk add static/api-python
+          if git -C ai-sdk diff --cached --quiet; then
+            echo "No documentation changes to commit"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push docs branch
+        if: steps.prepare-docs.outputs.changed == 'true'
+        env:
+          REF: ${{ github.ref_name }}
+          BRANCH: ${{ steps.prepare-docs.outputs.branch }}
+        run: |
+          git -C ai-sdk commit -m "chore: update Python API docs ($REF)"
+          git -C ai-sdk push --force origin "$BRANCH"
+
+      - name: Create pull request
+        if: steps.prepare-docs.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REF: ${{ github.ref_name }}
+          BRANCH: ${{ steps.prepare-docs.outputs.branch }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            REF_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/tree/$REF"
+          else
+            REF_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$REF"
+          fi
+          if gh pr list --repo SAP/ai-sdk --head "$BRANCH" --json number --jq '.[0].number' | grep -q .; then
+            echo "Pull request already exists for branch $BRANCH"
+          else
+            gh pr create \
+              --repo SAP/ai-sdk \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore: update Python API docs ($REF)" \
+              --body "Automated update of Python API docs from [$REF]($REF_URL) in SAP/ai-sdk-python."
+          fi

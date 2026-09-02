@@ -20,9 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run pylint
         run: |
@@ -54,8 +51,6 @@ jobs:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
           python-version: ${{ matrix.python-version }}
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run unit tests with coverage
         id: run-tests
@@ -74,13 +69,9 @@ jobs:
     name: 'integration tests (base)'
     runs-on: ubuntu-latest
     if: |
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name != 'pull_request'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run base integration tests
         env:
@@ -110,13 +101,9 @@ jobs:
     name: 'integration tests (core)'
     runs-on: ubuntu-latest
     if: |
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name != 'pull_request'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run core integration tests
         env:
@@ -151,13 +138,9 @@ jobs:
     name: 'integration tests (gen)'
     runs-on: ubuntu-latest
     if: |
-      github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name != 'pull_request'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
-        with:
-          index-username: ${{ secrets.ARTIFACTORY_USERNAME }}
-          index-token: ${{ secrets.ARTIFACTORY_TOKEN }}
 
       - name: Run gen integration tests
         env:

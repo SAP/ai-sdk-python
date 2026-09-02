@@ -1,7 +1,6 @@
 - [x] remove all "requires more effort to fix" from zizmor
 - [x] make repo compliant
 - [ ] setup trusted publishing with PyPI
-- [ ] replace Artifactory tokens with ones from the team
 - [ ] ensure tear down always runs
 - [x] update status checks in branch protection rules
 - [ ] add `__repr__` function after code is freshly moved + `_NamedPartial` + `NoDefault`
@@ -20,6 +19,6 @@ class CredentialsValue:
 
 after os-migration PR is merged:
 
-- [ ] create initial version tags (and delete old incorrect ones)
-- [ ] use setup action from main not os-migration
+- [x] create initial version tags (and delete old incorrect ones)
+- [x] use setup action from main not os-migration
 - [ ] update gen version + release notes after internal version is published

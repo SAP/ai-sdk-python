@@ -1,0 +1,24 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:best-practices",
+        "security:openssf-scorecard",
+        ":semanticCommits",
+        ":semanticCommitTypeAll(chore)",
+        ":pinOnlyDevDependencies",
+        ":enableVulnerabilityAlerts",
+        ":automergeMinor"
+    ],
+    "ignorePresets": [
+        ":dependencyDashboard",
+        ":semanticPrefixFixDepsChoreOthers"
+    ],
+    "minimumReleaseAge": "4 days",
+    "timezone": "Europe/Berlin",
+    "packageRules": [
+        {
+            "matchManagers": ["github-actions", "custom.regex"],
+            "schedule": ["every weekend"]
+        }
+    ]
+}
