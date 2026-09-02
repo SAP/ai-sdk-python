@@ -6,9 +6,10 @@ from gen_ai_hub.evaluations.constants import (
     DEFAULT_KEY,
     AWS_S3_OSS_TYPE_KEY,
     AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY,
+    AWS_SECRET_ACCESS_KEY, OBJECT_STORE_SECRET_EXISTS_MESSAGE,
 )
-from ai_api_client_sdk.exception import AIAPINotFoundException
+from ai_api_client_sdk.exception import AIAPINotFoundException, AIAPIServerException
+
 
 @dataclass
 class ObjectStoreData:
@@ -55,6 +56,21 @@ def create_aws_object_store_secret(
             resource_group=resource_group,
         )
         return response
+
+    except AIAPIServerException as e:
+        # Check if this is a 409 Conflict (secret already exists)
+        if hasattr(e, 'status_code') and e.status_code == 409:
+            # Return a mock response object with the expected message attribute
+            # so the caller can handle this gracefully with replace_existing=True
+            class ConflictResponse:
+                def __init__(self):
+                    self.message = OBJECT_STORE_SECRET_EXISTS_MESSAGE
+
+            return ConflictResponse()
+        # Re-raise if it's not a 409
+        raise ValueError(
+            f"Error while creating the Object Store secret. Request failed with error of {e}"
+        ) from e
 
     except Exception as e:
         raise ValueError(
