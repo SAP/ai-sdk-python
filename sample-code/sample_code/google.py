@@ -16,7 +16,7 @@ def generate():
     response = client.models.generate_content(
         model="gemini-3.5-flash", contents="How many paws are there for a dog?"
     )
-    return {"result": response.candidates[0].content.parts[0].text}
+    return {"result": response.text}
 
 
 def generate_stream():
@@ -66,4 +66,4 @@ def tool_call():
         contents="What is 769 + 348?",
         config=types.GenerateContentConfig(tools=[add]),
     )
-    return {"result": response.candidates[0].content.parts[0].text}
+    return {"result": response.text}
