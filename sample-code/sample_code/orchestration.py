@@ -226,7 +226,7 @@ def completion_with_fallback():
                             )
                         ]
                     ),
-                    model=LLMModelDetails(name="sap-rpt-1-small"),
+                    model=LLMModelDetails(name="dummy-model"),
                 )
             ),
             # Second configuration will succeed
