@@ -6,7 +6,8 @@ from gen_ai_hub.evaluations.constants import (
     DEFAULT_KEY,
     AWS_S3_OSS_TYPE_KEY,
     AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY, OBJECT_STORE_SECRET_EXISTS_MESSAGE,
+    AWS_SECRET_ACCESS_KEY,
+    OBJECT_STORE_SECRET_EXISTS_MESSAGE,
 )
 from ai_api_client_sdk.exception import AIAPINotFoundException, AIAPIServerException
 
