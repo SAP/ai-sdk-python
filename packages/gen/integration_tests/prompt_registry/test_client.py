@@ -85,7 +85,7 @@ class TestPromptTemplate(unittest.TestCase):
 
     def test_get_prompt_template_history(self):
         response = self.client.get_prompt_template_history(scenario=self.scenario, name=self.template_name,
-                                                           version=self.version)
+                                                           version=self.version, top=500)
         self.assertIsInstance(response, PromptTemplateListResponse)
 
     def test_delete_prompt_template_by_id(self):

@@ -116,7 +116,7 @@ class PromptTemplateClient(PromptRegistryClient):
 
         return PromptTemplateGetResponse(**response)
 
-    def get_prompt_template_history(self, scenario: str, name: str, version: str) -> PromptTemplateListResponse:
+    def get_prompt_template_history(self, scenario: str, name: str, version: str, top: int = None, skip: int = None) -> PromptTemplateListResponse:
         """Retrieve the history of edits to the prompt template. Only for imperative managed prompt templates.
 
         :param scenario: The scenario name of the prompt template.
@@ -125,11 +125,24 @@ class PromptTemplateClient(PromptRegistryClient):
         :type name: str
         :param version: The version ID of the prompt template.
         :type version: str
+        :param top: Number of prompt templates to be retrieved, defaults to None
+        :type top: int, optional
+        :param skip: Number of prompt templates to be skipped, from the list of the queried executions, defaults to None
+        :type skip: int, optional
         :return: A PromptTemplateListResponse object.
         :rtype: PromptTemplateListResponse
         """
 
-        response = self.rest_client.get(f"{PATH_SCENARIOS}/{scenario}/promptTemplates/{name}/versions/{version}/history")
+        params = {}
+        if top:
+            params['$top'] = top
+        if skip:
+            params['$skip'] = skip
+
+        response = self.rest_client.get(
+            f"{PATH_SCENARIOS}/{scenario}/promptTemplates/{name}/versions/{version}/history",
+            params = params or None
+        )
 
         return PromptTemplateListResponse(**response)
 
