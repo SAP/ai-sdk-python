@@ -69,8 +69,7 @@ jobs:
     name: 'integration tests (base)'
     runs-on: ubuntu-latest
     if: |
-      github.event_name != 'pull_request' || 
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name != 'pull_request'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
 
@@ -102,8 +101,7 @@ jobs:
     name: 'integration tests (core)'
     runs-on: ubuntu-latest
     if: |
-      github.event_name != 'pull_request' || 
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event_name != 'pull_request'
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
 
