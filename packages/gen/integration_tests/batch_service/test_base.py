@@ -11,6 +11,7 @@ import unittest
 
 from time import sleep
 
+from ai_api_client_sdk.exception import AIAPIServerException
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.batch_service.models.response import BatchStatus
@@ -49,16 +50,36 @@ class BatchServiceTestBase(unittest.TestCase):
     def create_object_store_secret(cls):
         aws_access_key_id = os.environ.get(AWS_ACCESS_KEY_ID)
         aws_secret_access_key = os.environ.get(AWS_SECRET_ACCESS_KEY)
-        response = cls.proxy_client.ai_core_client.object_store_secrets.create(
-            name=cls.secret_name,
-            type="S3",
-            data={
-                AWS_ACCESS_KEY_ID: aws_access_key_id,
-                AWS_SECRET_ACCESS_KEY: aws_secret_access_key,
-            },
-            bucket=os.environ.get(AWS_BUCKET_NAME),
-            endpoint=os.environ.get(AWS_HOST),
-            region=os.environ.get(AWS_REGION),
-            resource_group=os.environ.get(AICORE_RESOURCE_GROUP),
-        )
+        try:
+            response = cls.proxy_client.ai_core_client.object_store_secrets.create(
+                name=cls.secret_name,
+                type="S3",
+                data={
+                    AWS_ACCESS_KEY_ID: aws_access_key_id,
+                    AWS_SECRET_ACCESS_KEY: aws_secret_access_key,
+                },
+                bucket=os.environ.get(AWS_BUCKET_NAME),
+                endpoint=os.environ.get(AWS_HOST),
+                region=os.environ.get(AWS_REGION),
+                resource_group=os.environ.get(AICORE_RESOURCE_GROUP),
+            )
+        except AIAPIServerException as e:
+            if e.status_code == 409:
+                if 'already exists with different data' in e.error_message:
+                    cls.proxy_client.ai_core_client.object_store_secrets.modify(
+                        name=cls.secret_name,
+                        type="S3",
+                        data={
+                            AWS_ACCESS_KEY_ID: aws_access_key_id,
+                            AWS_SECRET_ACCESS_KEY: aws_secret_access_key,
+                        },
+                        bucket=os.environ.get(AWS_BUCKET_NAME),
+                        endpoint=os.environ.get(AWS_HOST),
+                        region=os.environ.get(AWS_REGION),
+                        resource_group=os.environ.get(AICORE_RESOURCE_GROUP),
+                    )
+            else:
+                raise Exception(
+                    f"Error while creating the Object Store secret. Request failed with error of {e}"
+                ) from e
 
