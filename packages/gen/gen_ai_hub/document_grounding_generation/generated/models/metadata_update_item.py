@@ -30,13 +30,12 @@ class MetadataUpdateItem(BaseModel):
     MetadataUpdateItem
     """ # noqa: E501
     ids: List[UUID] = Field(description="List of collection or document or chunk ids for which the metadata should be updated")
-    metadata_updates: List[MetadataKeyUpdate] = Field(description="List of metadata updates for the given resource ids", alias="metadataUpdates")
+    metadata_updates: List[MetadataKeyUpdate] = Field(description="List of metadata updates for the given resource ids", serialization_alias="metadataUpdates")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["ids", "metadataUpdates"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

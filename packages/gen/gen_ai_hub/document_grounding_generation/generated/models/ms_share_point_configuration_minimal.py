@@ -28,13 +28,12 @@ class MSSharePointConfigurationMinimal(BaseModel):
     """
     MSSharePointConfigurationMinimal
     """ # noqa: E501
-    share_point: SharePointSiteDetail = Field(alias="sharePoint")
+    share_point: SharePointSiteDetail = Field(serialization_alias="sharePoint")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["sharePoint"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

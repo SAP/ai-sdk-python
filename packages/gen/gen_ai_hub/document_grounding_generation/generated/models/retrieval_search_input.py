@@ -32,13 +32,12 @@ class RetrievalSearchInput(BaseModel):
     """ # noqa: E501
     query: Optional[Annotated[str, Field(min_length=1, strict=True)]] = Field(description="Query string")
     filters: List[FiltersInner]
-    post_processing: Optional[List[RetrievalSearchInputPostProcessingInner]] = Field(default=None, description="List of operations to be performed across PerFilterSearchResults.", alias="postProcessing")
+    post_processing: Optional[List[RetrievalSearchInputPostProcessingInner]] = Field(default=None, description="List of operations to be performed across PerFilterSearchResults.", serialization_alias="postProcessing")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["query", "filters", "postProcessing"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -13,7 +13,7 @@ sap-ai-sdk-core = { workspace = true }
 sap-ai-sdk-gen = { workspace = true }
 
 [tool.uv.workspace]
-members = ["packages/*"]
+members = ["packages/*", "sample_code"]
 
 [tool.pip-licenses]
 # Blue Oak Council Bronze+ permissive licenses (https://blueoakcouncil.org/list)

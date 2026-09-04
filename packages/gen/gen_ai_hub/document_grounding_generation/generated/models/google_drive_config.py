@@ -27,9 +27,9 @@ class GoogleDriveConfig(BaseModel):
     """
     GoogleDriveConfig
     """ # noqa: E501
-    resource_type: StrictStr = Field(alias="resourceType", json_schema_extra={"examples": ["SHARED_DRIVE"]})
-    resource_id: Optional[StrictStr] = Field(default=None, alias="resourceId", json_schema_extra={"examples": ["0AGVUFpXcXc5Uk9PVA"]})
-    include_paths: Optional[List[StrictStr]] = Field(default=None, alias="includePaths", json_schema_extra={"examples": [["/testFolder1", "/testFolder2"]]})
+    resource_type: StrictStr = Field(serialization_alias="resourceType", json_schema_extra={"examples": ["SHARED_DRIVE"]})
+    resource_id: Optional[StrictStr] = Field(default=None, serialization_alias="resourceId", json_schema_extra={"examples": ["0AGVUFpXcXc5Uk9PVA"]})
+    include_paths: Optional[List[StrictStr]] = Field(default=None, serialization_alias="includePaths", json_schema_extra={"examples": [["/testFolder1", "/testFolder2"]]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["resourceType", "resourceId", "includePaths"]
 
@@ -41,8 +41,7 @@ class GoogleDriveConfig(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

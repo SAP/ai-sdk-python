@@ -28,13 +28,12 @@ class EmbeddingConfig(BaseModel):
     """
     EmbeddingConfig
     """ # noqa: E501
-    model_name: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default='text-embedding-ada-002', alias="modelName")
+    model_name: Optional[Annotated[str, Field(strict=True, max_length=1024)]] = Field(default='text-embedding-ada-002', serialization_alias="modelName")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["modelName"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -29,7 +29,7 @@ class DocumentMetadata(BaseModel):
     """ # noqa: E501
     key: StrictStr = Field(description="Metadata key name.", json_schema_extra={"examples": ["contentObjectId"]})
     value: Optional[List[StrictStr]] = Field(description="An array of string values associated with the metadata key. If the key already exists, its values will be overwritten. Setting the value to null will delete the metadata key-value pair.")
-    match_mode: Optional[StrictStr] = Field(default=None, description="Match mode for the metadata key (ANY or ALL).", alias="matchMode")
+    match_mode: Optional[StrictStr] = Field(default=None, description="Match mode for the metadata key (ANY or ALL).", serialization_alias="matchMode")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["key", "value", "matchMode"]
 
@@ -44,8 +44,7 @@ class DocumentMetadata(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

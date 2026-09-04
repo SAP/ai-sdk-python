@@ -33,15 +33,14 @@ class DataRepositoryWithDocuments(BaseModel):
     id: UUID = Field(description="Unique identifier of this DataRepository.")
     title: StrictStr
     metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Metadata attached to DataRepository. Useful to later limit search to a subset of DataRepositories.")
-    remote_grounding_name: Optional[StrictStr] = Field(default=None, description="Friendly destination Name (grounding.name) of remote instance.", alias="remoteGroundingName")
+    remote_grounding_name: Optional[StrictStr] = Field(default=None, description="Friendly destination Name (grounding.name) of remote instance.", serialization_alias="remoteGroundingName")
     message: Optional[StrictStr] = Field(default=None, description="Optional message.")
     documents: List[Document]
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "title", "metadata", "remoteGroundingName", "message", "documents"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -33,8 +33,7 @@ class VectorSearchResults(BaseModel):
     __properties: ClassVar[List[str]] = ["results"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

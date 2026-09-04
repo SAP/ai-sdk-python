@@ -31,23 +31,22 @@ class ConfigurationDocumentFullDetails(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Unique identifier for the document.", json_schema_extra={"examples": ["3cba7512-b07a-58e6-a442-c83996a0b3bb"]})
     title: Optional[StrictStr] = Field(default=None, description="Title of the document.", json_schema_extra={"examples": ["Quarterly Report"]})
-    absolute_file_path: Optional[StrictStr] = Field(default=None, description="Absolute file path of the document in the repository.", alias="absoluteFilePath", json_schema_extra={"examples": ["/sites/team/finance/Q1/report.pdf"]})
-    created_timestamp: Optional[datetime] = Field(default=None, description="UTC timestamp when the document was created (RFC 3339 format, e.g., 2025-08-28T06:15:30Z)", alias="createdTimestamp", json_schema_extra={"examples": ["2025-08-28T06:15:30Z"]})
-    resource_uri: Optional[StrictStr] = Field(default=None, description="URI of the resource.", alias="resourceUri", json_schema_extra={"examples": ["https://example.com/resource/123"]})
-    web_url: Optional[StrictStr] = Field(default=None, description="Web URL of the document.", alias="webUrl", json_schema_extra={"examples": ["https://example.com/web/123"]})
-    document_etag: Optional[StrictStr] = Field(default=None, description="ETag of the document.", alias="documentEtag", json_schema_extra={"examples": ["abc123etag"]})
-    file_suffix: Optional[StrictStr] = Field(default=None, description="File suffix of the document.", alias="fileSuffix", json_schema_extra={"examples": [".pdf"]})
-    view_location: Optional[StrictStr] = Field(default=None, description="View location of the document.", alias="viewLocation", json_schema_extra={"examples": ["https://example.com/view/123"]})
-    download_location: Optional[StrictStr] = Field(default=None, description="Download location of the document.", alias="downloadLocation", json_schema_extra={"examples": ["https://example.com/download/123"]})
-    mime_type: Optional[StrictStr] = Field(default=None, description="MIME type of the document.", alias="mimeType", json_schema_extra={"examples": ["application/pdf"]})
-    file_size_mb: Optional[StrictStr] = Field(default=None, description="File size of the document in megabytes.", alias="fileSizeMb", json_schema_extra={"examples": ["1.5"]})
+    absolute_file_path: Optional[StrictStr] = Field(default=None, description="Absolute file path of the document in the repository.", serialization_alias="absoluteFilePath", json_schema_extra={"examples": ["/sites/team/finance/Q1/report.pdf"]})
+    created_timestamp: Optional[datetime] = Field(default=None, description="UTC timestamp when the document was created (RFC 3339 format, e.g., 2025-08-28T06:15:30Z)", serialization_alias="createdTimestamp", json_schema_extra={"examples": ["2025-08-28T06:15:30Z"]})
+    resource_uri: Optional[StrictStr] = Field(default=None, description="URI of the resource.", serialization_alias="resourceUri", json_schema_extra={"examples": ["https://example.com/resource/123"]})
+    web_url: Optional[StrictStr] = Field(default=None, description="Web URL of the document.", serialization_alias="webUrl", json_schema_extra={"examples": ["https://example.com/web/123"]})
+    document_etag: Optional[StrictStr] = Field(default=None, description="ETag of the document.", serialization_alias="documentEtag", json_schema_extra={"examples": ["abc123etag"]})
+    file_suffix: Optional[StrictStr] = Field(default=None, description="File suffix of the document.", serialization_alias="fileSuffix", json_schema_extra={"examples": [".pdf"]})
+    view_location: Optional[StrictStr] = Field(default=None, description="View location of the document.", serialization_alias="viewLocation", json_schema_extra={"examples": ["https://example.com/view/123"]})
+    download_location: Optional[StrictStr] = Field(default=None, description="Download location of the document.", serialization_alias="downloadLocation", json_schema_extra={"examples": ["https://example.com/download/123"]})
+    mime_type: Optional[StrictStr] = Field(default=None, description="MIME type of the document.", serialization_alias="mimeType", json_schema_extra={"examples": ["application/pdf"]})
+    file_size_mb: Optional[StrictStr] = Field(default=None, description="File size of the document in megabytes.", serialization_alias="fileSizeMb", json_schema_extra={"examples": ["1.5"]})
     metadata: Optional[List[DocumentMetadata]] = Field(default=None, description="Metadata key-value pairs associated with the document.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "title", "absoluteFilePath", "createdTimestamp", "resourceUri", "webUrl", "documentEtag", "fileSuffix", "viewLocation", "downloadLocation", "mimeType", "fileSizeMb", "metadata"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

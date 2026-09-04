@@ -27,14 +27,13 @@ class CollectionDeletedResponse(BaseModel):
     """
     CollectionDeletedResponse
     """ # noqa: E501
-    collection_url: StrictStr = Field(alias="collectionURL")
+    collection_url: StrictStr = Field(serialization_alias="collectionURL")
     status: StrictStr
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["collectionURL", "status"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

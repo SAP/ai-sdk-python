@@ -29,12 +29,11 @@ class ServiceNowConfigurationMinimal(BaseModel):
     ServiceNowConfigurationMinimal
     """ # noqa: E501
     destination: StrictStr = Field(json_schema_extra={"examples": ["destination-name"]})
-    service_now: Optional[ServiceNowConfigurationMinimalServiceNow] = Field(default=None, alias="serviceNow")
+    service_now: Optional[ServiceNowConfigurationMinimalServiceNow] = Field(default=None, serialization_alias="serviceNow")
     __properties: ClassVar[List[str]] = ["destination", "serviceNow"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

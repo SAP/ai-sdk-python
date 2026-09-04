@@ -28,14 +28,13 @@ class MetadataConfigurationStruct(BaseModel):
     """
     MetadataConfigurationStruct
     """ # noqa: E501
-    metadata_config_id: Annotated[str, Field(min_length=1, strict=True)] = Field(alias="metadataConfigId", json_schema_extra={"examples": ["uuid"]})
-    cron_expression: Optional[StrictStr] = Field(default=None, description="Optional cron expression for scheduling pipeline execution. Must represent an interval greater than 1 hour. ", alias="cronExpression", json_schema_extra={"examples": ["0 */20 * * *"]})
+    metadata_config_id: Annotated[str, Field(min_length=1, strict=True)] = Field(serialization_alias="metadataConfigId", json_schema_extra={"examples": ["uuid"]})
+    cron_expression: Optional[StrictStr] = Field(default=None, description="Optional cron expression for scheduling pipeline execution. Must represent an interval greater than 1 hour. ", serialization_alias="cronExpression", json_schema_extra={"examples": ["0 */20 * * *"]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["metadataConfigId", "cronExpression"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

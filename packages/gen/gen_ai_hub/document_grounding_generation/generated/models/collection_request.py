@@ -31,15 +31,14 @@ class CollectionRequest(BaseModel):
     A request for creating a new, single collection.
     """ # noqa: E501
     title: Optional[StrictStr] = None
-    embedding_config: EmbeddingConfig = Field(alias="embeddingConfig")
+    embedding_config: EmbeddingConfig = Field(serialization_alias="embeddingConfig")
     metadata: Optional[List[VectorKeyValueListPair]] = Field(default=None, description="Metadata attached to collection. Useful to restrict search to a subset of collections.")
     id: Optional[UUID] = Field(default=None, description="Unique identifier of a collection.")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["title", "embeddingConfig", "metadata", "id"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

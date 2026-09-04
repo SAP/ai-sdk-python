@@ -31,9 +31,9 @@ class MetadataConfigurationRequest(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="If provided, must be a valid UUID. If not provided, a new UUID will be generated.")
     name: Optional[StrictStr] = Field(default=None, description="If provided, must be a valid string. If not provided, will be same as id.")
-    destination_name: StrictStr = Field(description="Contains destination name containing credentials to access the data repository.", alias="destinationName")
-    data_repository_type: StrictStr = Field(description="The data repository type for which this configuration is being created.", alias="dataRepositoryType", json_schema_extra={"examples": ["MSSharePoint"]})
-    include_paths: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, alias="includePaths", json_schema_extra={"examples": [["/site/documents", "/shared/team"]]})
+    destination_name: StrictStr = Field(description="Contains destination name containing credentials to access the data repository.", serialization_alias="destinationName")
+    data_repository_type: StrictStr = Field(description="The data repository type for which this configuration is being created.", serialization_alias="dataRepositoryType", json_schema_extra={"examples": ["MSSharePoint"]})
+    include_paths: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, serialization_alias="includePaths", json_schema_extra={"examples": [["/site/documents", "/shared/team"]]})
     labels: Optional[List[MetadataConfigurationRequestLabelsInner]] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "name", "destinationName", "dataRepositoryType", "includePaths", "labels"]
@@ -46,8 +46,7 @@ class MetadataConfigurationRequest(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

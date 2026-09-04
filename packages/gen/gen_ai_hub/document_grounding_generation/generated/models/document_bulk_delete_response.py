@@ -29,13 +29,12 @@ class DocumentBulkDeleteResponse(BaseModel):
     Response after deleting documents in bulk.
     """ # noqa: E501
     deleted: List[UUID] = Field(description="List of successfully deleted document IDs")
-    not_found: List[UUID] = Field(description="List of document IDs that were not found", alias="notFound")
+    not_found: List[UUID] = Field(description="List of document IDs that were not found", serialization_alias="notFound")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["deleted", "notFound"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

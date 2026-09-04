@@ -32,13 +32,12 @@ class BoostingScoringConfiguration(BaseModel):
     enabled: Optional[StrictBool] = Field(default=True, description="Enable metadata-based boosting.")
     metadata: Optional[List[BoostingScoringConfigurationMetadataInner]] = None
     weight: Optional[StrictInt] = Field(default=1, description="Contribution to final score.")
-    score_computation_strategy: Optional[BoostingScoreComputationStrategy] = Field(default=None, alias="scoreComputationStrategy")
+    score_computation_strategy: Optional[BoostingScoreComputationStrategy] = Field(default=None, serialization_alias="scoreComputationStrategy")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["enabled", "metadata", "weight", "scoreComputationStrategy"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

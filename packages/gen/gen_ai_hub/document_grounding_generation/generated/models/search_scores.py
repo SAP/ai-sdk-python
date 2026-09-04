@@ -28,14 +28,13 @@ class SearchScores(BaseModel):
     """
     SearchScores
     """ # noqa: E501
-    aggregated_score: SearchScoresAggregatedScore = Field(alias="aggregatedScore")
-    dense_retrieval_score: SearchScoresAggregatedScore = Field(alias="denseRetrievalScore")
+    aggregated_score: SearchScoresAggregatedScore = Field(serialization_alias="aggregatedScore")
+    dense_retrieval_score: SearchScoresAggregatedScore = Field(serialization_alias="denseRetrievalScore")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["aggregatedScore", "denseRetrievalScore"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

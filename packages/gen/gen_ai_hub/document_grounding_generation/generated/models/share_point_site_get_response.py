@@ -29,13 +29,12 @@ class SharePointSiteGetResponse(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = None
     name: StrictStr
-    include_paths: Optional[List[StrictStr]] = Field(default=None, alias="includePaths")
+    include_paths: Optional[List[StrictStr]] = Field(default=None, serialization_alias="includePaths")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "name", "includePaths"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

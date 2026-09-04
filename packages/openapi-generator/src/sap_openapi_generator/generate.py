@@ -69,6 +69,50 @@ def _build_opid_flags(mappings_path: Path) -> list[str]:
     return flags
 
 
+def _fix_numbered_duplicates(output_dir: Path) -> None:
+    """Rename fileN.py → file.py when the generator appends a digit to avoid collisions.
+
+    The openapi-generator appends '0', '1', … to a filename when its snake_case
+    version collides with another file (e.g. filterconditions0.py vs filter_conditions.py).
+    The generated imports reference the un-suffixed name, so we rename the file to match.
+    Only renames when the un-suffixed target does not already exist.
+    """
+    import re
+    for numbered in sorted(output_dir.rglob("*.py")):
+        m = re.fullmatch(r"(.+?)(0)\.py", numbered.name)
+        if not m:
+            continue
+        canonical = numbered.with_name(m.group(1) + ".py")
+        if not canonical.exists():
+            numbered.rename(canonical)
+
+
+def _fix_field_aliases(output_dir: Path) -> None:
+    """Replace Field(alias="camelCase") with serialization_alias="camelCase".
+
+    The openapi-generator emits alias= which makes Pydantic use the camelCase name
+    as the __init__ parameter, hiding the snake_case field name from type checkers.
+    Replacing with serialization_alias= keeps camelCase JSON output while letting
+    the __init__ use the natural snake_case field name.
+    """
+    import re
+
+    ALIAS_RE = re.compile(
+        r'(Field\((?:[^"\')\n]|"[^"]*"|\'[^\']*\')*?)(?<![a-z_])alias=(["\'])([^"\']+)\2'
+    )
+
+    for py_file in output_dir.rglob("*.py"):
+        src = py_file.read_text()
+        if 'alias=' not in src:
+            continue
+        updated = ALIAS_RE.sub(
+            lambda m: f"{m.group(1)}serialization_alias={m.group(2)}{m.group(3)}{m.group(2)}",
+            src,
+        )
+        if updated != src:
+            py_file.write_text(updated)
+
+
 def _rewrite_imports(output_dir: Path, package_name: str) -> None:
     for py_file in output_dir.rglob("*.py"):
         src = py_file.read_text()
@@ -107,6 +151,8 @@ def generate_one(
             mappings_output_path=mappings,
         )
 
+        template_dir = config_path.parent / "custom-templates"
+
         cmd = [
             "npx", "--yes", "@openapitools/openapi-generator-cli", "generate",
             "-g", "python",
@@ -115,6 +161,8 @@ def generate_one(
             "-c", str(config_path),
             "--additional-properties", f"packageName={leaf}",
         ]
+        if template_dir.is_dir():
+            cmd += ["--template-dir", str(template_dir)]
         cmd += _build_opid_flags(mappings)
 
         result = subprocess.run(cmd, check=False)
@@ -130,6 +178,8 @@ def generate_one(
             shutil.rmtree(output_dir)
         shutil.move(str(generated_src), str(output_dir))
 
+    _fix_numbered_duplicates(output_dir)
+    _fix_field_aliases(output_dir)
     _rewrite_imports(output_dir, package_name)
     (output_dir / "py.typed").touch()
 

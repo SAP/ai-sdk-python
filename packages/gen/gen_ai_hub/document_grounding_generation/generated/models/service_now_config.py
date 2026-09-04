@@ -28,13 +28,12 @@ class ServiceNowConfig(BaseModel):
     """
     ServiceNowConfig
     """ # noqa: E501
-    include_paths: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, alias="includePaths", json_schema_extra={"examples": [["active=true", "sys_domain_path=/health"]]})
+    include_paths: Optional[Annotated[List[StrictStr], Field(min_length=1)]] = Field(default=None, serialization_alias="includePaths", json_schema_extra={"examples": [["active=true", "sys_domain_path=/health"]]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["includePaths"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

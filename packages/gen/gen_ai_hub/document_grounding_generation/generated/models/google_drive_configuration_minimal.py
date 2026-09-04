@@ -28,12 +28,11 @@ class GoogleDriveConfigurationMinimal(BaseModel):
     """
     GoogleDriveConfigurationMinimal
     """ # noqa: E501
-    google_drive: GoogleDriveResourceDetail = Field(alias="googleDrive")
+    google_drive: GoogleDriveResourceDetail = Field(serialization_alias="googleDrive")
     __properties: ClassVar[List[str]] = ["googleDrive"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

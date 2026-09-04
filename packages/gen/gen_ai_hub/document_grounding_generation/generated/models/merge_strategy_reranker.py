@@ -32,7 +32,7 @@ class MergeStrategyReranker(BaseModel):
     type: Optional[MergeStrategyType] = None
     model: Optional[StrictStr] = Field(default='cohere-3.5', description="The RerankerModel to use.")
     boosting: Optional[List[MergeStrategyRerankerBoostingInner]] = Field(default=None, description="Key-value pairs to be included in the ranking process, to boost related chunks according to chunk content and metadata, if includeMetaData is true.")
-    include_all_meta_data: Optional[StrictBool] = Field(default=False, description="If true, document and chunk metadata are sent to the reranker LLM along with the text content of the chunk.", alias="includeAllMetaData")
+    include_all_meta_data: Optional[StrictBool] = Field(default=False, description="If true, document and chunk metadata are sent to the reranker LLM along with the text content of the chunk.", serialization_alias="includeAllMetaData")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["type", "model", "boosting", "includeAllMetaData"]
 
@@ -47,8 +47,7 @@ class MergeStrategyReranker(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

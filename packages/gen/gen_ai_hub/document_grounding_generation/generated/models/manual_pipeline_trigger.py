@@ -27,14 +27,13 @@ class ManualPipelineTrigger(BaseModel):
     """
     ManualPipelineTrigger
     """ # noqa: E501
-    pipeline_id: Optional[StrictStr] = Field(default=None, alias="pipelineId", json_schema_extra={"examples": ["uuid"]})
-    metadata_only: Optional[StrictBool] = Field(default=None, alias="metadataOnly", json_schema_extra={"examples": [True]})
+    pipeline_id: Optional[StrictStr] = Field(default=None, serialization_alias="pipelineId", json_schema_extra={"examples": ["uuid"]})
+    metadata_only: Optional[StrictBool] = Field(default=None, serialization_alias="metadataOnly", json_schema_extra={"examples": [True]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["pipelineId", "metadataOnly"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -33,14 +33,13 @@ class RetrievalChunk(BaseModel):
     id: StrictStr
     content: StrictStr
     metadata: Optional[List[RetrievalKeyValueListPair]] = None
-    search_scores: Optional[SearchScores] = Field(default=None, alias="searchScores")
-    post_processing_score: Optional[Score] = Field(default=None, alias="postProcessingScore")
+    search_scores: Optional[SearchScores] = Field(default=None, serialization_alias="searchScores")
+    post_processing_score: Optional[Score] = Field(default=None, serialization_alias="postProcessingScore")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "content", "metadata", "searchScores", "postProcessingScore"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

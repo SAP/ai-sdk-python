@@ -27,13 +27,12 @@ class PatchPipelineConfiguration(BaseModel):
     """
     PatchPipelineConfiguration
     """ # noqa: E501
-    cron_expression: Optional[StrictStr] = Field(default=None, alias="cronExpression", json_schema_extra={"examples": ["0 3 * * *"]})
+    cron_expression: Optional[StrictStr] = Field(default=None, serialization_alias="cronExpression", json_schema_extra={"examples": ["0 3 * * *"]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["cronExpression"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -28,14 +28,13 @@ class PerFilterSearchResult(BaseModel):
     """
     PerFilterSearchResult
     """ # noqa: E501
-    filter_id: StrictStr = Field(alias="filterId")
+    filter_id: StrictStr = Field(serialization_alias="filterId")
     results: List[DocumentsChunk]
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["filterId", "results"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -28,13 +28,12 @@ class RetrievalDataRepositorySearchResult(BaseModel):
     """
     RetrievalDataRepositorySearchResult
     """ # noqa: E501
-    data_repository: DataRepositoryWithDocuments = Field(alias="dataRepository")
+    data_repository: DataRepositoryWithDocuments = Field(serialization_alias="dataRepository")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["dataRepository"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

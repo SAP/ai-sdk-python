@@ -33,15 +33,14 @@ class DataRepository(BaseModel):
     id: UUID = Field(description="Unique identifier of this DataRepository.")
     title: StrictStr
     metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Metadata attached to DataRepository. Useful to later limit search to a subset of DataRepositories.")
-    remote_grounding_name: Optional[StrictStr] = Field(default=None, alias="remoteGroundingName")
+    remote_grounding_name: Optional[StrictStr] = Field(default=None, serialization_alias="remoteGroundingName")
     message: Optional[StrictStr] = None
     type: DataRepositoryType
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "title", "metadata", "remoteGroundingName", "message", "type"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

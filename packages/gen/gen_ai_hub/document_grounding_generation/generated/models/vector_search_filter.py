@@ -32,18 +32,17 @@ class VectorSearchFilter(BaseModel):
     VectorSearchFilter
     """ # noqa: E501
     id: StrictStr = Field(description="Identifier of this VectorSearchFilter - unique per request.")
-    collection_ids: List[StrictStr] = Field(alias="collectionIds")
+    collection_ids: List[StrictStr] = Field(serialization_alias="collectionIds")
     configuration: VectorSearchConfiguration
-    collection_metadata: Optional[List[VectorKeyValueListPair]] = Field(default=None, description="Restrict collections considered during search to those annotated with the given metadata. Useful when combined with collections=['*']", alias="collectionMetadata")
-    document_metadata: Optional[List[VectorSearchDocumentKeyValueListPair]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", alias="documentMetadata")
-    chunk_metadata: Optional[List[VectorKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", alias="chunkMetadata")
+    collection_metadata: Optional[List[VectorKeyValueListPair]] = Field(default=None, description="Restrict collections considered during search to those annotated with the given metadata. Useful when combined with collections=['*']", serialization_alias="collectionMetadata")
+    document_metadata: Optional[List[VectorSearchDocumentKeyValueListPair]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", serialization_alias="documentMetadata")
+    chunk_metadata: Optional[List[VectorKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", serialization_alias="chunkMetadata")
     filter: Optional[Filter] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "collectionIds", "configuration", "collectionMetadata", "documentMetadata", "chunkMetadata", "filter"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

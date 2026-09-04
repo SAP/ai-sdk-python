@@ -30,13 +30,12 @@ class S3Configuration(BaseModel):
     """ # noqa: E501
     destination: StrictStr = Field(json_schema_extra={"examples": ["generic-secret-name"]})
     s3: Optional[ServiceNowConfigurationMinimalServiceNow] = None
-    cron_expression: Optional[StrictStr] = Field(default=None, alias="cronExpression", json_schema_extra={"examples": ["0 3 * * *"]})
+    cron_expression: Optional[StrictStr] = Field(default=None, serialization_alias="cronExpression", json_schema_extra={"examples": ["0 3 * * *"]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["destination", "s3", "cronExpression"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

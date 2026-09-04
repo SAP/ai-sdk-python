@@ -29,9 +29,9 @@ class GetPipelineStatus(BaseModel):
     """
     GetPipelineStatus
     """ # noqa: E501
-    last_started: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, alias="lastStarted", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
-    created_at: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, alias="createdAt", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
-    last_completed_at: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, alias="lastCompletedAt", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
+    last_started: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, serialization_alias="lastStarted", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
+    created_at: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, serialization_alias="createdAt", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
+    last_completed_at: Optional[Annotated[str, Field(strict=True)]] = Field(default=None, serialization_alias="lastCompletedAt", json_schema_extra={"examples": ["2024-02-15T12:45:00.000Z"]})
     status: Optional[PipelineExecutionStatus] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["lastStarted", "createdAt", "lastCompletedAt", "status"]
@@ -67,8 +67,7 @@ class GetPipelineStatus(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

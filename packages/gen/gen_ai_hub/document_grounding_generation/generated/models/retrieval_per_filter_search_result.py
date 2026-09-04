@@ -28,15 +28,14 @@ class RetrievalPerFilterSearchResult(BaseModel):
     """
     RetrievalPerFilterSearchResult
     """ # noqa: E501
-    filter_id: StrictStr = Field(alias="filterId")
+    filter_id: StrictStr = Field(serialization_alias="filterId")
     results: Optional[List[RetrievalDataRepositorySearchResult]] = Field(default=None, description="List of returned results.")
-    remote_grounding_name: Optional[StrictStr] = Field(default=None, description="Friendly Destination Name of remote instance (grounding.name). Only present if dataRepositoryType = remote:dg.", alias="remoteGroundingName")
+    remote_grounding_name: Optional[StrictStr] = Field(default=None, description="Friendly Destination Name of remote instance (grounding.name). Only present if dataRepositoryType = remote:dg.", serialization_alias="remoteGroundingName")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["filterId", "results", "remoteGroundingName"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

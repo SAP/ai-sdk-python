@@ -31,17 +31,16 @@ class VectorScoringConfiguration(BaseModel):
     """
     VectorScoringConfiguration
     """ # noqa: E501
-    dense_retrieval: Optional[DenseRetrievalScoringConfiguration] = Field(default=None, alias="denseRetrieval")
-    keyword_retrieval: Optional[KeyWordRetrievalScoringConfiguration] = Field(default=None, alias="keywordRetrieval")
+    dense_retrieval: Optional[DenseRetrievalScoringConfiguration] = Field(default=None, serialization_alias="denseRetrieval")
+    keyword_retrieval: Optional[KeyWordRetrievalScoringConfiguration] = Field(default=None, serialization_alias="keywordRetrieval")
     boosting: Optional[BoostingScoringConfiguration] = None
-    score_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Minimum chunk score threshold.", alias="scoreThreshold")
-    aggregation_strategy: Optional[ScoresAggregationStrategy] = Field(default=None, alias="aggregationStrategy")
+    score_threshold: Optional[Union[StrictFloat, StrictInt]] = Field(default=None, description="Minimum chunk score threshold.", serialization_alias="scoreThreshold")
+    aggregation_strategy: Optional[ScoresAggregationStrategy] = Field(default=None, serialization_alias="aggregationStrategy")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["denseRetrieval", "keywordRetrieval", "boosting", "scoreThreshold", "aggregationStrategy"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

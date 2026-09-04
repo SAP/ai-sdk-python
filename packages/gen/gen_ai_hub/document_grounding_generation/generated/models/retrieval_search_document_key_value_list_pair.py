@@ -31,13 +31,12 @@ class RetrievalSearchDocumentKeyValueListPair(BaseModel):
     """ # noqa: E501
     key: Annotated[str, Field(strict=True, max_length=1024)]
     value: List[Annotated[str, Field(strict=True, max_length=1024)]]
-    select_mode: Optional[List[RetrievalSearchSelectOptionEnum]] = Field(default=None, description="Select mode for search filters", alias="selectMode")
+    select_mode: Optional[List[RetrievalSearchSelectOptionEnum]] = Field(default=None, description="Select mode for search filters", serialization_alias="selectMode")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["key", "value", "selectMode"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

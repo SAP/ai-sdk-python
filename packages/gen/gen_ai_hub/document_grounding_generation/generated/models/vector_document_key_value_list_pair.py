@@ -31,13 +31,12 @@ class VectorDocumentKeyValueListPair(BaseModel):
     """ # noqa: E501
     key: Annotated[str, Field(strict=True, max_length=1024)]
     value: List[Annotated[str, Field(strict=True, max_length=1024)]]
-    match_mode: Optional[FilterMatchModeEnum] = Field(default=None, alias="matchMode")
+    match_mode: Optional[FilterMatchModeEnum] = Field(default=None, serialization_alias="matchMode")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["key", "value", "matchMode"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

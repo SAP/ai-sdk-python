@@ -29,15 +29,14 @@ class GetPipelineExecutionById(BaseModel):
     GetPipelineExecutionById
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, json_schema_extra={"examples": ["uuid"]})
-    created_at: Optional[StrictStr] = Field(default=None, alias="createdAt", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
-    modified_at: Optional[StrictStr] = Field(default=None, alias="modifiedAt", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
+    created_at: Optional[StrictStr] = Field(default=None, serialization_alias="createdAt", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
+    modified_at: Optional[StrictStr] = Field(default=None, serialization_alias="modifiedAt", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
     status: Optional[PipelineExecutionStatus] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "createdAt", "modifiedAt", "status"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

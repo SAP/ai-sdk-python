@@ -29,13 +29,12 @@ class SharePointSiteDetail(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, json_schema_extra={"examples": ["sharepoint-site-id"]})
     name: StrictStr = Field(json_schema_extra={"examples": ["sharepoint-site-name"]})
-    include_paths: Optional[List[StrictStr]] = Field(default=None, alias="includePaths", json_schema_extra={"examples": [["/testFolder1", "/testFolder2"]]})
+    include_paths: Optional[List[StrictStr]] = Field(default=None, serialization_alias="includePaths", json_schema_extra={"examples": [["/testFolder1", "/testFolder2"]]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "name", "includePaths"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -29,13 +29,12 @@ class KeyWordRetrievalScoringConfiguration(BaseModel):
     """ # noqa: E501
     enabled: Optional[StrictBool] = Field(default=True, description="Enable dense retrieval.")
     weight: Optional[StrictInt] = Field(default=1, description="Contribution to final score.")
-    extract_key_words_from_query: Optional[StrictBool] = Field(default=False, description="Extract Keywords from Query.", alias="extractKeyWordsFromQuery")
+    extract_key_words_from_query: Optional[StrictBool] = Field(default=False, description="Extract Keywords from Query.", serialization_alias="extractKeyWordsFromQuery")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["enabled", "weight", "extractKeyWordsFromQuery"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

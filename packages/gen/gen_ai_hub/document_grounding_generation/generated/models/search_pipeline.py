@@ -28,13 +28,12 @@ class SearchPipeline(BaseModel):
     """
     SearchPipeline
     """ # noqa: E501
-    data_repository_metadata: Optional[List[MetaDataDataRepositoryMetadataInner]] = Field(default=None, description="Search for metadata happens at key level. Pipelines matching the search criteria will be returned.", alias="dataRepositoryMetadata", json_schema_extra={"examples": [[{"key": "purpose", "value": ["demonstration"]}, {"key": "sample-key", "value": ["sample-value1", "sample-value2"]}]]})
+    data_repository_metadata: Optional[List[MetaDataDataRepositoryMetadataInner]] = Field(default=None, description="Search for metadata happens at key level. Pipelines matching the search criteria will be returned.", serialization_alias="dataRepositoryMetadata", json_schema_extra={"examples": [[{"key": "purpose", "value": ["demonstration"]}, {"key": "sample-key", "value": ["sample-value1", "sample-value2"]}]]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["dataRepositoryMetadata"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

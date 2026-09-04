@@ -30,15 +30,14 @@ class PostProcessingOperation(BaseModel):
     PostProcessingOperation
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default='ae9eee48-4671-4321-a3e5-640adaaf26ae', description="New ID for each PostProcessingOperation.")
-    max_chunk_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=5, description="Maximum number of chunks to be retained in final PerSearchFilterResult.", alias="maxChunkCount")
+    max_chunk_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=5, description="Maximum number of chunks to be retained in final PerSearchFilterResult.", serialization_alias="maxChunkCount")
     strategy: Strategy
     inputs: List[RetrievalSearchInputPostProcessingInnerInputsInner]
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "maxChunkCount", "strategy", "inputs"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

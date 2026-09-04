@@ -1,5 +1,5 @@
 from fastapi.responses import StreamingResponse
-from gen_ai_hub.proxy.native.openai import AsyncOpenAI, chat, embeddings, responses
+from gen_ai_hub.proxy.native.openai import AsyncOpenAI
 from openai.types.responses import Response
 from pydantic import BaseModel
 
@@ -11,6 +11,7 @@ def chat_completion():
     Returns:
         JSON object containing the model response as result.
     """
+    from gen_ai_hub.proxy.native.openai import chat
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Does Azure OpenAI support customer managed keys?"},
@@ -61,6 +62,7 @@ def chat_completion_structured():
     Returns:
         JSON object response from the model.
     """
+    from gen_ai_hub.proxy.native.openai import chat
 
     class Person(BaseModel):
         name: str
@@ -81,6 +83,7 @@ def chat_completion_stream():
     Returns:
         Streaming response emitting the produced text.
     """
+    from gen_ai_hub.proxy.native.openai import chat
     messages = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Count from 1 to 10, one number per line."},
@@ -108,6 +111,7 @@ def responses_simple():
     Returns:
         JSON object containing the model response as result.
     """
+    from gen_ai_hub.proxy.native.openai import responses
     response = responses.create(
         model="gpt-5.4-nano",
         instructions="You are a helpful assistant.",
@@ -140,6 +144,7 @@ def responses_structured():
     Returns:
         JSON object response from the model.
     """
+    from gen_ai_hub.proxy.native.openai import responses
 
     class Person(BaseModel):
         name: str
@@ -160,6 +165,7 @@ def embedding():
     Returns:
         JSON object containing the embedding.
     """
+    from gen_ai_hub.proxy.native.openai import embeddings
     result = embeddings.create(
         model_name="text-embedding-3-small",
         input="The quick brown fox jumps over the lazy dog.",

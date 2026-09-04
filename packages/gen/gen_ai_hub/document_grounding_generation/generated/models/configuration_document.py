@@ -31,8 +31,8 @@ class ConfigurationDocument(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="Unique identifier for the document.", json_schema_extra={"examples": ["3cba7512-b07a-58e6-a442-c83996a0b3bb"]})
     title: Optional[StrictStr] = Field(default=None, description="Title of the document.", json_schema_extra={"examples": ["Quarterly Report"]})
-    absolute_file_path: Optional[StrictStr] = Field(default=None, description="Absolute file path of the document in the repository.", alias="absoluteFilePath", json_schema_extra={"examples": ["/sites/team/finance/Q1/report.pdf"]})
-    created_timestamp: Optional[datetime] = Field(default=None, description="UTC timestamp when the document was created (RFC 3339 format, e.g., 2025-08-28T06:15:30Z)", alias="createdTimestamp", json_schema_extra={"examples": ["2025-08-28T06:15:30Z"]})
+    absolute_file_path: Optional[StrictStr] = Field(default=None, description="Absolute file path of the document in the repository.", serialization_alias="absoluteFilePath", json_schema_extra={"examples": ["/sites/team/finance/Q1/report.pdf"]})
+    created_timestamp: Optional[datetime] = Field(default=None, description="UTC timestamp when the document was created (RFC 3339 format, e.g., 2025-08-28T06:15:30Z)", serialization_alias="createdTimestamp", json_schema_extra={"examples": ["2025-08-28T06:15:30Z"]})
     type: Optional[StrictStr] = Field(default=None, description="Type of the resource. Can be FOLDER, DOCUMENT.")
     metadata: Optional[List[DocumentMetadata]] = Field(default=None, description="Metadata key-value pairs associated with the document.")
     additional_properties: Dict[str, Any] = {}
@@ -49,8 +49,7 @@ class ConfigurationDocument(BaseModel):
         return value
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

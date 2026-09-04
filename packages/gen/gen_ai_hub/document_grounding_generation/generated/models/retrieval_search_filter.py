@@ -32,19 +32,18 @@ class RetrievalSearchFilter(BaseModel):
     Limit scope of search to certain DataRepositories, Documents or Chunks.
     """ # noqa: E501
     id: StrictStr = Field(description="Identifier of this RetrievalSearchFilter - unique per request.")
-    search_configuration: Optional[RetrievalSearchConfiguration] = Field(default=None, alias="searchConfiguration")
-    data_repositories: Optional[List[StrictStr]] = Field(default=None, description="Specify ['*'] to search across all DataRepositories or give a specific list of DataRepository ids.", alias="dataRepositories")
-    data_repository_type: DataRepositoryType = Field(alias="dataRepositoryType")
-    remote_name: Optional[StrictStr] = Field(default=None, description="Destination Name of remote instance.", alias="remoteName")
-    data_repository_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict DataRepositories considered during search to those annotated with the given metadata. Useful when combined with dataRepositories=['*']", alias="dataRepositoryMetadata")
-    document_metadata: Optional[List[RetrievalSearchDocumentKeyValueListPair]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", alias="documentMetadata")
-    chunk_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", alias="chunkMetadata")
+    search_configuration: Optional[RetrievalSearchConfiguration] = Field(default=None, serialization_alias="searchConfiguration")
+    data_repositories: Optional[List[StrictStr]] = Field(default=None, description="Specify ['*'] to search across all DataRepositories or give a specific list of DataRepository ids.", serialization_alias="dataRepositories")
+    data_repository_type: DataRepositoryType = Field(serialization_alias="dataRepositoryType")
+    remote_name: Optional[StrictStr] = Field(default=None, description="Destination Name of remote instance.", serialization_alias="remoteName")
+    data_repository_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict DataRepositories considered during search to those annotated with the given metadata. Useful when combined with dataRepositories=['*']", serialization_alias="dataRepositoryMetadata")
+    document_metadata: Optional[List[RetrievalSearchDocumentKeyValueListPair]] = Field(default=None, description="Restrict documents considered during search to those annotated with the given metadata.", serialization_alias="documentMetadata")
+    chunk_metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default=None, description="Restrict chunks considered during search to those with the given metadata.", serialization_alias="chunkMetadata")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "searchConfiguration", "dataRepositories", "dataRepositoryType", "remoteName", "dataRepositoryMetadata", "documentMetadata", "chunkMetadata"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

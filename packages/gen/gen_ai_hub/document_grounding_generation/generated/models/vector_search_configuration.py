@@ -28,14 +28,13 @@ class VectorSearchConfiguration(BaseModel):
     """
     VectorSearchConfiguration
     """ # noqa: E501
-    max_chunk_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=None, description="Maximum number of chunks to be returned. Cannot be used with 'maxDocumentCount'.", alias="maxChunkCount")
-    max_document_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=None, description="[Only supports 'vector' dataRepositoryType] - Maximum number of documents to be returned. Cannot be used with 'maxChunkCount'. If maxDocumentCount is given, then only one chunk per document is returned.", alias="maxDocumentCount")
+    max_chunk_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=None, description="Maximum number of chunks to be returned. Cannot be used with 'maxDocumentCount'.", serialization_alias="maxChunkCount")
+    max_document_count: Optional[Annotated[int, Field(le=10000000, strict=True, gt=0)]] = Field(default=None, description="[Only supports 'vector' dataRepositoryType] - Maximum number of documents to be returned. Cannot be used with 'maxChunkCount'. If maxDocumentCount is given, then only one chunk per document is returned.", serialization_alias="maxDocumentCount")
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["maxChunkCount", "maxDocumentCount"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

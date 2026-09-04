@@ -37,8 +37,7 @@ class DocumentOutput(BaseModel):
     __properties: ClassVar[List[str]] = ["id", "metadata", "chunks"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

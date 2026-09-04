@@ -27,13 +27,12 @@ class PipelineId(BaseModel):
     """
     PipelineId
     """ # noqa: E501
-    pipeline_id: Optional[StrictStr] = Field(default=None, alias="pipelineId", json_schema_extra={"examples": ["uuid"]})
+    pipeline_id: Optional[StrictStr] = Field(default=None, serialization_alias="pipelineId", json_schema_extra={"examples": ["uuid"]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["pipelineId"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

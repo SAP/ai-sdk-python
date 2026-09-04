@@ -30,15 +30,14 @@ class ApiError(BaseModel):
     """ # noqa: E501
     code: StrictStr = Field(description="Descriptive error code (not http status code).")
     message: StrictStr = Field(description="plaintext error description")
-    request_id: Optional[StrictStr] = Field(default=None, description="id of individual request", alias="requestId")
+    request_id: Optional[StrictStr] = Field(default=None, description="id of individual request", serialization_alias="requestId")
     target: Optional[StrictStr] = Field(default=None, description="url that has been called")
     details: Optional[List[DetailsErrorResponse]] = None
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["code", "message", "requestId", "target", "details"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -1,7 +1,33 @@
+import json
+import os
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import openai, amazon, core, google, orchestration, document_grounding_generation
+from sample_code import openai, amazon, core, google, orchestration, document_grounding_generation, tab_ai_orchestration
+
+
+def _load_service_key() -> None:
+    """Parse AICORE_SERVICE_KEY into individual AICORE_* env vars if not already set."""
+    service_key = os.environ.get("AICORE_SERVICE_KEY")
+    if not service_key:
+        return
+    try:
+        d = json.loads(service_key)
+    except json.JSONDecodeError:
+        return
+    mapping = {
+        "AICORE_CLIENT_ID": d.get("clientid"),
+        "AICORE_CLIENT_SECRET": d.get("clientsecret"),
+        "AICORE_AUTH_URL": (d.get("url", "").rstrip("/") + "/oauth/token") if d.get("url") else None,
+        "AICORE_BASE_URL": (d.get("serviceurls", {}).get("AI_API_URL", "").rstrip("/") + "/v2") if d.get("serviceurls", {}).get("AI_API_URL") else None,
+    }
+    for key, value in mapping.items():
+        if value and not os.environ.get(key):
+            os.environ[key] = value
+
+
+_load_service_key()
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -75,3 +101,7 @@ app.get("/orchestration/tool-call-json")(orchestration.tool_call_json)
 app.post("/document-grounding-generation/collection/create")(document_grounding_generation.create_collection)
 app.get("/document-grounding-generation/pipelines")(document_grounding_generation.get_all_pipelines)
 app.post("/document-grounding-generation/retrieval/search")(document_grounding_generation.retrieval_search)
+
+# Tabular AI Orchestration
+app.get("/tab-ai-orchestration/predict")(tab_ai_orchestration.predict)
+app.get("/tab-ai-orchestration/predict-with-explanations")(tab_ai_orchestration.predict_with_explanations)

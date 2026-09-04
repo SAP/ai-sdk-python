@@ -30,19 +30,18 @@ class PipelineDocumentResponse(BaseModel):
     """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, json_schema_extra={"examples": ["uuid"]})
     status: Optional[DocumentStatus] = None
-    view_location: Optional[StrictStr] = Field(default=None, alias="viewLocation", json_schema_extra={"examples": ["location"]})
-    download_location: Optional[StrictStr] = Field(default=None, alias="downloadLocation", json_schema_extra={"examples": ["location"]})
-    absolute_url: Optional[StrictStr] = Field(default=None, alias="absoluteUrl")
+    view_location: Optional[StrictStr] = Field(default=None, serialization_alias="viewLocation", json_schema_extra={"examples": ["location"]})
+    download_location: Optional[StrictStr] = Field(default=None, serialization_alias="downloadLocation", json_schema_extra={"examples": ["location"]})
+    absolute_url: Optional[StrictStr] = Field(default=None, serialization_alias="absoluteUrl")
     title: Optional[StrictStr] = None
-    metadata_id: Optional[StrictStr] = Field(default=None, alias="metadataId")
-    created_timestamp: Optional[StrictStr] = Field(default=None, alias="createdTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
-    last_updated_timestamp: Optional[StrictStr] = Field(default=None, alias="lastUpdatedTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
+    metadata_id: Optional[StrictStr] = Field(default=None, serialization_alias="metadataId")
+    created_timestamp: Optional[StrictStr] = Field(default=None, serialization_alias="createdTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
+    last_updated_timestamp: Optional[StrictStr] = Field(default=None, serialization_alias="lastUpdatedTimestamp", json_schema_extra={"examples": ["2024-02-15T12:45:00Z"]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["id", "status", "viewLocation", "downloadLocation", "absoluteUrl", "title", "metadataId", "createdTimestamp", "lastUpdatedTimestamp"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

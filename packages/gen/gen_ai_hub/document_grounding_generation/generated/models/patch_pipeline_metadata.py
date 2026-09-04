@@ -28,13 +28,12 @@ class PatchPipelineMetadata(BaseModel):
     """
     PatchPipelineMetadata
     """ # noqa: E501
-    data_repository_metadata: Optional[List[MetaDataDataRepositoryMetadataInner]] = Field(default=None, description="Patch for metadata happens at key level. Value for the specific key would be inserted/replaced.", alias="dataRepositoryMetadata", json_schema_extra={"examples": [[{"key": "purpose", "value": ["demonstration"]}, {"key": "sample-key", "value": ["sample-value1", "sample-value2"]}]]})
+    data_repository_metadata: Optional[List[MetaDataDataRepositoryMetadataInner]] = Field(default=None, description="Patch for metadata happens at key level. Value for the specific key would be inserted/replaced.", serialization_alias="dataRepositoryMetadata", json_schema_extra={"examples": [[{"key": "purpose", "value": ["demonstration"]}, {"key": "sample-key", "value": ["sample-value1", "sample-value2"]}]]})
     additional_properties: Dict[str, Any] = {}
     __properties: ClassVar[List[str]] = ["dataRepositoryMetadata"]
 
     model_config = ConfigDict(
-        validate_by_name=True,
-        validate_by_alias=True,
+        populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
