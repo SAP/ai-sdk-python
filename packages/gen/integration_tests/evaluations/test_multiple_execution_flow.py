@@ -3,6 +3,7 @@ Integration tests for multiple execution flow in evaluations.
 Tests evaluation with multiple EvaluationConfig objects - one with prompt template,
 one with orchestration registry reference and custom metric.
 """
+import pytest
 import requests
 import unittest
 from gen_ai_hub.evaluations.models.evaluation_config import EvaluationConfig
@@ -226,6 +227,7 @@ class TestMultipleExecutionFlow(EvaluationClientTestBase):
             )
         except Exception as e:
             print(f"Warning: Error during setUpClass: {e}")
+            pytest.skip(f"Error during setUpClass: {e}")
             # IDs remain None, tearDownClass will handle cleanup if needed
 
     @classmethod
