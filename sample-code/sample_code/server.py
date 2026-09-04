@@ -1,33 +1,7 @@
-import json
-import os
-
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import openai, amazon, core, google, orchestration, document_grounding_generation, tab_ai_orchestration
-
-
-def _load_service_key() -> None:
-    """Parse AICORE_SERVICE_KEY into individual AICORE_* env vars if not already set."""
-    service_key = os.environ.get("AICORE_SERVICE_KEY")
-    if not service_key:
-        return
-    try:
-        d = json.loads(service_key)
-    except json.JSONDecodeError:
-        return
-    mapping = {
-        "AICORE_CLIENT_ID": d.get("clientid"),
-        "AICORE_CLIENT_SECRET": d.get("clientsecret"),
-        "AICORE_AUTH_URL": (d.get("url", "").rstrip("/") + "/oauth/token") if d.get("url") else None,
-        "AICORE_BASE_URL": (d.get("serviceurls", {}).get("AI_API_URL", "").rstrip("/") + "/v2") if d.get("serviceurls", {}).get("AI_API_URL") else None,
-    }
-    for key, value in mapping.items():
-        if value and not os.environ.get(key):
-            os.environ[key] = value
-
-
-_load_service_key()
+from sample_code import amazon, core, document_grounding_generation, google, openai, orchestration, tab_ai_orchestration
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -59,10 +33,8 @@ app.get("/core/models")(core.get_models)
 app.get("/openai/chat-completion")(openai.chat_completion)
 app.get("/openai/chat-completion-stream")(openai.chat_completion_stream)
 app.get("/openai/chat-completion-structured")(openai.chat_completion_structured)
-app.get("/openai/chat-completion-async")(openai.chat_completion_async)
 app.get("/openai/responses")(openai.responses_simple)
 app.get("/openai/responses-structured")(openai.responses_structured)
-app.get("/openai/responses-async")(openai.responses_simple_async)
 app.get("/openai/embedding")(openai.embedding)
 
 # Google

@@ -31,7 +31,7 @@ Optionally, you can add the `AICORE_RESOURCE_GROUP` environment variable to spec
 The server can be started with
 
 ```bash
-uv run uvicorn sample_code.server:app --env-file .env --reload
+uv run uvicorn sample_code.server:app --app-dir src --env-file .env --reload
 ```
 
 or by running ```make```.
