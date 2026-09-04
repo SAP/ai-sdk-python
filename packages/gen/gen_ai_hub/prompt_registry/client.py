@@ -134,9 +134,9 @@ class PromptTemplateClient(PromptRegistryClient):
         """
 
         params = {}
-        if top:
+        if top is not None:
             params['$top'] = top
-        if skip:
+        if skip is not None:
             params['$skip'] = skip
 
         response = self.rest_client.get(
