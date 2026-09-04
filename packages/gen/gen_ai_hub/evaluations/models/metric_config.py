@@ -20,6 +20,9 @@ class MetricRef:
         self.version = version
         self.id = id
 
+    def __str__(self):
+        return f"MetricRef<ID: {self.id}, name: {self.name}, scenario: {self.scenario}, version: {self.version}"
+
 class MetricConfig:
     """
     Defines the metric config of the evaluation flow
