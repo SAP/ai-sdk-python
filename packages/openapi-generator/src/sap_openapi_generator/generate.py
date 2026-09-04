@@ -114,6 +114,10 @@ def _fix_field_aliases(output_dir: Path) -> None:
 
 
 def _rewrite_imports(output_dir: Path, package_name: str) -> None:
+    import re
+    # Matches bare 'generated.' not preceded by a dot or word char (i.e. not already
+    # part of a fully-qualified path like 'gen_ai_hub.tab_ai_orchestration.generated.').
+    _bare_generated_re = re.compile(r'(?<![.\w])generated\.')
     for py_file in output_dir.rglob("*.py"):
         src = py_file.read_text()
         updated = (
@@ -122,6 +126,9 @@ def _rewrite_imports(output_dir: Path, package_name: str) -> None:
             .replace("import generated.", f"import {package_name}.")
             .replace("from generated import ", f"from {package_name} import ")
         )
+        # Catch expression-level uses of the bare 'generated' name (e.g. getattr(generated.models, ...))
+        # that the string replacements above don't cover.
+        updated = _bare_generated_re.sub(f"{package_name}.", updated)
         if updated != src:
             py_file.write_text(updated)
 

@@ -478,7 +478,7 @@ class VectorApi:
     ) -> DocumentsListResponse:
         """Create documents in collection
 
-        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-generated.
+        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-gen_ai_hub.document_grounding_generation.generated.
 
         :param ai_resource_group: Resource Group ID (required)
         :type ai_resource_group: str
@@ -556,7 +556,7 @@ class VectorApi:
     ) -> ApiResponse[DocumentsListResponse]:
         """Create documents in collection
 
-        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-generated.
+        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-gen_ai_hub.document_grounding_generation.generated.
 
         :param ai_resource_group: Resource Group ID (required)
         :type ai_resource_group: str
@@ -634,7 +634,7 @@ class VectorApi:
     ) -> RESTResponseType:
         """Create documents in collection
 
-        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-generated.
+        Create and stores one or multiple documents into a collection. If omitted, 'id' will be auto-gen_ai_hub.document_grounding_generation.generated.
 
         :param ai_resource_group: Resource Group ID (required)
         :type ai_resource_group: str
