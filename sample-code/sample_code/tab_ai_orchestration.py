@@ -1,5 +1,6 @@
 from gen_ai_hub.tab_ai_orchestration import TabAiOrchestrationClient
 from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_config import ContextSelectionConfig
+from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_strategy_enum import ContextSelectionStrategyEnum
 from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15 import ModelRpt15
 from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_explanations import ModelRpt15Explanations
 from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_prediction_config import ModelRpt15PredictionConfig
@@ -23,7 +24,7 @@ async def predict():
         scenario_config_name="product-prediction-scenario-lowercase",
         context_selection_config=ContextSelectionConfig(
             num_rows=3,
-            strategy="random",
+            strategy=ContextSelectionStrategyEnum.RANDOM,
             index_column="id",
         ),
         prediction_config=PredictionConfig(
@@ -66,7 +67,7 @@ async def predict_with_explanations():
         scenario_config_name="product-prediction-scenario-lowercase",
         context_selection_config=ContextSelectionConfig(
             num_rows=3,
-            strategy="random",
+            strategy=ContextSelectionStrategyEnum.RANDOM,
             index_column="id",
         ),
         prediction_config=PredictionConfig(
