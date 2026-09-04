@@ -168,7 +168,7 @@ class TestPromptTemplateClient(unittest.TestCase):
         response = self.test_client.get_prompt_template_history(SCENARIO, TEMPLATE_NAME, VERSION)
         self.assertEqual(response, TEMPLATE_LIST_RESPONSE)
         mock_get.assert_called_once_with(path=f'{PATH_SCENARIOS}/{SCENARIO}/promptTemplates/{TEMPLATE_NAME}/'
-                                              f'versions/{VERSION}/history')
+                                              f'versions/{VERSION}/history', params=None)
 
     @patch('ai_api_client_sdk.helpers.rest_client.RestClient.delete')
     def test_delete_prompt_template_by_id(self, mock_delete):
