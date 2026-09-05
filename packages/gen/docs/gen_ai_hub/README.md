@@ -19,6 +19,9 @@ as an alternative to client secret.
 - `AICORE_CERT_STR`: This is the content of the X.509 certificate as a string
 - `AICORE_KEY_STR`: This is the content of the X.509 key as a string
 
+Instead of setting the individual parameters above, you can set `AICORE_SERVICE_KEY` to the full JSON
+service key retrieved in step 2 (the same content as a service binding's `credentials` object).
+
 The values can be set as environment variables are through config files. For most cases we recommend to used config files.
 The config files should be placed in AI Core home folder. Which can be set using the env var `AICORE_HOME`, it is set to 
 `~/.aicore`, by default.
