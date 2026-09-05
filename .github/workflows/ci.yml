@@ -19,7 +19,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
 
       - name: Run pylint
         run: |
@@ -48,7 +48,7 @@ jobs:
             path: packages/gen/tests
             source: packages/gen/gen_ai_hub
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -71,7 +71,7 @@ jobs:
     if: |
       github.event_name != 'pull_request'
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
 
       - name: Run base integration tests
         env:
@@ -103,7 +103,7 @@ jobs:
     if: |
       github.event_name != 'pull_request'
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
 
       - name: Run core integration tests
         env:
@@ -140,7 +140,7 @@ jobs:
     if: |
       github.event_name != 'pull_request'
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@7c4e0ae0f4c548da7a8fd5a630ba849ec38296c6 # main
 
       - name: Run gen integration tests
         env:
