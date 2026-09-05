@@ -1,0 +1,6 @@
+{
+  "api.yaml": {
+    "directoryName": "gen_ai_hub/document_grounding_generation/generated",
+    "basePath": "/lm/document-grounding"
+  }
+}

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, openai, orchestration
+from sample_code import amazon, core, document_grounding_generation, google, openai, orchestration, tab_ai_orchestration
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -68,3 +68,12 @@ app.get("/orchestration/embedding-masked")(orchestration.embedding_masked)
 app.get("/orchestration/tool-call-decorator")(orchestration.tool_call_decorator)
 app.get("/orchestration/tool-call-function-tool")(orchestration.tool_call_function_tool)
 app.get("/orchestration/tool-call-json")(orchestration.tool_call_json)
+
+# Document Grounding Generation (generated client)
+app.post("/document-grounding-generation/collection/create")(document_grounding_generation.create_collection)
+app.get("/document-grounding-generation/pipelines")(document_grounding_generation.get_all_pipelines)
+app.post("/document-grounding-generation/retrieval/search")(document_grounding_generation.retrieval_search)
+
+# Tabular AI Orchestration
+app.get("/tab-ai-orchestration/predict")(tab_ai_orchestration.predict)
+app.get("/tab-ai-orchestration/predict-with-explanations")(tab_ai_orchestration.predict_with_explanations)

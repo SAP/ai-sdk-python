@@ -1,0 +1,6 @@
+{
+  "api.yaml": {
+    "directoryName": "gen_ai_hub/tab_ai_orchestration/generated",
+    "basePath": "/v1"
+  }
+}
