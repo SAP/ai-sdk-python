@@ -1,0 +1,9 @@
+{
+  "venvPath": "..",
+  "venv": ".venv",
+  "extraPaths": [
+    "../packages/base",
+    "../packages/core",
+    "../packages/gen"
+  ]
+}

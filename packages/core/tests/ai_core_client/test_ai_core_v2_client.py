@@ -5,7 +5,7 @@ import unittest
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, HOME_PATH_ENV_VAR, VCAP_SERVICES_ENV_VAR,
+from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, ENV_VAR_AICORE_HOME_PATH, ENV_VAR_VCAP_SERVICES,
                                            VCAP_AICORE_SERVICE_NAME)
 from ai_core_sdk.exception import AIAPIAuthenticatorException
 from ai_core_sdk.resource_clients.internal_rest_client import InternalRestClient
@@ -192,7 +192,7 @@ class TestAICoreV2Client(TestCase):
             config[k] = f'cfg_{v}'
 
         with tempfile.TemporaryDirectory() as temp_dir:
-            with patch.dict(os.environ, {HOME_PATH_ENV_VAR: temp_dir}):
+            with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: temp_dir}):
                 config_file_path = os.path.join(temp_dir, 'config.json')
                 with open(config_file_path, 'w') as f:
                     json.dump(config, f)
@@ -205,7 +205,7 @@ class TestAICoreV2Client(TestCase):
 
         AICoreV2Client.__init__ = aicv2c_init
 
-    @patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_X509_ENV_VALUE})
+    @patch.dict(os.environ, {ENV_VAR_VCAP_SERVICES: VCAP_SERVICE_X509_ENV_VALUE})
     def test_x509_from_vcap(self):
         vcap_dict_credentials = VCAP_SERVICE_X509_DICT[VCAP_AICORE_SERVICE_NAME][0]['credentials']
         init_mock = MagicMock(return_value=None)

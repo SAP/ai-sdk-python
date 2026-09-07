@@ -26,6 +26,9 @@ lint:
 license-check:
 	uv run pip-licenses
 
+sample-code-server:
+	uv run uvicorn sample_code.server:app --env-file sample-code/.env --reload
+
 test:
 	uv run pytest packages/base/tests
 	uv run pytest packages/core/tests

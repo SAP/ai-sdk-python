@@ -1,0 +1,30 @@
+name: Question
+description: Ask a question about the SAP Cloud SDK for AI (Python).
+title: '<title>'
+labels: 
+  - question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please note that this repository is for Python and SDK related issues only.
+        Issue for SAP Cloud SDK for AI (JS/TS), please open [here](https://github.com/SAP/ai-sdk-js/issues/new/choose).
+        Issue for SAP Cloud SDK for AI (Java), please open [here](https://github.com/SAP/ai-sdk-java/issues/new/choose).
+        Issue for SAP AI Core services (Orchestration, Grounding, Prompt Registry, ...), please refer to the [SAP AI Core Support Process](https://help.sap.com/docs/sap-ai-core/sap-ai-core-service-guide/support-process).
+  - type: checkboxes
+    attributes:
+      label: "Checklist"
+      description: "Before submitting your issue, please make sure to check the following:"
+      options:
+        - label: "My issue is not an [AI Core service issue](https://help.sap.com/docs/sap-ai-core/sap-ai-core-service-guide/support-process), but an SDK issue."
+          required: true
+        - label: "My issue is a Python related issue, not a [JS/TS](https://github.com/SAP/ai-sdk-js/issues) or [Java](https://github.com/SAP/ai-sdk-java/issues) related issue."
+          required: true
+        - label: "My issue is not [already reported or documented](https://github.com/SAP/ai-sdk-js/issues)."
+          required: true
+  - type: textarea
+    attributes:
+      label: "Describe the Question"
+      description: A clear and concise description of your question.
+    validations:
+      required: true
