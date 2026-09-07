@@ -254,3 +254,23 @@
 
 - Add support for orchestration service: templating, content safety, inference. See the example notebook [](orchestration) for details.
 - Add support for anthropic--claude-3.5-sonnet model
+
+## gen-v7.3.0 (2026-09-07)
+
+
+- feat(gen): dummy commit message
+- Update the changelog
+- feat(prompt_registry): add top and skip params (#110)
+- * feat(prompt_registry): add top and skip params
+- * fix(test): fix prompt registry test
+- * fix(params): fix int handling
+- fix(evaluations): fix error handling (#107)
+- * fix(evaluations): fix error handling
+- * fix(formatting)
+
+## gen-v7.2.0 (2026-07-17)
+
+
+- fix(gen): dummy commit
+- feat(gen): comment out snapshot release steps
+- feat(gen): fix scopes
