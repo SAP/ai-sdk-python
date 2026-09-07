@@ -91,5 +91,5 @@ version_provider = "pep621"
 changelog_file = "RELEASE_NOTES.md"
 
 [tool.commitizen.customize]
-bump_pattern = '^(feat|fix)\(gen|prompt_registry|evaluations\)'
-changelog_pattern = '^(feat|fix)\(gen|prompt_registry|evaluations\)'
+bump_pattern = '^(feat|fix)\((gen|prompt_registry|evaluations)\)'
+changelog_pattern = '^(feat|fix)\((gen|prompt_registry|evaluations)\)'
