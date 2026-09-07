@@ -16,6 +16,8 @@ jobs:
   bump:
     runs-on: ubuntu-latest
     permissions: {}
+    env:
+      PACKAGE: ${{ inputs.package }}
     steps:
       - name: Generate GitHub App token
         id: app-token
@@ -38,12 +40,23 @@ jobs:
           git config --local user.name "${{ vars.SAP_AI_SDK_BOT_NAME }}"
 
       - name: Bump versions and generate changelogs
-        working-directory: packages/${{ inputs.package }}
-        run: uv run cz bump --changelog
+        working-directory: packages/${{ env.PACKAGE }}
+        run: uv run cz bump --changelog --files-only
+
+      - name: Update lockfile
+        run: uv lock
+
+      - name: Commit and tag
+        working-directory: packages/${{ env.PACKAGE }}
+        run: |
+          VERSION=$(uv run cz version --project)
+          git add -u
+          git commit -m "bump: $PACKAGE-v${VERSION}"
+          git tag "$PACKAGE-v${VERSION}"
 
       - name: Push
-        working-directory: packages/${{ inputs.package }}
+        working-directory: packages/${{ env.PACKAGE }}
         run: |
           VERSION=$(uv run cz version --project)
           git push origin main
-          git push origin "${{ inputs.package }}-v${VERSION}"
+          git push origin "$PACKAGE-v${VERSION}"
