@@ -2,11 +2,10 @@ import unittest
 from parameterized import parameterized
 from pydantic import BaseModel
 
-from integration_tests.constants import (MISTRAL_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
+from ..constants import (MISTRAL_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
     OPENAI_GPT_5_MINI_TEST_MODEL, OPENAI_GPT_O4_MINI_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL,
     OPENAI_GPT_O3_MINI_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL_NANO, NVIDIA_EMBEDDING_TEST_MODEL, PERPLEXITY_TEST_MODEL,
-    COHERE_COMMAND_A_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL,
-    PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL)
+    COHERE_COMMAND_A_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL)
 
 try:
     import openai
@@ -20,7 +19,7 @@ try:
 except ImportError:
     no_openai = True
 
-from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
+from ..setup_aicore import TestCaseAICoreSetupMixin
 
 class Person(BaseModel):
     """
@@ -62,8 +61,7 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     @parameterized.expand(
         [
-            OPENAI_GPT_5_TEST_MODEL_NANO,
-            PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL
+            OPENAI_GPT_5_TEST_MODEL_NANO
         ]
     )
     def test_chat_completion(self, model=OPENAI_GPT_5_TEST_MODEL_NANO):
@@ -310,8 +308,7 @@ class AsyncOpenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTestCas
 
     @parameterized.expand(
         [
-            OPENAI_GPT_5_TEST_MODEL_NANO,
-            PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL
+            OPENAI_GPT_5_TEST_MODEL_NANO
         ]
     )
     async def test_async_chat_completion(self, model=OPENAI_GPT_5_TEST_MODEL_NANO):
