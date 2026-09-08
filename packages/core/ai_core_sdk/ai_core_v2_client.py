@@ -141,8 +141,9 @@ class AICoreV2Client:
         The hierarchy of precedence is:
         1. keyword argument
         2. environment variable
-        3. configuration file
-        4. value from VCAP_SERVICES environment variable, if exists
+        3. value from AICORE_SERVICE_KEY environment variable, if exists
+        4. configuration file
+        5. value from VCAP_SERVICES environment variable, if exists
 
         :param profile_name: name of the profile to use, defaults to None. If None is passed, the profile is read from
             the environment variable AICORE_PROFILE. If this is not set, the default profile is used.
