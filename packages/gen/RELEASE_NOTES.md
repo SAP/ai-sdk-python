@@ -257,26 +257,16 @@
 
 ## gen-v7.3.0 (2026-09-08)
 
+### Features
+- Added Support for $top and $skip parameters for fetching prompt templates from Prompt Registry
 
-- fix(gen): downgrade langchain-google-genai (#129)
-- * fix(gen): downgrade langchain-google-genai
-- * fix(gen): update uv lock file
-- fix(gen): downgrade langchain-google-genai (#122)
-- * fix(gen): downgrade langchain-google-genai
-- langchain-google-genai version 4.3.7 introduced a bug.
-Keep the version below that until it's fixed.
-- * chore(pr): enable integration tests for PRs
-- a buggy dependency update was merged because integration tests were
-disabled in PR. Hence the integration tests are re-enabled.
-- feat(gen): dummy commit message
-- Update the changelog
-- feat(prompt_registry): add top and skip params (#110)
-- * feat(prompt_registry): add top and skip params
-- * fix(test): fix prompt registry test
-- * fix(params): fix int handling
-- fix(evaluations): fix error handling (#107)
-- * fix(evaluations): fix error handling
-- * fix(formatting)
+### Bugfixes
+- Fixed error handling in Evaluations Client
+- Upgraded langchain
+- Upgraded langchain-google-genai
+- Upgraded langchain-openai
+- Upgraded langchain-aws
+- Upgraded google-genai
 
 ## gen-v7.2.0 (2026-07-17)
 
