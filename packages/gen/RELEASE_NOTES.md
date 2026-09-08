@@ -1,6 +1,22 @@
 # Release Notes
 ## 7.2.0
 
+### Breaking Changes
+- `init_llm()` and `init_embedding_model()` now require both a model name and `proxy_client` to be passed explicitly.
+  - **Model name**: was optional in 6.10.0; omitting it now raises a `ValueError`.
+  - **`proxy_client`**: the fallback to a default proxy client is no longer present in the non-custom model path. Without it, attributes such as `deployment_class` are not available and the deployment lookup fails.
+
+  Update your code to pass both explicitly:
+  ```python
+  # before (6.10.0)
+  llm = init_llm()
+
+  # after (7.2.0+)
+  from gen_ai_hub.proxy.core import get_proxy_client
+  proxy_client = get_proxy_client('gen-ai-hub')
+  llm = init_llm('gpt-4o', proxy_client=proxy_client)
+  ```
+
 ### Features
 - Added Support for LLM Batch Service, see [](batch_service)
 
