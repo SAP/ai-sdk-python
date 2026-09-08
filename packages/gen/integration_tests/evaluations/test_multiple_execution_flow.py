@@ -12,7 +12,6 @@ from gen_ai_hub.evaluations.models.metric_config import MetricConfig, MetricRef
 from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef, TemplateRefByID
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
 from .test_base import EvaluationClientTestBase
-from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
 def get_auth_token(auth_url, client_id, client_secret):
@@ -188,7 +187,6 @@ def delete_custom_metric(base_url, headers, metric_id):
         print(f"Warning: Error deleting custom metric {metric_id}: {e}")
 
 
-@retry_on_429_or_503_class(max_retries=3, initial_delay=2.0, backoff_factor=2.0)
 class TestMultipleExecutionFlow(EvaluationClientTestBase):
     """Test multiple evaluation execution flow."""
 
