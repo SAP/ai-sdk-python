@@ -93,11 +93,11 @@ def _init_model(proxy_client: Optional[BaseProxyClient],
                 kwargs: Dict[str, Any],
                 init_func: Optional[Callable] = None,
                 model_kwargs: Optional[Dict[str, Any]] = None):
+    proxy_client = proxy_client or get_proxy_client()
     model_kwargs = model_kwargs or {}
     if init_func:
         return _init_custom_model(proxy_client=proxy_client, init_func=init_func, args=args, kwargs=kwargs,
                                   model_kwargs=model_kwargs)
-    proxy_client = proxy_client or get_proxy_client()
     model_name, model_identification_kwargs, kwargs = handle_model_args_kwargs(proxy_client=proxy_client, args=args,
                                                                                kwargs=kwargs)
     init_func = _get_init_func(model_name, model_type)
