@@ -254,3 +254,23 @@
 
 - Add support for orchestration service: templating, content safety, inference. See the example notebook [](orchestration) for details.
 - Add support for anthropic--claude-3.5-sonnet model
+
+## gen-v7.3.0 (2026-09-08)
+
+### Features
+- Added Support for $top and $skip parameters for fetching prompt templates from Prompt Registry
+
+### Bugfixes
+- Fixed error handling in Evaluations Client
+- Upgraded langchain
+- Upgraded langchain-google-genai
+- Upgraded langchain-openai
+- Upgraded langchain-aws
+- Upgraded google-genai
+
+## gen-v7.2.0 (2026-07-17)
+
+
+- fix(gen): dummy commit
+- feat(gen): comment out snapshot release steps
+- feat(gen): fix scopes
