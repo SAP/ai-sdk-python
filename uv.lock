@@ -4284,7 +4284,7 @@ requires-dist = [
     { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
     { name = "langchain-classic", specifier = "~=1.0.0" },
     { name = "langchain-community", specifier = "~=0.4.1" },
-    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0" },
+    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0,<4.4.1" },
     { name = "langchain-openai", specifier = "~=1.6.0" },
     { name = "langcodes", specifier = "~=3.5.1" },
     { name = "openai", specifier = ">=1.66.0" },
