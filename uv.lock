@@ -1752,7 +1752,7 @@ wheels = [
 
 [[package]]
 name = "langchain-google-genai"
-version = "4.4.0"
+version = "4.3.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filetype" },
@@ -1760,9 +1760,9 @@ dependencies = [
     { name = "langchain-core" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cf/4e/41798c80b574d958d189e049f13d64eb9246a66623465290f2cbfd641759/langchain_google_genai-4.4.0.tar.gz", hash = "sha256:7871beec56ac07b719f77c46997845db6ff2267b817bffb0f97877053b0895d7", size = 378415, upload-time = "2026-09-01T20:15:45.816Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/14/2e/7410d35d5a073a8a5d4942d49dfc386e79e11c09c66f02429ffcaeb57a5c/langchain_google_genai-4.3.6.tar.gz", hash = "sha256:d123cd8007ae63fc989bd869ef3853312b912007e63c2815b9aa2f089cfa6a05", size = 301130, upload-time = "2026-08-26T23:53:56.92Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2c/10/83bb535e78c2cf767a6193c2f3b00b2894c1581a36ef85911ebaa3b9a891/langchain_google_genai-4.4.0-py3-none-any.whl", hash = "sha256:8e23a1307bd2158590bbf9d99f1d658fc84a9d9ddb77fb1b372f8875a2bafbbf", size = 81617, upload-time = "2026-09-01T20:15:44.533Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/d5/dd74fb715bea978e14c8ba706e228a3637951477525b182553a37a138b1a/langchain_google_genai-4.3.6-py3-none-any.whl", hash = "sha256:00b75df114a519e434b304daabcd98ea885af87a78a4b059b3063490f65feb44", size = 78524, upload-time = "2026-08-26T23:53:55.893Z" },
 ]
 
 [[package]]
@@ -4284,7 +4284,7 @@ requires-dist = [
     { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
     { name = "langchain-classic", specifier = "~=1.0.0" },
     { name = "langchain-community", specifier = "~=0.4.1" },
-    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0,<4.4.1" },
+    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.3.6,<4.3.7" },
     { name = "langchain-openai", specifier = "~=1.6.0" },
     { name = "langcodes", specifier = "~=3.5.1" },
     { name = "openai", specifier = ">=1.66.0" },
