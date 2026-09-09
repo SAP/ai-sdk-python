@@ -86,11 +86,24 @@ There are different options to persist the client credentials
 (in this order of precedence): 
  - in code via keyword arguments (see above),
  - environment variables,
+ - from the `AICORE_SERVICE_KEY` environment variable, if set,
  - profile configuration file.
  - from VCAP_SERVICES environment variable, if exists
 
 A **profile** is a json file residing in a config directory, 
 which can be set via environment variable `AICORE_HOME` (the default being `~/.aicore/config.json`).
+
+`AICORE_SERVICE_KEY` can hold the full JSON service key downloaded from your subaccount's AI Core
+service instance (the same content as a service binding's `credentials` object), for example:
+
+```json
+{
+  "clientid": "* * * ",
+  "clientsecret": "* * * ",
+  "url": "https://* * * .authentication.sap.hana.ondemand.com",
+  "serviceurls": {"AI_API_URL": "https://api.ai.* * *.cfapps.sap.hana.ondemand.com"}
+}
+```
 
 The command `aicore configure --help` shows the options for generating a profile.
 

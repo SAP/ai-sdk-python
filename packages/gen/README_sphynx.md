@@ -45,6 +45,7 @@ In the table below, you can see which models and vendor specific langchain packa
 There are different ways to configure the SAP AI Core access (listed in order of precedence):
 
 - environment variables
+- from the `AICORE_SERVICE_KEY` environment variable, if set
 - (profile) configuration file
 - from VCAP_SERVICES environment variable, if it exists
 
@@ -71,6 +72,21 @@ as an alternative to client secret.
 - `AICORE_KEY_FILE_PATH`: This is the path to the file which holds the X.509 key
 - `AICORE_CERT_STR`: This is the content of the X.509 certificate as a string
 - `AICORE_KEY_STR`: This is the content of the X.509 key as a string
+
+### Service key
+
+Instead of setting the individual `AICORE_*` environment variables above, you can set `AICORE_SERVICE_KEY`
+to the full JSON service key downloaded from your subaccount's AI Core service instance (the same content
+as a service binding's `credentials` object), for example:
+
+```json
+{
+  "clientid": "* * * ",
+  "clientsecret": "* * * ",
+  "url": "https://* * * .authentication.sap.hana.ondemand.com",
+  "serviceurls": {"AI_API_URL": "https://api.ai.* * *.cfapps.sap.hana.ondemand.com"}
+}
+```
 
 ### Configuration files
 

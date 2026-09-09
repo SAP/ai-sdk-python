@@ -320,14 +320,14 @@ class TestFetchCredentials(unittest.TestCase):
                 "AICORE_AUTH_URL": "https://auth.com/oauth/token",
                 "AICORE_BASE_URL": "https://api.com/v2",
             },
-        ), patch("gen_ai_hub.evaluations.credentials.init_conf", return_value={}):
+        ), patch("ai_core_sdk.credentials.init_conf", return_value={}):
             result = fetch_credentials()
             self.assertEqual(result["client_id"], "env-client")
             self.assertEqual(result["client_secret"], "env-secret")
 
     def test_fetch_credentials_cert_url_becomes_auth_url(self):
         with patch(
-            "gen_ai_hub.evaluations.credentials.init_conf", return_value={}
+            "ai_core_sdk.credentials.init_conf", return_value={}
         ), patch.dict(
             os.environ,
             {
