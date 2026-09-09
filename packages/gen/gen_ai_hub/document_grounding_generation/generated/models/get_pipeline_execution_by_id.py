@@ -98,8 +98,8 @@ class GetPipelineExecutionById(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "createdAt": obj.get("createdAt"),
-            "modifiedAt": obj.get("modifiedAt"),
+            "created_at": obj.get("createdAt"),
+            "modified_at": obj.get("modifiedAt"),
             "status": obj.get("status")
         })
         # store additional fields in additional_properties

@@ -101,7 +101,7 @@ class ApiError(BaseModel):
         _obj = cls.model_validate({
             "code": obj.get("code"),
             "message": obj.get("message"),
-            "requestId": obj.get("requestId"),
+            "request_id": obj.get("requestId"),
             "target": obj.get("target"),
             "details": [DetailsErrorResponse.from_dict(_item) for _item in obj["details"]] if obj.get("details") is not None else None
         })

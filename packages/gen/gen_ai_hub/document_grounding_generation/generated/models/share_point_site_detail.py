@@ -92,7 +92,7 @@ class SharePointSiteDetail(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "name": obj.get("name"),
-            "includePaths": obj.get("includePaths")
+            "include_paths": obj.get("includePaths")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

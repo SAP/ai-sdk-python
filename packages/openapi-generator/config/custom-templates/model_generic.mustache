@@ -501,10 +501,10 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{#items.isContainer}}
             {{#items.isArray}}
             {{#items.items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/items.items.isPrimitiveType}}
             {{^items.items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: [
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: [
                     [{{{items.items.dataType}}}.from_dict(_inner_item) for _inner_item in _item] if _item is not None else None
                     for _item in obj[{{{vendorExtensions.x-py-wire-name-literal}}}]
                 ] if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
@@ -512,10 +512,10 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{/items.isArray}}
             {{#items.isMap}}
             {{#items.items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/items.items.isPrimitiveType}}
             {{^items.items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: [
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: [
                     {_inner_key: {{{items.items.dataType}}}.from_dict(_inner_value) for _inner_key, _inner_value in _item.items()} if _item is not None else None
                     for _item in obj[{{{vendorExtensions.x-py-wire-name-literal}}}]
                 ] if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
@@ -525,14 +525,14 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{^items.isContainer}}
             {{^items.isPrimitiveType}}
             {{#items.isEnumOrRef}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/items.isEnumOrRef}}
             {{^items.isEnumOrRef}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: [{{{items.dataType}}}.from_dict(_item) for _item in obj[{{{vendorExtensions.x-py-wire-name-literal}}}]] if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: [{{{items.dataType}}}.from_dict(_item) for _item in obj[{{{vendorExtensions.x-py-wire-name-literal}}}]] if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
             {{/items.isEnumOrRef}}
             {{/items.isPrimitiveType}}
             {{#items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/items.isPrimitiveType}}
             {{/items.isContainer}}
             {{/isArray}}
@@ -541,7 +541,7 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{^items.isEnumOrRef}}
             {{#items.isContainer}}
             {{#items.isMap}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: dict(
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: dict(
                 (_k, dict(
                     (_ik, {{{items.items.dataType}}}.from_dict(_iv))
                         for _ik, _iv in _v.items()
@@ -555,7 +555,7 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             else None{{^-last}},{{/-last}}
             {{/items.isMap}}
             {{#items.isArray}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: {
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: {
                 _k: [{{{items.items.dataType}}}.from_dict(_item) for _item in _v] if _v is not None else None
                 for _k, _v in obj[{{{vendorExtensions.x-py-wire-name-literal}}}].items()
             }
@@ -564,7 +564,7 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{/items.isArray}}
             {{/items.isContainer}}
             {{^items.isContainer}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: dict(
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: dict(
                 (_k, {{{items.dataType}}}.from_dict(_v))
                 for _k, _v in obj[{{{vendorExtensions.x-py-wire-name-literal}}}].items()
             )
@@ -573,29 +573,29 @@ https://github.com/OpenAPITools/openapi-generator/blob/c84b949df1a9ec04ba75989cb
             {{/items.isContainer}}
             {{/items.isEnumOrRef}}
             {{#items.isEnumOrRef}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: dict((_k, _v) for _k, _v in obj.get({{{vendorExtensions.x-py-wire-name-literal}}}).items()) if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: dict((_k, _v) for _k, _v in obj.get({{{vendorExtensions.x-py-wire-name-literal}}}).items()) if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
             {{/items.isEnumOrRef}}
             {{/items.isPrimitiveType}}
             {{#items.isPrimitiveType}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/items.isPrimitiveType}}
             {{/isMap}}
             {{/isContainer}}
             {{^isContainer}}
             {{^isPrimitiveType}}
             {{^isEnumOrRef}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: {{{dataType}}}.from_dict(obj[{{{vendorExtensions.x-py-wire-name-literal}}}]) if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: {{{dataType}}}.from_dict(obj[{{{vendorExtensions.x-py-wire-name-literal}}}]) if obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None else None{{^-last}},{{/-last}}
             {{/isEnumOrRef}}
             {{#isEnumOrRef}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{#defaultValue}} if {{#isNullable}}{{{vendorExtensions.x-py-wire-name-literal}}} in obj{{/isNullable}}{{^isNullable}}obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None{{/isNullable}} else {{{defaultValue}}}{{/defaultValue}}{{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{#defaultValue}} if {{#isNullable}}{{{vendorExtensions.x-py-wire-name-literal}}} in obj{{/isNullable}}{{^isNullable}}obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None{{/isNullable}} else {{{defaultValue}}}{{/defaultValue}}{{^-last}},{{/-last}}
             {{/isEnumOrRef}}
             {{/isPrimitiveType}}
             {{#isPrimitiveType}}
             {{#defaultValue}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) if {{#isNullable}}{{{vendorExtensions.x-py-wire-name-literal}}} in obj{{/isNullable}}{{^isNullable}}obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None{{/isNullable}} else {{{defaultValue}}}{{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) if {{#isNullable}}{{{vendorExtensions.x-py-wire-name-literal}}} in obj{{/isNullable}}{{^isNullable}}obj.get({{{vendorExtensions.x-py-wire-name-literal}}}) is not None{{/isNullable}} else {{{defaultValue}}}{{^-last}},{{/-last}}
             {{/defaultValue}}
             {{^defaultValue}}
-            {{{vendorExtensions.x-py-wire-name-literal}}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
+            {{#lambda.pythonStringLiteral}}{{{name}}}{{/lambda.pythonStringLiteral}}: obj.get({{{vendorExtensions.x-py-wire-name-literal}}}){{^-last}},{{/-last}}
             {{/defaultValue}}
             {{/isPrimitiveType}}
             {{/isContainer}}

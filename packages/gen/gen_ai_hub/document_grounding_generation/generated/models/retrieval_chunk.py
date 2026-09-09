@@ -110,8 +110,8 @@ class RetrievalChunk(BaseModel):
             "id": obj.get("id"),
             "content": obj.get("content"),
             "metadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None,
-            "searchScores": SearchScores.from_dict(obj["searchScores"]) if obj.get("searchScores") is not None else None,
-            "postProcessingScore": Score.from_dict(obj["postProcessingScore"]) if obj.get("postProcessingScore") is not None else None
+            "search_scores": SearchScores.from_dict(obj["searchScores"]) if obj.get("searchScores") is not None else None,
+            "post_processing_score": Score.from_dict(obj["postProcessingScore"]) if obj.get("postProcessingScore") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

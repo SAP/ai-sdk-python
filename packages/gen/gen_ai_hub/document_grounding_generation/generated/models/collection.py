@@ -109,7 +109,7 @@ class Collection(BaseModel):
 
         _obj = cls.model_validate({
             "title": obj.get("title"),
-            "embeddingConfig": EmbeddingConfig.from_dict(obj["embeddingConfig"]) if obj.get("embeddingConfig") is not None else None,
+            "embedding_config": EmbeddingConfig.from_dict(obj["embeddingConfig"]) if obj.get("embeddingConfig") is not None else None,
             "metadata": [VectorKeyValueListPair.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None,
             "id": obj.get("id")
         })

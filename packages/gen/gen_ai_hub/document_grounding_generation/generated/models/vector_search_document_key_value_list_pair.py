@@ -99,7 +99,7 @@ class VectorSearchDocumentKeyValueListPair(BaseModel):
         _obj = cls.model_validate({
             "key": obj.get("key"),
             "value": obj.get("value"),
-            "selectMode": obj.get("selectMode")
+            "select_mode": obj.get("selectMode")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

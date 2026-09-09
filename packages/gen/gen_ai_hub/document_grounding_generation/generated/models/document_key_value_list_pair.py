@@ -94,7 +94,7 @@ class DocumentKeyValueListPair(BaseModel):
         _obj = cls.model_validate({
             "key": obj.get("key"),
             "value": obj.get("value"),
-            "matchMode": obj.get("matchMode")
+            "match_mode": obj.get("matchMode")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

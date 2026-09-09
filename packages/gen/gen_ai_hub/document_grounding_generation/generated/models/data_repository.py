@@ -115,7 +115,7 @@ class DataRepository(BaseModel):
             "id": obj.get("id"),
             "title": obj.get("title"),
             "metadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None,
-            "remoteGroundingName": obj.get("remoteGroundingName"),
+            "remote_grounding_name": obj.get("remoteGroundingName"),
             "message": obj.get("message"),
             "type": obj.get("type")
         })

@@ -88,7 +88,7 @@ class CollectionPendingResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "monitorURL": obj.get("monitorURL")
+            "monitor_url": obj.get("monitorURL")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

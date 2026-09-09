@@ -130,8 +130,8 @@ class PipelineExecutionData(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "status": obj.get("status"),
-            "createdAt": obj.get("createdAt"),
-            "modifiedAt": obj.get("modifiedAt")
+            "created_at": obj.get("createdAt"),
+            "modified_at": obj.get("modifiedAt")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

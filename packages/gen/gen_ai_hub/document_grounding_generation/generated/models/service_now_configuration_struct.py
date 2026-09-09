@@ -96,9 +96,9 @@ class ServiceNowConfigurationStruct(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "serviceNow": ServiceNowConfig.from_dict(obj["serviceNow"]) if obj.get("serviceNow") is not None else None,
-            "metadataConfigId": obj.get("metadataConfigId"),
-            "cronExpression": obj.get("cronExpression")
+            "service_now": ServiceNowConfig.from_dict(obj["serviceNow"]) if obj.get("serviceNow") is not None else None,
+            "metadata_config_id": obj.get("metadataConfigId"),
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

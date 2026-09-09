@@ -94,7 +94,7 @@ class MSSharePointConfigurationGetResponse(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "sharePoint": SharePointConfigGetResponse.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None
+            "share_point": SharePointConfigGetResponse.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

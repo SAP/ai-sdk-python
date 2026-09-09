@@ -126,11 +126,11 @@ class MetadataConfigurationResponse(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "name": obj.get("name"),
-            "destinationName": obj.get("destinationName"),
-            "dataRepositoryType": obj.get("dataRepositoryType"),
-            "includePaths": obj.get("includePaths"),
+            "destination_name": obj.get("destinationName"),
+            "data_repository_type": obj.get("dataRepositoryType"),
+            "include_paths": obj.get("includePaths"),
             "labels": [MetadataConfigurationRequestLabelsInner.from_dict(_item) for _item in obj["labels"]] if obj.get("labels") is not None else None,
-            "enumerationStatus": obj.get("enumerationStatus")
+            "enumeration_status": obj.get("enumerationStatus")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

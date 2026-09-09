@@ -117,7 +117,7 @@ class BoostingScoringConfiguration(BaseModel):
             "enabled": obj.get("enabled") if "enabled" in obj else True,
             "metadata": [BoostingScoringConfigurationMetadataInner.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None,
             "weight": obj.get("weight") if "weight" in obj else 1,
-            "scoreComputationStrategy": obj.get("scoreComputationStrategy")
+            "score_computation_strategy": obj.get("scoreComputationStrategy")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

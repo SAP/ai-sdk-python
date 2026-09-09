@@ -138,11 +138,11 @@ class VectorSearchFilter(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "collectionIds": obj.get("collectionIds"),
+            "collection_ids": obj.get("collectionIds"),
             "configuration": VectorSearchConfiguration.from_dict(obj["configuration"]) if obj.get("configuration") is not None else None,
-            "collectionMetadata": [VectorKeyValueListPair.from_dict(_item) for _item in obj["collectionMetadata"]] if obj.get("collectionMetadata") is not None else None,
-            "documentMetadata": [VectorSearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
-            "chunkMetadata": [VectorKeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None,
+            "collection_metadata": [VectorKeyValueListPair.from_dict(_item) for _item in obj["collectionMetadata"]] if obj.get("collectionMetadata") is not None else None,
+            "document_metadata": [VectorSearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
+            "chunk_metadata": [VectorKeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None,
             "filter": Filter.from_dict(obj["filter"]) if obj.get("filter") is not None else None
         })
         # store additional fields in additional_properties

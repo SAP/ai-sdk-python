@@ -95,8 +95,8 @@ class MSSharePointConfiguration(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "sharePoint": SharePointConfig.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None,
-            "cronExpression": obj.get("cronExpression")
+            "share_point": SharePointConfig.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None,
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

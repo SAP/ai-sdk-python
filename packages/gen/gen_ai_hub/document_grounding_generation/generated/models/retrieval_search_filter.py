@@ -131,13 +131,13 @@ class RetrievalSearchFilter(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "searchConfiguration": RetrievalSearchConfiguration.from_dict(obj["searchConfiguration"]) if obj.get("searchConfiguration") is not None else None,
-            "dataRepositories": obj.get("dataRepositories"),
-            "dataRepositoryType": obj.get("dataRepositoryType"),
-            "remoteName": obj.get("remoteName"),
-            "dataRepositoryMetadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None,
-            "documentMetadata": [RetrievalSearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
-            "chunkMetadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
+            "search_configuration": RetrievalSearchConfiguration.from_dict(obj["searchConfiguration"]) if obj.get("searchConfiguration") is not None else None,
+            "data_repositories": obj.get("dataRepositories"),
+            "data_repository_type": obj.get("dataRepositoryType"),
+            "remote_name": obj.get("remoteName"),
+            "data_repository_metadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None,
+            "document_metadata": [RetrievalSearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
+            "chunk_metadata": [RetrievalKeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

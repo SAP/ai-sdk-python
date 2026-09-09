@@ -112,7 +112,7 @@ class RetrievalSearchInput(BaseModel):
         _obj = cls.model_validate({
             "query": obj.get("query"),
             "filters": [FiltersInner.from_dict(_item) for _item in obj["filters"]] if obj.get("filters") is not None else None,
-            "postProcessing": [RetrievalSearchInputPostProcessingInner.from_dict(_item) for _item in obj["postProcessing"]] if obj.get("postProcessing") is not None else None
+            "post_processing": [RetrievalSearchInputPostProcessingInner.from_dict(_item) for _item in obj["postProcessing"]] if obj.get("postProcessing") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

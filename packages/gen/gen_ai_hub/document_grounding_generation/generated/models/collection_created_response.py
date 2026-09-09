@@ -89,7 +89,7 @@ class CollectionCreatedResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "collectionURL": obj.get("collectionURL"),
+            "collection_url": obj.get("collectionURL"),
             "status": obj.get("status")
         })
         # store additional fields in additional_properties

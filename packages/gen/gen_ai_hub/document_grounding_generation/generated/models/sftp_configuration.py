@@ -96,7 +96,7 @@ class SFTPConfiguration(BaseModel):
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
             "sftp": ServiceNowConfigurationMinimalServiceNow.from_dict(obj["sftp"]) if obj.get("sftp") is not None else None,
-            "cronExpression": obj.get("cronExpression")
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

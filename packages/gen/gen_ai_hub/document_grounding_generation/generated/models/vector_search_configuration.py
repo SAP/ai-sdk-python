@@ -100,8 +100,8 @@ class VectorSearchConfiguration(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "maxChunkCount": obj.get("maxChunkCount"),
-            "maxDocumentCount": obj.get("maxDocumentCount")
+            "max_chunk_count": obj.get("maxChunkCount"),
+            "max_document_count": obj.get("maxDocumentCount")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

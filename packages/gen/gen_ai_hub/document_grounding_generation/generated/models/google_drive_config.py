@@ -97,9 +97,9 @@ class GoogleDriveConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "resourceType": obj.get("resourceType"),
-            "resourceId": obj.get("resourceId"),
-            "includePaths": obj.get("includePaths")
+            "resource_type": obj.get("resourceType"),
+            "resource_id": obj.get("resourceId"),
+            "include_paths": obj.get("includePaths")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

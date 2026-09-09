@@ -90,8 +90,8 @@ class MetadataConfigurationStruct(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "metadataConfigId": obj.get("metadataConfigId"),
-            "cronExpression": obj.get("cronExpression")
+            "metadata_config_id": obj.get("metadataConfigId"),
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

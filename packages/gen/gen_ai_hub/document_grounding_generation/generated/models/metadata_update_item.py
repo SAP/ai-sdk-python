@@ -98,7 +98,7 @@ class MetadataUpdateItem(BaseModel):
 
         _obj = cls.model_validate({
             "ids": obj.get("ids"),
-            "metadataUpdates": [MetadataKeyUpdate.from_dict(_item) for _item in obj["metadataUpdates"]] if obj.get("metadataUpdates") is not None else None
+            "metadata_updates": [MetadataKeyUpdate.from_dict(_item) for _item in obj["metadataUpdates"]] if obj.get("metadataUpdates") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

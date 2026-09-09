@@ -89,8 +89,8 @@ class ManualPipelineTrigger(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "pipelineId": obj.get("pipelineId"),
-            "metadataOnly": obj.get("metadataOnly")
+            "pipeline_id": obj.get("pipelineId"),
+            "metadata_only": obj.get("metadataOnly")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

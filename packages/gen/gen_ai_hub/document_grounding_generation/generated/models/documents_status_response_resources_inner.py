@@ -129,13 +129,13 @@ class DocumentsStatusResponseResourcesInner(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "status": obj.get("status"),
-            "viewLocation": obj.get("viewLocation"),
-            "downloadLocation": obj.get("downloadLocation"),
-            "absoluteUrl": obj.get("absoluteUrl"),
+            "view_location": obj.get("viewLocation"),
+            "download_location": obj.get("downloadLocation"),
+            "absolute_url": obj.get("absoluteUrl"),
             "title": obj.get("title"),
-            "metadataId": obj.get("metadataId"),
-            "createdTimestamp": obj.get("createdTimestamp"),
-            "lastUpdatedTimestamp": obj.get("lastUpdatedTimestamp")
+            "metadata_id": obj.get("metadataId"),
+            "created_timestamp": obj.get("createdTimestamp"),
+            "last_updated_timestamp": obj.get("lastUpdatedTimestamp")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

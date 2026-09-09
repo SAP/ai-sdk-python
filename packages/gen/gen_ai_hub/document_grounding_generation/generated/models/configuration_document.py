@@ -118,8 +118,8 @@ class ConfigurationDocument(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "title": obj.get("title"),
-            "absoluteFilePath": obj.get("absoluteFilePath"),
-            "createdTimestamp": obj.get("createdTimestamp"),
+            "absolute_file_path": obj.get("absoluteFilePath"),
+            "created_timestamp": obj.get("createdTimestamp"),
             "type": obj.get("type"),
             "metadata": [DocumentMetadata.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None
         })

@@ -95,7 +95,7 @@ class MetadataConfigurationMetadata(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "dataRepositoryMetadata": [MetaDataKeyValuePairStrict.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None
+            "data_repository_metadata": [MetaDataKeyValuePairStrict.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

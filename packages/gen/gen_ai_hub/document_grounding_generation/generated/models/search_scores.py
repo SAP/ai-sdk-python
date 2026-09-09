@@ -96,8 +96,8 @@ class SearchScores(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "aggregatedScore": SearchScoresAggregatedScore.from_dict(obj["aggregatedScore"]) if obj.get("aggregatedScore") is not None else None,
-            "denseRetrievalScore": SearchScoresAggregatedScore.from_dict(obj["denseRetrievalScore"]) if obj.get("denseRetrievalScore") is not None else None
+            "aggregated_score": SearchScoresAggregatedScore.from_dict(obj["aggregatedScore"]) if obj.get("aggregatedScore") is not None else None,
+            "dense_retrieval_score": SearchScoresAggregatedScore.from_dict(obj["denseRetrievalScore"]) if obj.get("denseRetrievalScore") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

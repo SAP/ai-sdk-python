@@ -102,9 +102,9 @@ class RetrievalPerFilterSearchResult(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "filterId": obj.get("filterId"),
+            "filter_id": obj.get("filterId"),
             "results": [RetrievalDataRepositorySearchResult.from_dict(_item) for _item in obj["results"]] if obj.get("results") is not None else None,
-            "remoteGroundingName": obj.get("remoteGroundingName")
+            "remote_grounding_name": obj.get("remoteGroundingName")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

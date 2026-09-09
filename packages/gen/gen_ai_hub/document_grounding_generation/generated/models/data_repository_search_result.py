@@ -92,7 +92,7 @@ class DataRepositorySearchResult(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "dataRepository": DataRepositoryWithDocuments.from_dict(obj["dataRepository"]) if obj.get("dataRepository") is not None else None
+            "data_repository": DataRepositoryWithDocuments.from_dict(obj["dataRepository"]) if obj.get("dataRepository") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

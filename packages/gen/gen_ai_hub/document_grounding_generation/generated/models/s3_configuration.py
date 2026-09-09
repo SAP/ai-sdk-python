@@ -96,7 +96,7 @@ class S3Configuration(BaseModel):
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
             "s3": ServiceNowConfigurationMinimalServiceNow.from_dict(obj["s3"]) if obj.get("s3") is not None else None,
-            "cronExpression": obj.get("cronExpression")
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

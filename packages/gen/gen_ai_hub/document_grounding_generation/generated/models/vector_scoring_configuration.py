@@ -110,11 +110,11 @@ class VectorScoringConfiguration(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "denseRetrieval": DenseRetrievalScoringConfiguration.from_dict(obj["denseRetrieval"]) if obj.get("denseRetrieval") is not None else None,
-            "keywordRetrieval": KeyWordRetrievalScoringConfiguration.from_dict(obj["keywordRetrieval"]) if obj.get("keywordRetrieval") is not None else None,
+            "dense_retrieval": DenseRetrievalScoringConfiguration.from_dict(obj["denseRetrieval"]) if obj.get("denseRetrieval") is not None else None,
+            "keyword_retrieval": KeyWordRetrievalScoringConfiguration.from_dict(obj["keywordRetrieval"]) if obj.get("keywordRetrieval") is not None else None,
             "boosting": BoostingScoringConfiguration.from_dict(obj["boosting"]) if obj.get("boosting") is not None else None,
-            "scoreThreshold": obj.get("scoreThreshold"),
-            "aggregationStrategy": obj.get("aggregationStrategy")
+            "score_threshold": obj.get("scoreThreshold"),
+            "aggregation_strategy": obj.get("aggregationStrategy")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

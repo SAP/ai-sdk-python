@@ -86,7 +86,7 @@ class ServiceNowConfigurationMinimal(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "serviceNow": ServiceNowConfigurationMinimalServiceNow.from_dict(obj["serviceNow"]) if obj.get("serviceNow") is not None else None
+            "service_now": ServiceNowConfigurationMinimalServiceNow.from_dict(obj["serviceNow"]) if obj.get("serviceNow") is not None else None
         })
         return _obj
 

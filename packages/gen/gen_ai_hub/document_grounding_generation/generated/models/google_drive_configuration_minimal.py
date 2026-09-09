@@ -84,7 +84,7 @@ class GoogleDriveConfigurationMinimal(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "googleDrive": GoogleDriveResourceDetail.from_dict(obj["googleDrive"]) if obj.get("googleDrive") is not None else None
+            "google_drive": GoogleDriveResourceDetail.from_dict(obj["googleDrive"]) if obj.get("googleDrive") is not None else None
         })
         return _obj
 

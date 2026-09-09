@@ -92,7 +92,7 @@ class MSSharePointConfigurationMinimal(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "sharePoint": SharePointSiteDetail.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None
+            "share_point": SharePointSiteDetail.from_dict(obj["sharePoint"]) if obj.get("sharePoint") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

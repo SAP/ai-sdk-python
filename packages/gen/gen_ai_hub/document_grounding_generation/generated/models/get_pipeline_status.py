@@ -138,9 +138,9 @@ class GetPipelineStatus(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "lastStarted": obj.get("lastStarted"),
-            "createdAt": obj.get("createdAt"),
-            "lastCompletedAt": obj.get("lastCompletedAt"),
+            "last_started": obj.get("lastStarted"),
+            "created_at": obj.get("createdAt"),
+            "last_completed_at": obj.get("lastCompletedAt"),
             "status": obj.get("status")
         })
         # store additional fields in additional_properties

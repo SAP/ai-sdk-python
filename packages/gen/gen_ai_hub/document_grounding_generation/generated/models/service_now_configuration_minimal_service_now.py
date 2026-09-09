@@ -88,7 +88,7 @@ class ServiceNowConfigurationMinimalServiceNow(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "includePaths": obj.get("includePaths")
+            "include_paths": obj.get("includePaths")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

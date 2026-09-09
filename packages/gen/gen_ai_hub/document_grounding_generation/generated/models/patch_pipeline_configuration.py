@@ -88,7 +88,7 @@ class PatchPipelineConfiguration(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "cronExpression": obj.get("cronExpression")
+            "cron_expression": obj.get("cronExpression")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

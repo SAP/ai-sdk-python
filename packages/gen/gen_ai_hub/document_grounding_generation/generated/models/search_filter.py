@@ -119,11 +119,11 @@ class SearchFilter(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id"),
-            "collectionIds": obj.get("collectionIds"),
+            "collection_ids": obj.get("collectionIds"),
             "configuration": SearchConfiguration.from_dict(obj["configuration"]) if obj.get("configuration") is not None else None,
-            "collectionMetadata": [KeyValueListPair.from_dict(_item) for _item in obj["collectionMetadata"]] if obj.get("collectionMetadata") is not None else None,
-            "documentMetadata": [SearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
-            "chunkMetadata": [KeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
+            "collection_metadata": [KeyValueListPair.from_dict(_item) for _item in obj["collectionMetadata"]] if obj.get("collectionMetadata") is not None else None,
+            "document_metadata": [SearchDocumentKeyValueListPair.from_dict(_item) for _item in obj["documentMetadata"]] if obj.get("documentMetadata") is not None else None,
+            "chunk_metadata": [KeyValueListPair.from_dict(_item) for _item in obj["chunkMetadata"]] if obj.get("chunkMetadata") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

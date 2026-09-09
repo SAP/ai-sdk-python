@@ -107,7 +107,7 @@ class KeyWordRetrievalScoringConfiguration(BaseModel):
         _obj = cls.model_validate({
             "enabled": obj.get("enabled") if "enabled" in obj else True,
             "weight": obj.get("weight") if "weight" in obj else 1,
-            "extractKeyWordsFromQuery": obj.get("extractKeyWordsFromQuery") if "extractKeyWordsFromQuery" in obj else False
+            "extract_key_words_from_query": obj.get("extractKeyWordsFromQuery") if "extractKeyWordsFromQuery" in obj else False
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

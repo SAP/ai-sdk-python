@@ -91,7 +91,7 @@ class DocumentBulkDeleteResponse(BaseModel):
 
         _obj = cls.model_validate({
             "deleted": obj.get("deleted"),
-            "notFound": obj.get("notFound")
+            "not_found": obj.get("notFound")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

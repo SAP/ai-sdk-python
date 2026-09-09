@@ -93,7 +93,7 @@ class PerFilterSearchResultWithError(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "filterId": obj.get("filterId"),
+            "filter_id": obj.get("filterId"),
             "error": PerFilterSearchResultError.from_dict(obj["error"]) if obj.get("error") is not None else None
         })
         # store additional fields in additional_properties

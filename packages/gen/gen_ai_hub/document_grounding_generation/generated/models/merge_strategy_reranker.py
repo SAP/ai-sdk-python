@@ -127,7 +127,7 @@ class MergeStrategyReranker(BaseModel):
             "type": obj.get("type"),
             "model": obj.get("model") if "model" in obj else 'cohere-3.5',
             "boosting": [MergeStrategyRerankerBoostingInner.from_dict(_item) for _item in obj["boosting"]] if obj.get("boosting") is not None else None,
-            "includeAllMetaData": obj.get("includeAllMetaData") if "includeAllMetaData" in obj else False
+            "include_all_meta_data": obj.get("includeAllMetaData") if "includeAllMetaData" in obj else False
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

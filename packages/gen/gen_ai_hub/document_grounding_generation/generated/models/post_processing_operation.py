@@ -113,7 +113,7 @@ class PostProcessingOperation(BaseModel):
 
         _obj = cls.model_validate({
             "id": obj.get("id") if "id" in obj else 'ae9eee48-4671-4321-a3e5-640adaaf26ae',
-            "maxChunkCount": obj.get("maxChunkCount") if "maxChunkCount" in obj else 5,
+            "max_chunk_count": obj.get("maxChunkCount") if "maxChunkCount" in obj else 5,
             "strategy": Strategy.from_dict(obj["strategy"]) if obj.get("strategy") is not None else None,
             "inputs": [RetrievalSearchInputPostProcessingInnerInputsInner.from_dict(_item) for _item in obj["inputs"]] if obj.get("inputs") is not None else None
         })

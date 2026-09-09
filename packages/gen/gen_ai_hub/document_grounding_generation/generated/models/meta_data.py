@@ -97,7 +97,7 @@ class MetaData(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "dataRepositoryMetadata": [MetaDataDataRepositoryMetadataInner.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None
+            "data_repository_metadata": [MetaDataDataRepositoryMetadataInner.from_dict(_item) for _item in obj["dataRepositoryMetadata"]] if obj.get("dataRepositoryMetadata") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

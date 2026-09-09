@@ -89,7 +89,7 @@ class EmbeddingConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "modelName": obj.get("modelName") if obj.get("modelName") is not None else 'text-embedding-ada-002'
+            "model_name": obj.get("modelName") if obj.get("modelName") is not None else 'text-embedding-ada-002'
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

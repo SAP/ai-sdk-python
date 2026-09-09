@@ -110,16 +110,16 @@ class ConfigurationDocumentFullDetails(BaseModel):
         _obj = cls.model_validate({
             "id": obj.get("id"),
             "title": obj.get("title"),
-            "absoluteFilePath": obj.get("absoluteFilePath"),
-            "createdTimestamp": obj.get("createdTimestamp"),
-            "resourceUri": obj.get("resourceUri"),
-            "webUrl": obj.get("webUrl"),
-            "documentEtag": obj.get("documentEtag"),
-            "fileSuffix": obj.get("fileSuffix"),
-            "viewLocation": obj.get("viewLocation"),
-            "downloadLocation": obj.get("downloadLocation"),
-            "mimeType": obj.get("mimeType"),
-            "fileSizeMb": obj.get("fileSizeMb"),
+            "absolute_file_path": obj.get("absoluteFilePath"),
+            "created_timestamp": obj.get("createdTimestamp"),
+            "resource_uri": obj.get("resourceUri"),
+            "web_url": obj.get("webUrl"),
+            "document_etag": obj.get("documentEtag"),
+            "file_suffix": obj.get("fileSuffix"),
+            "view_location": obj.get("viewLocation"),
+            "download_location": obj.get("downloadLocation"),
+            "mime_type": obj.get("mimeType"),
+            "file_size_mb": obj.get("fileSizeMb"),
             "metadata": [DocumentMetadata.from_dict(_item) for _item in obj["metadata"]] if obj.get("metadata") is not None else None
         })
         # store additional fields in additional_properties

@@ -96,9 +96,9 @@ class GoogleDriveConfigurationStruct(BaseModel):
 
         _obj = cls.model_validate({
             "destination": obj.get("destination"),
-            "googleDrive": GoogleDriveConfig.from_dict(obj["googleDrive"]) if obj.get("googleDrive") is not None else None,
-            "cronExpression": obj.get("cronExpression"),
-            "metadataConfigId": obj.get("metadataConfigId")
+            "google_drive": GoogleDriveConfig.from_dict(obj["googleDrive"]) if obj.get("googleDrive") is not None else None,
+            "cron_expression": obj.get("cronExpression"),
+            "metadata_config_id": obj.get("metadataConfigId")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():
