@@ -298,11 +298,11 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     sources = [
         Source("kwargs",
                lambda cv: _str_or_none(kwargs.get(cv.name))),
-        Source("environment variables",
-               lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         # A service key is already the inner credentials object, so the leading `credentials` segment is stripped.
         Source("service key",
                lambda cv, service_key = _load_service_key(): _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
+        Source("environment variables",
+               lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("config file",
                lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
         Source("VCAP service",

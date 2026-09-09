@@ -44,8 +44,8 @@ In the table below, you can see which models and vendor specific langchain packa
 
 There are different ways to configure the SAP AI Core access (listed in order of precedence):
 
-- environment variables
 - from AICORE_SERVICE_KEY environment variable, if it exists
+- environment variables
 - (profile) configuration file
 - from VCAP_SERVICES environment variable, if it exists
 

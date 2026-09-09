@@ -140,8 +140,8 @@ class AICoreV2Client:
         A specific path to a config, that should be used, can be set via the environment variable AICORE_CONFIG.
         The hierarchy of precedence is:
         1. keyword argument
-        2. environment variable
-        3. value from AICORE_SERVICE_KEY environment variable, if exists
+        2. value from AICORE_SERVICE_KEY environment variable, if exists
+        3. environment variable
         4. configuration file
         5. value from VCAP_SERVICES environment variable, if exists
 
