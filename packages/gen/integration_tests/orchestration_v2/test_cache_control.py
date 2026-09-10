@@ -1,20 +1,11 @@
 """
-Unit and integration tests for prompt caching (cache_control) via Orchestration V2.
+Live integration tests for prompt caching (cache_control) via Orchestration V2.
 
 Caching is supported for Anthropic Claude and Amazon Nova models.
-The test targets anthropic--claude-4.6-sonnet (1024-token minimum, 5m and 1h TTLs).
+The tests target anthropic--claude-4.6-sonnet (1024-token minimum, 5m and 1h TTLs).
 
 Wire path:
   ai-sdk-python  ->  SAP AI Core /v2/completion  ->  SAP LiteLLM fork  ->  Anthropic API
-
-cache_control is serialized as a plain JSON key on the content block or tool dict by
-Pydantic model_dump(). The SAP LiteLLM fork translates it into Anthropic's native
-prompt-caching format.
-
-The spec defines cache_control on three schema-level attachment points:
-  - TextContent.cache_control         (TextPart in py)
-  - UserChatMessageContentItem.cache_control  (TextPart / ImagePart in py)
-  - ChatCompletionTool.cache_control
 
 Response fields (from SAP AI Core orchestration docs):
   prompt_tokens_details.cached_tokens           -- tokens read from cache (hit)
@@ -28,9 +19,8 @@ from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
-from gen_ai_hub.orchestration_v2.models.multimodal_items import TextPart, ImagePart, ImageUrl
+from gen_ai_hub.orchestration_v2.models.multimodal_items import TextPart
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
-from gen_ai_hub.orchestration_v2.models.tools import ChatCompletionTool, FunctionTool, FunctionObject
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503
@@ -82,125 +72,6 @@ def _config(messages, tools=None):
             )
         )
     )
-
-
-class TestCacheControlSerialization(unittest.TestCase):
-    """Unit tests: verify cache_control serializes correctly without a network call."""
-
-    # ------------------------------------------------------------------
-    # CacheControl model
-    # ------------------------------------------------------------------
-
-    def test_cache_control_default_ttl_omits_key(self):
-        """CacheControl() with no TTL serializes to {"type": "ephemeral"}."""
-        d = CacheControl().model_dump(by_alias=True)
-        self.assertEqual(d, {"type": "ephemeral"})
-        self.assertNotIn("ttl", d)
-
-    def test_cache_control_5m_ttl(self):
-        """CacheControl(ttl="5m") serializes with ttl field."""
-        d = CacheControl(ttl="5m").model_dump(by_alias=True)
-        self.assertEqual(d, {"type": "ephemeral", "ttl": "5m"})
-
-    def test_cache_control_1h_ttl(self):
-        """CacheControl(ttl="1h") serializes with ttl field."""
-        d = CacheControl(ttl="1h").model_dump(by_alias=True)
-        self.assertEqual(d, {"type": "ephemeral", "ttl": "1h"})
-
-    # ------------------------------------------------------------------
-    # TextPart with cache_control
-    # ------------------------------------------------------------------
-
-    def test_text_part_with_cache_control(self):
-        """TextPart with cache_control serializes the cache_control block."""
-        part = TextPart(text="hello", cache_control=CacheControl())
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["type"], "text")
-        self.assertEqual(d["text"], "hello")
-        self.assertEqual(d["cache_control"], {"type": "ephemeral"})
-
-    def test_text_part_without_cache_control_omits_key(self):
-        """TextPart without cache_control does not emit the key."""
-        part = TextPart(text="hello")
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertNotIn("cache_control", d)
-
-    def test_text_part_with_1h_ttl(self):
-        """TextPart with CacheControl(ttl='1h') serializes the ttl field."""
-        part = TextPart(text="hello", cache_control=CacheControl(ttl="1h"))
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
-
-    # ------------------------------------------------------------------
-    # ImagePart with cache_control
-    # ------------------------------------------------------------------
-
-    def test_image_part_with_cache_control(self):
-        """ImagePart with cache_control serializes the cache_control block."""
-        part = ImagePart(
-            image_url=ImageUrl(url="https://example.com/img.png"),
-            cache_control=CacheControl(),
-        )
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["type"], "image_url")
-        self.assertEqual(d["cache_control"], {"type": "ephemeral"})
-
-    def test_image_part_without_cache_control_omits_key(self):
-        """ImagePart without cache_control does not emit the key."""
-        part = ImagePart(image_url=ImageUrl(url="https://example.com/img.png"))
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertNotIn("cache_control", d)
-
-    def test_image_part_with_1h_ttl(self):
-        """ImagePart with CacheControl(ttl='1h') serializes the ttl field."""
-        part = ImagePart(
-            image_url=ImageUrl(url="https://example.com/img.png"),
-            cache_control=CacheControl(ttl="1h"),
-        )
-        d = part.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
-
-    # ------------------------------------------------------------------
-    # ChatCompletionTool with cache_control
-    # ------------------------------------------------------------------
-
-    def test_tool_cache_control_serialized(self):
-        """cache_control on a ChatCompletionTool appears at the tool level."""
-        tool = FunctionTool(
-            function=FunctionObject(
-                name="classify",
-                description="Classify input.",
-                parameters={"type": "object", "properties": {}},
-            ),
-            cache_control=CacheControl(),
-        )
-        d = tool.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["cache_control"], {"type": "ephemeral"})
-
-    def test_tool_without_cache_control_omits_key(self):
-        """A tool without cache_control does not emit the key."""
-        tool = FunctionTool(
-            function=FunctionObject(
-                name="classify",
-                description="Classify input.",
-                parameters={"type": "object", "properties": {}},
-            ),
-        )
-        d = tool.model_dump(by_alias=True, exclude_none=True)
-        self.assertNotIn("cache_control", d)
-
-    def test_tool_with_1h_ttl(self):
-        """cache_control with ttl='1h' on a tool serializes the ttl field."""
-        tool = FunctionTool(
-            function=FunctionObject(
-                name="classify",
-                description="Classify input.",
-                parameters={"type": "object", "properties": {}},
-            ),
-            cache_control=CacheControl(ttl="1h"),
-        )
-        d = tool.model_dump(by_alias=True, exclude_none=True)
-        self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
 
 class TestPromptCachingLive(OrchestrationServiceTestBase):

@@ -67,37 +67,24 @@ def python_type_to_json_type(py_type):
 
 
 class ChatCompletionTool(BaseModel):
-    """
-    Base class for all chat completion tools.
+    """A tool the model may call, identified by type ``"function"``.
 
     Args:
-            type (Literal["function"]): The type of the tool. Currently, only function is supported.
-
-            cache_control: Optional cache control settings for prompt caching.
-                Supported for Anthropic Claude models only. Not supported for Amazon Nova.
+        cache_control: Prompt-caching directive. Supported on Anthropic Claude only;
+            not supported on Amazon Nova.
     """
-    type_: Literal["function"] = Field(default="function",
-                                       alias="type",
-                                       description="The type of the tool. Currently, only function is supported.")
+    type_: Literal["function"] = Field(default="function", alias="type")
     cache_control: Optional[CacheControl] = None
 
 
 class FunctionObject(BaseModel):
-    """
-    Represents a function.
+    """A function definition used inside a ``FunctionTool``.
+
     Args:
-            name (str): The name of the function to be called. Must be a-z, A-Z, 0-9,
-                        or contain underscores and dashes, with a maximum length of 64.
-
-            description (str): A description of what the function does, used by the model
-                        to choose when and how to call the function.
-
-            parameters (dict): The parameters the functions accepts, described as a JSON Schema object.
-                        Omitting parameters defines a function with an empty parameter list.
-
-            strict (bool, optional): Whether to enable strict schema adherence when generating the function call.
-                        If set to true, the model will follow the exact schema defined in the parameters field.
-                        Only a subset of JSON Schema is supported when strict is true. Defaults to False.
+        name: Function name. Must match ``^[a-zA-Z0-9_-]+$``, max 64 chars.
+        description: What the function does; used by the model to decide when to call it.
+        parameters: JSON Schema object describing accepted parameters.
+        strict: When ``True``, the model follows the schema exactly. Defaults to ``False``.
     """
     description: Optional[str] = None
     name: str
@@ -107,15 +94,11 @@ class FunctionObject(BaseModel):
 
 
 class FunctionTool(ChatCompletionTool):
-    """
-    Represents a function tool for OpenAI-like function calling.
+    """A callable function tool for OpenAI-style function calling.
 
     Args:
-            type (Literal["function"]): The type of the tool. Currently, only function is supported.
-
-            function (FunctionObject): The function to be called.
+        function: The function definition (name, description, parameters).
     """
-    type_: Literal["function"] = Field(default="function", alias="type")
     function: FunctionObject
 
     def execute(self, **kwargs: Any) -> Any:
