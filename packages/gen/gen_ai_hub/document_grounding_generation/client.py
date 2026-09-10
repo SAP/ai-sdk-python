@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 from gen_ai_hub.proxy.core.base import BaseProxyClient
+from gen_ai_hub.proxy import get_proxy_client
 
 from gen_ai_hub.document_grounding_generation.generated.api_client import ApiClient
 from gen_ai_hub.document_grounding_generation.generated.configuration import (
@@ -35,9 +38,18 @@ class _SapRESTClientObject(RESTClientObject):
 
 
 class GroundingApiClient(ApiClient):
-    """ApiClient pre-wired with a BaseProxyClient (e.g. from get_proxy_client())."""
+    """ApiClient for the Document Grounding service.
 
-    def __init__(self, client: BaseProxyClient, base_url: str | None = None) -> None:
+    Resolves auth and base URL from the proxy client automatically.
+    If no proxy client is provided, one is created via get_proxy_client().
+    """
+
+    def __init__(
+        self,
+        proxy_client: Optional[BaseProxyClient] = None,
+        base_url: Optional[str] = None,
+    ) -> None:
+        client = proxy_client or get_proxy_client()
         config = Configuration(host=base_url or _get_base_url(client))
         super().__init__(configuration=config)
         self.rest_client = _SapRESTClientObject(config, client)

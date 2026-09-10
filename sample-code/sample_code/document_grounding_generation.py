@@ -1,4 +1,3 @@
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client
 from gen_ai_hub.document_grounding_generation import (
     GroundingApiClient,
     DataRepositoryType,
@@ -11,8 +10,7 @@ from gen_ai_hub.document_grounding_generation import (
 
 
 async def retrieval_search():
-    client = GroundingApiClient(get_proxy_client())
-    result = await RetrievalApi(client).search(
+    result = await RetrievalApi(GroundingApiClient()).search(
         ai_resource_group="default",
         retrieval_search_input=RetrievalSearchInput(
             query="Features of Generative AI Hub",

@@ -1,12 +1,24 @@
 from gen_ai_hub.tab_ai_orchestration import TabAiOrchestrationClient
-from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_config import ContextSelectionConfig
-from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_strategy_enum import ContextSelectionStrategyEnum
+from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_config import (
+    ContextSelectionConfig,
+)
+from gen_ai_hub.tab_ai_orchestration.generated.models.context_selection_strategy_enum import (
+    ContextSelectionStrategyEnum,
+)
 from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15 import ModelRpt15
-from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_explanations import ModelRpt15Explanations
-from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_prediction_config import ModelRpt15PredictionConfig
+from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_explanations import (
+    ModelRpt15Explanations,
+)
+from gen_ai_hub.tab_ai_orchestration.generated.models.model_rpt15_prediction_config import (
+    ModelRpt15PredictionConfig,
+)
 from gen_ai_hub.tab_ai_orchestration.generated.models.modelconfig import Modelconfig
-from gen_ai_hub.tab_ai_orchestration.generated.models.predict_request import PredictRequest
-from gen_ai_hub.tab_ai_orchestration.generated.models.prediction_config import PredictionConfig
+from gen_ai_hub.tab_ai_orchestration.generated.models.predict_request import (
+    PredictRequest,
+)
+from gen_ai_hub.tab_ai_orchestration.generated.models.prediction_config import (
+    PredictionConfig,
+)
 from gen_ai_hub.tab_ai_orchestration.generated.models.target_column import TargetColumn
 from gen_ai_hub.tab_ai_orchestration.generated.models.task_type_enum import TaskTypeEnum
 from gen_ai_hub.tab_ai_orchestration.generated.models.tfm_enum import TFMEnum
@@ -47,7 +59,6 @@ async def predict():
 
     async with TabAiOrchestrationClient(model_name="sap-rpt-1-small") as client:
         response = await client.predict(
-            ai_resource_group="default",
             predict_request=request,
         )
 
@@ -79,22 +90,24 @@ async def predict_with_explanations():
                 )
             ]
         ),
-        var_model_config=Modelconfig(ModelRpt15(
-            index_column="id",
-            data_schema={
-                "product": {"dtype": "string"},
-                "price": {"dtype": "numeric"},
-                "date": {"dtype": "date"},
-                "id": {"dtype": "string"},
-                "salesgroup": {"dtype": "string"},
-            },
-            prediction_config=ModelRpt15PredictionConfig(
-                explanations=ModelRpt15Explanations(
-                    top_column_scores=3,
-                    top_relevant_context_rows=2,
-                )
-            ),
-        )),
+        var_model_config=Modelconfig(
+            ModelRpt15(
+                index_column="id",
+                data_schema={
+                    "product": {"dtype": "string"},
+                    "price": {"dtype": "numeric"},
+                    "date": {"dtype": "date"},
+                    "id": {"dtype": "string"},
+                    "salesgroup": {"dtype": "string"},
+                },
+                prediction_config=ModelRpt15PredictionConfig(
+                    explanations=ModelRpt15Explanations(
+                        top_column_scores=3,
+                        top_relevant_context_rows=2,
+                    )
+                ),
+            )
+        ),
         columns={
             "product": ["Laptop", "Office Chair"],
             "price": [999.99, 142.99],
@@ -106,7 +119,6 @@ async def predict_with_explanations():
 
     async with TabAiOrchestrationClient(model_name="sap-rpt-1.5") as client:
         response = await client.predict(
-            ai_resource_group="default",
             predict_request=request,
         )
 
