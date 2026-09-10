@@ -96,8 +96,17 @@ class FunctionObject(BaseModel):
 class FunctionTool(ChatCompletionTool):
     """A callable function tool for OpenAI-style function calling.
 
+    Inherits all fields from :class:`ChatCompletionTool`:
+
     Args:
-        function: The function definition (name, description, parameters).
+        type: Always ``"function"``. Serialized via the ``type`` alias.
+        cache_control: Prompt-caching directive. Supported on Anthropic Claude only;
+            not supported on Amazon Nova.
+
+    Additional args:
+
+        function: The function definition — name, description, parameters schema,
+            and optional strict flag. See :class:`FunctionObject`.
     """
     function: FunctionObject
 
