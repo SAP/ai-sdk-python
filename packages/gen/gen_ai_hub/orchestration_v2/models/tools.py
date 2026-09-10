@@ -11,6 +11,7 @@ from typing import Literal, Optional
 from pydantic import Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
 def python_type_to_json_type(py_type):
@@ -71,10 +72,14 @@ class ChatCompletionTool(BaseModel):
 
     Args:
             type (Literal["function"]): The type of the tool. Currently, only function is supported.
+
+            cache_control: Optional cache control settings for prompt caching.
+                Supported for Anthropic Claude models only. Not supported for Amazon Nova.
     """
     type_: Literal["function"] = Field(default="function",
                                        alias="type",
                                        description="The type of the tool. Currently, only function is supported.")
+    cache_control: Optional[CacheControl] = None
 
 
 class FunctionObject(BaseModel):
