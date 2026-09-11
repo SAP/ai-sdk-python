@@ -1,4 +1,5 @@
 import unittest
+import unittest.mock
 from datetime import datetime
 from unittest.mock import MagicMock
 
@@ -74,6 +75,24 @@ class TestInitModels(unittest.TestCase):
         for model_name, model_class in self.emb.items():
             model = init_embedding_model(model_name, proxy_client=self.proxy_client)
             self.assertIsInstance(model, model_class)
+
+    def test_init_llm_without_proxy_client(self):
+        """init_llm should fall back to get_proxy_client() when proxy_client is not passed."""
+        with unittest.mock.patch(
+            'gen_ai_hub.proxy.langchain.init_models.get_proxy_client',
+            return_value=self.proxy_client,
+        ):
+            model = init_llm('gpt-5')
+        self.assertIsInstance(model, openai.ChatOpenAI)
+
+    def test_init_embedding_model_without_proxy_client(self):
+        """init_embedding_model should fall back to get_proxy_client() when proxy_client is not passed."""
+        with unittest.mock.patch(
+            'gen_ai_hub.proxy.langchain.init_models.get_proxy_client',
+            return_value=self.proxy_client,
+        ):
+            model = init_embedding_model('text-embedding-3-small')
+        self.assertIsInstance(model, openai.OpenAIEmbeddings)
 
     def test_init_llm(self):
         model_kwargs = {'top_k': 3}
