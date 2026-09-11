@@ -95,7 +95,7 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
         cache_control breakpoint was accepted by the server.
         """
         config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl())]),
+            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type="ephemeral"))]),
             UserMessage(content="In one word: what language did Romans speak?"),
         ])
         response = self.service.run(config=config)
@@ -116,7 +116,7 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
     def test_cache_hit_on_repeated_call(self):
         """Second call with the same cache breakpoint produces cached_tokens > 0."""
         config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl())]),
+            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type="ephemeral"))]),
             UserMessage(content="In one word: what language did Romans speak?"),
         ])
         self.service.run(config=config)   # populate cache
@@ -134,10 +134,10 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
 
     @retry_on_429_or_503(max_retries=3, initial_delay=2.0, backoff_factor=2.0)
     def test_explicit_ttl_1h_via_text_part(self):
-        """Attaching CacheControl(ttl='1h') directly to a TextPart returns
+        """Attaching CacheControl(type='ephemeral', ttl='1h') directly to a TextPart returns
         cache_creation_token_details with ephemeral_1h_input_tokens."""
         config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(ttl="1h"))]),
+            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type='ephemeral', ttl='1h'))]),
             UserMessage(content="Name the last Western Roman emperor."),
         ])
         response = self.service.run(config=config)

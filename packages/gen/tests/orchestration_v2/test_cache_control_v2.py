@@ -17,17 +17,17 @@ class TestCacheControlModel(unittest.TestCase):
     """CacheControl serialization."""
 
     def test_default_ttl_omits_key(self):
-        """CacheControl() with no TTL serializes to {"type": "ephemeral"}."""
-        d = CacheControl().model_dump(by_alias=True)
+        """CacheControl(type='ephemeral') with no TTL serializes to {"type": "ephemeral"}."""
+        d = CacheControl(type="ephemeral").model_dump(by_alias=True)
         self.assertEqual(d, {"type": "ephemeral"})
         self.assertNotIn("ttl", d)
 
     def test_5m_ttl(self):
-        d = CacheControl(ttl="5m").model_dump(by_alias=True)
+        d = CacheControl(type="ephemeral", ttl="5m").model_dump(by_alias=True)
         self.assertEqual(d, {"type": "ephemeral", "ttl": "5m"})
 
     def test_1h_ttl(self):
-        d = CacheControl(ttl="1h").model_dump(by_alias=True)
+        d = CacheControl(type="ephemeral", ttl="1h").model_dump(by_alias=True)
         self.assertEqual(d, {"type": "ephemeral", "ttl": "1h"})
 
 
@@ -35,7 +35,7 @@ class TestTextPartCacheControl(unittest.TestCase):
     """TextPart.cache_control serialization."""
 
     def test_with_cache_control(self):
-        part = TextPart(text="hello", cache_control=CacheControl())
+        part = TextPart(text="hello", cache_control=CacheControl(type="ephemeral"))
         d = part.model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["type"], "text")
         self.assertEqual(d["text"], "hello")
@@ -47,7 +47,7 @@ class TestTextPartCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        part = TextPart(text="hello", cache_control=CacheControl(ttl="1h"))
+        part = TextPart(text="hello", cache_control=CacheControl(type="ephemeral", ttl="1h"))
         d = part.model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
@@ -59,7 +59,7 @@ class TestImagePartCacheControl(unittest.TestCase):
         return ImagePart(image_url=ImageUrl(url="https://example.com/img.png"), **kwargs)
 
     def test_with_cache_control(self):
-        d = self._image_part(cache_control=CacheControl()).model_dump(by_alias=True, exclude_none=True)
+        d = self._image_part(cache_control=CacheControl(type="ephemeral")).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["type"], "image_url")
         self.assertEqual(d["cache_control"], {"type": "ephemeral"})
 
@@ -68,7 +68,7 @@ class TestImagePartCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        d = self._image_part(cache_control=CacheControl(ttl="1h")).model_dump(by_alias=True, exclude_none=True)
+        d = self._image_part(cache_control=CacheControl(type="ephemeral", ttl="1h")).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
 
@@ -86,7 +86,7 @@ class TestFunctionToolCacheControl(unittest.TestCase):
         )
 
     def test_with_cache_control(self):
-        d = self._tool(cache_control=CacheControl()).model_dump(by_alias=True, exclude_none=True)
+        d = self._tool(cache_control=CacheControl(type="ephemeral")).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral"})
 
     def test_without_cache_control_omits_key(self):
@@ -94,7 +94,7 @@ class TestFunctionToolCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        d = self._tool(cache_control=CacheControl(ttl="1h")).model_dump(by_alias=True, exclude_none=True)
+        d = self._tool(cache_control=CacheControl(type="ephemeral", ttl="1h")).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
     def test_type_field_serializes(self):

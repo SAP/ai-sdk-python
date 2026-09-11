@@ -18,25 +18,15 @@ class CacheControl(BaseModel):
         - Amazon Nova: system and user content blocks only (no tools, no TTL).
 
     Attach ``CacheControl`` directly to a content block (``TextPart``, ``ImagePart``) or
-    to a ``ChatCompletionTool``. For the "last-block shorthand" pass ``cache_control`` to
-    ``OrchestrationService.run()``; it calls ``apply_cache_control_to_last_message()``
-    automatically.
-
+    to a ``ChatCompletionTool``.
+    
     Args:
-        type: Always ``"ephemeral"``. Only value supported by the API.
+        type: ``"ephemeral"``
         ttl: Cache duration. ``"5m"`` (default) or ``"1h"`` (select Anthropic
              models only). Omit for Amazon Nova or when the default is sufficient.
-
-    Example::
-
-        from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
-        from gen_ai_hub.orchestration_v2.models.multimodal_items import TextPart
-
-        block = TextPart(text="Long context...", cache_control=CacheControl())
-        block_1h = TextPart(text="Long context...", cache_control=CacheControl(ttl="1h"))
     """
 
-    type: Literal["ephemeral"] = "ephemeral"
+    type: Literal["ephemeral"]
     ttl: Optional[Literal["5m", "1h"]] = None
 
     @model_serializer(mode="wrap")
