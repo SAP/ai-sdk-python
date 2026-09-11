@@ -63,7 +63,8 @@ class TestDockerRegistrySecretsClient(ResourceClientTestBase):
         body = {'data': drs_dict['data']}
         self.rest_client_mock.patch.return_value = response_dict
         br = self.client.modify(name=drs_dict['name'], **body)
-        self.rest_client_mock.patch.assert_called_with(path=f'{self.drs_path}/{drs_dict["name"]}', body=body)
+        headers = { 'Content-Type': 'application/merge-patch+json' }
+        self.rest_client_mock.patch.assert_called_with(path=f'{self.drs_path}/{drs_dict["name"]}', body=body, headers=headers)
         self.assertEqual(response_dict['id'], br.id)
         self.assertEqual(response_dict['message'], br.message)
 
