@@ -5,10 +5,12 @@ from sample_code import (
     amazon,
     core,
     document_grounding_generation,
+    document_grounding_kiota,
     google,
     openai,
     orchestration,
     tab_ai_orchestration,
+    tab_ai_orchestration_kiota,
 )
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
@@ -82,8 +84,19 @@ app.get("/document-grounding-generation/retrieval/search")(
     document_grounding_generation.retrieval_search
 )
 
+# Document Grounding Generation (Kiota-generated client)
+app.get("/kiota/document-grounding/retrieval/search")(
+    document_grounding_kiota.retrieval_search
+)
+
 # Tabular AI Orchestration
 app.get("/tab-ai-orchestration/predict")(tab_ai_orchestration.predict)
 app.get("/tab-ai-orchestration/predict-with-explanations")(
     tab_ai_orchestration.predict_with_explanations
+)
+
+# Tabular AI Orchestration (Kiota-generated client)
+app.get("/kiota/tab-ai-orchestration/predict")(tab_ai_orchestration_kiota.predict)
+app.get("/kiota/tab-ai-orchestration/predict-with-explanations")(
+    tab_ai_orchestration_kiota.predict_with_explanations
 )
