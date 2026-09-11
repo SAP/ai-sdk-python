@@ -1,0 +1,572 @@
+openapi: 3.1.0
+info:
+  title: Tabular AI Orchestrator
+  version: 1.8.1
+servers:
+  - url: /v1
+paths:
+  /predict:
+    post:
+      tags:
+        - predict
+      summary: Make predictions using a Tabular Foundation Model
+      description: >-
+        Make predictions for tabular data using a deployed Tabular Foundation
+        Model.
+
+            Required Headers:
+            - ai-resource-group: AI Core resource group identifier
+      operationId: predict
+      parameters:
+        - name: ai-resource-group
+          in: header
+          required: true
+          schema:
+            type: string
+            description: AI Core resource group identifier
+            title: Ai-Resource-Group
+          description: AI Core resource group identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PredictRequest"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PredictResponse"
+        "400":
+          description: Invalid request data
+        "401":
+          description: Authentication failed
+        "404":
+          description: Model not found
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+        "500":
+          description: Internal server error
+        "502":
+          description: External service error
+        "504":
+          description: Request timeout
+components:
+  schemas:
+    ColumnarData:
+      additionalProperties:
+        items: {}
+        type: array
+      type: object
+      title: ColumnarData
+      description: |-
+        Columnar data format where each key is a column name
+        and the value is a list of values for that column.
+
+        Example:
+        {
+            "code": ["new_code1", "new_code2"],
+            "category": ["Electronics", "Clothing"],
+            "price": [100, 50]
+        }
+    ContextSelectionConfig:
+      properties:
+        indexColumn:
+          anyOf:
+            - type: string
+            - type: "null"
+          title: Indexcolumn
+          description: Name of the unique row-identifier column (e.g. 'ROW_INDEX').
+            Required for 'heuristic', and deterministic 'random' strategies.
+        numRows:
+          anyOf:
+            - type: integer
+              minimum: 0
+            - type: "null"
+          title: Numrows
+          description: Number of rows to select for context. If not provided or set to 0,
+            context selection is skipped.
+        strategy:
+          $ref: "#/components/schemas/ContextSelectionStrategyEnum"
+          description: Sampling strategy for context selection.
+          default: random
+        strategyConfig:
+          anyOf:
+            - $ref: "#/components/schemas/SamplingRandomConfig"
+            - $ref: "#/components/schemas/SamplingHeuristicConfig"
+            - type: "null"
+          title: Strategyconfig
+          description: Strategy-specific configuration parameters.
+        filterConditions:
+          anyOf:
+            - $ref: "#/components/schemas/FilterConditions"
+            - $ref: "#/components/schemas/FilterCondition"
+            - type: "null"
+          title: Filterconditions
+          description: Filter conditions for context selection
+      type: object
+      title: ContextSelectionConfig
+      description: Configuration for context selection.
+    ContextSelectionStrategyEnum:
+      type: string
+      enum:
+        - none
+        - random
+        - heuristic
+        - auto
+      title: ContextSelectionStrategyEnum
+      description: Context selection strategies for data sampling.
+    FilterCondition:
+      properties:
+        field:
+          type: string
+          title: Field
+          description: Field name to filter on
+        op:
+          type: string
+          title: Op
+          description: Filter operator (e.g., 'eq', 'gte', 'lte')
+        value:
+          title: Value
+          description: Value to compare against
+      type: object
+      required:
+        - field
+        - op
+        - value
+      title: FilterCondition
+      description: A single filter condition for context selection.
+    FilterConditions:
+      properties:
+        logic:
+          type: string
+          title: Logic
+          description: Logical operator to combine conditions ('and' or 'or')
+        conditions:
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/FilterCondition"
+              - $ref: "#/components/schemas/FilterConditions"
+          type: array
+          title: Conditions
+          description: List of filter conditions
+      type: object
+      required:
+        - logic
+        - conditions
+      title: FilterConditions
+      description: Filter conditions for context selection.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: "#/components/schemas/ValidationError"
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ModelRpt1:
+      properties:
+        index_column:
+          anyOf:
+            - type: string
+            - type: "null"
+          title: Index Column
+          description: (Optional) The name of the column used to identify the row. This
+            column isn't used as an input feature for the model, and is returned
+            in the response objects.
+        data_schema:
+          anyOf:
+            - additionalProperties:
+                additionalProperties:
+                  type: string
+                type: object
+              type: object
+            - type: "null"
+          title: Data Schema
+          description: "(Optional) A schema definition for data types of all columns.
+            Possible values: string, numeric, or date."
+          examples:
+            - data_schema:
+                ORDERDATE:
+                  dtype: date
+                PRICE:
+                  dtype: numeric
+                PRODUCT:
+                  dtype: string
+        parse_data_types:
+          type: boolean
+          title: Parse Data Types
+          description: "(Optional, RPT default: True) Relevant when data_schema isn't
+            passed. Whether or not to parse data types, such as interpreting
+            strings as numbers or dates."
+          default: true
+      additionalProperties: true
+      type: object
+      title: ModelRpt1
+      description: "RPT1 Reference:
+        https://help.sap.com/docs/sap-ai-core/generative-ai/example-payloads-fo\
+        r-inferencing-sap-rpt-1?locale=en-US#parameters"
+    ModelRpt1_5:
+      properties:
+        index_column:
+          anyOf:
+            - type: string
+            - type: "null"
+          title: Index Column
+          description: (Optional) The name of the column used to identify the row. This
+            column isn't used as an input feature for the model, and is returned
+            in the response objects.
+        data_schema:
+          anyOf:
+            - additionalProperties:
+                additionalProperties:
+                  type: string
+                type: object
+              type: object
+            - type: "null"
+          title: Data Schema
+          description: "(Optional) A schema definition for data types of all columns.
+            Possible values: string, numeric, or date."
+          examples:
+            - data_schema:
+                ORDERDATE:
+                  dtype: date
+                PRICE:
+                  dtype: numeric
+                PRODUCT:
+                  dtype: string
+        parse_data_types:
+          type: boolean
+          title: Parse Data Types
+          description: "(Optional, RPT Default: True) Relevant when data_schema isn't
+            passed. Whether or not to parse data types, such as interpreting
+            strings as numbers or dates."
+          default: true
+        prediction_config:
+          $ref: "#/components/schemas/ModelRpt1_5PredictionConfig"
+          description: (Optional) An object for configuring predictions.
+      additionalProperties: true
+      type: object
+      title: ModelRpt1_5
+    ModelRpt1_5Explanations:
+      properties:
+        top_column_scores:
+          type: integer
+          maximum: 20
+          minimum: 0
+          title: Top Column Scores
+          description: "(Optional, RPT Default: 0) Number of top column scores to return.
+            A value of 0 disables explainability."
+          default: 0
+        top_relevant_context_rows:
+          anyOf:
+            - type: integer
+              maximum: 20
+            - type: "null"
+          title: Top Relevant Context Rows
+          description: (Optional) Number of most relevant context rows to return for each
+            query row.
+      additionalProperties: true
+      type: object
+      title: ModelRpt1_5Explanations
+    ModelRpt1_5PredictionConfig:
+      properties:
+        explanations:
+          $ref: "#/components/schemas/ModelRpt1_5Explanations"
+          description: (Optional) Configuration used to request explanations.
+      additionalProperties: true
+      type: object
+      title: ModelRpt1_5PredictionConfig
+    PredictMetadata:
+      properties:
+        num_columns:
+          type: integer
+          title: Num Columns
+        num_rows:
+          type: integer
+          title: Num Rows
+        num_predictions:
+          type: integer
+          title: Num Predictions
+        num_query_rows:
+          type: integer
+          title: Num Query Rows
+      type: object
+      required:
+        - num_columns
+        - num_rows
+        - num_predictions
+        - num_query_rows
+      title: PredictMetadata
+      description: Metadata about the prediction.
+    PredictRequest:
+      properties:
+        modelName:
+          $ref: "#/components/schemas/TFMEnum"
+          description: Name of the deployed model
+        scenarioConfigName:
+          type: string
+          title: Scenarioconfigname
+          description: Scenario configuration identifier
+        contextSelectionConfig:
+          anyOf:
+            - $ref: "#/components/schemas/ContextSelectionConfig"
+            - type: "null"
+          description: Context selection configuration
+        predictionConfig:
+          $ref: "#/components/schemas/PredictionConfig"
+          description: Prediction configuration
+        modelConfig:
+          oneOf:
+            - $ref: "#/components/schemas/ModelRpt1_5"
+            - $ref: "#/components/schemas/ModelRpt1"
+          title: Modelconfig
+          description: (Optional) Any additional TFM-specific configurations that will be
+            passed to the selected TFM.
+        columns:
+          anyOf:
+            - $ref: "#/components/schemas/ColumnarData"
+            - type: "null"
+          description: Query-only rows in columnar form. An object mapping from column
+            name to array of column values.
+        contextColumns:
+          anyOf:
+            - $ref: "#/components/schemas/ColumnarData"
+            - type: "null"
+          description: (Optional) Context rows in columnar form, only relevant if
+            'columns' is provided. An object mapping from column name to array
+            of column values.
+        rows:
+          anyOf:
+            - $ref: "#/components/schemas/RowData"
+            - type: "null"
+          description: Query-only rows in row form. An array of objects representing table
+            rows.
+        contextRows:
+          anyOf:
+            - $ref: "#/components/schemas/RowData"
+            - type: "null"
+          description: (Optional) Context rows in row form, only relevant if 'rows' is
+            provided. An array of objects representing table rows.
+      type: object
+      required:
+        - modelName
+        - scenarioConfigName
+        - predictionConfig
+      title: PredictRequest
+      description: Request schema for prediction endpoint.
+    PredictResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        metadata:
+          $ref: "#/components/schemas/PredictMetadata"
+        predictions:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Predictions
+        status:
+          $ref: "#/components/schemas/PredictStatus"
+        additional_information:
+          items:
+            type: string
+          type: array
+          title: Additional Information
+          description: Warnings or informational messages from context selection
+          default: []
+      type: object
+      required:
+        - id
+        - metadata
+        - predictions
+        - status
+      title: PredictResponse
+      description: Response schema for prediction endpoint.
+    PredictStatus:
+      properties:
+        code:
+          type: integer
+          title: Code
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+        - code
+        - message
+      title: PredictStatus
+      description: Status of the prediction.
+    PredictionConfig:
+      properties:
+        targetColumns:
+          items:
+            $ref: "#/components/schemas/TargetColumn"
+          type: array
+          minItems: 1
+          title: Targetcolumns
+          description: List of target columns with prediction configuration
+      additionalProperties: false
+      type: object
+      required:
+        - targetColumns
+      title: PredictionConfig
+      description: |-
+        Configuration for what to predict.
+
+        Model-agnostic prediction config. Only contains fields shared across
+        all TFMs. Model-specific fields belong in `PredictRequest.modelConfig`.
+    RowData:
+      items:
+        additionalProperties: true
+        type: object
+      type: array
+      title: RowData
+      description: |-
+        Row-wise data format where each element is a dictionary
+        representing a single row with column names as keys.
+
+        Example:
+        [
+            {"code": "new_code1", "category": "Electronics", "price": 100},
+            {"code": "new_code2", "category": "Clothing", "price": 50},
+        ]
+    SamplingHeuristicConfig:
+      properties:
+        methodRatio:
+          type: number
+          title: Methodratio
+          description: Fraction of numRows filled by scoring method (remainder is random
+            fill). Must be between 0 and 1.
+          default: 0.67
+        fuzzyNumPct:
+          type: number
+          title: Fuzzynumpct
+          description: Numeric fuzzy threshold as a fraction of the absolute query value.
+            E.g. 0.1 = +/-10%.
+          default: 0.1
+        chunkSize:
+          type: integer
+          title: Chunksize
+          description: Max CASE WHEN expressions per subquery chunk (avoids HANA
+            parse-tree depth limit).
+          default: 100
+        chunkThreshold:
+          type: integer
+          title: Chunkthreshold
+          description: Column count above which chunked SQL is used instead of a flat query.
+          default: 150
+        poolSize:
+          anyOf:
+            - type: integer
+            - type: "null"
+          title: Poolsize
+          description: If set, scoring runs against a random subsample of this many rows
+            instead of the full table. None = full table scan.
+        fuzzyDateDays:
+          type: integer
+          title: Fuzzydatedays
+          description: Day window for fuzzy date matching. A date column scores 1 if
+            abs(DAYS_BETWEEN(row_date, query_date)) <= dateFuzzyDays. Set to 0
+            for exact date match.
+          default: 30
+        allowTimeoutFallback:
+          type: boolean
+          title: Allowtimeoutfallback
+          description: When true, heuristic sampling falls back to random on timeout
+            instead of raising an error. Set by the orchestrator when
+            strategy=AUTO.
+          default: false
+      additionalProperties: true
+      type: object
+      title: SamplingHeuristicConfig
+    SamplingRandomConfig:
+      properties:
+        deterministic:
+          type: boolean
+          title: Deterministic
+          description: When true, uses HASH_SHA256 of indexColumn for ordering instead of
+            RAND(), producing the same row order on every call for the same
+            data.
+          default: false
+      additionalProperties: true
+      type: object
+      title: SamplingRandomConfig
+    TFMEnum:
+      type: string
+      enum:
+        - sap-rpt-1-small
+        - sap-rpt-1-large
+        - sap-rpt-1.5
+        - sap-rpt-1.5-large
+      title: TFMEnum
+      description: Supported Tabular Foundation Models.
+    TargetColumn:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Name of the column to predict
+        prediction_placeholder:
+          type: string
+          title: Prediction Placeholder
+          description: (Optional) Placeholder value indicating cells to predict
+          default: "[PREDICT]"
+        task_type:
+          $ref: "#/components/schemas/TaskTypeEnum"
+          description: (Optional) Type of prediction task (classification or regression)
+          default: classification
+        top_k:
+          anyOf:
+            - type: integer
+            - type: "null"
+          title: Top K
+          description: (Optional) Controls how many labels to predict for each column in
+            each row. Only applicable to 'classification' task type.
+      type: object
+      required:
+        - name
+      title: TargetColumn
+      description: Configuration for a target column to predict.
+    TaskTypeEnum:
+      type: string
+      enum:
+        - classification
+        - regression
+      title: TaskTypeEnum
+      description: ML task types for predictions.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
