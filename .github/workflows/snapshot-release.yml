@@ -68,6 +68,9 @@ jobs:
 
           bump gen
 
+      - name: Update lockfile
+        run: uv lock
+
       - name: Build packages
         run: |
           for pkg in base core gen; do

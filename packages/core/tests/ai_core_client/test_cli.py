@@ -8,7 +8,7 @@ import tempfile
 
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 from ai_core_sdk.helpers import get_home
-from ai_core_sdk.helpers.constants import HOME_PATH_ENV_VAR
+from ai_core_sdk.helpers.constants import ENV_VAR_AICORE_HOME_PATH
 
 from click.testing import CliRunner
 
@@ -30,7 +30,7 @@ class TestAICoreCLI(TestCase):
 
     def test_from_env(self):
         with tempfile.TemporaryDirectory() as temp_dir:
-            with patch.dict(os.environ, {HOME_PATH_ENV_VAR: temp_dir}):
+            with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: temp_dir}):
                 from ai_core_sdk.cli import cli
                 runner = CliRunner()
                 temp_dir = pathlib.Path(temp_dir)
@@ -52,7 +52,7 @@ class TestAICoreCLI(TestCase):
 
     def test_from_input(self):
         with tempfile.TemporaryDirectory() as temp_dir:
-            with patch.dict(os.environ, {HOME_PATH_ENV_VAR: temp_dir}):
+            with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: temp_dir}):
                 from ai_core_sdk.cli import cli
                 runner = CliRunner()
                 result = runner.invoke(cli, [f'configure', '-s', AICORE_DUMMY_KEY['clientsecret'],

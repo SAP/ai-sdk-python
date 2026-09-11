@@ -1,4 +1,17 @@
 # Release Notes
+## gen-v7.3.0 (2026-09-08)
+
+### Features
+- Added Support for $top and $skip parameters for fetching prompt templates from Prompt Registry
+
+### Bugfixes
+- Fixed error handling in Evaluations Client
+- Upgraded langchain
+- Upgraded langchain-google-genai
+- Upgraded langchain-openai
+- Upgraded langchain-aws
+- Upgraded google-genai
+
 ## 7.2.0
 
 ### Features

@@ -10,11 +10,11 @@ from dataclasses import dataclass
 from gen_ai_hub.evaluations.constants import (
     AI_CORE_PREFIX,
     AUTH_ENDPOINT_SUFFIX,
-    CONFIG_FILE_ENV_VAR,
-    PROFILE_ENV_VAR,
+    ENV_VAR_AICORE_CONFIG_FILE,
+    ENV_VAR_AICORE_PROFILE,
     VCAP_AICORE_SERVICE_NAME,
-    VCAP_SERVICES_ENV_VAR,
-    HOME_PATH_ENV_VAR,
+    ENV_VAR_VCAP_SERVICES,
+    ENV_VAR_AICORE_HOME_PATH,
     DEFAULT_HOME_PATH,
 )
 from gen_ai_hub.evaluations.helpers.logging import get_logger
@@ -23,7 +23,7 @@ logger = get_logger()
 
 
 def get_home() -> str:
-    return os.environ.get(HOME_PATH_ENV_VAR, DEFAULT_HOME_PATH)
+    return os.environ.get(ENV_VAR_AICORE_HOME_PATH, DEFAULT_HOME_PATH)
 
 
 def get_nested_value(data_dict, keys: List[str]):
@@ -46,7 +46,7 @@ class VCAPEnvironment:
 
     @classmethod
     def from_env(cls, env_var: Optional[str] = None):
-        env_var = env_var or VCAP_SERVICES_ENV_VAR
+        env_var = env_var or ENV_VAR_VCAP_SERVICES
         env = json.loads(os.environ.get(env_var, '{}'))
         return cls.from_dict(env)
 
@@ -155,9 +155,9 @@ CREDENTIAL_VALUES: Final[List[CredentialsValue]] = [
 def init_conf(profile: str = None):
     # Read configuration from ${AICORE_HOME}/config_<profile>.json.
     home = pathlib.Path(get_home())
-    profile = profile or os.environ.get(PROFILE_ENV_VAR)
+    profile = profile or os.environ.get(ENV_VAR_AICORE_PROFILE)
     profile_config_file = f'config_{profile}.json'
-    direct_config_file = pathlib.Path(os.getenv(CONFIG_FILE_ENV_VAR)) if os.getenv(CONFIG_FILE_ENV_VAR) else None
+    direct_config_file = pathlib.Path(os.getenv(ENV_VAR_AICORE_CONFIG_FILE)) if os.getenv(ENV_VAR_AICORE_CONFIG_FILE) else None
     path_to_config = (direct_config_file or
                       (home / ('config.json' if profile in ('default', '', None) else profile_config_file)))
     config = {}
