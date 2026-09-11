@@ -1,4 +1,5 @@
 from .azure_content_filter import AzureContentSafetyInput, AzureContentSafetyOutput, AzureContentFilter, AzureThreshold
+from .cache_control import CacheControl
 from .config import (ModuleConfig, OrchestrationConfig, OrchestrationConfigReference,
                      CompletionRequestConfigurationReferenceByIdConfigRef,
                      CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
@@ -20,7 +21,7 @@ from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
                      ResponseChatMessage, FunctionCall, MessageToolCall)
 from .multimodal_items import ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem
-from .response import (PromptTokensDetails, CompletionTokensDetails, TokenUsage, GenericModuleResult, TopLogprob,
+from .response import (CacheCreationTokenDetails, PromptTokensDetails, CompletionTokensDetails, TokenUsage, GenericModuleResult, TopLogprob,
                       ChatCompletionTokenLogprob, ChoiceLogprobs, LLMChoice, StreamFunctionObject, StreamToolCall,
                       StreamDelta, StreamLLMChoice, Citation, LLMModuleResult, StreamLLMModuleResult, ModuleResults,
                       StreamModuleResults, SAPAPIError, SAPAPIErrorStreaming, CompletionPostResponse, 
@@ -36,6 +37,9 @@ from .translation import (TranslationConfig, SAPDocumentTranslation, SAPDocument
 
 
 __all__ = [
+    # cache_control
+    "CacheControl",
+
     # azure_content_filter
     "AzureContentFilter", "AzureContentSafetyInput", "AzureContentSafetyOutput", "AzureThreshold",
     
@@ -79,7 +83,7 @@ __all__ = [
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
     
     # response
-    "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
+    "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
     "ChatCompletionTokenLogprob", "ChoiceLogprobs", "LLMChoice", "StreamFunctionObject", "StreamToolCall",
     "StreamDelta", "StreamLLMChoice", "Citation", "LLMModuleResult", "StreamLLMModuleResult", "ModuleResults",
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",

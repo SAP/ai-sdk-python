@@ -1,4 +1,7 @@
 expected = {
+    # cache_control
+    "CacheControl",
+
     # azure_content_filter
     "AzureContentFilter", "AzureContentSafetyInput", "AzureContentSafetyOutput", "AzureThreshold",
 
@@ -46,7 +49,7 @@ expected = {
     "ChatCompletionTokenLogprob", "ChoiceLogprobs", "LLMChoice", "StreamFunctionObject", "StreamToolCall",
     "StreamDelta", "StreamLLMChoice", "Citation", "LLMModuleResult", "StreamLLMModuleResult", "ModuleResults",
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",
-    "StreamCompletionPostResponse", "ErrorResponse", "ErrorResponseStreaming", "OrchestrationResponseWithRetries",
+    "StreamCompletionPostResponse", "ErrorResponse", "ErrorResponseStreaming", "OrchestrationResponseWithRetries", "CacheCreationTokenDetails",
 
     # response_format
     "ResponseFormatText", "ResponseFormatJsonObject", "ResponseFormatJsonSchema", "JSONResponseSchema",
@@ -72,8 +75,8 @@ expected = {
     "OrchestrationService",
 
     # Exceptions
-    "OrchestrationError", "OrchestrationErrorList"
-            }
+    "OrchestrationError", "OrchestrationErrorList",
+        }
 
 
 def test_flat_import_all():
