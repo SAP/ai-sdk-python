@@ -92,7 +92,8 @@ class DockerRegistrySecretsClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
         body = {'data': data}
-        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{name}', body=body)
+        headers = {'Content-Type': 'application/merge-patch+json'}
+        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{name}', body=body, headers=headers)
         return BasicResponse.from_dict(response_dict)
 
     def query(self, top: int = None, skip: int = None) -> DockerRegistrySecretQueryResponse:

@@ -2,7 +2,7 @@
 ## gen-v7.3.0 (2026-09-08)
 
 ### Features
-- Added Support for \$top and \$skip parameters for fetching prompt templates from Prompt Registry
+- Added Support for $top and $skip parameters for fetching prompt templates from Prompt Registry
 
 ### Bugfixes
 - Fixed error handling in Evaluations Client
