@@ -44,6 +44,7 @@ In the table below, you can see which models and vendor specific langchain packa
 
 There are different ways to configure the SAP AI Core access (listed in order of precedence):
 
+- from AICORE_SERVICE_KEY environment variable, if it exists
 - environment variables
 - (profile) configuration file
 - from VCAP_SERVICES environment variable, if it exists
@@ -72,6 +73,22 @@ as an alternative to client secret.
 - `AICORE_CERT_STR`: This is the content of the X.509 certificate as a string
 - `AICORE_KEY_STR`: This is the content of the X.509 key as a string
 
+### AICORE_SERVICE_KEY environment variable
+
+If you have an SAP AI Core service key (downloaded from BTP), you can pass it as a single environment variable instead of setting each credential separately. The SDK extracts `clientid`, `clientsecret`, `url`, and `AI_API_URL` from it automatically. You still need to set `AICORE_RESOURCE_GROUP` separately, as the resource group is not part of the service key.
+
+```bash
+export AICORE_SERVICE_KEY='{
+  "serviceurls": {
+    "AI_API_URL": "https://api.ai.* * *.cfapps.sap.hana.ondemand.com"
+  },
+  "clientid": "* * * ",
+  "clientsecret": "* * * ",
+  "url": "https://* * * .authentication.sap.hana.ondemand.com"
+}'
+export AICORE_RESOURCE_GROUP="default"
+```
+
 ### Configuration files
 
 By default, the configuration file is located at `~/.aicore/config.json`. You can change the directory where the config file is located by setting the `AICORE_HOME` environment variable.
@@ -99,6 +116,15 @@ The configuration file should be:
   "AICORE_CLIENT_SECRET": "* * * ",
   "AICORE_RESOURCE_GROUP": "* * * ",
   "AICORE_BASE_URL": "https://api.ai.* * *.cfapps.sap.hana.ondemand.com/v2"
+}
+```
+
+or
+
+```json
+{
+  "AICORE_SERVICE_KEY": "{\"serviceurls\":{\"AI_API_URL\":\"https://api.ai.***.cfapps.sap.hana.ondemand.com\"},\"clientid\":\"***\",\"clientsecret\":\"***\",\"url\":\"https://***.authentication.sap.hana.ondemand.com\"}",
+  "AICORE_RESOURCE_GROUP": "***"
 }
 ```
 
