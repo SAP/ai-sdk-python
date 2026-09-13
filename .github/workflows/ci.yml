@@ -159,4 +159,5 @@ jobs:
             --verbosity=2 \
             -ra \
             --disable-warnings \
+            --durations=0 \
             -m "not bedrock"
