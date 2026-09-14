@@ -31,3 +31,31 @@ class ABCBaseModel(BaseModel, ABC):
         kwargs.setdefault("by_alias", True)
         kwargs.setdefault("exclude_none", True)
         return super().model_dump(**kwargs)
+
+
+class ResponseBaseModel(BaseModel):
+    """
+    Base model for API response models.
+
+    - `extra="allow"` allows unexpected fields in responses to be accepted,
+      since the external API might introduce new attributes in the response.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=False,
+    )
+
+
+class ResponseBaseModel(BaseModel):
+    """
+    Base model for API response models.
+
+    - `extra="allow"` allows unexpected fields in responses to be accepted,
+      since the external API might introduce new attributes in the response.
+    """
+
+    model_config = ConfigDict(
+        extra="allow",
+        frozen=False,
+    )
