@@ -1,11 +1,8 @@
 # Release Notes
 ## gen-v7.4.0 (2026-09-14)
 
-
-- feat(gen): upgrade sap-ai-sdk-core (#145)
-- which includes:
-- service key support
-- minor fixes
+### Features
+- Added support for AI Core service key
 
 ## gen-v7.3.0 (2026-09-08)
 
