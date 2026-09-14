@@ -67,8 +67,8 @@ class ReasoningBlock(BaseModel):
         content: The reasoning content.
         signature: Signature string for hidden reasoning content.
     """
-    content: str
-    signature: str
+    content: str = ""
+    signature: str = ""
 
 
 class Role(str, Enum):
@@ -168,6 +168,7 @@ class AssistantMessage(BaseModel):
     content: Optional[Union[str, List[TextPart]]] = None
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class ToolChatMessage(BaseModel):
@@ -206,4 +207,4 @@ ChatMessage = Union[SystemMessage, UserMessage, AssistantMessage, ToolChatMessag
 ResponseChatMessage]
 
 __all__ = ["Role", "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-           "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall"]
+           "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock"]
