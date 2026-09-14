@@ -4182,7 +4182,7 @@ dev = [
 
 [[package]]
 name = "sap-ai-sdk-core"
-version = "3.3.1"
+version = "3.4.0"
 source = { editable = "packages/core" }
 dependencies = [
     { name = "click" },
