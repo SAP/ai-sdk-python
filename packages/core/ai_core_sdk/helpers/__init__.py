@@ -2,7 +2,7 @@ import os
 from typing import Dict
 
 from ai_api_client_sdk.helpers.authenticator import Authenticator
-from .constants import DEFAULT_HOME_PATH, HOME_PATH_ENV_VAR
+from .constants import DEFAULT_HOME_PATH, ENV_VAR_AICORE_HOME_PATH
 
 
 def form_top_skip_params(top: int = None, skip: int = None) -> Dict[str, int]:
@@ -36,4 +36,4 @@ def is_within_aicore() -> bool:
 
 
 def get_home() -> str:
-    return os.environ.get(HOME_PATH_ENV_VAR, DEFAULT_HOME_PATH)
+    return os.environ.get(ENV_VAR_AICORE_HOME_PATH, DEFAULT_HOME_PATH)

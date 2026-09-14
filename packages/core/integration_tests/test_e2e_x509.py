@@ -9,8 +9,8 @@ from . import (BASE_URL, CLIENT_ID, RESOURCE_GROUP_ID, X509_CERT_URL, X509_CERT_
 from . import write_x509_credentials_into_files, remove_x509_credentials
 from .ai_core_v2_client_e2e_test_base import AICoreV2ClientE2ETestBase
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, HOME_PATH_ENV_VAR, VCAP_AICORE_SERVICE_NAME,
-                                           VCAP_SERVICES_ENV_VAR)
+from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, ENV_VAR_AICORE_HOME_PATH, VCAP_AICORE_SERVICE_NAME,
+                                           ENV_VAR_VCAP_SERVICES)
 from ai_core_sdk.models import Scenario
 
 
@@ -72,7 +72,7 @@ class TestE2EX509(AICoreV2ClientE2ETestBase):
         self.assertIsNotNone(scenario.id)
         self.assertIsNotNone(scenario.name)
 
-    @patch.dict(os.environ, {VCAP_SERVICES_ENV_VAR: VCAP_SERVICE_X509_ENV_VALUE, 'AICORE_RESOURCE_GROUP': RESOURCE_GROUP_ID})
+    @patch.dict(os.environ, {ENV_VAR_VCAP_SERVICES: VCAP_SERVICE_X509_ENV_VALUE, 'AICORE_RESOURCE_GROUP': RESOURCE_GROUP_ID})
     def test_x509_from_vcap(self):
         client = AICoreV2Client.from_env()
         self._query_and_assert_scenarios(client)
@@ -86,7 +86,7 @@ class TestE2EX509(AICoreV2ClientE2ETestBase):
                 json.dump({}, f)
             with open(profile_config_path, 'w') as f:
                 json.dump(self.valid_x509_config, f)
-            with patch.dict(os.environ, {HOME_PATH_ENV_VAR: str(temp_dir)}):
+            with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: str(temp_dir)}):
                 client = AICoreV2Client.from_env(profile_name=profile)
                 self._query_and_assert_scenarios(client)
 

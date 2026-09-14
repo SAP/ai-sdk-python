@@ -76,7 +76,7 @@ class SecretsClient(BaseClient):
 
         response_dict = self.rest_client.delete(path=f'{self.__PATH}/{name}', resource_group=resource_group,
                                                 headers=headers)
-        if response_dict == 200:
+        if response_dict == 200 or response_dict == '':
             response_dict = { "message": "Secret has been deleted" }
         return Message.from_dict(response_dict)
 
