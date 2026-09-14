@@ -1,4 +1,4 @@
-## core-v3.4.0 (2026-09-11)
+## core-v3.4.0 (2026-09-14)
 
 ### Features
 - Added support for AICORE_SERVICE_KEY as credential
