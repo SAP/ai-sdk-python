@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, openai, orchestration
+from sample_code import amazon, core, google, grounding, langchain_orchestration, openai, orchestration, prompt_registry, sap_rpt
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -45,6 +45,21 @@ app.get("/google/tool-call")(google.tool_call)
 # Amazon/Anthropic
 app.get("/amazon/converse")(amazon.converse)
 
+# LangChain
+app.get("/langchain/chat-completion")(langchain_orchestration.init_llm_chat_completion)
+app.get("/langchain/embedding")(langchain_orchestration.init_embedding)
+app.get("/langchain/chat-completion-with-fallback")(langchain_orchestration.invoke_chain_with_fallback_configs)
+app.get("/langchain/dynamic-model-agent")(langchain_orchestration.invoke_dynamic_model_agent)
+app.get("/langchain/tool-chain")(langchain_orchestration.tool_chain)
+app.get("/langchain/structured-output")(langchain_orchestration.structured_output)
+app.get("/langchain/langgraph/chat-completion")(langchain_orchestration.langgraph_chat_completion)
+app.get("/langchain/langgraph/chat-completion-stream")(langchain_orchestration.langgraph_chat_completion_stream)
+
+# SAP RPT-1
+app.get("/sap-rpt/predict-by-rows")(sap_rpt.predict_by_rows)
+app.get("/sap-rpt/predict-by-columns")(sap_rpt.predict_by_columns)
+app.get("/sap-rpt/predict-regression")(sap_rpt.regression)
+
 # Orchestration
 app.get("/orchestration/completion")(orchestration.completion)
 app.get("/orchestration/completion-async")(orchestration.completion_async)
@@ -68,3 +83,23 @@ app.get("/orchestration/embedding-masked")(orchestration.embedding_masked)
 app.get("/orchestration/tool-call-decorator")(orchestration.tool_call_decorator)
 app.get("/orchestration/tool-call-function-tool")(orchestration.tool_call_function_tool)
 app.get("/orchestration/tool-call-json")(orchestration.tool_call_json)
+
+# Prompt Registry - Prompt Templates
+app.post("/prompt-registry/template/create")(prompt_registry.create_prompt_template)
+app.get("/prompt-registry/templates")(prompt_registry.get_prompt_templates)
+app.delete("/prompt-registry/template/{template_id}")(prompt_registry.delete_prompt_template)
+
+# Prompt Registry - Orchestration Configs
+app.post("/prompt-registry/config/create")(prompt_registry.create_orchestration_config)
+app.get("/prompt-registry/configs")(prompt_registry.get_orchestration_configs)
+
+# Document Grounding - Vector API
+app.post("/document-grounding/vector/create-collection")(grounding.create_collection)
+app.delete("/document-grounding/vector/delete-collection/{collection_id}")(grounding.delete_collection)
+app.post("/document-grounding/vector/add-documents/{collection_id}")(grounding.create_documents)
+
+# Document Grounding - Pipeline API
+app.get("/document-grounding/pipeline/get-pipelines")(grounding.get_pipelines)
+
+# Document Grounding - Retrieval API
+app.get("/document-grounding/retrieval/search")(grounding.retrieval_documents)
