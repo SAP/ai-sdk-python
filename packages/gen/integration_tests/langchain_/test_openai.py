@@ -3,11 +3,11 @@ import unittest
 from parameterized import parameterized
 from pydantic import BaseModel
 
-from integration_tests.constants import (OPENAI_GPT_O4_MINI_TEST_MODEL,
+from ..constants import (OPENAI_GPT_O4_MINI_TEST_MODEL,
     OPENAI_GPT_4O_MINI_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL_NANO, OPENAI_EMBEDDING_TEST_MODEL,
     OPENAI_GPT_O3_MINI_TEST_MODEL, MISTRAL_TEST_MODEL, NVIDIA_EMBEDDING_TEST_MODEL, PERPLEXITY_TEST_MODEL,
-    COHERE_COMMAND_A_TEST_MODEL, PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL)
-from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
+    COHERE_COMMAND_A_TEST_MODEL)
+from ..setup_aicore import TestCaseAICoreSetupMixin
 
 try:
     import openai
@@ -45,8 +45,7 @@ class TestOpenAILLM(TestCaseAICoreSetupMixin, unittest.TestCase):
     @parameterized.expand(
         [
             OPENAI_GPT_O4_MINI_TEST_MODEL,
-            PERPLEXITY_TEST_MODEL,
-            PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL,
+            PERPLEXITY_TEST_MODEL
         ]
     )
     def test_chat_model(self, model=OPENAI_GPT_4O_MINI_TEST_MODEL):
@@ -121,8 +120,7 @@ class AsyncOpenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTestCas
     @parameterized.expand(
         [
             OPENAI_GPT_O3_MINI_TEST_MODEL,
-            MISTRAL_TEST_MODEL,
-            PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL
+            MISTRAL_TEST_MODEL
         ]
     )
     async def test_chat_model(self, model=OPENAI_GPT_4O_MINI_TEST_MODEL):

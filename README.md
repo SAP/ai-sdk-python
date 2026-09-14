@@ -1,4 +1,5 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP/ai-sdk-python)](https://api.reuse.software/info/github.com/SAP/ai-sdk-python)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/SAP/ai-sdk-python)
 
 # SAP Cloud SDK for AI (Python)
 

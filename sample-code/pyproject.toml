@@ -1,0 +1,23 @@
+[project]
+name = "sample-code"
+version = "0.1.0"
+description = "Sample code for using the AI Core Python SDK"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.141.1",
+    "sap-ai-sdk-gen",
+    "uvicorn>=0.52.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-root = ""
+
+[tool.uv.sources]
+sap-ai-sdk-gen = { workspace = true, editable = true }
