@@ -40,7 +40,7 @@ __all__ = [
 
     # message
     "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall",
+    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock",
 
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
