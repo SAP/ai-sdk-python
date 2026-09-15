@@ -264,8 +264,10 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
             # Set AI-Client-Type header specific to generated AI Hub SDK.
             # Is overwritten by environment variable AI_CLIENT_TYPE if set.
             kwargs['client_type'] = cls.AI_CLIENT_TYPE_VAL
-            data['ai_core_client'] = AICoreV2Client.from_env(**kwargs)
-
+            ai_core_client = AICoreV2Client.from_env(**kwargs)
+            data['ai_core_client'] = ai_core_client
+            if data.get('resource_group') is None:
+                data['resource_group'] = ai_core_client.rest_client.headers.get('AI-Resource-Group')
 
         return data
 

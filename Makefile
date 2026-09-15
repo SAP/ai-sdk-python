@@ -1,7 +1,12 @@
-.PHONY: install docs lint license-check test test-integration test-pkg test-pkg-integration
+.PHONY: install generate docs lint license-check test test-integration test-pkg test-pkg-integration
 
 install:
 	uv sync --all-packages --all-extras
+
+GENERATE_PACKAGES := $(dir $(shell grep -rl "^generate:" packages/*/Makefile 2>/dev/null))
+
+generate:
+	$(foreach pkg,$(GENERATE_PACKAGES),$(MAKE) -C $(pkg) generate;)
 
 docs:
 	uv run sphinx-apidoc -e -M -f -T \
