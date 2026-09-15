@@ -59,6 +59,17 @@ class MessageToolCall(BaseModel):
     type: typing.Literal["function"] = "function"
     function: FunctionCall
 
+class ReasoningBlock(BaseModel):
+    """
+    The reasoning content returned by the model.
+
+    Attributes:
+        content: The reasoning content.
+        signature: Signature string for hidden reasoning content.
+    """
+    content: str
+    signature: str
+
 
 class Role(str, Enum):
     """
@@ -182,11 +193,14 @@ class ResponseChatMessage(BaseModel):
         refusal: A string indicating refusal reason.
 
         tool_calls: A list of tool call objects.
+
+        reasoning_content: A list of reasoning content blocks.
     """
     role: Role = Role.ASSISTANT
     content: str
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 ChatMessage = Union[SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage,
 ResponseChatMessage]
