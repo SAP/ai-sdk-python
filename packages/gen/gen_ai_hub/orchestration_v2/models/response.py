@@ -27,16 +27,35 @@ class ResponseBaseModel(BaseModel):
     )
 
 
+class CacheCreationTokenDetails(ResponseBaseModel):
+    """
+    Per-TTL breakdown of tokens written to the prompt cache.
+
+    Present only when cache_control includes an explicit ttl value.
+
+    Attributes:
+        ephemeral_5m_input_tokens: Tokens cached with a 5-minute TTL.
+        ephemeral_1h_input_tokens: Tokens cached with a 1-hour TTL.
+    """
+    ephemeral_5m_input_tokens: Optional[int] = None
+    ephemeral_1h_input_tokens: Optional[int] = None
+
+
 class PromptTokensDetails(ResponseBaseModel):
     """
     Represents the details of prompt tokens used in a specific operation.
 
     Attributes:
         audio_tokens (Optional[int]): Audio input tokens present in the prompt.
-        cached_tokens (Optional[int]): Cached tokens present in the prompt.
+        cached_tokens (Optional[int]): Tokens read from the prompt cache (cache hit).
+        cache_creation_tokens (Optional[int]): Tokens written to the prompt cache (cache miss).
+        cache_creation_token_details (Optional[CacheCreationTokenDetails]): Per-TTL
+            breakdown of cache writes. Present only when an explicit ttl was used.
     """
     audio_tokens: Optional[int] = None
     cached_tokens: Optional[int] = None
+    cache_creation_tokens: Optional[int] = None
+    cache_creation_token_details: Optional[CacheCreationTokenDetails] = None
 
 class CompletionTokensDetails(ResponseBaseModel):
     """
@@ -385,7 +404,8 @@ class OrchestrationResponseWithRetries(CompletionPostResponse):
     """
     retries: int = 0
 
-__all__ = ["PromptTokensDetails",
+__all__ = ["CacheCreationTokenDetails",
+    "PromptTokensDetails",
     "CompletionTokensDetails",
     "TokenUsage",
     "GenericModuleResult",
