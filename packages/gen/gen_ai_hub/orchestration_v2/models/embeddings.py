@@ -7,7 +7,7 @@ from typing import Optional, Dict, List, Union
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 
 
@@ -117,7 +117,7 @@ class EmbeddingsInput(BaseModel):
     type_: Optional[EmbeddingsInputType] = Field(default=None, alias="type")
 
 
-class EmbeddingsUsage(BaseModel):
+class EmbeddingsUsage(ResponseBaseModel):
     """
     Token usage information for the embeddings request.
 
@@ -129,7 +129,7 @@ class EmbeddingsUsage(BaseModel):
     total_tokens: int
 
 
-class EmbeddingResult(BaseModel):
+class EmbeddingResult(ResponseBaseModel):
     """
     A single embedding result.
 
@@ -143,7 +143,7 @@ class EmbeddingResult(BaseModel):
     index: int
 
 
-class EmbeddingsResponse(BaseModel):
+class EmbeddingsResponse(ResponseBaseModel):
     """
     The response from the embedding model, following OpenAI specification.
 
@@ -159,7 +159,7 @@ class EmbeddingsResponse(BaseModel):
     usage: EmbeddingsUsage
 
 
-class EmbeddingsPostResponse(BaseModel):
+class EmbeddingsPostResponse(ResponseBaseModel):
     """
     Response for an embeddings POST request.
 
