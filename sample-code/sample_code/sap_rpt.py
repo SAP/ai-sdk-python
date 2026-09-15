@@ -33,6 +33,14 @@ REGRESSION_ROWS = [
     {"PRODUCT": "Monitor 27 inch", "PRICE": 289.99, "ORDERDATE": "08-11-2025", "ID": "306", "DISCOUNT_RATE": "[PREDICT]"},
 ]
 
+REGRESSION_SCHEMA = {
+    "PRODUCT": DataType(dtype="string"),
+    "PRICE": DataType(dtype="numeric"),
+    "ORDERDATE": DataType(dtype="date"),
+    "ID": DataType(dtype="string"),
+    "DISCOUNT_RATE": DataType(dtype="numeric"),
+}
+
 
 def predict_by_rows():
     """
@@ -93,6 +101,8 @@ def regression():
         prediction_config=PredictionConfig(
             target_columns=[TargetColumn(name="DISCOUNT_RATE", task_type="regression")]
         ),
+        index_column="ID",
         rows=REGRESSION_ROWS,
+        data_schema=REGRESSION_SCHEMA,
     )
     return client.predict(body=body, model_name=MODEL_NAME)

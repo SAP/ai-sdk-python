@@ -184,7 +184,7 @@ class ResponseChatMessage(BaseModel):
         tool_calls: A list of tool call objects.
     """
     role: Role = Role.ASSISTANT
-    content: str
+    content: Optional[str] = None
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
 

@@ -15,13 +15,13 @@ def create_prompt_template():
     """
     Create a prompt template with a user-input placeholder.
 
-    The placeholder {{ ?user_input }} will be substituted at runtime via fill_prompt_template.
+    The placeholder {{?user_input}} will be substituted at runtime via fill_prompt_template.
     """
     client = PromptTemplateClient()
     spec = PromptTemplateSpec(
         template=[
             PromptTemplate(role="system", content="You are a helpful assistant."),
-            PromptTemplate(role="user", content="Hello World!"),
+            PromptTemplate(role="user", content="{{?user_input}}"),
         ]
     )
     return client.create_prompt_template(
@@ -30,6 +30,25 @@ def create_prompt_template():
         version=VERSION,
         prompt_template_spec=spec,
     )
+
+
+def fill_prompt_template():
+    """
+    Fill the prompt template placeholders with concrete values.
+
+    Replaces the {{?user_input}} placeholder in the template with a concrete question.
+
+    Returns:
+        JSON object containing the filled prompt messages.
+    """
+    client = PromptTemplateClient()
+    response = client.fill_prompt_template(
+        scenario=SCENARIO,
+        name=TEMPLATE_NAME,
+        version=VERSION,
+        input_params={"user_input": "What are the main features of SAP BTP?"},
+    )
+    return {"result": [msg.model_dump() for msg in response.parsed_prompt]}
 
 
 def get_prompt_templates():

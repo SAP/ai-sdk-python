@@ -13,6 +13,30 @@ from gen_ai_hub.proxy.core import get_proxy_client
 from gen_ai_hub.proxy.langchain.init_models import init_embedding_model, init_llm
 from gen_ai_hub.proxy.langchain.openai import ChatOpenAI
 
+def init_llm_chat_completion():
+    """
+    Run a basic chat completion using the init_llm helper.
+
+    Returns:
+        JSON object containing the model response.
+    """
+    llm = init_llm("gpt-5.4-nano")
+    result = llm.invoke("Tell me something about the SAP AI SDK")
+    return {"result": StrOutputParser().invoke(result)}
+
+
+def init_embedding():
+    """
+    Generate an embedding vector using the init_embedding_model helper.
+
+    Returns:
+        JSON object containing the embedding vector.
+    """
+    embedding_model = init_embedding_model("text-embedding-3-small")
+    result = embedding_model.embed_query("SAP AI SDK")
+    return {"result": result}
+
+
 def _build_langgraph_app(model_name: str = "gpt-5.4-nano"):
     """Build a simple single-node LangGraph app with in-memory checkpointing."""
     llm = ChatOpenAI(proxy_model_name=model_name)
@@ -96,7 +120,7 @@ def tool_chain():
     Returns:
         JSON object containing the final model response.
     """
-    llm = ChatOpenAI(proxy_model_name="gpt-5.4")
+    llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
 
     @tool
     def shareholder_value(value: float) -> str:
