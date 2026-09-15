@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sap-ai-sdk-gen"
-version = "7.3.0"
+version = "7.4.0"
 description = "SAP Cloud SDK for AI (Python): generative AI SDK"
 readme = "PYPIDESCRIPTION.md"
 license = "Apache-2.0"
@@ -38,7 +38,7 @@ dependencies = [
     "click>=8.1.7",
     "overloading==0.5.0",
     "packaging>=23.2",
-    "sap-ai-sdk-core>=3.3.0",
+    "sap-ai-sdk-core>=3.4.0",
     "pydantic~=2.12",
     "openai>=1.66.0",
     "langcodes~=3.5.1",
@@ -50,7 +50,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-google = ["google-genai~=2.22.0", "langchain-google-genai~=4.3.6,<4.3.7"]
+google = ["google-genai~=2.23.0", "langchain-google-genai~=4.3.6,<4.3.7"]
 amazon = ["boto3>=1.40.61", "aiobotocore>=3.2.0", "langchain-aws~=1.7.0"]
 all = ["sap-ai-sdk-gen[google,amazon]"]
 
