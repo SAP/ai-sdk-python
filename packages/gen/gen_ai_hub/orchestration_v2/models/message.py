@@ -139,7 +139,7 @@ class UserMessage(BaseModel):
         return mapped_content
 
 
-class AssistantMessage(BaseModel):
+class AssistantMessage(ResponseBaseModel):
     """
     Represents an assistant message in a prompt or conversation template.
 
