@@ -1,4 +1,4 @@
-"""Cache control for prompt caching on supported Anthropic and Amazon Nova models."""
+"""Cache control for prompt caching on supported models."""
 from typing import Any, Dict, Literal, Optional
 
 from pydantic import model_serializer
@@ -12,10 +12,6 @@ class CacheControl(BaseModel):
     When attached to a content block, the model stores intermediate computation
     results for that content and reuses them on subsequent requests within the
     TTL window, reducing both latency and token costs.
-
-    Supported models:
-        - Anthropic Claude: system and user content blocks; tools.
-        - Amazon Nova: system and user content blocks only (no tools, no TTL).
 
     Attach ``CacheControl`` directly to a content block (``TextPart``, ``ImagePart``) or
     to a ``ChatCompletionTool``.

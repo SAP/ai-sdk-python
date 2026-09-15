@@ -41,11 +41,10 @@ class TextPart(BaseModel):
         type: The type identifier, defaulting to "text".
 
         cache_control: Optional cache control settings for prompt caching.
-            Only supported for Anthropic Claude and Amazon Nova models.
     """
     text: str
     type_: Literal["text"] = Field(default="text", alias="type")
-    cache_control: Optional[CacheControl] = Field(default=None, exclude=False)
+    cache_control: Optional[CacheControl] = None
 
 
 class ImageUrl(BaseModel):
@@ -71,11 +70,10 @@ class ImagePart(BaseModel):
         type: The type identifier, defaulting to "image_url".
 
         cache_control: Optional cache control settings for prompt caching.
-            Only supported for Anthropic Claude models.
     """
     image_url: ImageUrl
     type_: Literal["image_url"] = Field(default="image_url", alias="type")
-    cache_control: Optional[CacheControl] = Field(default=None, exclude=False)
+    cache_control: Optional[CacheControl] = None
 
 
 ContentPart = Union[TextPart, ImagePart]

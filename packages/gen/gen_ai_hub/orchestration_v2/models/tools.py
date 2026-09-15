@@ -70,8 +70,8 @@ class ChatCompletionTool(BaseModel):
     """A tool the model may call, identified by type ``"function"``.
 
     Args:
-        cache_control: Prompt-caching directive. Supported on Anthropic Claude only;
-            not supported on Amazon Nova.
+        type (Literal["function"]): The type of the tool. Currently, only function is supported.
+        cache_control: Prompt-caching directive.
     """
     type_: Literal["function"] = Field(default="function", alias="type")
     cache_control: Optional[CacheControl] = None
@@ -100,8 +100,7 @@ class FunctionTool(ChatCompletionTool):
 
     Args:
         type: Always ``"function"``. Serialized via the ``type`` alias.
-        cache_control: Prompt-caching directive. Supported on Anthropic Claude only;
-            not supported on Amazon Nova.
+        cache_control: Prompt-caching directive.
 
     Additional args:
 
