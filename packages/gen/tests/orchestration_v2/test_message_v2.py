@@ -15,7 +15,7 @@ class TestResponseChatMessageValidation(unittest.TestCase):
             "content": "Hello",
             "reasoning_content": [{"content": "I think...", "signature": "sig123"}],
         })
-        assert msg.reasoning_content is not None
+        self.assert_IsNotNone(msg.reasoning_content)
         self.assertIsInstance(msg.reasoning_content[0], ReasoningBlock)
 
     def test_reasoning_content_optional(self):
