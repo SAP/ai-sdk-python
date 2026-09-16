@@ -36,7 +36,7 @@ expected = {
 
     # message
     "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock",
+    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall",
 
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",

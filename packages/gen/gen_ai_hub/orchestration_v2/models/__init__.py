@@ -18,7 +18,7 @@ from .embeddings import (EmbeddingsEncodingFormat, EmbeddingsInputType, Embeddin
 from .llama_guard_3_filter import LlamaGuard38bFilter
 from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
-                     ResponseChatMessage, FunctionCall, MessageToolCall, ReasoningBlock)
+                     ResponseChatMessage, FunctionCall, MessageToolCall)
 from .multimodal_items import ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem
 from .response import (PromptTokensDetails, CompletionTokensDetails, TokenUsage, GenericModuleResult, TopLogprob,
                       ChatCompletionTokenLogprob, ChoiceLogprobs, LLMChoice, StreamFunctionObject, StreamToolCall,
@@ -73,7 +73,7 @@ __all__ = [
     
     # message
     "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock",
+    "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall",
     
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
