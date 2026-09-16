@@ -18,8 +18,7 @@ class CacheControl(BaseModel):
     
     Args:
         type: ``"ephemeral"``
-        ttl: Cache duration. ``"5m"`` (default) or ``"1h"`` (select Anthropic
-             models only). Omit for Amazon Nova or when the default is sufficient.
+        ttl: Cache duration. ``"5m"`` (default) or ``"1h"``.
     """
 
     type: Literal["ephemeral"]
