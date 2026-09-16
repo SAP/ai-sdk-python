@@ -206,4 +206,4 @@ ChatMessage = Union[SystemMessage, UserMessage, AssistantMessage, ToolChatMessag
 ResponseChatMessage]
 
 __all__ = ["Role", "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-           "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall"]
+           "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock"]
