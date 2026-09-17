@@ -55,7 +55,7 @@ class TestAmazonLangchain(unittest.TestCase):
         response = chain.invoke("I love programming")
         self.assertIsInstance(response["text"], str)
 
-    @patch("langchain_community.embeddings.bedrock.BedrockEmbeddings.embed_query")
+    @patch("langchain_aws.embeddings.bedrock.BedrockEmbeddings.embed_query")
     def test_embedding_model(self, mock_chain_invoke):
         mock_chain_invoke.return_value = AMAZON_TITAN_EMBED_QUERY_RESPONSE
         embedding_model = BedrockEmbeddings(
