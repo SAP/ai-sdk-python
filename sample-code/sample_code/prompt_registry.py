@@ -16,6 +16,9 @@ def create_prompt_template():
     Create a prompt template with a user-input placeholder.
 
     The placeholder {{?user_input}} will be substituted at runtime via fill_prompt_template.
+
+    Returns:
+        The created prompt template.
     """
     client = PromptTemplateClient()
     spec = PromptTemplateSpec(
@@ -39,26 +42,38 @@ def fill_prompt_template():
     Replaces the {{?user_input}} placeholder in the template with a concrete question.
 
     Returns:
-        JSON object containing the filled prompt messages.
+        The filled prompt response.
     """
     client = PromptTemplateClient()
-    response = client.fill_prompt_template(
+    return client.fill_prompt_template(
         scenario=SCENARIO,
         name=TEMPLATE_NAME,
         version=VERSION,
         input_params={"user_input": "What are the main features of SAP BTP?"},
     )
-    return {"result": [msg.model_dump() for msg in response.parsed_prompt]}
 
 
 def get_prompt_templates():
-    """List all prompt templates matching the scenario/name/version filter."""
+    """
+    List all prompt templates matching the scenario/name/version filter.
+
+    Returns:
+        List of matching prompt templates.
+    """
     client = PromptTemplateClient()
     return client.get_prompt_templates(scenario=SCENARIO, name=TEMPLATE_NAME, version=VERSION)
 
 
 def delete_prompt_template(template_id: str):
-    """Delete a prompt template by its ID."""
+    """
+    Delete a prompt template by its ID.
+
+    Args:
+        template_id: The ID of the prompt template to delete.
+
+    Returns:
+        HTTP response confirming deletion with HTTP status code 204.
+    """
     client = PromptTemplateClient()
     return client.delete_prompt_template_by_id(template_id)
 
@@ -68,6 +83,9 @@ def create_orchestration_config():
     Create an orchestration config that bundles an LLM and a prompt template.
 
     The config references gpt-5.4-nano and a static Hello World prompt.
+
+    Returns:
+        The created orchestration config.
     """
     client = OrchestrationConfigClient()
     spec = OrchestrationConfig(
@@ -92,7 +110,12 @@ def create_orchestration_config():
 
 
 def get_orchestration_configs():
-    """List orchestration configs matching the scenario/name/version filter."""
+    """
+    List orchestration configs matching the scenario/name/version filter.
+
+    Returns:
+        List of matching orchestration configs.
+    """
     client = OrchestrationConfigClient()
     return client.get_orchestration_configs(
         scenario=SCENARIO,

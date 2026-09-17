@@ -25,7 +25,7 @@ def get_collections():
     List all vector collections available to the tenant.
 
     Returns:
-        JSON object containing the list of collections.
+        List of available collections.
     """
     client = VectorAPIClient()
     return client.get_collections()
@@ -36,7 +36,7 @@ def create_collection():
     Create a new vector collection with a text-embedding model.
 
     Returns:
-        JSON object containing the ID of the created collection.
+        The created collection.
     """
     client = VectorAPIClient()
     return client.create_collection(
@@ -70,7 +70,7 @@ def create_documents(collection_id: str):
         collection_id: The ID of the collection to add documents to.
 
     Returns:
-        JSON object containing the created document IDs.
+        The created documents.
     """
     client = VectorAPIClient()
     return client.create_documents(
@@ -105,7 +105,7 @@ def get_pipelines():
     List all document vectorization pipelines configured for the tenant.
 
     Returns:
-        JSON object containing the list of pipelines with their IDs and types.
+        List of configured pipelines.
     """
     client = PipelineAPIClient()
     return client.get_pipelines()

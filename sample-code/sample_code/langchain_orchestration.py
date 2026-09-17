@@ -8,8 +8,6 @@ from gen_ai_hub.orchestration_v2 import (
     DPIMethodConstant,
     DPIStandardEntity,
     FilteringModuleConfig,
-    FunctionObject,
-    FunctionTool,
     GlobalStreamOptions,
     InputFiltering,
     LLMModelDetails,
@@ -29,9 +27,6 @@ from gen_ai_hub.orchestration_v2 import (
     function_tool,
 )
 from fastapi.responses import StreamingResponse
-from gen_ai_hub.proxy.langchain.openai import ChatOpenAI
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import END, START, MessagesState, StateGraph
 
 def invoke_chain() -> str:
     """
@@ -96,14 +91,8 @@ def invoke_chain_with_output_filter() -> str:
     """
     Invoke the Orchestration Service with an Azure content safety output filter.
 
-    Uses gpt-5.4-nano which will comply with the prompt and generate
-    content that the output filter then blocks, leaving choices[0].message.content empty.
-    Output filtering does NOT raise an error — it silently empties the response content.
-
     Returns:
-        A message confirming the output was filtered.
-    Raises:
-        RuntimeError: If the output was not filtered as expected.
+        The model response as a string, empty if the output was filtered.
     """
     filtering = FilteringModuleConfig(
         output=OutputFiltering(
@@ -141,11 +130,10 @@ def invoke_chain_with_masking() -> str:
     Invoke the Orchestration Service with DPI pseudonymization masking.
 
     PII (name, address, email, phone, date) in the prompt is replaced with
-    pseudonyms before being sent to the model. Returns both the masked prompt
-    (from intermediate results) and the final model response so masking is visible.
+    pseudonyms before being sent to the model.
 
     Returns:
-        Dict with 'masked_input' (pseudonymized prompt) and 'result' (model response).
+        The model response as a string.
     """
     masking = MaskingModuleConfig(
         providers=[
@@ -170,7 +158,7 @@ def invoke_chain_with_masking() -> str:
                 prompt=Template(
                     template=[
                         UserMessage(
-                            content="Generate email that shows the contact info for Jane Doe, born on 1975-03-05, living at 10 Downing Street London UK with email 'jane.doe@mailprovider.com' and phone number +4902044123221."
+                            content="Generate email that shows the contact info for Jane Doe, born on 1975-03-05, living at 10 Downing Street, with email 'jane.doe@mailprovider.com' and phone number +4902044123221."
                         )
                     ]
                 ),

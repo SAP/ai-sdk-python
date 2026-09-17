@@ -48,6 +48,9 @@ def predict_by_rows():
 
     Context rows supply known COSTCENTER values; the query row marked
     with "[PREDICT]" receives a predicted classification.
+
+    Returns:
+        The prediction result.
     """
     client = RPTClient()
     body = RPTRequest(
@@ -72,6 +75,9 @@ def predict_by_columns():
     Classify a target column using column-oriented input data.
 
     Equivalent to predict_by_rows but uses the columns format instead of rows.
+
+    Returns:
+        The prediction result.
     """
     client = RPTClient()
     body = RPTRequest(
@@ -95,6 +101,9 @@ def regression():
     Predict a numeric target column (regression).
 
     Rows with "[PREDICT]" in DISCOUNT_RATE receive a predicted numeric value.
+
+    Returns:
+        The prediction result.
     """
     client = RPTClient()
     body = RPTRequest(
