@@ -1,3 +1,27 @@
+# [7.2.0](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/compare/v7.1.1...v7.2.0) (2026-07-16)
+
+
+### Bug Fixes
+
+* **batch_service:** address code reviews ([4d935aa](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/4d935aafcf9b45794633c5398bb405f82f5102db))
+* **docs:** add docstrings and example notebook ([b3ceefd](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/b3ceefdce235e543463152a913d6ac60317804d7))
+* **tests:** fix batch-service integration tests ([19bae00](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/19bae003d739bbe6d634c19382a8037b77f621b0))
+* **tests:** fix grounding tests ([7989781](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/79897813acf73cb902840e8adc6232c14473ed54))
+
+
+### Features
+
+* **batch_service:** batch service client ([e991eda](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/e991eda467657aa1241806da2e4f73ba47c022b5))
+
+## [7.1.1](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/compare/v7.1.0...v7.1.1) (2026-07-02)
+
+
+### Bug Fixes
+
+* **deps:** bump google-genai to v2, langchain-google-genai, langchain-openai, langchain-aws ([1c02816](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/1c028169c87e72cf7df1c93ecb809773d302c121)), closes [#669](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/issues/669) [#670](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/issues/670) [#674](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/issues/674)
+* **deps:** upgrade langchain-openai to 1.3.3 ([a3e24fe](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/a3e24febb6015608ca12474c3d4c5fb14568bdba))
+* **deps:** upgrade the langchain version accordingly ([3d74819](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/commit/3d7481952a9b403b6575233ea3d5f03bf7fe32f7))
+
 # [7.0.0](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/compare/v6.10.0...v7.0.0) (2026-04-28)
 
 

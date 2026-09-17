@@ -85,6 +85,7 @@ for scenario in scenarios.resources:
 There are different options to persist the client credentials
 (in this order of precedence): 
  - in code via keyword arguments (see above),
+ - from AICORE_SERVICE_KEY environment variable, if exists
  - environment variables,
  - profile configuration file.
  - from VCAP_SERVICES environment variable, if exists

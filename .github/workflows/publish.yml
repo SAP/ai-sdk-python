@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: pypi:sap-ai-sdk-${{ needs.build.outputs.package }}
+      name: 'pypi:sap-ai-sdk-gen'
     permissions:
       id-token: write
     steps:
