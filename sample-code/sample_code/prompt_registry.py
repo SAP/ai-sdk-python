@@ -67,7 +67,7 @@ def create_orchestration_config():
     """
     Create an orchestration config that bundles an LLM and a prompt template.
 
-    The config references gpt-4o-mini and a static Hello World prompt.
+    The config references gpt-5.4-nano and a static Hello World prompt.
     """
     client = OrchestrationConfigClient()
     spec = OrchestrationConfig(
@@ -79,7 +79,7 @@ def create_orchestration_config():
                         UserMessage(content="Hello, World!"),
                     ]
                 ),
-                model=LLMModelDetails(name="gpt-4o-mini"),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
             )
         )
     )

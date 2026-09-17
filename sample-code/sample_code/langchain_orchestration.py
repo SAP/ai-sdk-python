@@ -1,217 +1,331 @@
-import uuid
-
+from gen_ai_hub.orchestration_v2 import (
+    AzureContentSafetyInput,
+    AzureContentSafetyInputFilterConfig,
+    AzureContentSafetyOutput,
+    AzureContentSafetyOutputFilterConfig,
+    AzureThreshold,
+    DPICustomEntity,
+    DPIMethodConstant,
+    DPIStandardEntity,
+    FilteringModuleConfig,
+    FunctionObject,
+    FunctionTool,
+    GlobalStreamOptions,
+    InputFiltering,
+    LLMModelDetails,
+    MaskingMethod,
+    MaskingModuleConfig,
+    MaskingProviderConfig,
+    ModuleConfig,
+    OrchestrationConfig,
+    OrchestrationService,
+    OutputFiltering,
+    ProfileEntity,
+    PromptTemplatingModuleConfig,
+    SystemMessage,
+    Template,
+    ToolChatMessage,
+    UserMessage,
+    function_tool,
+)
 from fastapi.responses import StreamingResponse
-from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage, ToolMessage
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnableConfig
-from langchain_core.tools import tool
+from gen_ai_hub.proxy.langchain.openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, MessagesState, StateGraph
-from pydantic import BaseModel
 
-from gen_ai_hub.proxy.core import get_proxy_client
-from gen_ai_hub.proxy.langchain.init_models import init_embedding_model, init_llm
-from gen_ai_hub.proxy.langchain.openai import ChatOpenAI
-
-def init_llm_chat_completion():
+def invoke_chain() -> str:
     """
-    Run a basic chat completion using the init_llm helper.
+    Invoke the Orchestration Service with gpt-5.4-nano and return the response as a string.
 
     Returns:
-        JSON object containing the model response.
+        The model response as a string.
     """
-    llm = init_llm("gpt-5.4-nano")
-    result = llm.invoke("Tell me something about the SAP AI SDK")
-    return {"result": StrOutputParser().invoke(result)}
-
-
-def init_embedding():
-    """
-    Generate an embedding vector using the init_embedding_model helper.
-
-    Returns:
-        JSON object containing the embedding vector.
-    """
-    embedding_model = init_embedding_model("text-embedding-3-small")
-    result = embedding_model.embed_query("SAP AI SDK")
-    return {"result": result}
-
-
-def _build_langgraph_app(model_name: str = "gpt-5.4-nano"):
-    """Build a simple single-node LangGraph app with in-memory checkpointing."""
-    llm = ChatOpenAI(proxy_model_name=model_name)
-
-    async def call_model(state: MessagesState):
-        response = await llm.ainvoke(state["messages"])
-        return {"messages": [response]}
-
-    workflow = (
-        StateGraph(MessagesState)
-        .add_node("model", call_model)
-        .add_edge(START, "model")
-        .add_edge("model", END)
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[UserMessage(content="Tell me about SAP AI SDK")]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            )
+        )
     )
-    return workflow.compile(checkpointer=MemorySaver())
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content
 
 
-async def langgraph_chat_completion():
+def invoke_chain_with_input_filter() -> str:
     """
-    Invoke the model twice within the same thread to demonstrate memory across turns.
+    Invoke the Orchestration Service with an Azure content safety input filter.
 
     Returns:
-        JSON object containing both responses.
+        The model response as a string.
     """
-    app = _build_langgraph_app()
-    config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
-
-    output1 = await app.ainvoke(
-        {"messages": [HumanMessage(content="Tell me something about the SAP AI SDK")]},
-        config=config,
+    filtering = FilteringModuleConfig(
+        input=InputFiltering(
+            filters=[
+                AzureContentSafetyInputFilterConfig(
+                    config=AzureContentSafetyInput(
+                        hate=AzureThreshold.ALLOW_SAFE,
+                        violence=AzureThreshold.ALLOW_SAFE,
+                        self_harm=AzureThreshold.ALLOW_SAFE,
+                        sexual=AzureThreshold.ALLOW_SAFE,
+                    )
+                )
+            ]
+        )
     )
-    output2 = await app.ainvoke(
-        {"messages": [HumanMessage(content="What is special about it? Tell me in 3 sentences!")]},
-        config=config,
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(template=[UserMessage(content="Tell me about the way to kill myself.")]),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            ),
+            filtering=filtering,
+        )
     )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content
 
-    first = output1["messages"][-1].content
-    second = output2["messages"][-1].content
-    return {"result": f"{first}\n\n{second}"}
 
-
-async def langgraph_chat_completion_stream():
+def invoke_chain_with_output_filter() -> str:
     """
-    Stream two sequential turns through a LangGraph workflow.
+    Invoke the Orchestration Service with an Azure content safety output filter.
+
+    Uses gpt-5.4-nano which will comply with the prompt and generate
+    content that the output filter then blocks, leaving choices[0].message.content empty.
+    Output filtering does NOT raise an error — it silently empties the response content.
 
     Returns:
-        A StreamingResponse that yields both turns separated by a blank line.
+        A message confirming the output was filtered.
+    Raises:
+        RuntimeError: If the output was not filtered as expected.
     """
-    app = _build_langgraph_app()
-    thread_config: RunnableConfig = {"configurable": {"thread_id": str(uuid.uuid4())}}
+    filtering = FilteringModuleConfig(
+        output=OutputFiltering(
+            filters=[
+                AzureContentSafetyOutputFilterConfig(
+                    config=AzureContentSafetyOutput(
+                        hate=AzureThreshold.ALLOW_SAFE,
+                        violence=AzureThreshold.ALLOW_SAFE,
+                        self_harm=AzureThreshold.ALLOW_SAFE,
+                        sexual=AzureThreshold.ALLOW_SAFE,
+                    )
+                )
+            ]
+        )
+    )
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[UserMessage(content="Please tell me 5 ways to kill myself.")]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            ),
+            filtering=filtering,
+        )
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content
 
-    async def generate():
-        async for chunk, _ in app.astream(
-            {"messages": [HumanMessage(content="Tell me something about the SAP AI SDK")]},
-            config=thread_config,
-            stream_mode="messages",
-        ):
-            content = chunk.content  # type: ignore[union-attr]
-            if isinstance(content, str) and content:
-                yield content
 
-        yield "\n\n"
+def invoke_chain_with_masking() -> str:
+    """
+    Invoke the Orchestration Service with DPI pseudonymization masking.
 
-        async for chunk, _ in app.astream(
-            {"messages": [HumanMessage(content="What is special about it? Tell me in 3 sentences!")]},
-            config=thread_config,
-            stream_mode="messages",
-        ):
-            content = chunk.content  # type: ignore[union-attr]
-            if isinstance(content, str) and content:
-                yield content
+    PII (name, address, email, phone, date) in the prompt is replaced with
+    pseudonyms before being sent to the model. Returns both the masked prompt
+    (from intermediate results) and the final model response so masking is visible.
+
+    Returns:
+        Dict with 'masked_input' (pseudonymized prompt) and 'result' (model response).
+    """
+    masking = MaskingModuleConfig(
+        providers=[
+            MaskingProviderConfig(
+                method=MaskingMethod.ANONYMIZATION,
+                entities=[
+                    DPIStandardEntity(type=ProfileEntity.ADDRESS),
+                    DPIStandardEntity(type=ProfileEntity.EMAIL),
+                    DPIStandardEntity(type=ProfileEntity.PHONE),
+                    DPIStandardEntity(type=ProfileEntity.PERSON),
+                    DPICustomEntity(
+                        regex="[0-9]{4}[-/][0-9]{2}[-/][0-9]{2}",
+                        replacement_strategy=DPIMethodConstant(value="MASKED_DATE"),
+                    ),
+                ],
+            )
+        ]
+    )
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            content="Generate email that shows the contact info for Jane Doe, born on 1975-03-05, living at 10 Downing Street London UK with email 'jane.doe@mailprovider.com' and phone number +4902044123221."
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            ),
+            masking=masking,
+        )
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content
+
+def invoke_chain_with_fallback() -> str:
+    """
+    Invoke the Orchestration Service with a fallback model.
+
+    The first ModuleConfig uses a non-existent model to trigger fallback;
+    the second uses anthropic--claude-4.6-sonnet as the backup.
+
+    Returns:
+        The model response as a string.
+    """
+    config = OrchestrationConfig(
+        modules=[
+            ModuleConfig(
+                prompt_templating=PromptTemplatingModuleConfig(
+                    prompt=Template(template=[UserMessage(content="Tell me about SAP AI SDK")]),
+                    model=LLMModelDetails(name="dummy-model"),
+                )
+            ),
+            ModuleConfig(
+                prompt_templating=PromptTemplatingModuleConfig(
+                    prompt=Template(template=[UserMessage(content="Tell me about SAP AI SDK")]),
+                    model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
+                )
+            ),
+        ]
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content
+
+def stream_chain() -> StreamingResponse:
+    """
+    Stream a response from the Orchestration Service token by token.
+
+    Returns:
+        StreamingResponse yielding text chunks.
+    """
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[UserMessage(content="Tell me about SAP AI SDK with 1000 words.")]
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            )
+        ),
+        stream=GlobalStreamOptions(enabled=True),
+    )
+    service = OrchestrationService(config=config)
+
+    def generate():
+        for chunk in service.stream():
+            if chunk.final_result:
+                content = chunk.final_result.choices[0].delta.content
+                if content:
+                    yield content
+        service.close_http_connection()
 
     return StreamingResponse(generate(), media_type="text/plain")
 
 
-def tool_chain():
+def stream_chain_with_fallback() -> StreamingResponse:
     """
-    Demonstrate tool calling: the model calls a custom Python function and
-    the result is fed back for a final natural-language response.
+    Stream a response from the Orchestration Service with a fallback model.
 
     Returns:
-        JSON object containing the final model response.
+        StreamingResponse yielding text chunks from the fallback model.
     """
-    llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-
-    @tool
-    def shareholder_value(value: float) -> str:
-        """Multiplies the shareholder value."""
-        return f"The shareholder value has been increased to {value * 2}"
-
-    messages: list[BaseMessage] = [HumanMessage(content="Increase the shareholder value, it is currently at 10")]
-
-    response = llm.bind_tools([shareholder_value]).invoke(messages)
-    messages.append(response)
-
-    if response.tool_calls and response.tool_calls[0]["name"] == "shareholder_value":
-        tool_call = response.tool_calls[0]
-        tool_result = shareholder_value.invoke(tool_call["args"])
-        messages.append(
-            ToolMessage(content=tool_result, tool_call_id=tool_call["id"] or "default")
-        )
-    else:
-        messages.append(SystemMessage(content="No tool calls were made"))
-
-    final = llm.invoke(messages)
-    return {"result": StrOutputParser().invoke(final)}
-
-
-class SampleSchema(BaseModel):
-    """A sample structured output schema."""
-
-    setup: str
-    punchline: str
-    rating: int
-
-
-def structured_output():
-    """
-    Ask the model for a structured response conforming to a Pydantic schema.
-
-    Returns:
-        JSON object containing the structured output.
-    """
-    llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    structured_llm = llm.with_structured_output(SampleSchema)
-    result = structured_llm.invoke("Tell me a joke about cats")
-    if not isinstance(result, SampleSchema):
-        raise RuntimeError("Unexpected structured output type")
-    return {"result": result.model_dump()}
-
-def invoke_chain_with_fallback_configs():
-    """
-    Invoke a chain with fallback model configurations for resilience.
-
-    If the primary model fails, LangChain automatically retries with each
-    fallback in order until one succeeds.
-
-    Returns:
-        JSON object containing the model response.
-    """
-    primary_llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    client = get_proxy_client()
-    fallback_llms = [
-        ChatOpenAI(proxy_model_name="anthropic--claude-4.6-sonnet"),
-        init_llm("anthropic--claude-4.6-sonnet", proxy_client=client),
-    ]
-    llm = primary_llm.with_fallbacks(fallback_llms)
-    chain = llm | StrOutputParser()
-    result = chain.invoke([HumanMessage(content="Tell me about SAP AI SDK")])
-    return {"result": result}
-
-
-def invoke_dynamic_model_agent():
-    """
-    Select a model dynamically based on input complexity.
-
-    Short or simple prompts are routed to a lightweight model; longer or more
-    complex prompts are routed to a more capable model. The routing decision is
-    made at invocation time via a custom selector function.
-
-    Returns:
-        JSON object containing the model response.
-    """
-    simple_chain = ChatOpenAI(proxy_model_name="gpt-5.4-nano") | StrOutputParser()
-    complex_chain = ChatOpenAI(proxy_model_name="anthropic--claude-4.6-sonnet") | StrOutputParser()
-
-    def select_chain(messages: list):
-        total_words = sum(len(str(m.content).split()) for m in messages)
-        return complex_chain if total_words > 20 else simple_chain
-
-    message = (
-        "Explain the key architectural differences between microservices and monolithic "
-        "applications, covering scalability, maintainability, deployment complexity, and "
-        "data management strategies."
+    config = OrchestrationConfig(
+        modules=[
+            ModuleConfig(
+                prompt_templating=PromptTemplatingModuleConfig(
+                    prompt=Template(template=[UserMessage(content="Tell me about SAP AI SDK")]),
+                    model=LLMModelDetails(name="dummy-model"),
+                )
+            ),
+            ModuleConfig(
+                prompt_templating=PromptTemplatingModuleConfig(
+                    prompt=Template(template=[UserMessage(content="Tell me about SAP AI SDK")]),
+                    model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
+                )
+            ),
+        ],
+        stream=GlobalStreamOptions(enabled=True),
     )
-    messages = [HumanMessage(content=message)]
-    result = select_chain(messages).invoke(messages)
-    return {"result": result}
+    service = OrchestrationService(config=config)
+
+    def generate():
+        for chunk in service.stream():
+            if chunk.final_result:
+                content = chunk.final_result.choices[0].delta.content
+                if content:
+                    yield content
+        service.close_http_connection()
+
+    return StreamingResponse(generate(), media_type="text/plain")
+
+
+def invoke_tool_chain() -> str:
+    """
+    Invoke a tool chain via the Orchestration Service.
+
+    Binds a celsius_to_fahrenheit tool, executes the tool call triggered
+    by the model, then returns the final model response.
+
+    Returns:
+        The final model response as a string after tool execution.
+    """
+    @function_tool
+    def celsius_to_fahrenheit(celsius: float) -> str:
+        """Converts a temperature from Celsius to Fahrenheit."""
+        fahrenheit = celsius * 9 / 5 + 32
+        return f"{celsius}°C is {fahrenheit}°F"
+
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        SystemMessage(content="You are a helpful assistant that converts temperatures."),
+                        UserMessage(content="What is 100 degrees Celsius in Fahrenheit?"),
+                    ],
+                    tools=[celsius_to_fahrenheit],
+                ),
+                model=LLMModelDetails(name="gpt-5.4-nano"),
+            )
+        )
+    )
+
+    service = OrchestrationService()
+    result = service.run(config=config)
+    tool_calls = result.final_result.choices[0].message.tool_calls
+    if not tool_calls:
+        raise RuntimeError("No tool calls in response")
+
+    history = list(result.intermediate_results.templating or [])
+    history.append(result.final_result.choices[0].message)
+    for tool_call in tool_calls:
+        tool_result = celsius_to_fahrenheit.execute(**tool_call.function.parse_arguments())
+        history.append(ToolChatMessage(content=str(tool_result), tool_call_id=tool_call.id))
+
+    result = service.run(config=config, history=history)
+    service.close_http_connection()
+    return result.final_result.choices[0].message.content

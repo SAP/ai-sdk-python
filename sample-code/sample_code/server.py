@@ -1,7 +1,12 @@
+from pathlib import Path
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, grounding, langchain_orchestration, openai, orchestration, prompt_registry, sap_rpt
+load_dotenv(Path(__file__).parent / ".env", override=True)
+
+from sample_code import amazon, core, google, grounding, langchain_openai, langchain_orchestration, openai, orchestration, prompt_registry, sap_rpt
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -46,14 +51,22 @@ app.get("/google/tool-call")(google.tool_call)
 app.get("/amazon/converse")(amazon.converse)
 
 # LangChain
-app.get("/langchain/chat-completion")(langchain_orchestration.init_llm_chat_completion)
-app.get("/langchain/embedding")(langchain_orchestration.init_embedding)
-app.get("/langchain/chat-completion-with-fallback")(langchain_orchestration.invoke_chain_with_fallback_configs)
-app.get("/langchain/dynamic-model-agent")(langchain_orchestration.invoke_dynamic_model_agent)
-app.get("/langchain/tool-chain")(langchain_orchestration.tool_chain)
-app.get("/langchain/structured-output")(langchain_orchestration.structured_output)
-app.get("/langchain/langgraph/chat-completion")(langchain_orchestration.langgraph_chat_completion)
-app.get("/langchain/langgraph/chat-completion-stream")(langchain_orchestration.langgraph_chat_completion_stream)
+app.get("/langchain/invoke")(langchain_openai.invoke)
+app.get("/langchain/invoke_chain")(langchain_openai.invoke_chain)
+app.get("/langchain/structured-output-json-schema")(langchain_openai.invoke_with_structured_output_json_schema)
+app.get("/langchain/tool-chain")(langchain_openai.invoke_tool_chain)
+app.get("/langchain/rag-chain")(langchain_openai.invoke_rag_chain)
+app.get("/langchain/stream-chain")(langchain_openai.stream_chain)
+
+# LangChain Orchestration
+app.get("/langchain-orchestration/invoke-chain")(langchain_orchestration.invoke_chain)
+app.get("/langchain-orchestration/invoke-chain-input-filter")(langchain_orchestration.invoke_chain_with_input_filter)
+app.get("/langchain-orchestration/invoke-chain-output-filter")(langchain_orchestration.invoke_chain_with_output_filter)
+app.get("/langchain-orchestration/invoke-chain-masking")(langchain_orchestration.invoke_chain_with_masking)
+app.get("/langchain-orchestration/stream-chain")(langchain_orchestration.stream_chain)
+app.get("/langchain-orchestration/invoke-chain-fallback")(langchain_orchestration.invoke_chain_with_fallback)
+app.get("/langchain-orchestration/stream-chain-fallback")(langchain_orchestration.stream_chain_with_fallback)
+app.get("/langchain-orchestration/tool-chain")(langchain_orchestration.invoke_tool_chain)
 
 # SAP RPT-1
 app.get("/sap-rpt/predict-by-rows")(sap_rpt.predict_by_rows)

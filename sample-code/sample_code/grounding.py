@@ -42,7 +42,7 @@ def create_collection():
     return client.create_collection(
         CollectionCreateRequest(
             title="sample-collection",
-            embeddingConfig=EmbeddingConfig(modelName="text-embedding-3-large"),
+            embeddingConfig=EmbeddingConfig(modelName="text-embedding-3-small"),
             metadata=[VectorKeyValueListPair(key="source", value=["sample-code"])],
         )
     )
