@@ -734,6 +734,47 @@ class TestEmbeddingsRequestWithMasking(unittest.TestCase):
         allowlist = result["config"]["modules"]["masking"]["masking_providers"][0]["allowlist"]
         self.assertEqual(allowlist, ["SAP", "Microsoft"])
 
+class TestEmbeddingsResponseExtraFields(unittest.TestCase):
+    """EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse and EmbeddingsPostResponse
+    were switched to ResponseBaseModel and must silently accept unknown fields."""
+
+    def test_embeddings_usage_stores_extra_field(self):
+        usage = EmbeddingsUsage.model_validate({
+            "prompt_tokens": 10, "total_tokens": 10,
+            "extra_field": "extra",
+        })
+        self.assertEqual(usage.extra_field, "extra")
+
+    def test_embedding_result_stores_extra_field(self):
+        result = EmbeddingResult.model_validate({
+            "object": "embedding", "embedding": [0.1, 0.2], "index": 0,
+            "extra_field": "extra",
+        })
+        self.assertEqual(result.extra_field, "extra")
+
+    def test_embeddings_response_stores_extra_field(self):
+        response = EmbeddingsResponse.model_validate({
+            "object": "list",
+            "data": [{"object": "embedding", "embedding": [0.1], "index": 0}],
+            "model": "text-embedding-3-large",
+            "usage": {"prompt_tokens": 5, "total_tokens": 5},
+            "extra_field": "extra",
+        })
+        self.assertEqual(response.extra_field, "extra")
+
+    def test_embeddings_post_response_stores_extra_field(self):
+        response = EmbeddingsPostResponse.model_validate({
+            "request_id": "emb-req-1",
+            "final_result": {
+                "object": "list",
+                "data": [{"object": "embedding", "embedding": [0.1], "index": 0}],
+                "model": "text-embedding-3-large",
+                "usage": {"prompt_tokens": 5, "total_tokens": 5},
+            },
+            "extra_field": "extra",
+        })
+        self.assertEqual(response.extra_field, "extra")
+
 
 if __name__ == "__main__":
     unittest.main()
