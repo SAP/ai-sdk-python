@@ -2,7 +2,7 @@
 Live integration tests for prompt caching (cache_control) via Orchestration V2.
 
 Caching is supported for Anthropic Claude and Amazon Nova models.
-The tests target anthropic--claude-4.6-sonnet (1024-token minimum, 5m and 1h TTLs).
+The tests target anthropic--claude-4.5-sonnet (1024-token minimum, 5m and 1h TTLs).
 
 Wire path:
   ai-sdk-python  ->  SAP AI Core /v2/completion  ->  SAP LiteLLM fork  ->  Anthropic API
@@ -25,7 +25,7 @@ from gen_ai_hub.orchestration_v2.service import OrchestrationService
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503
 
-# Must exceed the 1024-token minimum for claude-4.6-sonnet cache points.
+# Must exceed the 1024-token minimum for claude-4.5-sonnet cache points.
 _LONG_SYSTEM_PROMPT = (
     "You are a helpful assistant with deep knowledge of European history. "
     "Below is a detailed reference text that you must use to answer questions accurately.\n\n"
@@ -58,7 +58,7 @@ _LONG_SYSTEM_PROMPT = (
 )
 
 _LLM = LLMModelDetails(
-    name="anthropic--claude-4.6-sonnet",
+    name="anthropic--claude-4.5-sonnet",
     params={"max_tokens": 64, "temperature": 0.0},
 )
 
