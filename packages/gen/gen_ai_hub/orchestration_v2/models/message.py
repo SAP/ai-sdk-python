@@ -197,7 +197,7 @@ class ResponseChatMessage(BaseModel):
         reasoning_content: A list of reasoning content blocks.
     """
     role: Role = Role.ASSISTANT
-    content: Optional[str] = None
+    content: str
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
     reasoning_content: Optional[List[ReasoningBlock]] = None
