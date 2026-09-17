@@ -28,6 +28,7 @@ from gen_ai_hub.orchestration_v2 import (
 )
 from fastapi.responses import StreamingResponse
 
+
 def invoke_chain() -> str:
     """
     Invoke the Orchestration Service with gpt-5.4-nano and return the response as a string.
@@ -172,6 +173,7 @@ def invoke_chain_with_masking() -> str:
     service.close_http_connection()
     return result.final_result.choices[0].message.content
 
+
 def invoke_chain_with_fallback() -> str:
     """
     Invoke the Orchestration Service with a fallback model.
@@ -202,6 +204,7 @@ def invoke_chain_with_fallback() -> str:
     result = service.run()
     service.close_http_connection()
     return result.final_result.choices[0].message.content
+
 
 def stream_chain() -> StreamingResponse:
     """

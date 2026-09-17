@@ -18,6 +18,7 @@ class SampleSchema(BaseModel):
     content: str
     language: str
 
+
 def invoke():
     """
     Ask GPT about the capital of Germany.
@@ -29,6 +30,7 @@ def invoke():
     response = llm.invoke("Where is the capital of Germany?")
     parser = StrOutputParser()
     return parser.invoke(response)
+
 
 def invoke_chain():
     """
