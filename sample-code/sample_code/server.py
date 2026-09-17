@@ -1,7 +1,17 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, openai, orchestration
+from sample_code import (
+    amazon,
+    core,
+    document_grounding_generation,
+    document_grounding_kiota,
+    google,
+    openai,
+    orchestration,
+    tab_ai_orchestration,
+    tab_ai_orchestration_kiota,
+)
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -68,3 +78,25 @@ app.get("/orchestration/embedding-masked")(orchestration.embedding_masked)
 app.get("/orchestration/tool-call-decorator")(orchestration.tool_call_decorator)
 app.get("/orchestration/tool-call-function-tool")(orchestration.tool_call_function_tool)
 app.get("/orchestration/tool-call-json")(orchestration.tool_call_json)
+
+# Document Grounding Generation (generated client)
+app.get("/document-grounding-generation/retrieval/search")(
+    document_grounding_generation.retrieval_search
+)
+
+# Document Grounding Generation (Kiota-generated client)
+app.get("/kiota/document-grounding/retrieval/search")(
+    document_grounding_kiota.retrieval_search
+)
+
+# Tabular AI Orchestration
+app.get("/tab-ai-orchestration/predict")(tab_ai_orchestration.predict)
+app.get("/tab-ai-orchestration/predict-with-explanations")(
+    tab_ai_orchestration.predict_with_explanations
+)
+
+# Tabular AI Orchestration (Kiota-generated client)
+app.get("/kiota/tab-ai-orchestration/predict")(tab_ai_orchestration_kiota.predict)
+app.get("/kiota/tab-ai-orchestration/predict-with-explanations")(
+    tab_ai_orchestration_kiota.predict_with_explanations
+)
