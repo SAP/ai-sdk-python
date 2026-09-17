@@ -24,6 +24,7 @@ __all__ = [
     "Service",
     "Source",
     "VCAPEnvironment",
+    "CREDENTIAL_VALUES",
     "EVAL_CREDENTIAL_VALUES",
     "extract_credentials",
     "fetch_credentials",
@@ -44,6 +45,7 @@ EVAL_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = CORE_CREDENTIAL_VALUES +
     CredentialsValue(name='input_object_store_secret_name'),
 ]
 
+CREDENTIAL_VALUES: Final[List[CredentialsValue]] = EVAL_CREDENTIAL_VALUES
 
 def extract_credentials(source: Source, exclude: List[str] = None) -> Dict[str, str]:
     """Extract all evaluation credentials from a source."""
