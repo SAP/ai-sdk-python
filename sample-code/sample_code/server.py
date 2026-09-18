@@ -58,16 +58,6 @@ app.get("/langchain/tool-chain")(langchain_openai.invoke_tool_chain)
 app.get("/langchain/rag-chain")(langchain_openai.invoke_rag_chain)
 app.get("/langchain/stream-chain")(langchain_openai.stream_chain)
 
-# LangChain Orchestration
-app.get("/langchain-orchestration/invoke-chain")(langchain_orchestration.invoke_chain)
-app.get("/langchain-orchestration/invoke-chain-input-filter")(langchain_orchestration.invoke_chain_with_input_filter)
-app.get("/langchain-orchestration/invoke-chain-output-filter")(langchain_orchestration.invoke_chain_with_output_filter)
-app.get("/langchain-orchestration/invoke-chain-masking")(langchain_orchestration.invoke_chain_with_masking)
-app.get("/langchain-orchestration/stream-chain")(langchain_orchestration.stream_chain)
-app.get("/langchain-orchestration/invoke-chain-fallback")(langchain_orchestration.invoke_chain_with_fallback)
-app.get("/langchain-orchestration/stream-chain-fallback")(langchain_orchestration.stream_chain_with_fallback)
-app.get("/langchain-orchestration/tool-chain")(langchain_orchestration.invoke_tool_chain)
-
 # SAP RPT-1
 app.get("/sap-rpt/predict-by-rows")(sap_rpt.predict_by_rows)
 app.get("/sap-rpt/predict-by-columns")(sap_rpt.predict_by_columns)
