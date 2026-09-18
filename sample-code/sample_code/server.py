@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 
 load_dotenv(Path(__file__).parent / ".env", override=True)
 
-from sample_code import amazon, core, google, grounding, langchain_openai, langchain_orchestration, openai, orchestration, prompt_registry, sap_rpt
+from sample_code import amazon, core, google, grounding, langchain_openai, openai, orchestration, prompt_registry, sap_rpt
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
