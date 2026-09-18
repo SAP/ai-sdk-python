@@ -3,6 +3,9 @@ from .service import OrchestrationService
 from .exceptions import OrchestrationError, OrchestrationErrorList
 
 __all__ = [
+    # cache_control
+    "CacheControl",
+
     # azure_content_filter
     "AzureContentFilter", "AzureContentSafetyInput", "AzureContentSafetyOutput", "AzureThreshold",
 
@@ -46,7 +49,7 @@ __all__ = [
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
 
     # response
-    "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
+    "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
     "ChatCompletionTokenLogprob", "ChoiceLogprobs", "LLMChoice", "StreamFunctionObject", "StreamToolCall",
     "StreamDelta", "StreamLLMChoice", "Citation", "LLMModuleResult", "StreamLLMModuleResult", "ModuleResults",
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",
