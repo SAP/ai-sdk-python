@@ -6,25 +6,9 @@ from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
 
-
-class ResponseBaseModel(BaseModel):
-    """
-    Abstract base model that extends Pydantic's BaseModel and ABC.
-
-    - `extra="allow"` allows unexpected fields in responses to be accepted,
-      since the external API might introduce new attributes in the response.
-
-    This enforces consistent and safe serialization behavior across all
-    derived models.
-    """
-
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=False,
-    )
 
 
 class CacheCreationTokenDetails(ResponseBaseModel):
