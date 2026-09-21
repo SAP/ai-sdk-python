@@ -7,8 +7,8 @@ from langchain_classic.prompts.chat import (
     ChatPromptTemplate,
     MessagesPlaceholder,
 )
-from langchain_classic.schema import BaseChatMessageHistory, HumanMessage
-from langchain_community.chat_message_histories.in_memory import ChatMessageHistory
+from langchain_classic.schema import HumanMessage
+from langchain_core.chat_history import BaseChatMessageHistory, InMemoryChatMessageHistory
 from langchain_core.messages import AIMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
@@ -30,7 +30,7 @@ class TestGoogleGenerativeAI(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     def _create_model_history(self) -> str:
         session_id = str(uuid.uuid4())
-        self.model_histories[session_id] = ChatMessageHistory()
+        self.model_histories[session_id] = InMemoryChatMessageHistory()
         return session_id
 
     def test_genai_invoke(self, model=GEMINI_2_5_FLASH_LITE_TEST_MODEL):
