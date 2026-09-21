@@ -189,7 +189,7 @@ def transform_respx_stmt(full_stmt, indent):
         # that pytest_httpx2/httpx2.Response can consume them correctly.
         if extra:
             extra = re.sub(
-                r'stream=(?!IteratorStream\()(.+)',
+                r'stream=(?!\w*[Ss]tream\()(.+)',
                 lambda mo: 'stream=IteratorStream(' + mo.group(1) + ')',
                 extra,
             )
@@ -209,6 +209,7 @@ def transform_respx_stmt(full_stmt, indent):
 def transform_respx(content, path):
     lines = content.splitlines(keepends=True)
     result = []
+    _route_vars = set()  # variable names assigned from respx route calls
     i = 0
     while i < len(lines):
         line = lines[i]
@@ -319,15 +320,18 @@ def transform_respx(content, path):
                 open_parens += nxt.count('(') - nxt.count(')')
             full = ' '.join(l.strip() for l in stmt_lines)
             indent = re.match(r'^(\s*)', stmt_lines[0]).group(1)
+            var_m = re.match(r'\s*(\w+)\s*=\s*respx\.', full)
+            if var_m:
+                _route_vars.add(var_m.group(1))
             result.append(transform_respx_stmt(full, indent) + '\n')
             i += 1
             continue
 
-        # Replace 'yield <var>' that referred to a respx route object
-        # with 'yield _mock' since the route variable no longer exists.
-        if re.match(r'^\s*yield\s+\w+\s*$', raw):
-            ind = re.match(r'^(\s*)', raw).group(1)
-            result.append(f'{ind}yield _mock\n')
+        # Replace 'yield <var>' ONLY when <var> was a respx route variable
+        # (tracked when we strip 'var = respx.METHOD(...)' assignments).
+        m_yield = re.match(r'^(\s*)yield\s+(\w+)\s*$', raw)
+        if m_yield and m_yield.group(2) in _route_vars:
+            result.append(f'{m_yield.group(1)}yield _mock\n')
             i += 1
             continue
         result.append(line)
