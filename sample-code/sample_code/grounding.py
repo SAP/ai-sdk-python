@@ -1,5 +1,3 @@
-from fastapi import Query
-
 from gen_ai_hub.document_grounding.client import (
     PipelineAPIClient,
     RetrievalAPIClient,
@@ -111,18 +109,9 @@ def get_pipelines():
     return client.get_pipelines()
 
 
-def retrieval_documents(
-    query: str = "What are the key features of SAP BTP?",
-    data_repository_type: str = "vector",
-    data_repositories: list[str] = Query(default=["*"]),
-):
+def retrieval_documents():
     """
     Retrieve documents across data repositories.
-
-    Args:
-        query: Search query.
-        data_repository_type: Type of data repository.
-        data_repositories: List of data repository IDs to search in.
 
     Returns:
         Search results.
@@ -130,12 +119,12 @@ def retrieval_documents(
     client = RetrievalAPIClient()
     return client.search(
         RetrievalSearchInput(
-            query=query,
+            query="What are the key features of SAP BTP?",
             filters=[
                 RetrievalSearchFilter(
                     id="filter-1",
-                    dataRepositoryType=data_repository_type,
-                    dataRepositories=data_repositories,
+                    dataRepositoryType="vector",
+                    dataRepositories=["*"],
                     searchConfiguration=RetrievalSearchConfiguration(maxChunkCount=1),
                 )
             ],

@@ -58,7 +58,7 @@ app.get("/langchain/tool-chain")(langchain_openai.invoke_tool_chain)
 app.get("/langchain/rag-chain")(langchain_openai.invoke_rag_chain)
 app.get("/langchain/stream-chain")(langchain_openai.stream_chain)
 
-# SAP RPT-1
+# SAP RPT
 app.get("/sap-rpt/predict-by-rows")(sap_rpt.predict_by_rows)
 app.get("/sap-rpt/predict-by-columns")(sap_rpt.predict_by_columns)
 app.get("/sap-rpt/predict-regression")(sap_rpt.regression)

@@ -1,8 +1,6 @@
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from gen_ai_hub.proxy.native.sap.models import DataType, PredictionConfig, RPTRequest, TargetColumn
 
-MODEL_NAME = "sap-rpt-1-small"
-
 CLASSIFICATION_SCHEMA = {
     "PRODUCT": DataType(dtype="string"),
     "PRICE": DataType(dtype="numeric"),
@@ -67,7 +65,7 @@ def predict_by_rows():
         rows=CLASSIFICATION_ROWS,
         data_schema=CLASSIFICATION_SCHEMA,
     )
-    return client.predict(body=body, model_name=MODEL_NAME)
+    return client.predict(body=body, model_name="sap-rpt-1-small")
 
 
 def predict_by_columns():
@@ -93,7 +91,7 @@ def predict_by_columns():
         columns=CLASSIFICATION_COLUMNS,
         data_schema=CLASSIFICATION_SCHEMA,
     )
-    return client.predict(body=body, model_name=MODEL_NAME)
+    return client.predict(body=body, model_name="sap-rpt-1-small")
 
 
 def regression():
@@ -114,4 +112,4 @@ def regression():
         rows=REGRESSION_ROWS,
         data_schema=REGRESSION_SCHEMA,
     )
-    return client.predict(body=body, model_name=MODEL_NAME)
+    return client.predict(body=body, model_name="sap-rpt-1-small")

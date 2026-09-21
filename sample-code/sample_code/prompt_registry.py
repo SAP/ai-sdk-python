@@ -5,12 +5,6 @@ from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
 from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig, Template
 
-SCENARIO = "my-scenario"
-TEMPLATE_NAME = "my-template"
-VERSION = "1.0.0"
-CONFIG_NAME = "my-orchestration-config"
-
-
 def create_prompt_template():
     """
     Create a prompt template with a user-input placeholder.
@@ -28,9 +22,9 @@ def create_prompt_template():
         ]
     )
     return client.create_prompt_template(
-        scenario=SCENARIO,
-        name=TEMPLATE_NAME,
-        version=VERSION,
+        scenario="my-scenario",
+        name="my-template",
+        version="1.0.0",
         prompt_template_spec=spec,
     )
 
@@ -46,9 +40,9 @@ def fill_prompt_template():
     """
     client = PromptTemplateClient()
     return client.fill_prompt_template(
-        scenario=SCENARIO,
-        name=TEMPLATE_NAME,
-        version=VERSION,
+        scenario="my-scenario",
+        name="my-template",
+        version="1.0.0",
         input_params={"user_input": "What are the main features of SAP BTP?"},
     )
 
@@ -61,7 +55,7 @@ def get_prompt_templates():
         List of matching prompt templates.
     """
     client = PromptTemplateClient()
-    return client.get_prompt_templates(scenario=SCENARIO, name=TEMPLATE_NAME, version=VERSION)
+    return client.get_prompt_templates(scenario="my-scenario", name="my-template", version="1.0.0")
 
 
 def delete_prompt_template(template_id: str):
@@ -102,9 +96,9 @@ def create_orchestration_config():
         )
     )
     return client.create_orchestration_config(
-        scenario=SCENARIO,
-        name=CONFIG_NAME,
-        version=VERSION,
+        scenario="my-scenario",
+        name="my-orchestration-config",
+        version="1.0.0",
         spec=spec,
     )
 
@@ -118,8 +112,8 @@ def get_orchestration_configs():
     """
     client = OrchestrationConfigClient()
     return client.get_orchestration_configs(
-        scenario=SCENARIO,
-        name=CONFIG_NAME,
-        version=VERSION,
+        scenario="my-scenario",
+        name="my-orchestration-config",
+        version="1.0.0",
         include_spec=True,
     )

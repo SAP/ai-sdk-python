@@ -1,5 +1,3 @@
-from collections.abc import AsyncGenerator
-
 from fastapi.responses import StreamingResponse
 from langchain_core.messages import HumanMessage, ToolMessage
 from langchain_core.output_parsers import StrOutputParser
@@ -146,7 +144,7 @@ def stream_chain() -> StreamingResponse:
     llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
     messages = [HumanMessage(content="Write a 1000 word explanation about SAP AI SDK and its capabilities")]
 
-    async def generate() -> AsyncGenerator[str, None]:
+    async def generate():
         async for chunk in llm.astream(messages):
             if chunk.content:
                 yield chunk.content
