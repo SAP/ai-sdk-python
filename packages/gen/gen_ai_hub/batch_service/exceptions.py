@@ -2,7 +2,16 @@
 Exceptions for the batch service module.
 """
 
-import httpx
+try:
+    import httpx2
+except ModuleNotFoundError:
+    import httpx as httpx2  # type: ignore[no-redef]
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
 
 
 class BatchServiceError(Exception):
@@ -17,7 +26,7 @@ class BatchServiceError(Exception):
         request_id: str,
         message: str,
         status_code: int,
-        headers: httpx.Headers,
+        headers: httpx2.Headers,
     ):
         self.request_id = request_id
         self.message = message

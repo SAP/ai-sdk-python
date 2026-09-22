@@ -1,4 +1,13 @@
-from httpx import TimeoutException
+try:
+    from httpx2 import TimeoutException
+except ModuleNotFoundError:
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+    from httpx import TimeoutException  # type: ignore[no-redef]
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.llm import LLM
 from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage

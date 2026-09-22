@@ -11,7 +11,16 @@ from enum import Enum
 from typing import Iterable, Iterator, AsyncIterator
 
 import dacite
-import httpx
+try:
+    import httpx2
+except ModuleNotFoundError:
+    import httpx as httpx2  # type: ignore[no-redef]
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
 
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
 from gen_ai_hub.orchestration.models.response import OrchestrationResponseStreaming
@@ -34,7 +43,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "OrchestrationResp
     if "code" in event:
         raise OrchestrationError(
             request_id=event.get("request_id"),
-            http_headers=httpx.Headers({}),
+            http_headers=httpx2.Headers({}),
             message=event.get("message"),
             code=event.get("code"),
             location=event.get("location"),
@@ -49,7 +58,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "OrchestrationResp
 
 class SSEClient:
     """
-    A synchronous Server-Sent Events (SSE) client that wraps an httpx.Response for iterating
+    A synchronous Server-Sent Events (SSE) client that wraps an httpx2.Response for iterating
     over streaming responses.
 
     This client reads data chunks from the HTTP stream and parses each SSE event.
@@ -59,8 +68,8 @@ class SSEClient:
     def __init__(self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"):
         """Initializes the SSEClient.
 
-        :param response_cm: An httpx.Response context manager for the streaming response.
-        :type response_cm: httpx.Response
+        :param response_cm: An httpx2.Response context manager for the streaming response.
+        :type response_cm: httpx2.Response
         :param prefix: The prefix string that identifies SSE event data, defaults to "data: "
         :type prefix: str, optional
         :param final_message: The message that indicates the end of the stream, defaults to "[DONE]"
@@ -86,9 +95,9 @@ class SSEClient:
         self._response = self.response_cm.__enter__()
         try:
             self._response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             content = self._response.read()
-            error_response = httpx.Response(
+            error_response = httpx2.Response(
                 status_code=self._response.status_code,
                 headers=self._response.headers,
                 content=content,
@@ -169,7 +178,7 @@ class AsyncSSEClient:
         """Initializes the AsyncSSEClient.
 
         :param response_cm: An asynchronous context manager for the HTTP streaming response.
-        :type response_cm: the type of an async context manager returning httpx.Response
+        :type response_cm: the type of an async context manager returning httpx2.Response
         :param prefix: The SSE data prefix, defaults to "data: "
         :type prefix: str, optional
         :param final_message: The message indicating the end of the stream, defaults to "[DONE]"
@@ -194,9 +203,9 @@ class AsyncSSEClient:
         self._response = await self.response_cm.__aenter__()
         try:
             self._response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             content = await self._response.aread()
-            error_response = httpx.Response(
+            error_response = httpx2.Response(
                 status_code=self._response.status_code,
                 headers=self._response.headers,
                 content=content,
@@ -276,13 +285,13 @@ class AsyncSSEClient:
             raise StopAsyncIteration
 
 
-def _handle_http_error(error, response: httpx.Response):
+def _handle_http_error(error, response: httpx2.Response):
     """Handles HTTP errors by raising an OrchestrationError with details from the response.
 
     :param error: the original HTTP error.
-    :type error: httpx.HTTPStatusError
-    :param response: the httpx.Response object containing error details incl. headers.
-    :type response: httpx.Response
+    :type error: httpx2.HTTPStatusError
+    :param response: the httpx2.Response object containing error details incl. headers.
+    :type response: httpx2.Response
     :raises OrchestrationError: with information extracted from the response.
     """
     if not response.content:

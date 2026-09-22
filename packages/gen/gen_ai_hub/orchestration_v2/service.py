@@ -13,7 +13,17 @@ import asyncio
 from functools import wraps
 from typing import List, Optional, Iterable, Union
 
-import httpx
+try:
+    import httpx2
+except ModuleNotFoundError:
+    import httpx as httpx2  # type: ignore[no-redef]
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+from gen_ai_hub._ssl import default_ssl_context
 from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
@@ -189,7 +199,7 @@ class OrchestrationService:
                  deployment_id: Optional[str] = None,
                  config_name: Optional[str] = None,
                  config_id: Optional[str] = None,
-                 timeout: Union[int, float, httpx.Timeout, None] = None):
+                 timeout: Union[int, float, httpx2.Timeout, None] = None):
         """Initializes the OrchestrationService.
 
         :param api_url: the base URL for the orchestration API, defaults to None
@@ -207,7 +217,7 @@ class OrchestrationService:
         :param config_id: the configuration ID, defaults to None
         :type config_id: Optional[str], optional
         :param timeout: the timeout for HTTP requests, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :raises ValueError: if both config and config_ref are provided.
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
@@ -221,10 +231,10 @@ class OrchestrationService:
             raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         self.timeout = timeout
         # create reusable httpx client to improve performance
-        self.client = httpx.Client(timeout=self.timeout)
-        self.async_client = httpx.AsyncClient(timeout=self.timeout)
+        self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
+        self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
 
-    def _determine_timeout(self, timeout: httpx.Timeout) -> httpx.Timeout:
+    def _determine_timeout(self, timeout: httpx2.Timeout) -> httpx2.Timeout:
         # Determine the timeout to use for this request
         if timeout is not None:
             # Overwrite default timeout for this request
@@ -234,7 +244,7 @@ class OrchestrationService:
             request_timeout = self.timeout
         else:
             # If timeout is not set, use httpx client's default behavior, rather than "None" (disables timeout)
-            request_timeout = httpx.USE_CLIENT_DEFAULT
+            request_timeout = httpx2.USE_CLIENT_DEFAULT
         return request_timeout
 
     def _should_retry(self, error: Exception) -> bool:
@@ -247,7 +257,7 @@ class OrchestrationService:
         Returns:
             True if the error is retryable (only 429 rate limit errors), False otherwise.
         """
-        if isinstance(error, httpx.HTTPStatusError):
+        if isinstance(error, httpx2.HTTPStatusError):
             return error.response.status_code == 429
         return False
 
@@ -261,7 +271,7 @@ class OrchestrationService:
         Returns:
             Number of seconds to wait before retrying, or None if not specified.
         """
-        if isinstance(error, httpx.HTTPStatusError) and error.response.status_code == 429:
+        if isinstance(error, httpx2.HTTPStatusError) and error.response.status_code == 429:
             retry_after = error.response.headers.get('Retry-After')
             if retry_after:
                 try:
@@ -309,7 +319,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             stream: bool = False,
     ) -> Union[CompletionPostResponse | Iterable[StreamCompletionPostResponse]]:
         """
@@ -376,7 +386,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -388,7 +398,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             stream: bool = False,
     ) -> Union[CompletionPostResponse | AsyncSSEClient]:
         """
@@ -451,7 +461,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -463,7 +473,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -477,7 +487,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
         """        
@@ -496,7 +506,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> Iterable[StreamCompletionPostResponse]:
         """Executes an orchestration streaming request synchronously.
 
@@ -510,7 +520,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: An Iterable[StreamCompletionPostResponse] object
         :rtype: Iterable[StreamCompletionPostResponse]
         """
@@ -530,7 +540,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -543,7 +553,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
         """
@@ -562,7 +572,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration streaming request asynchronously.
 
@@ -575,7 +585,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: the AsyncSSEClient object
         :rtype: AsyncSSEClient
         """        
@@ -595,7 +605,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -610,7 +620,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -641,7 +651,7 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
+            except (OrchestrationError, httpx2.HTTPStatusError, httpx2.ConnectError, httpx2.TimeoutException) as error:
                 time.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
         return None
 
@@ -678,7 +688,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -694,7 +704,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -724,7 +734,7 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
+            except (OrchestrationError, httpx2.HTTPStatusError, httpx2.ConnectError, httpx2.TimeoutException) as error:
                 await asyncio.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
         return None
 
@@ -732,7 +742,7 @@ class OrchestrationService:
             self,
             config: EmbeddingsOrchestrationConfig,
             input: EmbeddingsInput,  # pylint: disable=redefined-builtin
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> EmbeddingsPostResponse:
         """Executes an embeddings request synchronously.
 
@@ -741,7 +751,7 @@ class OrchestrationService:
         :param input: the input text to embed
         :type input: EmbeddingsInput
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: the EmbeddingsPostResponse object
         :rtype: EmbeddingsPostResponse
         """
@@ -758,7 +768,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -768,7 +778,7 @@ class OrchestrationService:
             self,
             config: EmbeddingsOrchestrationConfig,
             input: EmbeddingsInput,  # pylint: disable=redefined-builtin
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> EmbeddingsPostResponse:
         """Executes an embeddings request asynchronously.
 
@@ -777,7 +787,7 @@ class OrchestrationService:
         :param input: the input text to embed
         :type input: EmbeddingsInput
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: the EmbeddingsPostResponse object
         :rtype: EmbeddingsPostResponse
         """
@@ -794,7 +804,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()

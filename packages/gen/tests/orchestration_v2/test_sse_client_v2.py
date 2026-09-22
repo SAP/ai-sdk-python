@@ -2,7 +2,16 @@ import json
 import unittest
 from unittest.mock import Mock
 
-from httpx import Response
+try:
+    from httpx2 import Response
+except ModuleNotFoundError:
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+    from httpx import Response  # type: ignore[no-redef]
 
 from gen_ai_hub.orchestration_v2.sse_client import AsyncSSEClient
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationErrorList

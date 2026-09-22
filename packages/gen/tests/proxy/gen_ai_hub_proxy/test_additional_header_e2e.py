@@ -5,8 +5,17 @@ import unittest
 from collections import Counter
 from contextlib import contextmanager
 
-import respx
-from httpx import Response
+from tests.mock import _HTTPXMock as _HTTPXMock
+try:
+    from httpx2 import Response
+except ModuleNotFoundError:
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+    from httpx import Response  # type: ignore[no-redef]
 
 from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
 from gen_ai_hub.proxy.native.openai import AsyncOpenAI, OpenAI
@@ -36,9 +45,9 @@ class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
 
         @contextmanager
         def mocker(deployment_url):
-            with respx.mock:
-                route = respx.post(deployment_url).mock(side_effect=mock_callback)
-                yield route
+            with _HTTPXMock() as _mock:
+                _mock.add_callback(mock_callback, url=deployment_url, method="POST")
+                yield _mock
 
         n_requests = 10
 
@@ -74,9 +83,9 @@ class SyncOpenAITests(unittest.TestCase):
 
         @contextmanager
         def mocker(deployment_url):
-            with respx.mock:
-                route = respx.post(deployment_url).mock(side_effect=mock_callback)
-                yield route
+            with _HTTPXMock() as _mock:
+                _mock.add_callback(mock_callback, url=deployment_url, method="POST")
+                yield _mock
 
         n_requests = 10
 

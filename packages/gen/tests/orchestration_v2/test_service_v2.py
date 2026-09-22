@@ -2,7 +2,16 @@ import unittest
 from typing import cast
 from unittest.mock import Mock, patch, AsyncMock
 
-import httpx
+try:
+    import httpx2
+except ModuleNotFoundError:
+    import httpx as httpx2  # type: ignore[no-redef]
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
 
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
@@ -98,7 +107,7 @@ class TestOrchestrationService(unittest.TestCase):
         with ai_core_ai_api_mocker(auth_url=self.proxy_client.auth_url, base_url=self.proxy_client.base_url):
             client = OrchestrationService(deployment_id=self.NOT_EXISTENT_DEPLOYMENT_ID, proxy_client=self.proxy_client)
             with orchestration_deployment_not_found_mocker(client.api_url + '/v2/completion'):
-                with self.assertRaises(httpx.HTTPStatusError):
+                with self.assertRaises(httpx2.HTTPStatusError):
                     client.run(config=self.config)
 
     def test_run_without_config(self):
@@ -192,13 +201,13 @@ class TestOrchestrationService(unittest.TestCase):
             client = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
 
             # Create a mock error without Retry-After header
-            response = Mock(spec=httpx.Response)
+            response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({"Retry-After": "3"})
+            response.headers = httpx2.Headers({"Retry-After": "3"})
             response.text = "Too Many Requests"
             response.request = Mock()
 
-            error = httpx.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
+            error = httpx2.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
 
             # Collect delays for multiple retries
             delays = []
@@ -217,13 +226,13 @@ class TestOrchestrationService(unittest.TestCase):
             client = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
 
             # Create a mock error without Retry-After header
-            response = Mock(spec=httpx.Response)
+            response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({})
+            response.headers = httpx2.Headers({})
             response.text = "Too Many Requests"
             response.request = Mock()
 
-            error = httpx.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
+            error = httpx2.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
 
             # Collect delays for multiple retries
             delays = []
@@ -242,13 +251,13 @@ class TestOrchestrationService(unittest.TestCase):
             client = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
 
             # Create a mock error
-            response = Mock(spec=httpx.Response)
+            response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({})
+            response.headers = httpx2.Headers({})
             response.text = "Too Many Requests"
             response.request = Mock()
 
-            error = httpx.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
+            error = httpx2.HTTPStatusError("429 Too Many Requests", request=response.request, response=response)
 
             # Mock _should_retry to return True so we test the retry_count >= max_retries condition
             with patch.object(client, '_should_retry', return_value=True):
@@ -256,8 +265,8 @@ class TestOrchestrationService(unittest.TestCase):
                 # Need to call handle_retry within an exception context since it uses bare 'raise'
                 try:
                     raise error
-                except httpx.HTTPStatusError as e:
-                    with self.assertRaises(httpx.HTTPStatusError) as context:
+                except httpx2.HTTPStatusError as e:
+                    with self.assertRaises(httpx2.HTTPStatusError) as context:
                         client.handle_retry(retry_count=3, base_delay=1.0, error=e, max_retries=3)
 
                     # Verify retries attribute was set
@@ -382,7 +391,7 @@ class TestOrchestrationService(unittest.TestCase):
             service = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
             with patch.object(service.client, "post", side_effect=capture_request):
                 service.run(config=self.config)
-            self.assertEqual(timeout_captured.get("timeout"), httpx.USE_CLIENT_DEFAULT)
+            self.assertEqual(timeout_captured.get("timeout"), httpx2.USE_CLIENT_DEFAULT)
 
             # timeout set in httpx client, not overwritten in request
             service = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client, timeout=99.0)
@@ -443,7 +452,7 @@ class TestOrchestrationServiceAsync(unittest.IsolatedAsyncioTestCase):
             service = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
             with patch.object(service.async_client, "post", new=AsyncMock(side_effect=capture_request)):
                 await service.arun(config=self.config)
-            self.assertEqual(timeout_captured.get("timeout"), httpx.USE_CLIENT_DEFAULT)
+            self.assertEqual(timeout_captured.get("timeout"), httpx2.USE_CLIENT_DEFAULT)
 
             # timeout set in httpx client, not overwritten in request
             service = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client, timeout=99.0)

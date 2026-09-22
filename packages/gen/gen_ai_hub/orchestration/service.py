@@ -16,7 +16,17 @@ from typing import List, Optional, Iterable, Union
 
 import dacite
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
-import httpx
+try:
+    import httpx2
+except ModuleNotFoundError:
+    import httpx as httpx2  # type: ignore[no-redef]
+    import warnings
+    warnings.warn(
+        "httpx is deprecated; install httpx2 instead.",
+        DeprecationWarning,
+        stacklevel=1,
+    )
+from gen_ai_hub._ssl import default_ssl_context
 from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
@@ -202,7 +212,7 @@ class OrchestrationService:
                  deployment_id: Optional[str] = None,
                  config_name: Optional[str] = None,
                  config_id: Optional[str] = None,
-                 timeout: Union[int, float, httpx.Timeout, None] = None):
+                 timeout: Union[int, float, httpx2.Timeout, None] = None):
         """Initializes the OrchestrationService with the provided parameters.
 
         :param api_url: The base URL for the orchestration API, defaults to None
@@ -218,7 +228,7 @@ class OrchestrationService:
         :param config_id: the configuration ID, defaults to None
         :type config_id: Optional[str], optional
         :param timeout: the timeout for HTTP requests, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")    
         if api_url:
@@ -228,10 +238,10 @@ class OrchestrationService:
         self.config = config
         self.timeout = timeout
         # create reusable httpx client to improve performance
-        self.client = httpx.Client(timeout=self.timeout)
-        self.async_client = httpx.AsyncClient(timeout=self.timeout)
+        self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
+        self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
 
-    def _determine_timeout(self, timeout: httpx.Timeout) -> httpx.Timeout:
+    def _determine_timeout(self, timeout: httpx2.Timeout) -> httpx2.Timeout:
         # Determine the timeout to use for this request
         if timeout is not None:
             # Overwrite default timeout for this request
@@ -241,7 +251,7 @@ class OrchestrationService:
             request_timeout = self.timeout
         else:
             # If timeout is not set, use httpx client's default behavior, rather than "None" (disables timeout)
-            request_timeout = httpx.USE_CLIENT_DEFAULT
+            request_timeout = httpx2.USE_CLIENT_DEFAULT
         return request_timeout
 
     def _should_retry(self, error: Exception) -> bool:
@@ -252,7 +262,7 @@ class OrchestrationService:
         :return: True if the error is retryable (only 429 rate limit errors), False otherwise.
         :rtype: bool
         """
-        if isinstance(error, httpx.HTTPStatusError):
+        if isinstance(error, httpx2.HTTPStatusError):
             return error.response.status_code == 429
         return False
 
@@ -264,7 +274,7 @@ class OrchestrationService:
         :return: Number of seconds to wait before retrying, or None if not specified.
         :rtype: Optional[float]
         """
-        if isinstance(error, httpx.HTTPStatusError) and error.response.status_code == 429:
+        if isinstance(error, httpx2.HTTPStatusError) and error.response.status_code == 429:
             retry_after = error.response.headers.get('Retry-After')
             if retry_after:
                 try:
@@ -311,7 +321,7 @@ class OrchestrationService:
             history: List[Message],
             stream: bool,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> Union[OrchestrationResponse, Iterable[OrchestrationResponseStreaming]]:
         """Executes an orchestration request synchronously.
         For streaming requests, this method creates a single HTTP stream. It manually enters the stream's
@@ -330,7 +340,7 @@ class OrchestrationService:
         :param stream_options: additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :raises ValueError: If no configuration is provided.
         :raises OrchestrationError: If the HTTP request fails.
         :return: An OrchestrationResponse if not streaming, or an iterable of OrchestrationResponseStreaming
@@ -369,7 +379,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -386,7 +396,7 @@ class OrchestrationService:
             history: List[Message],
             stream: bool,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> Union[OrchestrationResponse, AsyncSSEClient]:
         """Executes an orchestration request asynchronously.
 
@@ -401,7 +411,7 @@ class OrchestrationService:
         :param stream_options: additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :raises ValueError: If no configuration is provided.
         :raises OrchestrationError: If the HTTP request fails.
         :return: An OrchestrationResponse if not streaming, or an AsyncSSEClient for iterating over 
@@ -438,7 +448,7 @@ class OrchestrationService:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -453,7 +463,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -464,7 +474,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: An OrchestrationResponse object.
         :rtype: OrchestrationResponse
         """
@@ -482,7 +492,7 @@ class OrchestrationService:
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> SSEClient:
         """Executes an orchestration request in streaming mode (synchronously).
 
@@ -495,7 +505,7 @@ class OrchestrationService:
         :param stream_options: the additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: An SSEClient instance for iterating over the streaming response.
         :rtype: SSEClient
         """
@@ -513,7 +523,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -524,7 +534,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: An OrchestrationResponse object.
         :rtype: OrchestrationResponse
         """
@@ -542,7 +552,7 @@ class OrchestrationService:
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration request asynchronously in streaming mode.
 
@@ -555,7 +565,7 @@ class OrchestrationService:
         :param stream_options: the additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :return: An AsyncSSEClient instance for iterating over the streaming response.
         :rtype: AsyncSSEClient
         """
@@ -585,7 +595,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -598,7 +608,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -626,7 +636,7 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
+            except (OrchestrationError, httpx2.HTTPStatusError, httpx2.ConnectError, httpx2.TimeoutException) as error:
                 time.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
         return None
 
@@ -661,7 +671,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx2.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -675,7 +685,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :type timeout: Union[int, float, httpx2.Timeout, None], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -703,6 +713,6 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
+            except (OrchestrationError, httpx2.HTTPStatusError, httpx2.ConnectError, httpx2.TimeoutException) as error:
                 await asyncio.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
         return None
