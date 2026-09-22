@@ -28,11 +28,11 @@ class _SapRESTClientObject(RESTClientObject):
     def _create_pool_manager(self) -> httpx.AsyncClient:
         pool = super()._create_pool_manager()
         hooks = dict(pool.event_hooks)
-        hooks["request"] = list(hooks.get("request", [])) + [self._inject_auth]
+        hooks["request"] = list(hooks.get("request", [])) + [self._inject_headers]
         pool.event_hooks = hooks
         return pool
 
-    async def _inject_auth(self, request: httpx.Request) -> None:
+    async def _inject_headers(self, request: httpx.Request) -> None:
         for key, value in self._client.request_header.items():
             request.headers[key] = value
 
