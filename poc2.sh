@@ -361,6 +361,8 @@ def transform_file(path):
             content,
             flags=re.DOTALL,
         )
+        if not has_import(content, 're'):
+            content = re.sub(r'^(import asyncio\n)', r'import re\n\1', content, flags=re.MULTILINE)
 
 
     # Detect import patterns in the (possibly respx-transformed) content
