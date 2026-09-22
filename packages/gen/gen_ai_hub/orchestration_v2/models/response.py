@@ -7,7 +7,7 @@ from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
 from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
-from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
+from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
 
@@ -189,6 +189,7 @@ class StreamDelta(ResponseBaseModel):
     role: Optional[str] = None
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class StreamLLMChoice(ResponseBaseModel):
