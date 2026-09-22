@@ -118,7 +118,11 @@ class TestGoogleGenerativeAI(TestCaseAICoreSetupMixin, unittest.TestCase):
             },
             config=config,
         )
-        self.assertIsInstance(response.content, str)
+        self.assertIsInstance(response.content, list)
+        self.assertTrue(
+            all(isinstance(p, str) for p in response.content),
+            f"Expected list[str], got: {response.content!r}",
+        )
 
     def test_chat_from_prompt_template(self):
         chat_model = ChatGoogleGenerativeAI(
