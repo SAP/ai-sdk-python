@@ -435,10 +435,10 @@ def transform_file(path):
             r'timeout=timeout,\s*\)',
             (
                 'http_options=types.HttpOptions(\n'
-                '                    httpx_client=sync_http_client,\n'
-                '                    httpx_async_client=async_http_client,\n'
-                '                    timeout=timeout,\n'
-                '                )'
+                '                httpx_client=sync_http_client,\n'
+                '                httpx_async_client=async_http_client,\n'
+                '                timeout=timeout,\n'
+                '            )'
             ),
             content,
             flags=re.DOTALL,
