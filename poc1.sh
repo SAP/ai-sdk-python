@@ -426,7 +426,8 @@ def transform_file(path):
             content,
             count=1,
         )
-        # Replace client_args/async_client_args dict style with direct client kwargs
+        # Replace client_args/async_client_args dict style with httpx_client/httpx_async_client
+        # (the correct HttpOptions field names in google-genai 2.23)
         content = re.sub(
             r'http_options=types\.HttpOptions\(\s*'
             r'client_args=\{\s*"transport":\s*sync_transport\s*\},\s*'
@@ -434,8 +435,8 @@ def transform_file(path):
             r'timeout=timeout,\s*\)',
             (
                 'http_options=types.HttpOptions(\n'
-                '                    http_client=sync_http_client,\n'
-                '                    async_http_client=async_http_client,\n'
+                '                    httpx_client=sync_http_client,\n'
+                '                    httpx_async_client=async_http_client,\n'
                 '                    timeout=timeout,\n'
                 '                )'
             ),
