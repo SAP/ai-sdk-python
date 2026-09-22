@@ -230,20 +230,19 @@ class Client(GoogleClient):
             **deployment_selector_kwargs
         )
 
+        sync_http_client = httpx2.Client(transport=sync_transport)
+        async_http_client = httpx2.AsyncClient(transport=async_transport)
+
         super().__init__(
             vertexai=True,
             project=project,
             location=location,
             credentials=Credentials(token="dummy-token-placeholder"),
             http_options=types.HttpOptions(
-                client_args={
-                    "transport": sync_transport
-                    },
-                async_client_args={
-                    "transport": async_transport
-                    },
-                timeout=timeout,
-            ),
+                    http_client=sync_http_client,
+                    async_http_client=async_http_client,
+                    timeout=timeout,
+                ),
             **kwargs
         )
         self._models = Models(self._api_client)
