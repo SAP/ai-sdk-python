@@ -340,9 +340,26 @@ def transform_respx(content, path):
 
 
 def has_import(content, name):
-    """True if 'import <name>' or 'from <name> import' already present."""
-    return bool(re.search(rf'^\s*(?:import {re.escape(name)}|from {re.escape(name)} import)',
-                          content, re.MULTILINE))
+    """True if `name` is imported, covering:
+      - import name
+      - import a, name, b        (comma lists)
+      - import name.sub          (subpackages)
+      - from name import x
+      - from name.sub import x
+      - statements after ';'
+    Rejects partial identifier matches (e.g. 'requests_mock' for 're').
+    """
+    escaped = re.escape(name)
+    pattern = (
+        rf'(?:^|;)\s*'                       # line start OR after a semicolon
+        rf'(?:'
+        rf'import\s+(?:[\w.]+\s*,\s*)*'      # 'import', optional prior comma items
+        rf'{escaped}(?![\w])'               #   the target module
+        rf'|'
+        rf'from\s+{escaped}(?![\w])'        # OR 'from name'
+        rf')'
+    )
+    return bool(re.search(pattern, content, re.MULTILINE))
 
 
 # ── Main file transformer ─────────────────────────────────────────────────────
