@@ -12,6 +12,7 @@ from pydantic import Field
 from pydantic.main import IncEx
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
 class ImageDetailLevel(Enum):
@@ -38,9 +39,12 @@ class TextPart(BaseModel):
         text: The string content of the text part.
 
         type: The type identifier, defaulting to "text".
+
+        cache_control: Optional cache control settings for prompt caching.
     """
     text: str
     type_: Literal["text"] = Field(default="text", alias="type")
+    cache_control: Optional[CacheControl] = None
 
 
 class ImageUrl(BaseModel):
@@ -56,7 +60,6 @@ class ImageUrl(BaseModel):
     detail: Optional[ImageDetailLevel] = None
 
 
-# @dataclass
 class ImagePart(BaseModel):
     """
     Represents an image segment within a multimodal content block.
@@ -65,9 +68,12 @@ class ImagePart(BaseModel):
         image_url: An `ImageUrl` object containing the image's location and detail level.
 
         type: The type identifier, defaulting to "image_url".
+
+        cache_control: Optional cache control settings for prompt caching.
     """
     image_url: ImageUrl
     type_: Literal["image_url"] = Field(default="image_url", alias="type")
+    cache_control: Optional[CacheControl] = None
 
 
 ContentPart = Union[TextPart, ImagePart]

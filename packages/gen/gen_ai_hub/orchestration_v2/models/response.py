@@ -6,25 +6,23 @@ from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
 
 
-class ResponseBaseModel(BaseModel):
+
+class CacheCreationTokenDetails(ResponseBaseModel):
     """
-    Abstract base model that extends Pydantic's BaseModel and ABC.
+    Per-TTL breakdown of tokens written to the prompt cache.
 
-    - `extra="allow"` allows unexpected fields in responses to be accepted,
-      since the external API might introduce new attributes in the response.
+    Present only when cache_control includes an explicit ttl value.
 
-    This enforces consistent and safe serialization behavior across all
-    derived models.
+    Attributes:
+        ephemeral_5m_input_tokens: Tokens cached with a 5-minute TTL.
+        ephemeral_1h_input_tokens: Tokens cached with a 1-hour TTL.
     """
-
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=False,
-    )
+    ephemeral_5m_input_tokens: Optional[int] = None
+    ephemeral_1h_input_tokens: Optional[int] = None
 
 
 class PromptTokensDetails(ResponseBaseModel):
@@ -33,10 +31,15 @@ class PromptTokensDetails(ResponseBaseModel):
 
     Attributes:
         audio_tokens (Optional[int]): Audio input tokens present in the prompt.
-        cached_tokens (Optional[int]): Cached tokens present in the prompt.
+        cached_tokens (Optional[int]): Tokens read from the prompt cache (cache hit).
+        cache_creation_tokens (Optional[int]): Tokens written to the prompt cache (cache miss).
+        cache_creation_token_details (Optional[CacheCreationTokenDetails]): Per-TTL
+            breakdown of cache writes. Present only when an explicit ttl was used.
     """
     audio_tokens: Optional[int] = None
     cached_tokens: Optional[int] = None
+    cache_creation_tokens: Optional[int] = None
+    cache_creation_token_details: Optional[CacheCreationTokenDetails] = None
 
 class CompletionTokensDetails(ResponseBaseModel):
     """
@@ -385,7 +388,8 @@ class OrchestrationResponseWithRetries(CompletionPostResponse):
     """
     retries: int = 0
 
-__all__ = ["PromptTokensDetails",
+__all__ = ["CacheCreationTokenDetails",
+    "PromptTokensDetails",
     "CompletionTokensDetails",
     "TokenUsage",
     "GenericModuleResult",
