@@ -1,10 +1,5 @@
-from pathlib import Path
-
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-
-load_dotenv(Path(__file__).parent / ".env", override=True)
 
 from sample_code import amazon, core, google, grounding, langchain_openai, openai, orchestration, prompt_registry, sap_rpt
 
