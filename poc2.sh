@@ -349,6 +349,21 @@ def transform_file(path):
     if path in RESPX_FILES:
         content = transform_respx(content, path)
 
+    # ── openai/cohere mockers: add api-version query param to URL ─────────────
+    # pytest_httpx2 does strict query-param matching (unlike respx which was
+    # URL-permissive). The OpenAI proxy always appends ?api-version=... to every
+    # request via default_query. Mockers that pass an explicit URL must include
+    # that param; url=None (wildcard) is left untouched.
+    if path == os.path.join(GEN, 'tests/mock.py'):
+        API_VERSION = '2025-03-01-preview'
+        content = re.sub(
+            r'(def (?:openai|cohere)_\w+_mocker\([^)]*\):.*?_mock\.add_response\()url=deployment_url,',
+            lambda m: m.group(1) + f"url=(f'{{deployment_url}}?api-version={API_VERSION}' if deployment_url else None),",
+            content,
+            flags=re.DOTALL,
+        )
+
+
     # Detect import patterns in the (possibly respx-transformed) content
     has_bare_import = bool(re.search(r'^import httpx$', content, re.MULTILINE))
     from_imports = re.findall(r'^from httpx import (.+)$', content, re.MULTILINE)
