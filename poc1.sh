@@ -91,6 +91,9 @@ RESPX_FILES = {
     os.path.join(GEN, "tests/proxy/gen_ai_hub_proxy/test_additional_header_e2e.py"),
 }
 
+# ── google_genai clients file (needs httpx2.Client injection) ─────────────────
+GOOGLE_CLIENTS_FILE = os.path.join(GEN, "gen_ai_hub/proxy/native/google_genai/clients.py")
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ─────────────────────────────────────────────────────────────────────────────
@@ -404,6 +407,40 @@ def transform_file(path):
             r'httpx2\.AsyncClient\(timeout=self\.timeout\)',
             f'httpx2.AsyncClient(timeout=self.timeout, {verify})',
             content
+        )
+
+    # ── google_genai/clients.py: inject httpx2.Client instead of client_args ──────
+    # google-genai >= 2.x accepts http_client/async_http_client on HttpOptions
+    # directly. Passing httpx2.Client(transport=...) avoids the AssertionError
+    # where google-genai builds httpx2.Request objects but the old client_args
+    # path constructed its own inner httpx client without our transport attached.
+    if path == GOOGLE_CLIENTS_FILE:
+        # Insert httpx2 client construction just before super().__init__()
+        content = re.sub(
+            r'(?m)^( +)super\(\)\.__init__\(',
+            lambda m: (
+                f"{m.group(1)}sync_http_client = httpx2.Client(transport=sync_transport)\n"
+                f"{m.group(1)}async_http_client = httpx2.AsyncClient(transport=async_transport)\n\n"
+                f"{m.group(1)}super().__init__("
+            ),
+            content,
+            count=1,
+        )
+        # Replace client_args/async_client_args dict style with direct client kwargs
+        content = re.sub(
+            r'http_options=types\.HttpOptions\(\s*'
+            r'client_args=\{\s*"transport":\s*sync_transport\s*\},\s*'
+            r'async_client_args=\{\s*"transport":\s*async_transport\s*\},\s*'
+            r'timeout=timeout,\s*\)',
+            (
+                'http_options=types.HttpOptions(\n'
+                '                    http_client=sync_http_client,\n'
+                '                    async_http_client=async_http_client,\n'
+                '                    timeout=timeout,\n'
+                '                )'
+            ),
+            content,
+            flags=re.DOTALL,
         )
 
     if content != original:
