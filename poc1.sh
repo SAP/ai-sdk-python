@@ -94,6 +94,9 @@ RESPX_FILES = {
 # ── google_genai clients file (needs httpx2.Client injection) ─────────────────
 GOOGLE_CLIENTS_FILE = os.path.join(GEN, "gen_ai_hub/proxy/native/google_genai/clients.py")
 
+# ── google_genai integration test (content normalisation helper) ──────────────
+GOOGLE_GENAI_INTTEST = os.path.join(GEN, "integration_tests/langchain_/test_google_genai.py")
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ─────────────────────────────────────────────────────────────────────────────
@@ -407,6 +410,26 @@ def transform_file(path):
             r'httpx2\.AsyncClient\(timeout=self\.timeout\)',
             f'httpx2.AsyncClient(timeout=self.timeout, {verify})',
             content
+        )
+
+    # ── google_genai integration tests: assert correct list[str] type ────────────
+    # langchain-google-genai >= 4.3.6 returns list[str] from .content on the
+    # second turn of a conversation with message history (multiple content
+    # parts).
+    if path == GOOGLE_GENAI_INTTEST:
+        # The unique anchor for the second-turn assert is the line immediately
+        # before "def test_chat_from_prompt_template" — that's the closing assert
+        # of test_genai_langchain_history.
+        content = content.replace(
+            '        self.assertIsInstance(response.content, str)\n\n    def test_chat_from_prompt_template',
+            (
+                '        self.assertIsInstance(response.content, list)\n'
+                '        self.assertTrue(\n'
+                '            all(isinstance(p, str) for p in response.content),\n'
+                '            f"Expected list[str], got: {response.content!r}",\n'
+                '        )\n'
+                '\n    def test_chat_from_prompt_template'
+            ),
         )
 
     # ── google_genai/clients.py: inject httpx2.Client instead of client_args ──────
