@@ -339,6 +339,12 @@ def transform_respx(content, path):
     return ''.join(result)
 
 
+def has_import(content, name):
+    """True if 'import <name>' or 'from <name> import' already present."""
+    return bool(re.search(rf'^\s*(?:import {re.escape(name)}|from {re.escape(name)} import)',
+                          content, re.MULTILINE))
+
+
 # ── Main file transformer ─────────────────────────────────────────────────────
 def transform_file(path):
     with open(path) as f:
