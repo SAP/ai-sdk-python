@@ -5,7 +5,6 @@ Response models for orchestration v2
 from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
-from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
 from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage, ReasoningBlock
 
