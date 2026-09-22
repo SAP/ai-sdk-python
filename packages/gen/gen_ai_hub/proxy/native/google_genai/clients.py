@@ -239,10 +239,10 @@ class Client(GoogleClient):
             location=location,
             credentials=Credentials(token="dummy-token-placeholder"),
             http_options=types.HttpOptions(
-                    http_client=sync_http_client,
-                    async_http_client=async_http_client,
-                    timeout=timeout,
-                ),
+                httpx_client=sync_http_client,
+                httpx_async_client=async_http_client,
+                timeout=timeout,
+            ),
             **kwargs
         )
         self._models = Models(self._api_client)
