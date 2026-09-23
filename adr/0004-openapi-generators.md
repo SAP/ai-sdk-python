@@ -10,7 +10,7 @@ The Python SDK code is currently fully manually written and maintained. The Java
 
 ## Decision
 
-Use the [OpenAPI generator](https://openapi-generator.tech/) for code generation in the Python SDK in favor of other code generators. The extent to which the generator will be used will to be decided in future ADRs.
+Use the [OpenAPI generator](https://openapi-generator.tech/) for code generation in the Python SDK in favor of other code generators. The extent to which the generator will be used will be decided in future ADRs.
 
 ## Consequences
 
@@ -31,7 +31,7 @@ The following generators were considered (all except two were immediately ruled 
 - [Hey API](https://github.com/hey-api/hey-api): ruled out because the Python generator is in alpha (as of September 2026) and not stable yet
 - [Fern](https://github.com/fern-api/fern): ruled out because (despite being Open-source) it is a commercial product and has been acquired by Postman
 - [Speakeasy](https://www.speakeasy.com): ruled out because it is a commercial product
-- [Stainless](https://www.stainless.com/): not available anymore (as of September 2026)
+- [Stainless](https://www.stainless.com/): not available anymore (since May 2026)
 
 Commercial generators are not considered for multiple reasons, one of them being that this would make external contributions to the SDK more difficult.
 
