@@ -4089,14 +4089,14 @@ version = "0.1.0"
 source = { editable = "sample-code" }
 dependencies = [
     { name = "fastapi" },
-    { name = "sap-ai-sdk-gen" },
+    { name = "sap-ai-sdk-gen", extra = ["all"] },
     { name = "uvicorn" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "fastapi", specifier = ">=0.141.1" },
-    { name = "sap-ai-sdk-gen", editable = "packages/gen" },
+    { name = "sap-ai-sdk-gen", extras = ["all"], editable = "packages/gen" },
     { name = "uvicorn", specifier = ">=0.52.1" },
 ]
 

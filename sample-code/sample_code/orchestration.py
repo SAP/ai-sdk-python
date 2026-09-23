@@ -239,7 +239,7 @@ def completion_with_fallback():
                             )
                         ]
                     ),
-                    model=LLMModelDetails(name="anthropic--claude-4.5-haiku"),
+                    model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
                 )
             ),
         ]
@@ -447,7 +447,7 @@ def output_filtering():
                         )
                     ]
                 ),
-                model=LLMModelDetails(name="anthropic--claude-4.5-haiku"),
+                model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
             ),
             filtering=content_filter_config,
         )
