@@ -6,7 +6,7 @@ from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
-from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
+from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
 
@@ -189,6 +189,7 @@ class StreamDelta(ResponseBaseModel):
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
     refusal: Optional[str] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class StreamLLMChoice(ResponseBaseModel):
