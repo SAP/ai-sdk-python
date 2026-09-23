@@ -1,8 +1,14 @@
 # Release Notes
 ## gen-v7.4.1 (2026-09-23)
 
+### Features
+- Added Support for cache_control in Orchestration Service V2
+- Added support for reasoning_content in Orchestration Service V2
 
-- fix(gen): remove langchain_community (#149)
+### Bugfixes
+- Removed langchain-community from dependencies
+- Upgraded google-genai
+- Decreased response validation strictness in order to tolerate extra fields
 
 ## gen-v7.4.0 (2026-09-14)
 
