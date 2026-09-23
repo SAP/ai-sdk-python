@@ -5,9 +5,8 @@ Response models for orchestration v2
 from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
-from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
 from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
-from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
+from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
 
@@ -189,6 +188,8 @@ class StreamDelta(ResponseBaseModel):
     role: Optional[str] = None
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
+    refusal: Optional[str] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class StreamLLMChoice(ResponseBaseModel):
@@ -345,7 +346,7 @@ class SAPAPIErrorStreaming(ResponseBaseModel):
     code: int
     message: str
     location: str
-    intermediate_results: Optional[ModuleResultsStreaming] = None
+    intermediate_results: Optional[StreamModuleResults] = None
     headers: Optional[dict[str, str]] = None
 
 class CompletionPostResponse(ResponseBaseModel):

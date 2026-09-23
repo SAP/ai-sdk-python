@@ -164,11 +164,14 @@ class AssistantMessage(BaseModel):
         refusal: A string indicating refusal reason.
 
         tool_calls: A list of tool call objects.
+
+        reasoning_content: A list of reasoning content blocks.
     """
     role: Role = Role.ASSISTANT
     content: Optional[Union[str, List[TextPart]]] = None
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class ToolChatMessage(BaseModel):

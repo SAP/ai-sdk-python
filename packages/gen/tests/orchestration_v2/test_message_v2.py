@@ -1,9 +1,10 @@
 import unittest
 
 from gen_ai_hub.orchestration_v2.models.message import (
-    ReasoningBlock,
+    AssistantMessage,
     FunctionCall,
     MessageToolCall,
+    ReasoningBlock,
     ResponseChatMessage,
 )
 from gen_ai_hub.orchestration_v2.models.response import (
@@ -36,7 +37,7 @@ from gen_ai_hub.orchestration_v2.models.response import (
 
 class TestResponseChatMessageValidation(unittest.TestCase):
 
-    def test_reasoning_content_deserialized_from_dict(self):
+    def test_deserialization_from_dict(self):
         msg = ResponseChatMessage.model_validate({
             "role": "assistant",
             "content": "Hello",
@@ -47,6 +48,20 @@ class TestResponseChatMessageValidation(unittest.TestCase):
 
     def test_reasoning_content_optional(self):
         msg = ResponseChatMessage.model_validate({"role": "assistant", "content": "Hello"})
+        self.assertIsNone(msg.reasoning_content)
+
+class TestAssistantMessageValidation(unittest.TestCase):
+
+    def test_deserialization_from_dict(self):
+        msg = AssistantMessage.model_validate({
+            "content": "Hello",
+            "reasoning_content": [{"content": "I think...", "signature": "sig123"}],
+        })
+        self.assertIsNotNone(msg.reasoning_content)
+        self.assertIsInstance(msg.reasoning_content[0], ReasoningBlock)
+
+    def test_reasoning_content_optional(self):
+        msg = AssistantMessage.model_validate({"role": "assistant", "content": "Hello"})
         self.assertIsNone(msg.reasoning_content)
 
 class TestExtraFieldsAllowed(unittest.TestCase):
