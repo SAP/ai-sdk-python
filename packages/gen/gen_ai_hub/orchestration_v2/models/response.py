@@ -6,7 +6,7 @@ from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
 from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
-from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage, ReasoningBlock
+from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
 class CacheCreationTokenDetails(ResponseBaseModel):
