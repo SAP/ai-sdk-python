@@ -1,4 +1,9 @@
 # Release Notes
+## gen-v7.4.1 (2026-09-23)
+
+
+- fix(gen): remove langchain_community (#149)
+
 ## gen-v7.4.0 (2026-09-14)
 
 ### Features
