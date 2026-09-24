@@ -13,6 +13,6 @@ Closes SAP/ai-sdk-python-backlog#ISSUENUMBER.
 - [ ] Error handling created / updated & covered by the tests above
 - [ ] Documentation updated
   - Only Public APIs are allowed to be used in documentation/tutorials/sample code 
-- [ ] (Optional) Skills updated
+- [ ] (Optional) Skill updated
 - [ ] (Optional) Aligned changes with the JS/TS and Java SDK
 - [ ] (Optional) Release notes updated -->
