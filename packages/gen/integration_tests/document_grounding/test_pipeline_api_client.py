@@ -2,7 +2,6 @@ import unittest
 import time
 from typing import cast
 
-import requests.status_codes
 from ai_api_client_sdk.exception import AIAPIServerException
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.document_grounding.client import PipelineAPIClient
@@ -87,7 +86,7 @@ class TestPipelinesAPIIntegration(unittest.TestCase):
         # wait for the pipeline to be created
         time.sleep(3)
         response = self.client.delete_pipeline_by_id(new_pipeline_id)
-        self.assertEqual(response.status_code, requests.status_codes.codes.NO_CONTENT, msg=response.text)
+        self.assertEqual(response.status_code, 204, msg=response.text)
         self.pipeline_ids.pop(-1)
 
     def test_search_pipelines(self):

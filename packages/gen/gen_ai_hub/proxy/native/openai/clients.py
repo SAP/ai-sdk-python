@@ -589,7 +589,7 @@ class AsyncChat(AsyncChat_):
 class AsyncChatCompletions(AsyncChatCompletions_):
     """
     The AsyncChatCompletions class is a derived class which extends AsyncChatCompletions_.
-    This class is used to handle asynchronous chat completion requests. It provides methods
+    This class is used to handle asynchronous chat completion httpx2. It provides methods
     to create and manage chat completions in an asynchronous manner.
     """
 
@@ -1072,7 +1072,7 @@ class AsyncOpenAI(AsyncOpenAI_):
     completions, generating chat messages, and getting embeddings.
 
     Attributes:
-        proxy_client (BaseProxyClient): A proxy client to make API requests. If not provided, a default one will be
+        proxy_client (BaseProxyClient): A proxy client to make API httpx2. If not provided, a default one will be
         created.
 
         api_version (str, optional): The version of the OpenAI API to use. Default is defined by DEFAULT_API_VERSION.

@@ -3,15 +3,53 @@ import os
 from typing import Callable, Dict, Union
 
 import humps
-import requests
-from requests.adapters import HTTPAdapter
-from urllib3 import Retry
+import time
+import httpx2
 
 from ai_api_client_sdk.exception import AIAPIAuthorizationException, AIAPIInvalidRequestException, \
     AIAPINotFoundException, AIAPIPreconditionFailedException, AIAPIServerException
 from ai_api_client_sdk.helpers.constants import SKIP_AUTH_ENV_VAR, Timeouts
 from ai_api_client_sdk.helpers.logging import get_logger, set_log_level
 
+
+_STATUS_FORCELIST = frozenset({429, 500, 502, 503, 504})
+_BACKOFF_FACTOR   = 0.1
+
+
+class _RetryingClient(httpx2.Client):
+    """
+    Drop-in replacement for requests.Session() + HTTPAdapter(max_retries=Retry(...)).
+
+    Replicates urllib3.Retry semantics:
+      - Retries on HTTP status codes in _STATUS_FORCELIST  (equiv. status_forcelist)
+      - Retries on httpx2.RequestError (network/connect)   (equiv. connect + read)
+      - Backoff: backoff_factor * 2**attempt               (equiv. urllib3 formula)
+    """
+
+    def __init__(self, *, num_retries: int, backoff_factor: float,
+                 status_forcelist: frozenset, **kwargs):
+        super().__init__(**kwargs)
+        self._num_retries      = num_retries
+        self._backoff_factor   = backoff_factor
+        self._status_forcelist = status_forcelist
+
+    def request(self, method, url, **kwargs):
+        last_response = None
+        for attempt in range(self._num_retries + 1):
+            try:
+                response = super().request(method, url, **kwargs)
+                if response.status_code in self._status_forcelist:
+                    last_response = response
+                    if attempt < self._num_retries:
+                        time.sleep(self._backoff_factor * (2 ** attempt))
+                        continue
+                    return last_response      # exhausted — return final response
+                return response               # success
+            except httpx2.RequestError:
+                if attempt == self._num_retries:
+                    raise                     # exhausted — propagate
+                time.sleep(self._backoff_factor * (2 ** attempt))
+        return last_response                  # unreachable; satisfies type checker
 
 class RestClient:
     """RestClient is the class implemented for sending the requests to the server.
@@ -63,19 +101,6 @@ class RestClient:
                         **kwargs) -> dict:
         error_description = f'Failed to {method.lower()} {path}'
         set_log_level(self.logger)
-        requests_session = requests.Session()
-
-        retries = Retry(total=self.num_request_retries,
-                        read=self.num_request_retries,
-                        connect=self.num_request_retries,
-                        status=self.num_request_retries,
-                        backoff_factor=0.1,
-                        status_forcelist=[429, 500, 502, 503, 504])
-
-        requests_session.mount('http://', HTTPAdapter(max_retries=retries))
-        requests_session.mount('https://', HTTPAdapter(max_retries=retries))
-
-        requests_function = getattr(requests_session, method)
         url = f'{self.base_url}{path}'
         headers = headers or {}
         headers.update(self.headers.copy())
@@ -93,8 +118,14 @@ class RestClient:
         self.logger.debug(f"Sending {method} request to {url} with headers: {headers_for_log}, params: {params}"
                            f", payload: {body_json}.")
 
-        response = requests_function(url=url, params=params, json=body_json, headers=headers,
-                                     timeout=(self.connect_timeout, self.read_timeout), **kwargs)
+        with _RetryingClient(
+            num_retries=self.num_request_retries,
+            backoff_factor=_BACKOFF_FACTOR,
+            status_forcelist=_STATUS_FORCELIST,
+            timeout=httpx2.Timeout(self.read_timeout, connect=self.connect_timeout),
+        ) as client:
+            response = client.request(method, url=url, params=params, json=body_json,
+                                      headers=headers, **kwargs)
         self.logger.debug(f"Received response from {url} with status code: {response.status_code}, "
                            f"response: {response.text}.")
 

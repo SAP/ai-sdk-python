@@ -4,9 +4,9 @@ from datetime import timedelta, datetime, timezone
 from threading import Lock
 from typing import Optional
 
-import requests
 import time
-from requests.exceptions import ConnectionError
+import httpx2
+from httpx2 import ConnectError
 
 from ai_api_client_sdk.exception import AIAPIAuthenticatorException, AIAPIAuthenticatorInvalidRequestException, \
     AIAPIAuthenticatorAuthorizationException, AIAPIAuthenticatorServerException, \
@@ -69,12 +69,12 @@ class Authenticator:
                 f.write(self.cert_str)
             with open(key_file_path, 'w') as f:
                 f.write(self.key_str)
-            response = requests.post(url=self.url, data=data, cert=(cert_file_path, key_file_path))
+            response = httpx2.post(url=self.url, data=data, cert=(cert_file_path, key_file_path))
         return response
 
     def _should_retry_token_retrieval_params(
             self, attempt: int,
-            response: Optional[requests.Response] = None,
+            response: Optional[httpx2.Response] = None,
             status_code: Optional[int] = None,
             exp: Optional[Exception] = None
     ) -> dict:
@@ -85,7 +85,7 @@ class Authenticator:
         :param attempt: Current attempt number for the token retrieval.
         :type attempt: int
         :param response: HTTP response object related to the token retrieval, if available.
-        :type response: Optional[requests.Response]
+        :type response: Optional[httpx2.Response]
         :param status_code: HTTP status code from the token retrieval response, if available.
         :type status_code: Optional[int]
         :param exp: Exception raised during the token retrieval, if any.
@@ -116,24 +116,24 @@ class Authenticator:
         return {"should_retry": False,
                 "delay": 0}
 
-    def _execute_token_request(self) -> requests.Response:
+    def _execute_token_request(self) -> httpx2.Response:
         """Executes a request to the xsuaa server to retrieve the token.
 
         :return: The response from the xsuaa server.
-        :rtype: requests.Response
+        :rtype: httpx2.Response
 
         :raises: class:`ai_api_client_sdk.exception.AIAPIAuthenticatorException` if an unexpected exception occurs"""
         data = {"grant_type": "client_credentials", "client_id": self.client_id}
         if self.client_secret:
             data["client_secret"] = self.client_secret
-            return requests.post(url=self.url, data=data)
+            return httpx2.post(url=self.url, data=data)
         if self.cert_str and self.key_str:
             return self._request_token_with_cert_key_str(data)
         if self.cert_file_path and self.key_file_path:
-            return requests.post(url=self.url, data=data, cert=(self.cert_file_path, self.key_file_path))
+            return httpx2.post(url=self.url, data=data, cert=(self.cert_file_path, self.key_file_path))
         raise AIAPIAuthenticatorException(error_message=PARAM_ERROR_MESSAGE)
 
-    def _sleep_before_retry(self, attempt: int, *, response: Optional[requests.Response] = None,
+    def _sleep_before_retry(self, attempt: int, *, response: Optional[httpx2.Response] = None,
                             status_code: Optional[int] = None, exp: Optional[Exception] = None) -> bool:
         params = self._should_retry_token_retrieval_params(
             attempt=attempt,
@@ -146,11 +146,11 @@ class Authenticator:
         time.sleep(params["delay"])
         return True
 
-    def _retrieve_token_with_retries(self) -> tuple[requests.Response, int, Optional[str]]:
+    def _retrieve_token_with_retries(self) -> tuple[httpx2.Response, int, Optional[str]]:
         """Retrieves the token from the xsuaa server with retries.
 
         :return: A tuple containing: response, status_code, error_msg
-        :rtype: tuple[requests.Response, int, Optional[str]]
+        :rtype: tuple[httpx2.Response, int, Optional[str]]
 
         :raises: class:`ai_api_client_sdk.exception.AIAPIAuthenticatorException` if an unexpected exception occurs
         """
@@ -206,10 +206,10 @@ class Authenticator:
         elif status_code // 100 != 2:
             raise AIAPIAuthenticatorServerException(status_code=status_code, error_message=error_msg)
 
-    def _update_token_from_response(self, response: requests.Response, error_msg: Optional[str]) -> None:
+    def _update_token_from_response(self, response: httpx2.Response, error_msg: Optional[str]) -> None:
         """Updates the token from the response received from the xsuaa server.
         :param response: The response received from the xsuaa server.
-        :type response: requests.Response
+        :type response: httpx2.Response
         :param error_msg: The error message received from the xsuaa server.
         :type error_msg: Optional[str]
 

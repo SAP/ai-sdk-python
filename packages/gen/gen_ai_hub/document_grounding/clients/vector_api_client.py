@@ -14,7 +14,7 @@ Key capabilities:
 API Reference: https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Vector
 """
 import humps
-import requests
+import httpx2
 from typing import Optional
 
 from gen_ai_hub import GenAIHubProxyClient
@@ -86,13 +86,13 @@ class VectorAPIClient:
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
         return CollectionsListResponse(**response)
 
-    def create_collection(self, collection_request: CollectionCreateRequest) -> requests.Response:
+    def create_collection(self, collection_request: CollectionCreateRequest) -> httpx2.Response:
         """Create a new collection.
 
         :param collection_request: The object containing the collection configuration.
         :type collection_request: CollectionCreateRequest
-        :return: requests.Response empty object with 202 status code
-        :rtype: requests.Response
+        :return: httpx2.Response empty object with 202 status code
+        :rtype: httpx2.Response
         """
 
         response = self.rest_client.post(
@@ -100,8 +100,7 @@ class VectorAPIClient:
             body=collection_request.model_dump(exclude_none=True)
         )
         if response == "":  # rest_client (ai api sdk) returns empty string for 202 No Content
-            response = requests.Response()
-            response.status_code = 202
+            response = httpx2.Response(status_code=202)
         return response
 
     def get_collection_by_id(self, collection_id: str) -> Collection:
@@ -117,19 +116,18 @@ class VectorAPIClient:
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
         return Collection(**response)
 
-    def delete_collection(self, collection_id: str) -> requests.Response:
+    def delete_collection(self, collection_id: str) -> httpx2.Response:
         """Delete collection by ID.
 
         :param collection_id: The ID of the collection to delete.
         :type collection_id: str
-        :return: requests.Response empty object with 204 status code
-        :rtype: requests.Response
+        :return: httpx2.Response empty object with 204 status code
+        :rtype: httpx2.Response
         """
 
         response = self.rest_client.delete(path=f"{self.path}/collections/{collection_id}")
         if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
-            response = requests.Response()
-            response.status_code = 204
+            response = httpx2.Response(status_code=204)
         return response
 
     # --- Documents ---
@@ -217,23 +215,22 @@ class VectorAPIClient:
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
         return Document(**response)
 
-    def delete_document(self, collection_id: str, document_id: str) -> requests.Response:
+    def delete_document(self, collection_id: str, document_id: str) -> httpx2.Response:
         """Delete a document from a collection.
 
         :param collection_id: The ID of the collection to delete the document from.
         :type collection_id: str
         :param document_id: The ID of the document to delete.
         :type document_id: str
-        :return: requests.Response empty object with 204 status code
-        :rtype: requests.Response
+        :return: httpx2.Response empty object with 204 status code
+        :rtype: httpx2.Response
         """
 
         response = self.rest_client.delete(
             path=f"{self.path}/collections/{collection_id}/documents/{document_id}"
         )
         if response == "":  # 204 No Content
-            response = requests.Response()
-            response.status_code = 204
+            response = httpx2.Response(status_code=204)
         return response
 
     # --- Collection statuses ---

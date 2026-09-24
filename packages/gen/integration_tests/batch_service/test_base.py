@@ -31,7 +31,7 @@ class BatchServiceTestBase(unittest.TestCase):
         cls.proxy_client: GenAIHubProxyClient = get_proxy_client('gen-ai-hub')
         cls.service = BatchService(proxy_client=cls.proxy_client)
         cls.secret_name = 'batch-service-oss'
-        cls.input_uri = f"ai://{cls.secret_name}/batch_service_test_data/requests.jsonl"
+        cls.input_uri = f"ai://{cls.secret_name}/batch_service_test_data/httpx2.jsonl"
         cls.output_uri = f"ai://{cls.secret_name}/batch_service_test_data/output/"
         cls.provider = "azure-openai"
         cls.model = "gpt-4.1"

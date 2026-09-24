@@ -1,4 +1,4 @@
-import requests
+import httpx2
 
 from ai_api_client_sdk.exception import AIAPINotFoundException, AIAPIInvalidRequestException
 from . import get_token, RESOURCE_GROUP_ID, BASE_URL
@@ -118,7 +118,7 @@ class TestE2EMetrics(AIAPIV2ClientE2ETestBase):
                 }
             ]
         }
-        response = requests.patch(url=f'{BASE_URL}/metrics', json=metrics, headers=headers)
+        response = httpx2.patch(url=f'{BASE_URL}/metrics', json=metrics, headers=headers)
         if response.status_code != 204:
             raise Exception(f"Failed to post metrics for execution {execution_id}")
         print(f'Successfully add metrics for execution {execution_id} in testing')

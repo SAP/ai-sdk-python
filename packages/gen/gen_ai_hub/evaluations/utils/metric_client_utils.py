@@ -1,4 +1,4 @@
-import requests
+import httpx2
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 from gen_ai_hub.evaluations.constants import (
     CONTENT_TYPE,
@@ -41,7 +41,7 @@ def _get_custom_metric_details(
             "Authorization": token,  # already sends token in Bearer token format
             "AI-Resource-Group": resource_group,
         }
-        response = requests.get(
+        response = httpx2.get(
             url=url_built,
             headers=headers,
         )
@@ -93,9 +93,9 @@ def get_custom_metric_by_id(
             "Authorization": token,  # already sends token in Bearer token format
             "AI-Resource-Group": resource_group,
         }
-        # response = requests.post(completion_url, json=test_orch_config, headers=headers)
+        # response = httpx2.post(completion_url, json=test_orch_config, headers=headers)
 
-        response = requests.get(
+        response = httpx2.get(
             url=url_built,
             headers=headers,
         )
@@ -188,7 +188,7 @@ def get_metric_version_history(
             "Authorization": token,  # already sends token in Bearer token format
             "AI-Resource-Group": resource_group,
         }
-        response = requests.get(
+        response = httpx2.get(
             url=url_built,
             headers=headers,
         )

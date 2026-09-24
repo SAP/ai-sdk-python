@@ -6,9 +6,10 @@ from unittest.mock import MagicMock, patch
 from ai_api_client_sdk.exception import AIAPIAuthorizationException, AIAPIInvalidRequestException, \
     AIAPINotFoundException, AIAPIPreconditionFailedException, AIAPIServerException
 from ai_api_client_sdk.helpers.constants import DEBUG_ENV_VAR_NAME, SKIP_AUTH_ENV_VAR, Timeouts
+import httpx2
 from ai_api_client_sdk.helpers.rest_client import RestClient
 
-REQUESTS_PATCH_STRING = 'ai_api_client_sdk.helpers.rest_client.requests'
+_PATCH_STRING = 'ai_api_client_sdk.helpers.rest_client._RetryingClient'
 
 class TestRestClient(TestCase):
     @classmethod
@@ -72,22 +73,25 @@ class TestRestClient(TestCase):
     def get_token():
         return 'test_token'
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_get(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_get(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.get(path=self.path, params=self.params)
-        request_session.get.assert_called_with(url=self.url, params=self.params, json=None, headers=self.headers,
-                                               timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=self.params, json=None, headers=self.headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_debug_log_api_call_enabled(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_debug_log_api_call_enabled(self, MockRetryingClient):
         os.environ[DEBUG_ENV_VAR_NAME] = 'True'
-        request_session = MagicMock()
-        request_session.post.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
 
         with self.assertLogs(self.rest_client.logger, level='DEBUG') as cm:
             r_json = self.rest_client.post(self.path, self.body, self.headers, self.resource_group)
@@ -103,12 +107,14 @@ class TestRestClient(TestCase):
                 self.assertTrue(k in cm.output[1])
                 self.assertTrue(v in cm.output[1])
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_debug_log_api_call_disabled(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_debug_log_api_call_disabled(self, MockRetryingClient):
         os.environ[DEBUG_ENV_VAR_NAME] = 'False'
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
 
         error_msg = None
         try:
@@ -123,318 +129,347 @@ class TestRestClient(TestCase):
         if error_msg:
             self.fail(error_msg)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_get_empty_body(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(200, None, '')
-        request_session.get.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_get_empty_body(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, None, '')
+        mock_client.request.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.get(path=self.path, params=self.params)
-        request_session.get.assert_called_with(url=self.url, params=self.params, json=None, headers=self.headers,
-                                               timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=self.params, json=None, headers=self.headers)
         self.assertEqual('', r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_post(self, requests_mock):
-        request_session = MagicMock()
-        request_session.post.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_post(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.post(path=self.path, body=self.body)
-        request_session.post.assert_called_with(url=self.url, params=None, json=self.body, headers=self.headers,
-                                                timeout=(60, 60))
+        mock_client.request.assert_called_with('post', url=self.url, params=None, json=self.body, headers=self.headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_post_empty_body(self, requests_mock):
-        request_session = MagicMock()
-        request_session.post.return_value = self.create_response_mock(200, None, '')
-        request_session.post.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_post_empty_body(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, None, '')
+        mock_client.request.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.post(path=self.path, body=self.body)
-        request_session.post.assert_called_with(url=self.url, params=None, json=self.body, headers=self.headers,
-                                                timeout=(60, 60))
+        mock_client.request.assert_called_with('post', url=self.url, params=None, json=self.body, headers=self.headers)
         self.assertEqual('', r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_patch(self, requests_mock):
-        request_session = MagicMock()
-        request_session.patch.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_patch(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.patch(path=self.path, body=self.body)
-        request_session.patch.assert_called_with(url=self.url, params=None, json=self.body, headers=self.headers,
-                                                 timeout=(60, 60))
+        mock_client.request.assert_called_with('patch', url=self.url, params=None, json=self.body, headers=self.headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_patch_empty_body(self, requests_mock):
-        request_session = MagicMock()
-        request_session.patch.return_value = self.create_response_mock(200, None, '')
-        request_session.patch.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_patch_empty_body(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, None, '')
+        mock_client.request.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.patch(path=self.path, body=self.body)
-        request_session.patch.assert_called_with(url=self.url, params=None, json=self.body, headers=self.headers,
-                                                 timeout=(60, 60))
+        mock_client.request.assert_called_with('patch', url=self.url, params=None, json=self.body, headers=self.headers)
         self.assertEqual('', r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_delete(self, requests_mock):
-        request_session = MagicMock()
-        request_session.delete.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_delete(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.delete(path=self.path)
-        request_session.delete.assert_called_with(url=self.url, params=None, json=None, headers=self.headers,
-                                                  timeout=(60, 60))
+        mock_client.request.assert_called_with('delete', url=self.url, params=None, json=None, headers=self.headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_delete_empty_body(self, requests_mock):
-        request_session = MagicMock()
-        request_session.delete.return_value = self.create_response_mock(200, None, '')
-        request_session.delete.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_delete_empty_body(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, None, '')
+        mock_client.request.return_value.json.side_effect = json.decoder.JSONDecodeError('msg', 'doc', 1)
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.delete(path=self.path)
-        request_session.delete.assert_called_with(url=self.url, params=None, json=None, headers=self.headers,
-                                                  timeout=(60, 60))
+        mock_client.request.assert_called_with('delete', url=self.url, params=None, json=None, headers=self.headers)
         self.assertEqual('', r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_client_type_from_parameter(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_client_type_from_parameter(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         self.rest_client.get(path=self.path)
         headers = self.headers.copy()
-        request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=headers,
-                                               timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value))
+        mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=headers)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_client_type_from_env_var(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_client_type_from_env_var(self, MockRetryingClient):
         backup = os.environ.get('AI_CLIENT_TYPE', None)
         try:
             env_client_type = 'env_client_type'
             os.environ['AI_CLIENT_TYPE'] = env_client_type
             rest_client = RestClient(base_url=self.base_url, get_token=self.get_token,
                                      resource_group=self.resource_group)
-            request_session = MagicMock()
-            request_session.get.return_value = self.response_mock
-            requests_mock.Session.return_value = request_session
+            mock_client = MagicMock()
+            mock_client.__enter__ = MagicMock(return_value=mock_client)
+            mock_client.__exit__ = MagicMock(return_value=False)
+            mock_client.request.return_value = self.response_mock
+            MockRetryingClient.return_value = mock_client
             rest_client.get(path=self.path)
             headers = self.headers.copy()
             headers['AI-Client-Type'] = env_client_type
-            request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=headers,
-                                                   timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value))
+            mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=headers)
         finally:
             if backup is not None:
                 os.environ['AI_CLIENT_TYPE'] = backup
             else:
                 del os.environ['AI_CLIENT_TYPE']
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_client_type_env_var_precedence(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_client_type_env_var_precedence(self, MockRetryingClient):
         try:
             env_client_type = 'env_client_type'
             os.environ['AI_CLIENT_TYPE'] = env_client_type
             rest_client = RestClient(base_url=self.base_url, get_token=self.get_token,
                                      resource_group=self.resource_group, client_type='param_client_type')
-            request_session = MagicMock()
-            request_session.get.return_value = self.response_mock
-            requests_mock.Session.return_value = request_session
+            mock_client = MagicMock()
+            mock_client.__enter__ = MagicMock(return_value=mock_client)
+            mock_client.__exit__ = MagicMock(return_value=False)
+            mock_client.request.return_value = self.response_mock
+            MockRetryingClient.return_value = mock_client
             rest_client.get(path=self.path)
             headers = self.headers.copy()
             headers['AI-Client-Type'] = env_client_type
-            request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=headers,
-                                                   timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value))
+            mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=headers)
         finally:
             del os.environ['AI_CLIENT_TYPE']
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_no_client_type(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_no_client_type(self, MockRetryingClient):
         rest_client = RestClient(base_url=self.base_url, get_token=self.get_token,
                                  resource_group=self.resource_group)
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         rest_client.get(path=self.path)
         headers = self.headers.copy()
         del headers['AI-Client-Type']
-        request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=headers,
-                                               timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value))
+        mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=headers)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_get_with_resource_group(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_get_with_resource_group(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         new_rg = 'new_resource_group'
         headers = self.headers.copy()
         headers['AI-Resource-Group'] = new_rg
         r_json = self.rest_client.get(path=self.path, resource_group=new_rg)
-        request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=headers, timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_camelize_decamelize(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_camelize_decamelize(self, MockRetryingClient):
         body = {'body_key': 'body_value'}
         c_body = {'bodyKey': 'body_value'}
         params = {'param_key': 'param_value'}
         c_params = {'paramKey': 'param_value'}
         response_json = {'responseKey': 'response_value'}
         d_response_json = {'response_key': 'response_value'}
-        request_session = MagicMock()
-        request_session.post.return_value = self.create_response_mock(200, response_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, response_json)
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.post(path=self.path, body=body)
-        request_session.post.assert_called_with(url=self.url, params=None, json=c_body, headers=self.headers,
-                                                timeout=(60, 60))
+        mock_client.request.assert_called_with('post', url=self.url, params=None, json=c_body, headers=self.headers)
         self.assertEqual(d_response_json, r_json)
-        request_session.get.return_value = self.create_response_mock(200, response_json)
+        mock_client.request.return_value = self.create_response_mock(200, response_json)
         r_json = self.rest_client.get(path=self.path, params=params)
-        request_session.get.assert_called_with(url=self.url, params=c_params, json=None, headers=self.headers,
-                                               timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=c_params, json=None, headers=self.headers)
         self.assertEqual(d_response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_not_camelize_body(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_not_camelize_body(self, MockRetryingClient):
         body = {'body_key': 'body_value'}
 
         response_json = {'responseKey': 'response_value'}
 
-        request_session = MagicMock()
-        request_session.post.return_value = self.create_response_mock(200, response_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(200, response_json)
+        MockRetryingClient.return_value = mock_client
 
         kwargs = {'convert_body_to_camel_case': False}
         self.rest_client.post(path=self.path, body=body, **kwargs)
-        request_session.post.assert_called_with(url=self.url, params=None, json=body, headers=self.headers,
-                                                timeout=(60, 60))
+        mock_client.request.assert_called_with('post', url=self.url, params=None, json=body, headers=self.headers)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_not_camelize_params(self, requests_mock):
-        request_session = MagicMock()
+    @patch(_PATCH_STRING)
+    def test_not_camelize_params(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
         params = {'param_key': 'param_value'}
         kwargs = {'convert_params_to_camel_case': False}
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.get(path=self.path, params=params, **kwargs)
-        request_session.get.assert_called_with(url=self.url, params=params, json=None, headers=self.headers,
-                                               timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=params, json=None, headers=self.headers)
         self.assertEqual(self.response_json, r_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_authorization_exception(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(401, {})
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_authorization_exception(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(401, {})
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(AIAPIAuthorizationException) as cm:
             self.rest_client.get(path=self.path)
-        request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=self.headers,
-                                               timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=self.headers)
         self.assertEqual(f'Failed to get {self.path}', cm.exception.description)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_request_exception(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.side_effect = Exception
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_request_exception(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.side_effect = Exception
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(Exception):
             self.rest_client.get(path=self.path)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_server_exception(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_server_exception(self, MockRetryingClient):
         status_code = 500
         response_text = 'error_text'
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(status_code, {}, response_text)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(status_code, {}, response_text)
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(AIAPIServerException) as cm:
             self.rest_client.get(path=self.path)
         self.assert_server_exception(cm.exception, status_code, response_text=response_text)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_invalid_request_exception(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_invalid_request_exception(self, MockRetryingClient):
         status_code = 400
         error_json = self.create_error_json(message='Invalid Request', details='Invalid')
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(status_code, error_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(status_code, error_json)
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(AIAPIInvalidRequestException) as cm:
             self.rest_client.get(path=self.path)
         self.assert_server_exception(cm.exception, status_code, error_json=error_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_not_found_exception(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_not_found_exception(self, MockRetryingClient):
         status_code = 404
         error_json = self.create_error_json(message='Not Found')
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(status_code, error_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(status_code, error_json)
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(AIAPINotFoundException) as cm:
             self.rest_client.get(path=self.path)
         self.assert_server_exception(cm.exception, status_code, error_json=error_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_precondition_failed_exception(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_precondition_failed_exception(self, MockRetryingClient):
         status_code = 412
         error_json = self.create_error_json(message='Precondition Failed')
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(status_code, error_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(status_code, error_json)
+        MockRetryingClient.return_value = mock_client
         with self.assertRaises(AIAPIPreconditionFailedException) as cm:
             self.rest_client.get(path=self.path)
         self.assert_server_exception(cm.exception, status_code, error_json=error_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_kwargs(self, requests_mock):
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        request_session.post.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+    @patch(_PATCH_STRING)
+    def test_kwargs(self, MockRetryingClient):
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
 
         kwargs = {'a': True, 'b': 1, 'c': 'string'}
 
         rget_json = self.rest_client.get(path=self.path, params=self.params, headers=self.headers, **kwargs)
-        request_session.get.assert_called_with(url=self.url, params=self.params, json=None, headers=self.headers,
-                                                timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value),
-                                                **kwargs)
+        mock_client.request.assert_called_with('get', url=self.url, params=self.params, json=None, headers=self.headers, **kwargs)
         self.assertEqual(self.response_json, rget_json)
 
         rpost_json = self.rest_client.post(path=self.path, params=self.params, headers=self.headers, **kwargs)
-        request_session.post.assert_called_with(url=self.url, params=self.params, json=None, headers=self.headers,
-                                                timeout=(Timeouts.CONNECT_TIMEOUT.value, Timeouts.READ_TIMEOUT.value),
-                                                **kwargs)
+        mock_client.request.assert_called_with('post', url=self.url, params=self.params, json=None, headers=self.headers, **kwargs)
         self.assertEqual(self.response_json, rpost_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_kwargs_error(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_kwargs_error(self, MockRetryingClient):
         status_code = 400
         error_json = self.create_error_json(message='Unexpected key', code=status_code)
-        request_session = MagicMock()
-        request_session.get.return_value = self.create_response_mock(status_code, error_json)
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.create_response_mock(status_code, error_json)
+        MockRetryingClient.return_value = mock_client
         kwargs = {'X': False}
         with self.assertRaises(AIAPIServerException) as cm:
             self.rest_client.get(path=self.path, **kwargs)
         self.assert_server_exception(cm.exception, status_code, error_json=error_json)
 
-    @patch(REQUESTS_PATCH_STRING)
-    def test_bytes_response(self, requests_mock):
+    @patch(_PATCH_STRING)
+    def test_bytes_response(self, MockRetryingClient):
         response_mock = MagicMock()
         response_mock.status_code = 200
         response_mock.content = b'response_bytes_content'
-        request_session = MagicMock()
-        request_session.get.return_value = response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = response_mock
+        MockRetryingClient.return_value = mock_client
         r_json = self.rest_client.get(path=self.path, return_bytes_content=True)
-        request_session.get.assert_called_with(url=self.url, params=None, json=None, headers=self.headers, timeout=(60, 60))
+        mock_client.request.assert_called_with('get', url=self.url, params=None, json=None, headers=self.headers)
         self.assertEqual(b'response_bytes_content', r_json)
 
-    @patch('ai_api_client_sdk.helpers.rest_client.requests')
-    def test_skip_authorization_env_var(self, requests_mock):
+    @patch('ai_api_client_sdk.helpers.rest_client._RetryingClient')
+    def test_skip_authorization_env_var(self, MockRetryingClient):
         # Set SKIP_AUTHORIZATION to 'true'
         os.environ[SKIP_AUTH_ENV_VAR] = 'true'
-        request_session = MagicMock()
-        request_session.get.return_value = self.response_mock
-        requests_mock.Session.return_value = request_session
+        mock_client = MagicMock()
+        mock_client.__enter__ = MagicMock(return_value=mock_client)
+        mock_client.__exit__ = MagicMock(return_value=False)
+        mock_client.request.return_value = self.response_mock
+        MockRetryingClient.return_value = mock_client
 
         # Remove Authorization from headers to simulate default behavior
         headers = self.headers.copy()
@@ -443,7 +478,7 @@ class TestRestClient(TestCase):
         # Call get without Authorization header
         r_json = self.rest_client.get(path=self.path, headers=headers)
         # Ensure Authorization header is NOT set
-        called_headers = request_session.get.call_args[1]['headers']
+        called_headers = mock_client.request.call_args[1]['headers']
         assert 'Authorization' not in called_headers
         self.assertEqual(self.response_json, r_json)
 
@@ -451,8 +486,8 @@ class TestRestClient(TestCase):
         del os.environ[SKIP_AUTH_ENV_VAR]
 
         # Now test when SKIP_AUTHORIZATION is not set
-        request_session.get.reset_mock()
+        mock_client.get.reset_mock()
         r_json = self.rest_client.get(path=self.path, headers=headers)
-        called_headers = request_session.get.call_args[1]['headers']
+        called_headers = mock_client.request.call_args[1]['headers']
         assert 'Authorization' in called_headers
         self.assertEqual(self.response_json, r_json)

@@ -176,7 +176,7 @@ class OrchestrationService:
 
     config_id: Optional configuration ID.
 
-    timeout: Optional timeout for HTTP requests.
+    timeout: Optional timeout for HTTP httpx2.
 
     
     """

@@ -37,7 +37,7 @@ class PromptRegistryClient(ABC):
     def __init__(self, proxy_client: Optional[GenAIHubProxyClient] = None):
         """Initializes the PromptRegistryClient.
 
-        :param proxy_client: Optional proxy client to use for requests.
+        :param proxy_client: Optional proxy client to use for httpx2.
         :type proxy_client: Optional[GenAIHubProxyClient], optional
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")

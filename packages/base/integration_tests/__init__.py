@@ -2,7 +2,7 @@ import os
 import random
 from time import sleep
 
-import requests
+import httpx2
 
 from ai_api_client_sdk.helpers.authenticator import Authenticator
 
@@ -76,14 +76,14 @@ def remove_x509_credentials():
 
 def provision_resource_group():
     headers = {'Authorization': get_token()}
-    res = requests.post(url=f'{PROVISIONING_BASE_URL}/resourceGroups', json={"resourceGroupId": RESOURCE_GROUP_ID},
+    res = httpx2.post(url=f'{PROVISIONING_BASE_URL}/resourceGroups', json={"resourceGroupId": RESOURCE_GROUP_ID},
                         headers=headers)
     if res.status_code // 100 != 2:
         raise Exception(f"Failed to create resource group {RESOURCE_GROUP_ID}: {res.status_code}, {res.text}")
 
     sleep(5)
     for i in range(10):
-        res = requests.get(url=f'{PROVISIONING_BASE_URL}/resourceGroups/{RESOURCE_GROUP_ID}', headers=headers)
+        res = httpx2.get(url=f'{PROVISIONING_BASE_URL}/resourceGroups/{RESOURCE_GROUP_ID}', headers=headers)
         try:
             if res.status_code == 200 and res.json()['status'] == 'PROVISIONED':
                 break
@@ -92,7 +92,7 @@ def provision_resource_group():
         sleep(0.5)
     print(f"client sdk integration test resource group: {RESOURCE_GROUP_ID}")
     headers['AI-Resource-Group'] = RESOURCE_GROUP_ID
-    res = requests.post(url=f'{PROVISIONING_BASE_URL}/objectStoreSecrets',
+    res = httpx2.post(url=f'{PROVISIONING_BASE_URL}/objectStoreSecrets',
                         json={"name": "default", "type": 'S3', "bucket": OSS_BUCKET, "endpoint": OSS_ENDPOINT,
                               "pathPrefix": "", "region": OSS_REGION,
                               "data": {"AWS_ACCESS_KEY_ID": OSS_KEY, "AWS_SECRET_ACCESS_KEY": OSS_SECRET}},
@@ -104,7 +104,7 @@ def provision_resource_group():
 
 def deprovision_resource_group():
     headers = {'Authorization': get_token()}
-    res = requests.delete(url=f'{PROVISIONING_BASE_URL}/resourceGroups/{RESOURCE_GROUP_ID}', headers=headers)
+    res = httpx2.delete(url=f'{PROVISIONING_BASE_URL}/resourceGroups/{RESOURCE_GROUP_ID}', headers=headers)
     if res.status_code != 202:
         raise Exception(f"Failed to remove resource group {RESOURCE_GROUP_ID}")
 

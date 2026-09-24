@@ -43,7 +43,7 @@ class RetrievalAPIClient:
     def __init__(self, proxy_client: Optional[GenAIHubProxyClient] = None):
         """Initialize the RetrievalAPIClient.
 
-        :param proxy_client: Optional proxy client for making API requests.
+        :param proxy_client: Optional proxy client for making API httpx2.
         :type proxy_client: Optional[GenAIHubProxyClient], optional
         """
 

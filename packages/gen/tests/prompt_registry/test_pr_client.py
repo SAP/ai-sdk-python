@@ -145,7 +145,7 @@ class TestPromptTemplateClient(unittest.TestCase):
         self.assertEqual(response, TEMPLATE_LIST_RESPONSE)
         mock_get.assert_called_once_with(path=PATH_PROMPT_TEMPLATES, params=query_params)
 
-    @patch('ai_api_client_sdk.helpers.rest_client.requests.Session')
+    @patch('ai_api_client_sdk.helpers.rest_client.httpx2.Session')
     def test_get_prompt_templates_error(self, mock_handle_request_session):
         mock_handle_request_session.raise_for_status.side_effect = (
             AIAPIServerException(description='Error', error_message='Resource not found', status_code=404))

@@ -1,4 +1,4 @@
-import requests
+import httpx2
 from gen_ai_hub.document_grounding.models.vector import (
     Collection,
     CollectionsListResponse,
@@ -172,8 +172,6 @@ VECTOR_SEARCH_RESPONSE = VectorSearchResults(
 )
 
 # --- Common Responses ---
-RESPONSE_202 = requests.Response()
-RESPONSE_202.status_code = 202
+RESPONSE_202 = httpx2.Response(status_code=202)
 
-RESPONSE_204 = requests.Response()
-RESPONSE_204.status_code = 204
+RESPONSE_204 = httpx2.Response(status_code=204)

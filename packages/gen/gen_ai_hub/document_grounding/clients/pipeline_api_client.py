@@ -13,7 +13,7 @@ Supported data repositories:
 API Reference: https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Pipelines
 """
 import humps
-import requests
+import httpx2
 from typing import Optional
 
 from gen_ai_hub import GenAIHubProxyClient
@@ -120,19 +120,18 @@ class PipelineAPIClient:
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}")
         return BasePipelineResponse(**response)
 
-    def delete_pipeline_by_id(self, pipeline_id: str) -> requests.Response:
+    def delete_pipeline_by_id(self, pipeline_id: str) -> httpx2.Response:
         """Delete a pipeline by pipeline id
 
         :param pipeline_id: ID of the pipeline to delete
         :type pipeline_id: str
         :return: Response of the delete operation
-        :rtype: requests.Response
+        :rtype: httpx2.Response
         """
 
         response = self.rest_client.delete(path=f"{self.path}/{pipeline_id}")
         if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
-            response = requests.Response()
-            response.status_code = 204
+            response = httpx2.Response(status_code=204)
         return response
 
     def get_pipeline_status(self, pipeline_id: str) -> GetPipelineStatusResponse:
@@ -314,17 +313,16 @@ class PipelineAPIClient:
         response = humps.camelize(response)
         return Document(**response)
 
-    def trigger_pipeline(self, request: ManualPipelineTrigger) -> requests.Response:
+    def trigger_pipeline(self, request: ManualPipelineTrigger) -> httpx2.Response:
         """Trigger Pipeline Manually
 
         :param request: The manual trigger request object.
         :type request: ManualPipelineTrigger
         :return: Response of the trigger operation
-        :rtype: requests.Response
+        :rtype: httpx2.Response
         """
 
         response = self.rest_client.post(path=f"{self.path}/trigger", body=request.model_dump(exclude_none=True))
         if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
-            response = requests.Response()
-            response.status_code = 202
+            response = httpx2.Response(status_code=202)
         return response

@@ -16,7 +16,7 @@ class BatchInput(ABCBaseModel):
     individual LLM requests to be processed.
 
     :param uri: Fully qualified object-store URI of the input file.
-        Must point to a ``.jsonl`` file (e.g. ``ai://my-store/input/requests.jsonl``).
+        Must point to a ``.jsonl`` file (e.g. ``ai://my-store/input/httpx2.jsonl``).
     :type uri: str
     """
 

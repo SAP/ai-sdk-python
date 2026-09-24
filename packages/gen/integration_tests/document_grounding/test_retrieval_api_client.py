@@ -1,6 +1,6 @@
 import unittest
 from typing import cast
-import requests
+import httpx2
 
 from .. import get_random_string
 from gen_ai_hub import GenAIHubProxyClient
@@ -64,7 +64,7 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
             ],
         )
         create_resp = cls.vector_client.create_collection(create_request)
-        assert create_resp.status_code == requests.status_codes.codes.ACCEPTED
+        assert create_resp.status_code == 202
 
         list_resp = cls.vector_client.get_collections()
         assert list_resp.resources

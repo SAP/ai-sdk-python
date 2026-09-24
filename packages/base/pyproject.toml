@@ -27,7 +27,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.9"
-dependencies = ["aenum~=3.1", "pyhumps~=3.0", "requests~=2.32"]
+dependencies = ["aenum~=3.1", "pyhumps~=3.0", "httpx2>=2.0.0"]
 
 [dependency-groups]
 dev = [

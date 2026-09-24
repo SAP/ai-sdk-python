@@ -32,7 +32,7 @@ class TestAuthenticator(TestCase):
         cls.token = 'test_token'
         cls.token_expire_time = '43200'
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_authenticator(self, requests_mock):
         response_mock = MagicMock()
         response_mock.json.return_value = {'access_token': self.token, 'expires_in': self.token_expire_time}
@@ -130,7 +130,7 @@ class TestAuthenticator(TestCase):
             Authenticator(auth_url=self.auth_url, client_id=self.client_id, key_file_path=self.key_file_path)
         self.assertEqual(PARAM_ERROR_MESSAGE, cm.exception.error_message)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_with_x509_file_path(self, requests_mock):
         requests_mock.post.return_value = ResponseMock(
             {'access_token': self.token, 'expires_in': self.token_expire_time}, 200)
@@ -153,7 +153,7 @@ class TestAuthenticator(TestCase):
             self.assertEqual(self.key_str, f.read())
         return ResponseMock({'access_token': self.token, 'expires_in': self.token_expire_time}, 200)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_with_x509_str(self, requests_mock):
         requests_mock.post = self._requests_post_mock
         a = Authenticator(auth_url=self.auth_url, client_id=self.client_id, cert_str=self.cert_str,
@@ -161,7 +161,7 @@ class TestAuthenticator(TestCase):
         generated_token = a.get_token()
         self.assertEqual(f'Bearer {self.token}', generated_token)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_error(self, requests_mock):
         requests_mock.post.side_effect = Exception
         a = Authenticator(auth_url=self.auth_url, client_id=self.client_id, client_secret=self.client_secret)
@@ -170,7 +170,7 @@ class TestAuthenticator(TestCase):
         data = {'grant_type': 'client_credentials', 'client_id': self.client_id, 'client_secret': self.client_secret}
         requests_mock.post.assert_called_with(url=self.auth_url, data=data)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_invalid_request_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -180,7 +180,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=1,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_unauthorized_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -190,7 +190,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=1,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_forbidden_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -200,7 +200,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=1,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_method_not_allowed_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -210,7 +210,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=1,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_timeout_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -220,7 +220,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=4,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_server_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -230,7 +230,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=4,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_get_token_raises_exception(self, requests_mock):
         self._do_test_get_token_raises_exception(
             requests_mock=requests_mock,
@@ -240,7 +240,7 @@ class TestAuthenticator(TestCase):
             expected_post_calls=1,
         )
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_token_is_cached(self, requests_mock):
         token = 'test_token'
         expires_in = '43200' # 12h
@@ -256,7 +256,7 @@ class TestAuthenticator(TestCase):
         requests_mock.post.assert_called_with(url=self.auth_url, data=data)
         self.assertEqual(f'Bearer {token}', generated_token)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_token_is_valid_but_refresh(self, requests_mock):
         token = 'test_token'
         expires_in = '3600'  # 1h
@@ -272,7 +272,7 @@ class TestAuthenticator(TestCase):
         self.assertEqual(f'Bearer {token}', generated_token)
         self.assertEqual(2, requests_mock.post.call_count)
 
-    @patch('ai_api_client_sdk.helpers.authenticator.requests')
+    @patch('ai_api_client_sdk.helpers.authenticator.httpx2')
     def test_token_is_expired(self, requests_mock):
         token = 'test_token'
         expires_in = '0'

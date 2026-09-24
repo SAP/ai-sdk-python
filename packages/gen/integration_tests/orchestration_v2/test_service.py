@@ -1,4 +1,4 @@
-import requests
+import httpx2
 import time
 from httpx import TimeoutException
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, ModuleConfig,
@@ -47,7 +47,7 @@ class TestService(OrchestrationServiceTestBase):
         headers = self.service.proxy_client.request_header
         url = self.service.api_url.split("/inference")[0]
         endpoint = f"{url}/registry/v2/orchestrationConfigs/{self.config_ref['id']}"
-        requests.delete(endpoint, headers=headers)
+        httpx2.delete(endpoint, headers=headers)
 
     def create_config_ref(self) -> dict:
         if self.config_ref is not None:
@@ -82,7 +82,7 @@ class TestService(OrchestrationServiceTestBase):
         delay = 2.0
         for attempt in range(max_retries + 1):
             try:
-                response = requests.post(endpoint, json=body, headers=headers)
+                response = httpx2.post(endpoint, json=body, headers=headers)
                 response_json = response.json()
 
                 # Check if response has required 'id' field
@@ -95,7 +95,7 @@ class TestService(OrchestrationServiceTestBase):
                         raise KeyError(f"Response missing 'id' field: {response_json}")
 
                 return response_json
-            except requests.exceptions.RequestException as e:
+            except httpx2.RequestError as e:
                 if attempt < max_retries:
                     time.sleep(delay)
                     delay *= 2

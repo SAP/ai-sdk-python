@@ -19,7 +19,7 @@ class TestGetCustomMetricDetails(unittest.TestCase):
         self.resource_group = "test-rg"
         self.error_collector = ValidationCollector()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_custom_metric_details_success(self, mock_get):
         mock_response = MagicMock()
         mock_response.json.return_value = {"resources": [{"id": "1", "name": "metric1"}]}
@@ -32,7 +32,7 @@ class TestGetCustomMetricDetails(unittest.TestCase):
         self.assertEqual(result, {"resources": [{"id": "1", "name": "metric1"}]})
         mock_get.assert_called_once()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_custom_metric_details_exception(self, mock_get):
         mock_get.side_effect = Exception("Network error")
 
@@ -53,7 +53,7 @@ class TestGetCustomMetricById(unittest.TestCase):
         self.resource_group = "test-rg"
         self.error_collector = ValidationCollector()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_custom_metric_by_id_success(self, mock_get):
         mock_response = MagicMock()
         mock_response.json.return_value = {
@@ -71,7 +71,7 @@ class TestGetCustomMetricById(unittest.TestCase):
         self.assertEqual(result["name"], "test-metric")
         mock_get.assert_called_once()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_custom_metric_by_id_exception(self, mock_get):
         mock_get.side_effect = Exception("API error")
 
@@ -151,7 +151,7 @@ class TestGetMetricVersionHistory(unittest.TestCase):
         self.resource_group = "test-rg"
         self.error_collector = ValidationCollector()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_metric_version_history_success(self, mock_get):
         mock_response = MagicMock()
         mock_response.json.return_value = {
@@ -175,7 +175,7 @@ class TestGetMetricVersionHistory(unittest.TestCase):
         self.assertEqual(result["version"], "1.0")
         mock_get.assert_called_once()
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_metric_version_history_no_resources(self, mock_get):
         mock_response = MagicMock()
         mock_response.json.return_value = {"resources": []}
@@ -194,7 +194,7 @@ class TestGetMetricVersionHistory(unittest.TestCase):
         self.assertTrue(len(self.error_collector.errors) > 0)
         self.assertIn("No version history resources found", self.error_collector.errors[0][1])
 
-    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.requests.get")
+    @patch("gen_ai_hub.evaluations.utils.metric_client_utils.httpx2.get")
     def test_get_metric_version_history_exception(self, mock_get):
         mock_get.side_effect = Exception("Request failed")
 

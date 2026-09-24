@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-import requests
+import httpx2
 from gen_ai_hub.document_grounding.client import PipelineAPIClient
 from gen_ai_hub.document_grounding.models.pipeline import S3PipelineCreateRequest, CommonConfiguration
 from tests.mock import get_mocked_ai_core_client
@@ -214,7 +214,7 @@ class TestPipelineAPIClient(unittest.TestCase):
         mock_post.return_value = ""
         resp = self.test_client.trigger_pipeline(MANUAL_TRIGGER_REQUEST)
 
-        self.assertIsInstance(resp, requests.Response)
+        self.assertIsInstance(resp, httpx2.Response)
         self.assertEqual(resp.status_code, 202)
 
         mock_post.assert_called_once_with(

@@ -1,6 +1,5 @@
 import unittest
 from typing import cast
-import requests.status_codes
 
 from .. import get_random_string
 from gen_ai_hub import GenAIHubProxyClient
@@ -63,7 +62,7 @@ class TestVectorAPIIntegration(unittest.TestCase):
         )
         response = self.client.create_collection(request)
 
-        self.assertEqual(response.status_code, requests.status_codes.codes.ACCEPTED)
+        self.assertEqual(response.status_code, 202)
 
         # Retrieve all collections and validate the last created collection data.
         response = self.client.get_collections()
@@ -306,12 +305,12 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertTrue(self.__class__.collection_id)
         self.assertTrue(self.__class__.document_id)
         response = self.client.delete_document(self.__class__.collection_id, self.__class__.document_id)
-        self.assertEqual(response.status_code, requests.status_codes.codes.NO_CONTENT)
+        self.assertEqual(response.status_code, 204)
 
         # Delete a collection (204 No Content).
         self.assertTrue(self.__class__.collection_id)
         response = self.client.delete_collection(self.__class__.collection_id)
-        self.assertEqual(response.status_code, requests.status_codes.codes.NO_CONTENT)
+        self.assertEqual(response.status_code, 204)
 
         # Verify deletion status after deletion.
         self.assertTrue(self.__class__.collection_id)

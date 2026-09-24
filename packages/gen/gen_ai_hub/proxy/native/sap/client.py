@@ -34,7 +34,7 @@ class RPTClient:
                          If not provided, a default implementation is used.
     :type proxy_client: Optional[GenAIHubProxyClient]
 
-    :param timeout: Default timeout value for the HTTP client used for requests.
+    :param timeout: Default timeout value for the HTTP client used for httpx2.
     :type timeout: Union[int, float, httpx.Timeout, None]
     """
 

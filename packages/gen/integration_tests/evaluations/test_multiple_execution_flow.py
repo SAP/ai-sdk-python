@@ -4,7 +4,7 @@ Tests evaluation with multiple EvaluationConfig objects - one with prompt templa
 one with orchestration registry reference and custom metric.
 """
 import pytest
-import requests
+import httpx2
 import unittest
 from gen_ai_hub.evaluations.models.evaluation_config import EvaluationConfig
 from gen_ai_hub.evaluations.models.dataset_config import Dataset
@@ -15,13 +15,13 @@ from .test_base import EvaluationClientTestBase
 
 
 def get_auth_token(auth_url, client_id, client_secret):
-    """Get authentication token for API requests."""
+    """Get authentication token for API httpx2."""
     payload = {
         'grant_type': 'client_credentials',
         'client_id': client_id,
         'client_secret': client_secret,
     }
-    response = requests.post(auth_url, data=payload)
+    response = httpx2.post(auth_url, data=payload)
     response.raise_for_status()
     response_data = response.json()
     if 'access_token' in response_data:
@@ -48,7 +48,7 @@ def create_prompt_template(base_url, headers):
         }
     }
     print(f"Creating prompt template with payload: {payload}")
-    response = requests.post(api_url, headers=headers, json=payload)
+    response = httpx2.post(api_url, headers=headers, json=payload)
     response.raise_for_status()
     result = response.json()
     print(f"Prompt template created: {result.get('id')}")
@@ -82,7 +82,7 @@ def create_orchestration_registry_config(base_url, headers, model_name, model_ve
             }
         }
     }
-    response = requests.post(api_url, headers=headers, json=payload)
+    response = httpx2.post(api_url, headers=headers, json=payload)
     response.raise_for_status()
     result = response.json()
     print(f"Orchestration registry configuration created: {result.get('id')}")
@@ -137,7 +137,7 @@ def create_custom_metric(base_url, headers, model_name, model_version):
             }
         }
     }
-    response = requests.post(api_url, headers=headers, json=payload)
+    response = httpx2.post(api_url, headers=headers, json=payload)
     response.raise_for_status()
     result = response.json()
     print(f"Custom metric created: {result.get('id')}")
@@ -150,7 +150,7 @@ def delete_orchestration_registry_config(base_url, headers, config_id):
         return
     try:
         api_url = f"{base_url}/registry/v2/orchestrationConfigs/{config_id}"
-        response = requests.delete(api_url, headers=headers)
+        response = httpx2.delete(api_url, headers=headers)
         if response.status_code < 300:
             print(f"Orchestration registry configuration deleted: {config_id}")
         else:
@@ -164,7 +164,7 @@ def delete_prompt_template(base_url, headers, template_id):
         return
     try:
         api_url = f"{base_url}/lm/promptTemplates/{template_id}"
-        response = requests.delete(api_url, headers=headers)
+        response = httpx2.delete(api_url, headers=headers)
         if response.status_code < 300:
             print(f"Prompt template deleted: {template_id}")
         else:
@@ -178,7 +178,7 @@ def delete_custom_metric(base_url, headers, metric_id):
         return
     try:
         api_url = f"{base_url}/lm/evaluationMetrics/{metric_id}"
-        response = requests.delete(api_url, headers=headers)
+        response = httpx2.delete(api_url, headers=headers)
         if response.status_code < 300:
             print(f"Custom metric deleted: {metric_id}")
         else:
