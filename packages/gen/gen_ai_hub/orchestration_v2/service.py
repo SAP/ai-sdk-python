@@ -12,6 +12,7 @@ import logging
 import asyncio
 from functools import wraps
 from typing import List, Optional, Iterable, Union
+from gen_ai_hub._types import TimeoutTypes
 
 import httpx2
 from gen_ai_hub._ssl import default_ssl_context
@@ -190,7 +191,7 @@ class OrchestrationService:
                  deployment_id: Optional[str] = None,
                  config_name: Optional[str] = None,
                  config_id: Optional[str] = None,
-                 timeout: Union[int, float, httpx2.Timeout, None] = None):
+                 timeout: Optional[TimeoutTypes] = None):
         """Initializes the OrchestrationService.
 
         :param api_url: the base URL for the orchestration API, defaults to None
@@ -208,7 +209,7 @@ class OrchestrationService:
         :param config_id: the configuration ID, defaults to None
         :type config_id: Optional[str], optional
         :param timeout: the timeout for HTTP requests, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :raises ValueError: if both config and config_ref are provided.
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
@@ -225,7 +226,7 @@ class OrchestrationService:
         self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
         self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
 
-    def _determine_timeout(self, timeout: httpx2.Timeout) -> httpx2.Timeout:
+    def _determine_timeout(self, timeout: TimeoutTypes) -> TimeoutTypes:
         # Determine the timeout to use for this request
         if timeout is not None:
             # Overwrite default timeout for this request
@@ -310,7 +311,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             stream: bool = False,
     ) -> Union[CompletionPostResponse | Iterable[StreamCompletionPostResponse]]:
         """
@@ -389,7 +390,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             stream: bool = False,
     ) -> Union[CompletionPostResponse | AsyncSSEClient]:
         """
@@ -464,7 +465,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -478,7 +479,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
         """        
@@ -497,7 +498,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> Iterable[StreamCompletionPostResponse]:
         """Executes an orchestration streaming request synchronously.
 
@@ -511,7 +512,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: An Iterable[StreamCompletionPostResponse] object
         :rtype: Iterable[StreamCompletionPostResponse]
         """
@@ -531,7 +532,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -544,7 +545,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
         """
@@ -563,7 +564,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration streaming request asynchronously.
 
@@ -576,7 +577,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: the AsyncSSEClient object
         :rtype: AsyncSSEClient
         """        
@@ -596,7 +597,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -611,7 +612,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -679,7 +680,7 @@ class OrchestrationService:
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -695,7 +696,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -733,7 +734,7 @@ class OrchestrationService:
             self,
             config: EmbeddingsOrchestrationConfig,
             input: EmbeddingsInput,  # pylint: disable=redefined-builtin
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> EmbeddingsPostResponse:
         """Executes an embeddings request synchronously.
 
@@ -742,7 +743,7 @@ class OrchestrationService:
         :param input: the input text to embed
         :type input: EmbeddingsInput
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: the EmbeddingsPostResponse object
         :rtype: EmbeddingsPostResponse
         """
@@ -769,7 +770,7 @@ class OrchestrationService:
             self,
             config: EmbeddingsOrchestrationConfig,
             input: EmbeddingsInput,  # pylint: disable=redefined-builtin
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> EmbeddingsPostResponse:
         """Executes an embeddings request asynchronously.
 
@@ -778,7 +779,7 @@ class OrchestrationService:
         :param input: the input text to embed
         :type input: EmbeddingsInput
         :param timeout: the timeout overwrite per request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: the EmbeddingsPostResponse object
         :rtype: EmbeddingsPostResponse
         """

@@ -13,6 +13,7 @@ import random
 import time
 import logging
 from typing import List, Optional, Iterable, Union
+from gen_ai_hub._types import TimeoutTypes
 
 import dacite
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
@@ -203,7 +204,7 @@ class OrchestrationService:
                  deployment_id: Optional[str] = None,
                  config_name: Optional[str] = None,
                  config_id: Optional[str] = None,
-                 timeout: Union[int, float, httpx2.Timeout, None] = None):
+                 timeout: Optional[TimeoutTypes] = None):
         """Initializes the OrchestrationService with the provided parameters.
 
         :param api_url: The base URL for the orchestration API, defaults to None
@@ -219,7 +220,7 @@ class OrchestrationService:
         :param config_id: the configuration ID, defaults to None
         :type config_id: Optional[str], optional
         :param timeout: the timeout for HTTP requests, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")    
         if api_url:
@@ -232,7 +233,7 @@ class OrchestrationService:
         self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
         self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
 
-    def _determine_timeout(self, timeout: httpx2.Timeout) -> httpx2.Timeout:
+    def _determine_timeout(self, timeout: TimeoutTypes) -> TimeoutTypes:
         # Determine the timeout to use for this request
         if timeout is not None:
             # Overwrite default timeout for this request
@@ -312,7 +313,7 @@ class OrchestrationService:
             history: List[Message],
             stream: bool,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> Union[OrchestrationResponse, Iterable[OrchestrationResponseStreaming]]:
         """Executes an orchestration request synchronously.
         For streaming requests, this method creates a single HTTP stream. It manually enters the stream's
@@ -331,7 +332,7 @@ class OrchestrationService:
         :param stream_options: additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :raises ValueError: If no configuration is provided.
         :raises OrchestrationError: If the HTTP request fails.
         :return: An OrchestrationResponse if not streaming, or an iterable of OrchestrationResponseStreaming
@@ -387,7 +388,7 @@ class OrchestrationService:
             history: List[Message],
             stream: bool,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> Union[OrchestrationResponse, AsyncSSEClient]:
         """Executes an orchestration request asynchronously.
 
@@ -402,7 +403,7 @@ class OrchestrationService:
         :param stream_options: additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :raises ValueError: If no configuration is provided.
         :raises OrchestrationError: If the HTTP request fails.
         :return: An OrchestrationResponse if not streaming, or an AsyncSSEClient for iterating over 
@@ -454,7 +455,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -465,7 +466,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: An OrchestrationResponse object.
         :rtype: OrchestrationResponse
         """
@@ -483,7 +484,7 @@ class OrchestrationService:
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> SSEClient:
         """Executes an orchestration request in streaming mode (synchronously).
 
@@ -496,7 +497,7 @@ class OrchestrationService:
         :param stream_options: the additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: An SSEClient instance for iterating over the streaming response.
         :rtype: SSEClient
         """
@@ -514,7 +515,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -525,7 +526,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: An OrchestrationResponse object.
         :rtype: OrchestrationResponse
         """
@@ -543,7 +544,7 @@ class OrchestrationService:
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
             stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration request asynchronously in streaming mode.
 
@@ -556,7 +557,7 @@ class OrchestrationService:
         :param stream_options: the additional streaming options, defaults to None
         :type stream_options: Optional[dict], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :return: An AsyncSSEClient instance for iterating over the streaming response.
         :rtype: AsyncSSEClient
         """
@@ -586,7 +587,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -599,7 +600,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
@@ -662,7 +663,7 @@ class OrchestrationService:
             config: Optional[OrchestrationConfig] = None,
             template_values: Optional[List[TemplateValue]] = None,
             history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx2.Timeout, None] = None,
+            timeout: Optional[TimeoutTypes] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
@@ -676,7 +677,7 @@ class OrchestrationService:
         :param history: the message history, defaults to None
         :type history: Optional[List[Message]], optional
         :param timeout: the timeout for the request, defaults to None
-        :type timeout: Union[int, float, httpx2.Timeout, None], optional
+        :type timeout: Optional[TimeoutTypes], optional
         :param max_retries: the maximum number of retry attempts, defaults to 10
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
