@@ -9,7 +9,6 @@ from typing import Optional, Union
 from gen_ai_hub._types import TimeoutTypes
 
 import httpx2
-from gen_ai_hub._ssl import default_ssl_context
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
@@ -86,8 +85,8 @@ class BatchService:
             self.api_url = base
         self.resource_group = resource_group
         self.timeout = timeout
-        self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
-        self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
+        self.client = httpx2.Client(timeout=self.timeout)
+        self.async_client = httpx2.AsyncClient(timeout=self.timeout)
 
     # ------------------------------------------------------------------
     # Internal helpers

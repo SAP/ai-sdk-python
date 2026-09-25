@@ -1,7 +1,6 @@
 from typing import Optional, Union
 from gen_ai_hub._types import TimeoutTypes
 import httpx2
-from gen_ai_hub._ssl import default_ssl_context
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
@@ -47,8 +46,8 @@ class RPTClient:
     ):
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
         self.timeout = timeout
-        self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
-        self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
+        self.client = httpx2.Client(timeout=self.timeout)
+        self.async_client = httpx2.AsyncClient(timeout=self.timeout)
 
     def _determine_timeout(self, timeout: TimeoutTypes) -> TimeoutTypes:
         # Determine the timeout to use for this request

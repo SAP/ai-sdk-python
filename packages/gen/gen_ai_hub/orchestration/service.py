@@ -18,7 +18,6 @@ from gen_ai_hub._types import TimeoutTypes
 import dacite
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
 import httpx2
-from gen_ai_hub._ssl import default_ssl_context
 from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
@@ -230,8 +229,8 @@ class OrchestrationService:
         self.config = config
         self.timeout = timeout
         # create reusable httpx client to improve performance
-        self.client = httpx2.Client(timeout=self.timeout, verify=default_ssl_context())
-        self.async_client = httpx2.AsyncClient(timeout=self.timeout, verify=default_ssl_context())
+        self.client = httpx2.Client(timeout=self.timeout)
+        self.async_client = httpx2.AsyncClient(timeout=self.timeout)
 
     def _determine_timeout(self, timeout: TimeoutTypes) -> TimeoutTypes:
         # Determine the timeout to use for this request
