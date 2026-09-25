@@ -39,10 +39,10 @@ __all__ = [
 # Extends the core credential values with evaluation-specific ones.
 # Currently supporting only the AWS creds, would need to extend to other hyperscalers in future.
 EVAL_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = CORE_CREDENTIAL_VALUES + [
-    CredentialsValue(name='aws_access_key_id'),
-    CredentialsValue(name='aws_secret_access_key'),
-    CredentialsValue(name='orchestration_url'),
-    CredentialsValue(name='input_object_store_secret_name'),
+    CredentialsValue(name='aws_access_key_id', vcap_key=('credentials', 'aws_access_key_id')),
+    CredentialsValue(name='aws_secret_access_key', vcap_key=('credentials', 'aws_secret_access_key')),
+    CredentialsValue(name='orchestration_url', vcap_key=('credentials', 'orchestration_url')),
+    CredentialsValue(name='input_object_store_secret_name', vcap_key=('credentials', 'input_object_store_secret_name')),
 ]
 
 CREDENTIAL_VALUES: Final[List[CredentialsValue]] = EVAL_CREDENTIAL_VALUES
