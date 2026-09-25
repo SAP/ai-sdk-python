@@ -194,7 +194,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error without Retry-After header
             response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx2.Headers({"Retry-After": "3"})
+            response.headers = {"Retry-After": "3"}
             response.text = "Too Many Requests"
             response.request = Mock()
 
@@ -219,7 +219,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error without Retry-After header
             response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx2.Headers({})
+            response.headers = {}
             response.text = "Too Many Requests"
             response.request = Mock()
 
@@ -244,7 +244,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error
             response = Mock(spec=httpx2.Response)
             response.status_code = 429
-            response.headers = httpx2.Headers({})
+            response.headers = {}
             response.text = "Too Many Requests"
             response.request = Mock()
 

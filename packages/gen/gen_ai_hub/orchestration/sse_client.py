@@ -34,7 +34,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "OrchestrationResp
     if "code" in event:
         raise OrchestrationError(
             request_id=event.get("request_id"),
-            http_headers=httpx2.Headers({}),
+            http_headers={},
             message=event.get("message"),
             code=event.get("code"),
             location=event.get("location"),

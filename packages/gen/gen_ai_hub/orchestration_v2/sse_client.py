@@ -39,7 +39,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
         if isinstance(error_event, dict):
             raise OrchestrationError(
                 request_id=error_event.get("request_id"),
-                headers=httpx2.Headers({}),
+                headers={},
                 message=error_event.get("message"),
                 code=error_event.get("code"),
                 location=error_event.get("location"),
@@ -49,7 +49,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
             errors = [
                 OrchestrationError(
                     request_id=e.get("request_id"),
-                    headers=httpx2.Headers({}),
+                    headers={},
                     message=e.get("message"),
                     code=e.get("code"),
                     location=e.get("location"),

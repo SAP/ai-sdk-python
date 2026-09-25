@@ -17,7 +17,7 @@ class BatchServiceError(Exception):
         request_id: str,
         message: str,
         status_code: int,
-        headers: httpx2.Headers,
+        headers: dict[str, str],
     ):
         self.request_id = request_id
         self.message = message

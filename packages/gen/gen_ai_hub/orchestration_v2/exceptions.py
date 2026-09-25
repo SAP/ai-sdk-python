@@ -18,7 +18,7 @@ class OrchestrationError(Exception):
     def __init__(
             self,
             request_id: str,
-            headers: httpx2.Headers,
+            headers: dict[str, str],
             message: str,
             code: int,
             location: str,
@@ -30,7 +30,7 @@ class OrchestrationError(Exception):
         :param request_id: unique identifier for the request that encountered the error.
         :type request_id: str
         :param headers: HTTP headers associated with the request, useful in case of e.g. rate limiting..
-        :type headers: httpx2.Headers
+        :type headers: dict[str, str]
         :param message: Detailed error message describing the issue.
         :type message: str
         :param code: Error code associated with the specific type of failure.
