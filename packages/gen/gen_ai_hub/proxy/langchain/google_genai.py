@@ -4,6 +4,7 @@ from typing import Optional
 
 from langchain_google_genai import ChatGoogleGenerativeAI as ChatGoogleGenerativeAI_
 from langchain_google_genai import GoogleGenerativeAIEmbeddings as GoogleGenerativeAIEmbeddings_
+from langchain_google_genai.chat_models import _ClientCleanup  # private upstream name, since 4.3.7
 from pydantic import model_validator, ConfigDict
 
 from gen_ai_hub.proxy.core.base import BaseProxyClient
@@ -114,6 +115,17 @@ class ChatGoogleGenerativeAI(_BaseGoogleGenerativeAI, ChatGoogleGenerativeAI_):
 
     def _init_parent(self, **kwargs):
         ChatGoogleGenerativeAI_.__init__(self, **kwargs)
+
+    @model_validator(mode="after")
+    def _register_client_cleanup(self):
+        """Register the injected client for cleanup.
+
+        Upstream wraps the client in a ``_ClientCleanup`` stored in
+        ``_client_cleanup``, which ``async_client`` and ``aclose`` read. That
+        happens in a validator this class shadows, so do it here instead.
+        """
+        self._client_cleanup = _ClientCleanup(self.client)
+        return self
 
 
 class GoogleGenerativeAIEmbeddings(_BaseGoogleGenerativeAI, GoogleGenerativeAIEmbeddings_):
