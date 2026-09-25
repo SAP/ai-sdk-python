@@ -1,5 +1,5 @@
 from typing import Optional, Union
-import httpx
+import httpx2
 from google.genai import Client as GoogleClient
 from google.genai import types
 from google.genai.models import Models as GoogleModels
@@ -32,7 +32,7 @@ def _resolve_deployment(transport_instance, requested_model_name: str):
     return deployment
 
 
-def _rewrite_request(transport_instance, request: httpx.Request):
+def _rewrite_request(transport_instance, request: httpx2.Request):
     """Interception and rewriting of the request. Handles dynamic routing, header injection, etc."""
 
     path = request.url.path
@@ -55,7 +55,7 @@ def _rewrite_request(transport_instance, request: httpx.Request):
 
     deployment = _resolve_deployment(transport_instance, model_name)
 
-    deployment_url = httpx.URL(deployment.url)
+    deployment_url = httpx2.URL(deployment.url)
 
     # Path construction: deployment_url + /models/ + {model_name}:generateContent
     new_path = f"{deployment_url.path.rstrip('/')}/models/{suffix}"
@@ -85,7 +85,7 @@ def _rewrite_request(transport_instance, request: httpx.Request):
     return request
 
 
-class AICoreDynamicTransport(httpx.BaseTransport):
+class AICoreDynamicTransport(httpx2.BaseTransport):
     """Synchronous transport that dynamically resolves deployment URLs per request."""
 
     def __init__(self, proxy_client: BaseProxyClient, **deployment_selector_kwargs):
@@ -95,7 +95,7 @@ class AICoreDynamicTransport(httpx.BaseTransport):
         :type proxy_client: BaseProxyClient
         """
         self.proxy_client = proxy_client
-        self._inner_transport = httpx.HTTPTransport()
+        self._inner_transport = httpx2.HTTPTransport()
         self._selector_kwargs = kwargs_if_set(**deployment_selector_kwargs)
 
     def get_selector_kwargs(self):
@@ -106,13 +106,13 @@ class AICoreDynamicTransport(httpx.BaseTransport):
         """
         return self._selector_kwargs
 
-    def handle_request(self, request: httpx.Request) -> httpx.Response:
+    def handle_request(self, request: httpx2.Request) -> httpx2.Response:
         """Handles the request by rewriting it to route through the appropriate AI Core deployment.
 
         :param request: The original HTTPX request.
-        :type request: httpx.Request
+        :type request: httpx2.Request
         :return: The HTTPX response from the AI Core deployment.
-        :rtype: httpx.Response
+        :rtype: httpx2.Response
         """
         modified_request = _rewrite_request(self, request)
         return self._inner_transport.handle_request(modified_request)
@@ -122,7 +122,7 @@ class AICoreDynamicTransport(httpx.BaseTransport):
         self._inner_transport.close()
 
 
-class AsyncAICoreDynamicTransport(httpx.AsyncBaseTransport):
+class AsyncAICoreDynamicTransport(httpx2.AsyncBaseTransport):
     """Asynchronous transport that dynamically resolves deployment URLs per request."""
 
     def __init__(self, proxy_client: BaseProxyClient, **deployment_selector_kwargs):
@@ -132,7 +132,7 @@ class AsyncAICoreDynamicTransport(httpx.AsyncBaseTransport):
         :type proxy_client: BaseProxyClient
         """
         self.proxy_client = proxy_client
-        self._inner_transport = httpx.AsyncHTTPTransport()
+        self._inner_transport = httpx2.AsyncHTTPTransport()
         self._selector_kwargs = kwargs_if_set(**deployment_selector_kwargs)
 
     def get_selector_kwargs(self):
@@ -143,13 +143,13 @@ class AsyncAICoreDynamicTransport(httpx.AsyncBaseTransport):
         """
         return self._selector_kwargs
 
-    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+    async def handle_async_request(self, request: httpx2.Request) -> httpx2.Response:
         """Handles the request by rewriting it to route through the appropriate AI Core deployment.
 
         :param request: The original HTTPX request.
-        :type request: httpx.Request
+        :type request: httpx2.Request
         :return: The HTTPX response from the AI Core deployment.
-        :rtype: httpx.Response
+        :rtype: httpx2.Response
         """
         modified_request = _rewrite_request(self, request)
         return await self._inner_transport.handle_async_request(modified_request)
@@ -230,18 +230,17 @@ class Client(GoogleClient):
             **deployment_selector_kwargs
         )
 
+        sync_http_client = httpx2.Client(transport=sync_transport)
+        async_http_client = httpx2.AsyncClient(transport=async_transport)
+
         super().__init__(
             vertexai=True,
             project=project,
             location=location,
             credentials=Credentials(token="dummy-token-placeholder"),
             http_options=types.HttpOptions(
-                client_args={
-                    "transport": sync_transport
-                    },
-                async_client_args={
-                    "transport": async_transport
-                    },
+                httpx_client=sync_http_client,
+                httpx_async_client=async_http_client,
                 timeout=timeout,
             ),
             **kwargs

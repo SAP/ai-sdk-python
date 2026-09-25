@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest.mock import Mock
 
-from httpx import Response
+from httpx2 import Response
 
 from gen_ai_hub.orchestration.sse_client import AsyncSSEClient
 

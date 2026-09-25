@@ -1,4 +1,4 @@
-import httpx
+import httpx2
 from typing import Dict, Any
 
 
@@ -12,7 +12,7 @@ class OrchestrationError(Exception):
     def __init__(
         self,
         request_id: str,
-        http_headers: httpx.Headers,
+        http_headers: dict[str, str],
         message: str,
         code: int,
         location: str,
@@ -24,7 +24,7 @@ class OrchestrationError(Exception):
         :param request_id: unique identifier for the request
         :type request_id: str
         :param http_headers: the HTTP headers associated with the error, useful in case of e.g. rate limiting.
-        :type http_headers: httpx.Headers
+        :type http_headers: dict[str, str]
         :param message: Detailed error message describing the issue.
         :type message: str
         :param code: Error code associated with the specific type of failure
