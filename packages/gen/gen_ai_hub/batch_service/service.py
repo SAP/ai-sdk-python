@@ -7,7 +7,7 @@ cancel, and delete batch processing jobs via SAP AI Core.
 
 from typing import Optional, Union
 
-import httpx
+from gen_ai_hub.http_types import *
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
@@ -25,11 +25,11 @@ from gen_ai_hub.batch_service.models.response import (
 _BASE_PATH = "/llm-batch-service/v1/batches"
 
 
-def _handle_http_error(response: httpx.Response) -> None:
-    """Raises BatchServiceError from a non-2xx httpx response."""
+def _handle_http_error(response: httpx_Response) -> None:
+    """Raises BatchServiceError from a non-2xx httpx_response."""
     try:
         response.raise_for_status()
-    except httpx.HTTPStatusError as error:
+    except httpx_HTTPStatusError as error:
         try:
             payload = response.json()
             request_id = payload.get('request_id', '')
@@ -65,8 +65,8 @@ class BatchService:
     :param resource_group: Value for the ``AI-Resource-Group`` header. Falls back
                         to the resource group on ``proxy_client`` when omitted.
     :type resource_group: str, Optional
-    :param timeout: Default HTTP request timeout passed to httpx.
-    :type timeout: Union[int, float, httpx.Timeout], Optional
+    :param timeout: Default HTTP request timeout passed to httpx_
+    :type timeout: Union[int, float, httpx_Timeout], Optional
     """
 
     def __init__(
@@ -74,7 +74,7 @@ class BatchService:
         api_url: Optional[str] = None,
         proxy_client: Optional[GenAIHubProxyClient] = None,
         resource_group: Optional[str] = None,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ):
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
         if api_url:
@@ -84,8 +84,8 @@ class BatchService:
             self.api_url = base
         self.resource_group = resource_group
         self.timeout = timeout
-        self.client = httpx.Client(timeout=self.timeout)
-        self.async_client = httpx.AsyncClient(timeout=self.timeout)
+        self.client = httpx_Client(timeout=self.timeout)
+        self.async_client = httpx_AsyncClient(timeout=self.timeout)
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -98,13 +98,13 @@ class BatchService:
         return headers
 
     def _determine_timeout(
-        self, timeout: Union[int, float, httpx.Timeout, None]
-    ) -> Union[int, float, httpx.Timeout]:
+        self, timeout: Union[int, float, httpx_Timeout, None]
+    ) -> Union[int, float, httpx_Timeout]:
         if timeout is not None:
             return timeout
         if self.timeout is not None:
             return self.timeout
-        return httpx.USE_CLIENT_DEFAULT
+        return httpx_USE_CLIENT_DEFAULT
 
     def _batches_url(self, *segments: str) -> str:
         parts = [self.api_url + _BASE_PATH] + list(segments)
@@ -122,7 +122,7 @@ class BatchService:
         output_uri: str,
         provider: str,
         model: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchCreateResponse:
         """Create a new batch processing job.
 
@@ -137,7 +137,7 @@ class BatchService:
         :param model: Model name (e.g. ``"gpt-4.1-mini"``).
         :type model: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchCreateResponse` with the job ID and initial status.
         """
         body = BatchCreateRequest(
@@ -158,12 +158,12 @@ class BatchService:
 
     def list(
         self,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchListResponse:
         """List all batch jobs for the current resource group.
 
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchListResponse` containing the batch summaries.
         """
         response = self.client.get(
@@ -178,14 +178,14 @@ class BatchService:
     def get(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchDetailResponse:
         """Retrieve details of a specific batch job.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchDetailResponse` with full job details.
         """
         response = self.client.get(
@@ -200,14 +200,14 @@ class BatchService:
     def get_status(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchStatusResponse:
         """Retrieve the current status of a batch job.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchStatusResponse` with current and target status.
         """
         response = self.client.get(
@@ -222,14 +222,14 @@ class BatchService:
     def cancel(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchCancelResponse:
         """Schedule a batch job for cancellation.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchCancelResponse` confirming the cancellation request.
         """
         response = self.client.patch(
@@ -244,14 +244,14 @@ class BatchService:
     def delete(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchDeleteResponse:
         """Delete a batch job (only allowed for terminal states: COMPLETED, FAILED, CANCELLED).
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchDeleteResponse` confirming the deletion.
         """
         response = self.client.delete(
@@ -275,7 +275,7 @@ class BatchService:
         output_uri: str,
         provider: str,
         model: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchCreateResponse:
         """Async variant of :meth:`create`.
 
@@ -290,7 +290,7 @@ class BatchService:
         :param model: Model name (e.g. ``"gpt-4.1-mini"``).
         :type model: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchCreateResponse` with the job ID and initial status.
         """
         body = BatchCreateRequest(
@@ -311,12 +311,12 @@ class BatchService:
 
     async def alist(
         self,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchListResponse:
         """Async variant of :meth:`list`.
 
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchListResponse` containing the batch summaries.
         """
         response = await self.async_client.get(
@@ -331,14 +331,14 @@ class BatchService:
     async def aget(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchDetailResponse:
         """Async variant of :meth:`get`.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchDetailResponse` with full job details.
         """
         response = await self.async_client.get(
@@ -353,14 +353,14 @@ class BatchService:
     async def aget_status(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchStatusResponse:
         """Async variant of :meth:`get_status`.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchStatusResponse` with current and target status.
         """
         response = await self.async_client.get(
@@ -375,14 +375,14 @@ class BatchService:
     async def acancel(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchCancelResponse:
         """Async variant of :meth:`cancel`.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchCancelResponse` confirming the cancellation request.
         """
         response = await self.async_client.patch(
@@ -397,14 +397,14 @@ class BatchService:
     async def adelete(
         self,
         batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> BatchDeleteResponse:
         """Async variant of :meth:`delete`.
 
         :param batch_id: UUID of the batch job.
         :type batch_id: str
         :param timeout: Per-request timeout override.
-        :type timeout: Union[int, float, httpx.Timeout], Optional
+        :type timeout: Union[int, float, httpx_Timeout], Optional
         :returns: :class:`BatchDeleteResponse` confirming the deletion.
         """
         response = await self.async_client.delete(
@@ -421,9 +421,9 @@ class BatchService:
     # ------------------------------------------------------------------
 
     def close_http_connection(self) -> None:
-        """Close the underlying synchronous httpx client."""
+        """Close the underlying synchronous httpx_client."""
         self.client.close()
 
     async def aclose_http_connection(self) -> None:
-        """Close the underlying asynchronous httpx client."""
+        """Close the underlying asynchronous httpx_client."""
         await self.async_client.aclose()

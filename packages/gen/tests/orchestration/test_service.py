@@ -1,5 +1,5 @@
 
-import httpx
+from gen_ai_hub.httpx_types import httpx_Headers
 import unittest
 from unittest.mock import Mock, patch, AsyncMock
 from typing import cast
@@ -168,7 +168,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error without Retry-After header
             response = Mock(spec=httpx.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({"Retry-After": "3"})
+            response.headers = httpx_Headers({"Retry-After": "3"})
             response.text = "Too Many Requests"
             response.request = Mock()
 
@@ -193,7 +193,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error without Retry-After header
             response = Mock(spec=httpx.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({})
+            response.headers = httpx_Headers({})
             response.text = "Too Many Requests"
             response.request = Mock()
 
@@ -218,7 +218,7 @@ class TestOrchestrationService(unittest.TestCase):
             # Create a mock error
             response = Mock(spec=httpx.Response)
             response.status_code = 429
-            response.headers = httpx.Headers({})
+            response.headers = httpx_Headers({})
             response.text = "Too Many Requests"
             response.request = Mock()
 

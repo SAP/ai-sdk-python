@@ -4,7 +4,7 @@ Exceptions for the orchestration service module.
 
 from gen_ai_hub.orchestration_v2.models.response import ModuleResults
 
-import httpx
+from gen_ai_hub.http_types import *
 from typing import Optional
 
 
@@ -18,7 +18,7 @@ class OrchestrationError(Exception):
     def __init__(
             self,
             request_id: str,
-            headers: httpx.Headers,
+            headers: httpx_Headers,
             message: str,
             code: int,
             location: str,
@@ -30,7 +30,7 @@ class OrchestrationError(Exception):
         :param request_id: unique identifier for the request that encountered the error.
         :type request_id: str
         :param headers: HTTP headers associated with the request, useful in case of e.g. rate limiting..
-        :type headers: httpx.Headers
+        :type headers: httpx_Headers
         :param message: Detailed error message describing the issue.
         :type message: str
         :param code: Error code associated with the specific type of failure.

@@ -2,7 +2,7 @@
 Exceptions for the batch service module.
 """
 
-import httpx
+from gen_ai_hub.http_types import *
 
 
 class BatchServiceError(Exception):
@@ -17,7 +17,7 @@ class BatchServiceError(Exception):
         request_id: str,
         message: str,
         status_code: int,
-        headers: httpx.Headers,
+        headers: httpx_Headers,
     ):
         self.request_id = request_id
         self.message = message

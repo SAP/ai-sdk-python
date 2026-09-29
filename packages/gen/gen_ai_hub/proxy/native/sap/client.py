@@ -1,5 +1,5 @@
 from typing import Optional, Union
-import httpx
+from gen_ai_hub.http_types import *
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
@@ -7,7 +7,7 @@ from gen_ai_hub.proxy.native.sap.models import RPTResponse, RPTException, RPTReq
 
 PREDICTION_SUFFIX = "/predict"
 
-def _handle_http_error(error, response: httpx.Response):
+def _handle_http_error(error, response: httpx_Response):
 
     if not response.content:
         raise error
@@ -35,20 +35,20 @@ class RPTClient:
     :type proxy_client: Optional[GenAIHubProxyClient]
 
     :param timeout: Default timeout value for the HTTP client used for requests.
-    :type timeout: Union[int, float, httpx.Timeout, None]
+    :type timeout: Union[int, float, httpx_Timeout, None]
     """
 
     def __init__(
             self,
             proxy_client: Optional[GenAIHubProxyClient] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx_Timeout, None] = None,
     ):
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
         self.timeout = timeout
-        self.client = httpx.Client(timeout=self.timeout)
-        self.async_client = httpx.AsyncClient(timeout=self.timeout)
+        self.client = httpx_Client(timeout=self.timeout)
+        self.async_client = httpx_AsyncClient(timeout=self.timeout)
 
-    def _determine_timeout(self, timeout: httpx.Timeout) -> httpx.Timeout:
+    def _determine_timeout(self, timeout: httpx_Timeout) -> httpx_Timeout:
         # Determine the timeout to use for this request
         if timeout is not None:
             # Overwrite default timeout for this request
@@ -57,15 +57,15 @@ class RPTClient:
             # Use the  default timeout is set
             request_timeout = self.timeout
         else:
-            # If timeout is not set, use httpx client's default behavior, rather than "None" (disables timeout)
-            request_timeout = httpx.USE_CLIENT_DEFAULT
+            # If timeout is not set, use httpx_client's default behavior, rather than "None" (disables timeout)
+            request_timeout = httpx_USE_CLIENT_DEFAULT
         return request_timeout
 
     def _execute_request(
             self,
             body: RPTRequest,
             api_url: str,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> RPTResponse:
         """
         Executes an HTTP POST request to a prediction API endpoint with the given
@@ -82,8 +82,8 @@ class RPTClient:
         :type api_url: str
 
         :param timeout: The timeout configuration for the HTTP request. Can be an
-                        integer, float, httpx.Timeout object, or None.
-        :type timeout: Union[int, float, httpx.Timeout, None]
+                        integer, float, httpx_Timeout object, or None.
+        :type timeout: Union[int, float, httpx_Timeout, None]
 
         :returns: A response object representing the data returned from the API
                   after successful execution.
@@ -100,7 +100,7 @@ class RPTClient:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx_HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -110,7 +110,7 @@ class RPTClient:
             self,
             body: RPTRequest,
             api_url: str,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+            timeout: Union[int, float, httpx_Timeout, None] = None,
     ) -> RPTResponse:
         """
         Asynchronously executes an HTTP POST request to a prediction API endpoint
@@ -127,8 +127,8 @@ class RPTClient:
         :type api_url: str
 
         :param timeout: The timeout configuration for the HTTP request. Can be an
-                        integer, float, httpx.Timeout object, or None.
-        :type timeout: Union[int, float, httpx.Timeout, None]
+                        integer, float, httpx_Timeout object, or None.
+        :type timeout: Union[int, float, httpx_Timeout, None]
 
         :returns: A response object representing the data returned from the API
                   after successful execution.
@@ -145,7 +145,7 @@ class RPTClient:
         )
         try:
             response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx_HTTPStatusError as error:
             _handle_http_error(error, response)
 
         data = response.json()
@@ -202,7 +202,7 @@ class RPTClient:
                 deployment_url: Optional[str] = None,
                 model_name: Optional[str] = None,
                 model_version: Optional[str] = None,
-                timeout: Union[int, float, httpx.Timeout, None] = None,
+                timeout: Union[int, float, httpx_Timeout, None] = None,
                 **kwargs) -> RPTResponse:
         """
         Executes a prediction request by sending the provided data and deployment parameters.
@@ -224,8 +224,8 @@ class RPTClient:
                               Could be provided only if `model_name` is provided.
         :type model_version: Optional[str]
         :param timeout: The time duration to wait for the prediction request to complete.
-                        Can be an integer, float, or an instance of `httpx.Timeout`.
-        :type timeout: Union[int, float, httpx.Timeout, None]
+                        Can be an integer, float, or an instance of `httpx_Timeout`.
+        :type timeout: Union[int, float, httpx_Timeout, None]
 
         :returns: The response received from the prediction endpoint, represented as an
                   `RPTResponse` object.
@@ -245,7 +245,7 @@ class RPTClient:
                        deployment_url: Optional[str] = None,
                        model_name: Optional[str] = None,
                        model_version: Optional[str] = None,
-                       timeout: Union[int, float, httpx.Timeout, None] = None,
+                       timeout: Union[int, float, httpx_Timeout, None] = None,
                        **kwargs) -> RPTResponse:
         """
         Asynchronously executes a prediction request by sending the provided data and deployment parameters.
@@ -269,8 +269,8 @@ class RPTClient:
         :type model_version: Optional[str]
 
         :param timeout: The time duration to wait for the prediction request to complete.
-                        Can be an integer, float, or an instance of `httpx.Timeout`.
-        :type timeout: Union[int, float, httpx.Timeout, None]
+                        Can be an integer, float, or an instance of `httpx_Timeout`.
+        :type timeout: Union[int, float, httpx_Timeout, None]
 
         :returns: The response received from the prediction endpoint, represented as an
                   `RPTResponse` object.
