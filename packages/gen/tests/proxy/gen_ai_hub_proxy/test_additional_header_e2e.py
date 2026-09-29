@@ -5,7 +5,7 @@ import unittest
 from collections import Counter
 from contextlib import contextmanager
 
-import respx
+from tests.http_mock import HttpMocker
 from gen_ai_hub.http_types import httpx_Response
 
 from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
@@ -36,9 +36,9 @@ class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
 
         @contextmanager
         def mocker(deployment_url):
-            with respx.mock:
-                route = respx.post(deployment_url).mock(side_effect=mock_callback)
-                yield route
+            with HttpMocker() as m:
+                m.mock_callback("POST", deployment_url, callback=mock_callback)
+                yield m
 
         n_requests = 10
 
@@ -74,9 +74,9 @@ class SyncOpenAITests(unittest.TestCase):
 
         @contextmanager
         def mocker(deployment_url):
-            with respx.mock:
-                route = respx.post(deployment_url).mock(side_effect=mock_callback)
-                yield route
+            with HttpMocker() as m:
+                m.mock_callback("POST", deployment_url, callback=mock_callback)
+                yield m
 
         n_requests = 10
 
