@@ -106,7 +106,7 @@ def completion_stream():
     Run chat example with a streaming response through the Orchestration Service API.
 
     Returns:
-        JSON object containing the model response as result.
+        Plain text stream containing the model response.
     """
     config = OrchestrationConfig(
         modules=ModuleConfig(
