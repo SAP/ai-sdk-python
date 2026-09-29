@@ -2,11 +2,8 @@
 Exceptions for the orchestration service module.
 """
 
+from gen_ai_hub.http_types import httpx_Headers
 from gen_ai_hub.orchestration_v2.models.response import ModuleResults
-
-from gen_ai_hub.http_types import *
-from typing import Optional
-
 
 class OrchestrationError(Exception):
     """

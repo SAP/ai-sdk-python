@@ -1,10 +1,10 @@
 from typing import Optional, Union
-from gen_ai_hub.http_types import *
 from google.genai import Client as GoogleClient
 from google.genai import types
 from google.genai.models import Models as GoogleModels
 from google.oauth2.credentials import Credentials
 
+from gen_ai_hub.http_types import httpx_AsyncBaseTransport, httpx_AsyncHTTPTransport, httpx_BaseTransport, httpx_HTTPTransport, httpx_Request, httpx_Response, httpx_URL
 from gen_ai_hub.proxy.core.base import BaseProxyClient
 from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client
 from gen_ai_hub.proxy.core.utils import kwargs_if_set

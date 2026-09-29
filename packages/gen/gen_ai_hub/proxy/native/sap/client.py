@@ -1,5 +1,5 @@
 from typing import Optional, Union
-from gen_ai_hub.http_types import *
+from gen_ai_hub.http_types import httpx_AsyncClient, httpx_Client, httpx_HTTPStatusError, httpx_Response, httpx_Timeout, httpx_USE_CLIENT_DEFAULT
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client

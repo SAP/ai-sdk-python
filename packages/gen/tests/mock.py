@@ -10,8 +10,7 @@ from typing import Any, Dict, Final, List, Tuple, Type
 import numpy as np
 import requests_mock
 import respx
-from httpx import Response, AsyncByteStream
-
+from gen_ai_hub.http_types import httpx_Response, httpx_AsyncByteStream
 from gen_ai_hub.prompt_registry.models.prompt_template import (PromptTemplateSpec, PromptTemplateListResponse,
                                                                PromptTemplateGetResponse, PromptTemplatePostResponse,
                                                                PromptTemplateDeleteResponse, PromptTemplate,
@@ -844,13 +843,13 @@ GET_ORCHESTRATION_V2_COMPLETION_RESPONSE = {
 @contextmanager
 def orchestration_completion_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_COMPLETION_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=GET_ORCHESTRATION_COMPLETION_RESPONSE))
         yield
 
 @contextmanager
 def orchestration_completion_v2_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_COMPLETION_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=GET_ORCHESTRATION_V2_COMPLETION_RESPONSE))
         yield
 
 GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE = {
@@ -934,34 +933,34 @@ GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE = {
 @contextmanager
 def orchestration_embeddings_v2_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE))
         yield
 
 
 @contextmanager
 def orchestration_embeddings_v2_batch_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_BATCH_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_BATCH_RESPONSE))
         yield
 
 
 @contextmanager
 def orchestration_embeddings_v2_with_masking_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE))
         yield
 
 
 @contextmanager
 def orchestration_deployment_not_found_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(404, content=b'deployment not found'))
+        respx.post(deployment_url).mock(return_value=httpx_Response(404, content=b'deployment not found'))
         yield
 
 @contextmanager
 def orchestration_too_many_requests_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(429, headers={"X-Custom-Header": "value"},
+        respx.post(deployment_url).mock(return_value=httpx_Response(429, headers={"X-Custom-Header": "value"},
                                                               json={"error": {"message": "too many requests"}}))
         yield
 
@@ -1126,7 +1125,7 @@ def generate_v2_events():
 def orchestration_stream_completion_mocker(deployment_url):
     with respx.mock:
         respx.post(deployment_url).mock(
-            return_value=Response(200, stream=generate_events())
+            return_value=httpx_Response(200, stream=generate_events())
         )
         yield
 
@@ -1134,7 +1133,7 @@ def orchestration_stream_completion_mocker(deployment_url):
 def orchestration_stream_v2_completion_mocker(deployment_url):
     with respx.mock:
         respx.post(deployment_url).mock(
-            return_value=Response(200, stream=generate_v2_events())
+            return_value=httpx_Response(200, stream=generate_v2_events())
         )
         yield
 
@@ -1151,7 +1150,7 @@ async def async_generate_v2_events():
         await asyncio.sleep(0)  # yield control to the event loop
 
 # A simple AsyncByteStream implementation that wraps an async iterator.
-class AsyncIteratorStream(AsyncByteStream):
+class AsyncIteratorStream(httpx_AsyncByteStream):
     def __init__(self, aiter):
         self.aiter = aiter
 
@@ -1164,7 +1163,7 @@ class AsyncIteratorStream(AsyncByteStream):
 async def orchestration_stream_completion_mocker_async(deployment_url):
     with respx.mock:
         respx.post(deployment_url).mock(
-            return_value=Response(200, stream=AsyncIteratorStream(async_generate_events()))
+            return_value=httpx_Response(200, stream=AsyncIteratorStream(async_generate_events()))
         )
         yield
 
@@ -1172,7 +1171,7 @@ async def orchestration_stream_completion_mocker_async(deployment_url):
 async def orchestration_v2_stream_completion_mocker_async(deployment_url):
     with respx.mock:
         respx.post(deployment_url).mock(
-            return_value=Response(200, stream=AsyncIteratorStream(async_generate_v2_events()))
+            return_value=httpx_Response(200, stream=AsyncIteratorStream(async_generate_v2_events()))
         )
         yield
 
@@ -1223,14 +1222,14 @@ COHERE_CHAT_COMPLETION_RESPONSE = {
 @contextmanager
 def openai_chat_completion_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_CHAT_COMPLETION_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_CHAT_COMPLETION_RESPONSE))
         yield
 
 
 @contextmanager
 def cohere_chat_completion_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=COHERE_CHAT_COMPLETION_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=COHERE_CHAT_COMPLETION_RESPONSE))
         yield
 
 
@@ -1257,7 +1256,7 @@ OPENAI_STRUCTRED_OUTPUTS_RESPONSE = {
 @contextmanager
 def openai_structured_outputs_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_STRUCTRED_OUTPUTS_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_STRUCTRED_OUTPUTS_RESPONSE))
         yield
 
 
@@ -1282,7 +1281,7 @@ OPENAI_EMBEDDINGS_RESPONSE = {
 @contextmanager
 def openai_embeddings_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_EMBEDDINGS_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_EMBEDDINGS_RESPONSE))
         yield
 
 
@@ -1316,7 +1315,7 @@ OPENAI_GPT35_INSTRUCT_RESPONSE = {
 @contextmanager
 def openai_completion_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_GPT35_INSTRUCT_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_GPT35_INSTRUCT_RESPONSE))
         yield
 
 RPT_RESPONSE_CODE_0 = {
@@ -1486,7 +1485,7 @@ OPENAI_RESPONSES_RESPONSE = {
 @contextmanager
 def openai_responses_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_RESPONSES_RESPONSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_RESPONSES_RESPONSE))
         yield
 
 OPENAI_RESPONSES_RESPONSE_PARSE = {
@@ -1657,13 +1656,13 @@ OPENAI_RESPONSES_RESPONSE_PARSE = {
 @contextmanager
 def openai_responses_structured_outputs_mocker(deployment_url):
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_RESPONSES_RESPONSE_PARSE))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=OPENAI_RESPONSES_RESPONSE_PARSE))
         yield
 
 @contextmanager
 def sap_rpt_moke_response_code_0(url: str):
     with respx.mock:
-        respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0))
+        respx.post(f"{url}/predict").mock(return_value=httpx_Response(200, json=RPT_RESPONSE_CODE_0))
         yield
 
 RPT_RESPONSE_CODE_2 = {
@@ -1688,7 +1687,7 @@ RPT_RESPONSE_CODE_2 = {
 @contextmanager
 def sap_rpt_moke_response_code_2(url: str):
     with respx.mock:
-        respx.post(f"{url}/predict").mock(return_value=Response(422, json=RPT_RESPONSE_CODE_2))
+        respx.post(f"{url}/predict").mock(return_value=httpx_Response(422, json=RPT_RESPONSE_CODE_2))
         yield
 
 @contextmanager
@@ -1715,7 +1714,7 @@ def openai_stream_completion_mocker(deployment_url):
             )
 
     with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=list(stream_events())))
+        respx.post(deployment_url).mock(return_value=httpx_Response(200, json=list(stream_events())))
         yield
 
 
@@ -2267,96 +2266,96 @@ BATCH_ERROR_RESPONSE = {
 @contextmanager
 def batch_create_mocker():
     with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+        respx.post(BATCHES_URL).mock(return_value=httpx_Response(202, json=BATCH_CREATE_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_list_mocker():
     with respx.mock:
-        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+        respx.get(BATCHES_URL).mock(return_value=httpx_Response(200, json=BATCH_LIST_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_get_mocker(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=httpx_Response(200, json=BATCH_DETAIL_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_status_mocker(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=httpx_Response(200, json=BATCH_STATUS_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_cancel_mocker(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=httpx_Response(202, json=BATCH_CANCEL_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_delete_mocker(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=httpx_Response(202, json=BATCH_DELETE_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_not_found_mocker(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(404, json=BATCH_ERROR_RESPONSE))
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=httpx_Response(404, json=BATCH_ERROR_RESPONSE))
         yield
 
 
 @contextmanager
 def batch_create_error_mocker():
     with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(400, json=BATCH_ERROR_RESPONSE))
+        respx.post(BATCHES_URL).mock(return_value=httpx_Response(400, json=BATCH_ERROR_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_create_mocker_async():
     with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+        respx.post(BATCHES_URL).mock(return_value=httpx_Response(202, json=BATCH_CREATE_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_list_mocker_async():
     with respx.mock:
-        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+        respx.get(BATCHES_URL).mock(return_value=httpx_Response(200, json=BATCH_LIST_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_get_mocker_async(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=httpx_Response(200, json=BATCH_DETAIL_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_status_mocker_async(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=httpx_Response(200, json=BATCH_STATUS_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_cancel_mocker_async(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=httpx_Response(202, json=BATCH_CANCEL_RESPONSE))
         yield
 
 
 @asynccontextmanager
 async def batch_delete_mocker_async(batch_id: str = BATCH_ID):
     with respx.mock:
-        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=httpx_Response(202, json=BATCH_DELETE_RESPONSE))
         yield

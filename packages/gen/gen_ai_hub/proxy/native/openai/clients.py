@@ -5,7 +5,6 @@ import re
 from contextlib import contextmanager
 from typing import Optional, Union, List, TypeVar, Iterable
 
-from gen_ai_hub.http_types import *
 from openai import AsyncOpenAI as AsyncOpenAI_
 from openai import OpenAI as OpenAI_
 from openai import resources
@@ -28,6 +27,7 @@ from openai.types.chat.parsed_chat_completion import ParsedChatCompletion
 from openai.types.responses import Response, ResponseStreamEvent, ResponseInputParam, ParsedResponse
 
 
+from gen_ai_hub.http_types import httpx_URL
 from gen_ai_hub.proxy.core import get_proxy_client
 from gen_ai_hub.proxy.core.base import BaseProxyClient
 from gen_ai_hub.proxy.core.utils import NOT_GIVEN, NotGiven, if_set, kwargs_if_set

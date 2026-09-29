@@ -13,10 +13,10 @@ import asyncio
 from functools import wraps
 from typing import List, Optional, Iterable, Union
 
-from gen_ai_hub.http_types import *
 from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
+from gen_ai_hub.http_types import httpx_AsyncClient, httpx_Client, httpx_ConnectError, httpx_HTTPStatusError, httpx_Timeout, httpx_TimeoutException, httpx_USE_CLIENT_DEFAULT
 from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionPostRequest
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, OrchestrationConfigReference
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage

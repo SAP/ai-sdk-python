@@ -1,6 +1,6 @@
-from gen_ai_hub.http_types import *
 from typing import Dict, Any
 
+from gen_ai_hub.http_types import httpx_Headers
 
 class OrchestrationError(Exception):
     """

@@ -15,11 +15,11 @@ import logging
 from typing import List, Optional, Iterable, Union
 
 import dacite
-from gen_ai_hub.orchestration.exceptions import OrchestrationError
-from gen_ai_hub.http_types import *
 from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
+from gen_ai_hub.http_types import httpx_AsyncClient, httpx_Client, httpx_ConnectError, httpx_HTTPStatusError, httpx_Timeout, httpx_TimeoutException, httpx_USE_CLIENT_DEFAULT
+from gen_ai_hub.orchestration.exceptions import OrchestrationError
 from gen_ai_hub.orchestration.models.base import JSONSerializable
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.message import Message

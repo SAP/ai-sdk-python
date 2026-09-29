@@ -2,7 +2,7 @@
 Exceptions for the batch service module.
 """
 
-from gen_ai_hub.http_types import *
+from gen_ai_hub.http_types import httpx_Headers
 
 
 class BatchServiceError(Exception):

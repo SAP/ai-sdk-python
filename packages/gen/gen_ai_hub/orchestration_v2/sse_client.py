@@ -10,8 +10,7 @@ when iteration is complete.
 import json
 from typing import Iterable, Iterator, AsyncIterator
 
-from gen_ai_hub.http_types import *
-
+from gen_ai_hub.http_types import httpx_Headers, httpx_HTTPStatusError, httpx_Response
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError, OrchestrationErrorList
 from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResponse
 

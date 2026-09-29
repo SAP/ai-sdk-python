@@ -11,8 +11,8 @@ from enum import Enum
 from typing import Iterable, Iterator, AsyncIterator
 
 import dacite
-from gen_ai_hub.http_types import *
 
+from gen_ai_hub.http_types import httpx_Headers, httpx_HTTPStatusError, httpx_Response
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
 from gen_ai_hub.orchestration.models.response import OrchestrationResponseStreaming
 

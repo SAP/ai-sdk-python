@@ -7,8 +7,6 @@ cancel, and delete batch processing jobs via SAP AI Core.
 
 from typing import Optional, Union
 
-from gen_ai_hub.http_types import *
-
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.batch_service.exceptions import BatchServiceError
@@ -21,6 +19,7 @@ from gen_ai_hub.batch_service.models.response import (
     BatchCancelResponse,
     BatchDeleteResponse,
 )
+from gen_ai_hub.http_types import httpx_AsyncClient, httpx_Client, httpx_HTTPStatusError, httpx_Response, httpx_Timeout, httpx_USE_CLIENT_DEFAULT
 
 _BASE_PATH = "/llm-batch-service/v1/batches"
 
