@@ -1,4 +1,4 @@
-from httpx import TimeoutException
+from gen_ai_hub.http_types import httpx_TimeoutException
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.llm import LLM
 from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage
@@ -159,7 +159,7 @@ class TestService(OrchestrationServiceTestBase):
         )
 
         # First request - should time out
-        with self.assertRaises(TimeoutException):
+        with self.assertRaises(httpx_TimeoutException):
             self.service.run(config=config)
 
         # Second request - should succeed due to overwrite in request with higher timeout

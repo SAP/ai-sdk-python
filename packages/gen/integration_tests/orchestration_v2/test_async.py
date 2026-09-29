@@ -1,7 +1,7 @@
 import unittest
 
-from httpx import TimeoutException
 
+from gen_ai_hub.http_types import httpx_TimeoutException
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, ModuleConfig,
 CompletionRequestConfigurationReferenceByIdConfigRef,
@@ -124,7 +124,7 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         self.service = OrchestrationService(self.api_url, timeout=0.1)
 
         # First request - should time out
-        with self.assertRaises(TimeoutException):
+        with self.assertRaises(httpx_TimeoutException):
             await self.service.arun(config=self.config)
 
         # Second request - should succeed due to overwrite in request with higher timeout

@@ -5,8 +5,6 @@ Unit tests for the BatchService client — async methods.
 import unittest
 from unittest.mock import AsyncMock, patch
 
-import httpx
-
 from gen_ai_hub.batch_service.models.response import (
     BatchCreateResponse,
     BatchListResponse,
@@ -16,6 +14,7 @@ from gen_ai_hub.batch_service.models.response import (
     BatchDeleteResponse,
 )
 from gen_ai_hub.batch_service.service import BatchService
+from gen_ai_hub.http_types import httpx_Response, httpx_USE_CLIENT_DEFAULT
 from tests.mock import (
     BATCH_ID,
     BATCH_CREATE_RESPONSE as CREATE_RESPONSE,
@@ -85,12 +84,12 @@ class TestBatchServiceAsync(unittest.IsolatedAsyncioTestCase):
 
         async def capture_post(url, **kwargs):
             captured["timeout"] = kwargs.get("timeout")
-            return httpx.Response(202, json=CREATE_RESPONSE)
+            return httpx_Response(202, json=CREATE_RESPONSE)
 
         with patch.object(self.client.async_client, "post", new=AsyncMock(side_effect=capture_post)):
             await self.client.acreate(input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
 
-        self.assertEqual(captured["timeout"], httpx.USE_CLIENT_DEFAULT)
+        self.assertEqual(captured["timeout"], httpx_USE_CLIENT_DEFAULT)
 
     async def test_async_timeout_service_default(self):
         client = BatchService(proxy_client=self.proxy_client, timeout=55.0)
@@ -98,7 +97,7 @@ class TestBatchServiceAsync(unittest.IsolatedAsyncioTestCase):
 
         async def capture_post(url, **kwargs):
             captured["timeout"] = kwargs.get("timeout")
-            return httpx.Response(202, json=CREATE_RESPONSE)
+            return httpx_Response(202, json=CREATE_RESPONSE)
 
         with patch.object(client.async_client, "post", new=AsyncMock(side_effect=capture_post)):
             await client.acreate(input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
@@ -111,7 +110,7 @@ class TestBatchServiceAsync(unittest.IsolatedAsyncioTestCase):
 
         async def capture_post(url, **kwargs):
             captured["timeout"] = kwargs.get("timeout")
-            return httpx.Response(202, json=CREATE_RESPONSE)
+            return httpx_Response(202, json=CREATE_RESPONSE)
 
         with patch.object(client.async_client, "post", new=AsyncMock(side_effect=capture_post)):
             await client.acreate(input_uri="ai://x", output_uri="ai://y", provider="p", model="m", timeout=33.0)

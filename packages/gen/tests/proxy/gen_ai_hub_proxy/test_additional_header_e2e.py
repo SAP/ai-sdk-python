@@ -6,7 +6,7 @@ from collections import Counter
 from contextlib import contextmanager
 
 import respx
-from httpx import Response
+from gen_ai_hub.http_types import httpx_Response
 
 from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
 from gen_ai_hub.proxy.native.openai import AsyncOpenAI, OpenAI
@@ -32,7 +32,7 @@ class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
             body = json.loads(request.content.decode('utf-8'))
             self.assertEqual(body['input'], request.headers['test-func'])
             counter[request.headers['test-func']] += 1
-            return Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
+            return httpx_Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
 
         @contextmanager
         def mocker(deployment_url):
@@ -70,7 +70,7 @@ class SyncOpenAITests(unittest.TestCase):
             body = json.loads(request.content.decode('utf-8'))
             self.assertEqual(body['input'], request.headers['test-func'])
             counter[request.headers['test-func']] += 1
-            return Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
+            return httpx_Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
 
         @contextmanager
         def mocker(deployment_url):

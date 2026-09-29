@@ -2,7 +2,7 @@ import json
 import unittest
 from unittest.mock import Mock
 
-from httpx import Response
+from gen_ai_hub.http_types import httpx_Response
 
 from gen_ai_hub.orchestration_v2.sse_client import AsyncSSEClient
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationErrorList
@@ -74,7 +74,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"data: {json.dumps(event2)}\n",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -102,7 +102,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"{part2}\n",  # Second part with newline
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -124,7 +124,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"data: {json.dumps(event1)}\ndata: {json.dumps(event2)}\n",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -147,7 +147,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"data: {json.dumps(event1)}\n",  # This should not be processed
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -171,7 +171,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             "\n",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -193,7 +193,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             "another invalid line\n",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -214,7 +214,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"data: {json.dumps(event)}",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -235,7 +235,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         # Split into very small chunks (2 characters each)
         chunks = [event_str[i:i + 2] for i in range(0, len(event_str), 2)]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -261,7 +261,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             chunks.append(part)
         chunks.append(f"{parts[-1]}\n")
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
@@ -297,7 +297,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             f"data: {json.dumps(error_event)}\n",
         ]
 
-        mock_response = Mock(spec=Response)
+        mock_response = Mock(spec=httpx_Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
