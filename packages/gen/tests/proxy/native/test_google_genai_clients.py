@@ -50,7 +50,7 @@ class TestAICoreDynamicTransport(unittest.TestCase):
             url="https://base_url.com/deployment"
         )
 
-    @patch("httpx_HTTPTransport.handle_request")
+    @patch("gen_ai_hub.http_types.httpx_HTTPTransport.handle_request")
     def test_handle_request(self, mock_handle_request):
         request = httpx_Request(
             method="POST",
@@ -78,7 +78,7 @@ class TestAsyncAICoreDynamicTransport(unittest.IsolatedAsyncioTestCase):
             url="https://base_url.com/deployment"
         )
 
-    @patch("httpx_AsyncHTTPTransport.handle_async_request")
+    @patch("gen_ai_hub.http_types.httpx_AsyncHTTPTransport.handle_async_request")
     async def test_handle_async_request(self, mock_handle_async_request):
         request = httpx_Request(
             method="POST",
