@@ -175,7 +175,7 @@ def init_conf(profile: str = None):
     return config
 
 
-def _extract_credentials(source: Source, credential_values: List[CredentialsValue], exclude: List[str] = None) \
+def extract_credentials(source: Source, credential_values: List[CredentialsValue], exclude: List[str] = None) \
         -> Dict[str, str]:
     """Extract all credentials from a source."""
     exclude = exclude or []
@@ -188,10 +188,10 @@ def _extract_credentials(source: Source, credential_values: List[CredentialsValu
     return credentials
 
 
-def _resolve_credentials(sources: List[Source], credential_values: List[CredentialsValue]) -> Dict[str, str]:
+def resolve_credentials(sources: List[Source], credential_values: List[CredentialsValue]) -> Dict[str, str]:
     """Extract credentials from the first source that has any defined."""
     for source in sources:
-        if credentials := _extract_credentials(source, exclude=['resource_group'], credential_values=credential_values):
+        if credentials := extract_credentials(source, exclude=['resource_group'], credential_values=credential_values):
             logger.debug(f"Using credentials from: {source.name}")
             return credentials
     raise ValueError("No credentials found in any source")
@@ -309,7 +309,7 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
                lambda cv, vcap_service = _load_vcap_service_key(): _str_or_none(vcap_service.get(cv.vcap_key, None) if vcap_service and cv.vcap_key else None)),
     ]
 
-    credentials = _resolve_credentials(sources, credential_values)
+    credentials = resolve_credentials(sources, credential_values)
 
     # Use cert_url as auth_url if present (VCAP provides cert_url for certificate auth)
     if 'cert_url' in credentials:
