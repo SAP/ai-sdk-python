@@ -1,6 +1,8 @@
+import asyncio
 import unittest
 from unittest.mock import patch
 
+from google.genai.client import AsyncClient
 from langchain_classic.chains import LLMChain
 from langchain_classic.prompts.chat import (
     AIMessagePromptTemplate,
@@ -18,6 +20,15 @@ class TestGoogleGenerativeAILangchain(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.proxy_client = get_mocked_ai_core_client()
+
+    def test_async_client_available(self):
+        # `async_client` and `aclose` read `_client_cleanup`, which our validator
+        # has to set because the upstream validator that normally sets it is shadowed.
+        chat_model = ChatGoogleGenerativeAI(
+            proxy_model_name="gemini-2.0-flash", proxy_client=self.proxy_client
+        )
+        self.assertIsInstance(chat_model.async_client, AsyncClient)
+        asyncio.run(chat_model.aclose())
 
     @patch("langchain_classic.chains.base.Chain.invoke")
     def test_chat_model(self, mock_chain_invoke):

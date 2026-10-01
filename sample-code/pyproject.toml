@@ -8,7 +8,7 @@ license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
-    "sap-ai-sdk-gen",
+    "sap-ai-sdk-gen[all]",
     "uvicorn>=0.52.1",
 ]
 
