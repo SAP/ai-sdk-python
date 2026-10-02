@@ -1,9 +1,17 @@
 import unittest
 from unittest.mock import patch
 
-from gen_ai_hub.proxy.native.sap.models import RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException
+from gen_ai_hub.proxy.native.sap.models import (
+    RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException,
+    PredictionItem, ExplanationConfig, ExplanationResult
+)
 from gen_ai_hub.proxy.native.sap.client import RPTClient
-from tests.mock import get_mocked_ai_core_client, sap_rpt_moke_response_code_0, sap_rpt_moke_response_code_2
+from tests.mock import (
+    get_mocked_ai_core_client,
+    sap_rpt_moke_response_code_0,
+    sap_rpt_moke_response_code_0_with_explanations,
+    sap_rpt_moke_response_code_2,
+)
 
 mock_url = "https://mock-rpt-deployment"
 
@@ -101,12 +109,16 @@ class RPTRequestModels(unittest.TestCase):
 
     def test_prediction_config(self):
         expected_dict = {
-        "target_columns": [
-            {
-                "name": "COSTCENTER",
-                "prediction_placeholder": "[PREDICT]",
-                "task_type": "classification"
-            }]
+            "target_columns": [
+                {
+                    "name": "COSTCENTER",
+                    "prediction_placeholder": "[PREDICT]",
+                    "task_type": "classification",
+                    "top_k": None
+                }
+            ],
+            "explanations": None,
+            "context_mode": "default"
         }
         prediction_config = PredictionConfig(target_columns=[
             TargetColumn(name="COSTCENTER", prediction_placeholder="[PREDICT]", task_type="classification")
@@ -127,6 +139,103 @@ class RPTRequestModels(unittest.TestCase):
         assert request.columns["COSTCENTER"][0] == "[PREDICT]"
         assert "rows" not in request.model_dump()
 
+    def test_prediction_item_confidence_valid_boundaries(self):
+        item_low = PredictionItem(prediction="cat", confidence=0.0)
+        item_high = PredictionItem(prediction="cat", confidence=1.0)
+        self.assertEqual(item_low.confidence, 0.0)
+        self.assertEqual(item_high.confidence, 1.0)
+
+    def test_prediction_item_confidence_valid_midrange(self):
+        item = PredictionItem(prediction="cat", confidence=0.85)
+        self.assertEqual(item.confidence, 0.85)
+
+    def test_prediction_item_confidence_none(self):
+        item = PredictionItem(prediction=3.14)
+        self.assertIsNone(item.confidence)
+
+    def test_prediction_item_confidence_above_max(self):
+        with self.assertRaises(ValueError):
+            PredictionItem(prediction="cat", confidence=1.1)
+
+    def test_prediction_item_confidence_below_min(self):
+        with self.assertRaises(ValueError):
+            PredictionItem(prediction="cat", confidence=-0.1)
+
+
+    def test_target_column_top_k(self):
+        tc = TargetColumn(name="CATEGORY", prediction_placeholder="[PREDICT]", task_type="classification", top_k=3)
+        self.assertEqual(tc.top_k, 3)
+        self.assertEqual(tc.model_dump()["top_k"], 3)
+
+    def test_target_column_top_k_default_none(self):
+        tc = TargetColumn(name="CATEGORY", prediction_placeholder="[PREDICT]", task_type="classification")
+        self.assertIsNone(tc.top_k)
+
+    def test_prediction_item_confidence_interval_regression(self):
+        item = PredictionItem(prediction=195.09, confidence_interval=(191.42, 198.76))
+        self.assertEqual(item.confidence_interval, (191.42, 198.76))
+        self.assertIsNone(item.confidence)
+
+    def test_prediction_item_confidence_interval_none_for_classification(self):
+        item = PredictionItem(prediction="Office Furniture", confidence=0.96, confidence_interval=None)
+        self.assertIsNone(item.confidence_interval)
+        self.assertEqual(item.confidence, 0.96)
+
+    def test_explanation_config_defaults(self):
+        config = ExplanationConfig()
+        self.assertEqual(config.top_column_scores, 0)
+        self.assertEqual(config.top_relevant_context_rows, 0)
+
+    def test_explanation_config_custom_values(self):
+        config = ExplanationConfig(top_column_scores=5, top_relevant_context_rows=3)
+        self.assertEqual(config.top_column_scores, 5)
+        self.assertEqual(config.top_relevant_context_rows, 3)
+
+    def test_explanation_result_deserialization(self):
+        data = {
+            "top_column_scores": [{"PRODUCT": 0.08, "ORDERDATE": 0.03}],
+            "top_relevant_context_rows": [[3, 4, 1]]
+        }
+        result = ExplanationResult(**data)
+        self.assertEqual(result.top_column_scores[0]["PRODUCT"], 0.08)
+        self.assertEqual(result.top_relevant_context_rows[0], [3, 4, 1])
+
+    def test_explanation_result_nullable_fields(self):
+        result = ExplanationResult(top_column_scores=None, top_relevant_context_rows=None)
+        self.assertIsNone(result.top_column_scores)
+        self.assertIsNone(result.top_relevant_context_rows)
+
+    def test_response_metadata_includes_context_mode(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        self.assertEqual(response.metadata.context_mode, "default")
+
+    def test_response_explanations_none_by_default(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        self.assertIsNone(response.explanations)
+
+    def test_response_with_explanations(self):
+        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
+        response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
+        self.assertIsNotNone(response.explanations)
+        self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.08)
+        self.assertEqual(response.explanations.top_relevant_context_rows[0], [3, 4, 1])
+
+    def test_response_confidence_interval_in_regression_prediction(self):
+        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
+        response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
+        discount_rate_predictions = response.predictions[0]["DISCOUNT_RATE"]
+        self.assertEqual(discount_rate_predictions[0]["confidence_interval"], [0.12, 0.18])
+        self.assertIsNone(discount_rate_predictions[0]["confidence"])
+
+    def test_response_confidence_interval_none_for_classification(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        costcenter_predictions = response.predictions[0]["COSTCENTER"]
+        self.assertIsNone(costcenter_predictions[0].confidence_interval)
+        self.assertEqual(costcenter_predictions[0].confidence, 0.96)
+
     def test_rpt_request_columns_and_rows_provided(self):
         with self.assertRaises(ValueError) as err:
             RPTRequest(
@@ -145,7 +254,7 @@ class RPTClientTests(unittest.TestCase):
     def test_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_0(url_mock.return_value):
-                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1-small")
+                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
@@ -164,13 +273,13 @@ class RPTClientTests(unittest.TestCase):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
-                    self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1-small")
+                    self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)
                     self.assertIsNotNone(err.exception.detail)
 
     def test_request_with_invalid_body(self):
         with self.assertRaises(ValueError):
-            self.client.predict(body={}, model_name="sap-rpt-1-small")
+            self.client.predict(body={}, model_name="sap-rpt-1.6")
 
     def test_request_without_model_name_api_url_and_kwargs(self):
         with self.assertRaises(ValueError):
@@ -188,7 +297,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
     async def test_async_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_0(url_mock.return_value):
-                response = await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1-small")
+                response = await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
@@ -199,7 +308,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
-                    await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1-small")
+                    await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)
                     self.assertIsNotNone(err.exception.detail)
 
