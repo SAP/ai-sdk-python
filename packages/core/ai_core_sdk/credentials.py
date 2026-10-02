@@ -245,7 +245,6 @@ def validate_credentials(credentials: Dict[str, str]) -> None:
 def _str_or_none(value) -> Optional[str]:
     return str(value) if value else None
 
-
 def _load_service_key() -> Dict[str, Any]:
     """Read and parse AICORE_SERVICE_KEY from the environment.
 
