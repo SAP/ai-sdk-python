@@ -187,7 +187,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name="DISCOUNT_RATE", task_type="regression")
+                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder="[PREDICT]")
                 ]),
             rows=rows_regression
         )
@@ -201,7 +201,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name="DISCOUNT_RATE", task_type="regression")
+                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder="[PREDICT]")
                 ]),
             rows=rows_regression
         )
