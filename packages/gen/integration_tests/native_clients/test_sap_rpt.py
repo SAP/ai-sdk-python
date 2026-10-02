@@ -1,6 +1,6 @@
 import unittest
 
-from integration_tests.constants import SAP_RPT_1_SMALL_TEST_MODEL
+from integration_tests.constants import SAP_RPT_1_6_SMALL_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from gen_ai_hub.proxy.native.sap.models import RPTRequest, RPTResponse, PredictionConfig, TargetColumn
@@ -138,15 +138,15 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         self.client = RPTClient(proxy_client=self.proxy_client)
 
     def test_client_find_url_by_model_name(self):
-        url = self.client._get_url(model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        url = self.client._get_url(model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsNotNone(url)
 
     def test_client_find_url_by_model_name_and_version(self):
-        url = self.client._get_url(model_name=SAP_RPT_1_SMALL_TEST_MODEL, model_version="latest")
+        url = self.client._get_url(model_name=SAP_RPT_1_6_SMALL_TEST_MODEL, model_version="latest")
         self.assertIsNotNone(url)
 
     def test_client_find_url_by_config_name(self):
-        url = self.client._get_url(config_name="sap-rpt-1-small-latest")
+        url = self.client._get_url(config_name="sap-rpt-1.6-small-latest")
         self.assertIsNotNone(url)
 
     def test_client_find_url_with_invalid_model_name(self):
@@ -155,7 +155,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
     def test_predict_by_row(self):
         body = RPTRequest(**request_by_row_dict)
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.predictions[0]["ID"], "35")
@@ -165,7 +165,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
     def test_predict_by_columns(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.metadata.num_columns, 5)
@@ -175,7 +175,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
     def test_predict_with_api_url(self):
         body = RPTRequest(**request_by_columns_dict)
-        deployment_url = self.client._get_url(model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        deployment_url = self.client._get_url(model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         response = self.client.predict(body=body, deployment_url=deployment_url)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
@@ -191,7 +191,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
                 ]),
             rows=rows_regression
         )
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.metadata.num_predictions, 2)
@@ -207,7 +207,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         )
 
         with self.assertRaises(Exception):
-            self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL, timeout=0.001)
+            self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL, timeout=0.001)
 
 
 
@@ -225,7 +225,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
                 ]
             }
         })
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         costcenter_predictions = response.predictions[0]['COSTCENTER']
@@ -233,7 +233,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
     def test_predict_response_includes_context_mode(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertIn(response.metadata.context_mode, ['default', 'deep'])
 
@@ -245,7 +245,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
                 ]),
             rows=rows_regression
         )
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         discount_predictions = response.predictions[0]['DISCOUNT_RATE']
@@ -270,7 +270,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
                 }
             }
         })
-        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertIsNotNone(response.explanations)
@@ -285,7 +285,7 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_apredict_by_row(self):
         body = RPTRequest(**request_by_row_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.predictions[0]["ID"], "35")
@@ -295,7 +295,7 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_apredict_by_columns(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.metadata.num_columns, 5)
@@ -305,7 +305,7 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_apredict_response_includes_context_mode(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertIn(response.metadata.context_mode, ['default', 'deep'])
 
@@ -317,7 +317,7 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
                 ]),
             rows=rows_regression
         )
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_SMALL_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         discount_predictions = response.predictions[0]['DISCOUNT_RATE']
