@@ -1,3 +1,8 @@
+## core-v3.5.0 (2026-10-02)
+
+
+- feat(core): dummy commit for core version dump (#177)
+
 ## core-v3.4.0 (2026-09-14)
 
 ### Features
