@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from gen_ai_hub.proxy.native.sap.models import RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException
+from gen_ai_hub.proxy.native.sap.models import RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException, PredictionItem
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from tests.mock import get_mocked_ai_core_client, sap_rpt_moke_response_code_0, sap_rpt_moke_response_code_2
 
@@ -101,12 +101,16 @@ class RPTRequestModels(unittest.TestCase):
 
     def test_prediction_config(self):
         expected_dict = {
-        "target_columns": [
-            {
-                "name": "COSTCENTER",
-                "prediction_placeholder": "[PREDICT]",
-                "task_type": "classification"
-            }]
+            "target_columns": [
+                {
+                    "name": "COSTCENTER",
+                    "prediction_placeholder": "[PREDICT]",
+                    "task_type": "classification",
+                    "top_k": None
+                }
+            ],
+            "explanations": None,
+            "context_mode": "default"
         }
         prediction_config = PredictionConfig(target_columns=[
             TargetColumn(name="COSTCENTER", prediction_placeholder="[PREDICT]", task_type="classification")
@@ -126,6 +130,28 @@ class RPTRequestModels(unittest.TestCase):
         assert request.prediction_config.target_columns[0].name == "COSTCENTER"
         assert request.columns["COSTCENTER"][0] == "[PREDICT]"
         assert "rows" not in request.model_dump()
+
+    def test_prediction_item_confidence_valid_boundaries(self):
+        item_low = PredictionItem(prediction="cat", confidence=0.0)
+        item_high = PredictionItem(prediction="cat", confidence=1.0)
+        self.assertEqual(item_low.confidence, 0.0)
+        self.assertEqual(item_high.confidence, 1.0)
+
+    def test_prediction_item_confidence_valid_midrange(self):
+        item = PredictionItem(prediction="cat", confidence=0.85)
+        self.assertEqual(item.confidence, 0.85)
+
+    def test_prediction_item_confidence_none(self):
+        item = PredictionItem(prediction=3.14)
+        self.assertIsNone(item.confidence)
+
+    def test_prediction_item_confidence_above_max(self):
+        with self.assertRaises(ValueError):
+            PredictionItem(prediction="cat", confidence=1.1)
+
+    def test_prediction_item_confidence_below_min(self):
+        with self.assertRaises(ValueError):
+            PredictionItem(prediction="cat", confidence=-0.1)
 
     def test_rpt_request_columns_and_rows_provided(self):
         with self.assertRaises(ValueError) as err:
