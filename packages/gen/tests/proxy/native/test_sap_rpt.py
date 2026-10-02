@@ -1,9 +1,17 @@
 import unittest
 from unittest.mock import patch
 
-from gen_ai_hub.proxy.native.sap.models import RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException, PredictionItem
+from gen_ai_hub.proxy.native.sap.models import (
+    RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException,
+    PredictionItem, ExplanationConfig, ExplanationResult
+)
 from gen_ai_hub.proxy.native.sap.client import RPTClient
-from tests.mock import get_mocked_ai_core_client, sap_rpt_moke_response_code_0, sap_rpt_moke_response_code_2
+from tests.mock import (
+    get_mocked_ai_core_client,
+    sap_rpt_moke_response_code_0,
+    sap_rpt_moke_response_code_0_with_explanations,
+    sap_rpt_moke_response_code_2,
+)
 
 mock_url = "https://mock-rpt-deployment"
 
@@ -152,6 +160,81 @@ class RPTRequestModels(unittest.TestCase):
     def test_prediction_item_confidence_below_min(self):
         with self.assertRaises(ValueError):
             PredictionItem(prediction="cat", confidence=-0.1)
+
+
+    def test_target_column_top_k(self):
+        tc = TargetColumn(name="CATEGORY", prediction_placeholder="[PREDICT]", task_type="classification", top_k=3)
+        self.assertEqual(tc.top_k, 3)
+        self.assertEqual(tc.model_dump()["top_k"], 3)
+
+    def test_target_column_top_k_default_none(self):
+        tc = TargetColumn(name="CATEGORY", prediction_placeholder="[PREDICT]", task_type="classification")
+        self.assertIsNone(tc.top_k)
+
+    def test_prediction_item_confidence_interval_regression(self):
+        item = PredictionItem(prediction=195.09, confidence_interval=(191.42, 198.76))
+        self.assertEqual(item.confidence_interval, (191.42, 198.76))
+        self.assertIsNone(item.confidence)
+
+    def test_prediction_item_confidence_interval_none_for_classification(self):
+        item = PredictionItem(prediction="Office Furniture", confidence=0.96, confidence_interval=None)
+        self.assertIsNone(item.confidence_interval)
+        self.assertEqual(item.confidence, 0.96)
+
+    def test_explanation_config_defaults(self):
+        config = ExplanationConfig()
+        self.assertEqual(config.top_column_scores, 0)
+        self.assertEqual(config.top_relevant_context_rows, 0)
+
+    def test_explanation_config_custom_values(self):
+        config = ExplanationConfig(top_column_scores=5, top_relevant_context_rows=3)
+        self.assertEqual(config.top_column_scores, 5)
+        self.assertEqual(config.top_relevant_context_rows, 3)
+
+    def test_explanation_result_deserialization(self):
+        data = {
+            "top_column_scores": [{"PRODUCT": 0.08, "ORDERDATE": 0.03}],
+            "top_relevant_context_rows": [[3, 4, 1]]
+        }
+        result = ExplanationResult(**data)
+        self.assertEqual(result.top_column_scores[0]["PRODUCT"], 0.08)
+        self.assertEqual(result.top_relevant_context_rows[0], [3, 4, 1])
+
+    def test_explanation_result_nullable_fields(self):
+        result = ExplanationResult(top_column_scores=None, top_relevant_context_rows=None)
+        self.assertIsNone(result.top_column_scores)
+        self.assertIsNone(result.top_relevant_context_rows)
+
+    def test_response_metadata_includes_context_mode(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        self.assertEqual(response.metadata.context_mode, "default")
+
+    def test_response_explanations_none_by_default(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        self.assertIsNone(response.explanations)
+
+    def test_response_with_explanations(self):
+        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
+        response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
+        self.assertIsNotNone(response.explanations)
+        self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.08)
+        self.assertEqual(response.explanations.top_relevant_context_rows[0], [3, 4, 1])
+
+    def test_response_confidence_interval_in_regression_prediction(self):
+        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
+        response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
+        discount_rate_predictions = response.predictions[0]["DISCOUNT_RATE"]
+        self.assertEqual(discount_rate_predictions[0]["confidence_interval"], [0.12, 0.18])
+        self.assertIsNone(discount_rate_predictions[0]["confidence"])
+
+    def test_response_confidence_interval_none_for_classification(self):
+        from tests.mock import RPT_RESPONSE_CODE_0
+        response = RPTResponse(**RPT_RESPONSE_CODE_0)
+        costcenter_predictions = response.predictions[0]["COSTCENTER"]
+        self.assertIsNone(costcenter_predictions[0].confidence_interval)
+        self.assertEqual(costcenter_predictions[0].confidence, 0.96)
 
     def test_rpt_request_columns_and_rows_provided(self):
         with self.assertRaises(ValueError) as err:

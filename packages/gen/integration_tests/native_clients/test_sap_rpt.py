@@ -210,6 +210,74 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
             self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL, timeout=0.001)
 
 
+
+    def test_predict_classification_with_top_k(self):
+        body = RPTRequest(**{
+            **request_by_columns_dict,
+            'prediction_config': {
+                'target_columns': [
+                    {
+                        'name': 'COSTCENTER',
+                        'prediction_placeholder': '[PREDICT]',
+                        'task_type': 'classification',
+                        'top_k': 2
+                    }
+                ]
+            }
+        })
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        costcenter_predictions = response.predictions[0]['COSTCENTER']
+        self.assertGreaterEqual(len(costcenter_predictions), 1)
+
+    def test_predict_response_includes_context_mode(self):
+        body = RPTRequest(**request_by_columns_dict)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertIn(response.metadata.context_mode, ['default', 'deep'])
+
+    def test_regression_prediction_includes_confidence_interval(self):
+        body = RPTRequest(
+            prediction_config=PredictionConfig(
+                target_columns=[
+                    TargetColumn(name='DISCOUNT_RATE', task_type='regression', prediction_placeholder='[PREDICT]')
+                ]),
+            rows=rows_regression
+        )
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        discount_predictions = response.predictions[0]['DISCOUNT_RATE']
+        self.assertIsNotNone(discount_predictions[0].confidence_interval)
+        self.assertEqual(len(discount_predictions[0].confidence_interval), 2)
+        self.assertIsNone(discount_predictions[0].confidence)
+
+    def test_predict_with_explanations(self):
+        body = RPTRequest(**{
+            **request_by_columns_dict,
+            'prediction_config': {
+                'target_columns': [
+                    {
+                        'name': 'COSTCENTER',
+                        'prediction_placeholder': '[PREDICT]',
+                        'task_type': 'classification'
+                    }
+                ],
+                'explanations': {
+                    'top_column_scores': 3,
+                    'top_relevant_context_rows': 2
+                }
+            }
+        })
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        self.assertIsNotNone(response.explanations)
+        self.assertIsNotNone(response.explanations.top_column_scores)
+        self.assertIsNotNone(response.explanations.top_relevant_context_rows)
+
+
 class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTestCase):
 
     def setUp(self) -> None:
@@ -234,3 +302,26 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
         self.assertEqual(response.metadata.num_predictions, 1)
         self.assertIn("COSTCENTER", response.predictions[0].model_dump())
         self.assertNotIn("ID", response.predictions[0].model_dump())
+
+    async def test_apredict_response_includes_context_mode(self):
+        body = RPTRequest(**request_by_columns_dict)
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertIn(response.metadata.context_mode, ['default', 'deep'])
+
+    async def test_apredict_regression_includes_confidence_interval(self):
+        body = RPTRequest(
+            prediction_config=PredictionConfig(
+                target_columns=[
+                    TargetColumn(name='DISCOUNT_RATE', task_type='regression', prediction_placeholder='[PREDICT]')
+                ]),
+            rows=rows_regression
+        )
+        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_SMALL_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        discount_predictions = response.predictions[0]['DISCOUNT_RATE']
+        self.assertIsNotNone(discount_predictions[0].confidence_interval)
+        self.assertEqual(len(discount_predictions[0].confidence_interval), 2)
+        self.assertIsNone(discount_predictions[0].confidence)
+
