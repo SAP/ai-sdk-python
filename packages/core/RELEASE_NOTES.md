@@ -1,7 +1,7 @@
 ## core-v3.5.0 (2026-10-02)
 
-
-- feat(core): dummy commit for core version dump (#177)
+### Features
+- Exposed some internal auth functions for further use in gen package
 
 ## core-v3.4.0 (2026-09-14)
 
