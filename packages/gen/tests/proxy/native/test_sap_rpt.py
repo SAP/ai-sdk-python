@@ -254,7 +254,7 @@ class RPTClientTests(unittest.TestCase):
     def test_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_0(url_mock.return_value):
-                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6-small")
+                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
@@ -273,13 +273,13 @@ class RPTClientTests(unittest.TestCase):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
-                    self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6-small")
+                    self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)
                     self.assertIsNotNone(err.exception.detail)
 
     def test_request_with_invalid_body(self):
         with self.assertRaises(ValueError):
-            self.client.predict(body={}, model_name="sap-rpt-1.6-small")
+            self.client.predict(body={}, model_name="sap-rpt-1.6")
 
     def test_request_without_model_name_api_url_and_kwargs(self):
         with self.assertRaises(ValueError):
@@ -297,7 +297,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
     async def test_async_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_0(url_mock.return_value):
-                response = await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6-small")
+                response = await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
@@ -308,7 +308,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
             with sap_rpt_moke_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
-                    await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6-small")
+                    await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)
                     self.assertIsNotNone(err.exception.detail)
 

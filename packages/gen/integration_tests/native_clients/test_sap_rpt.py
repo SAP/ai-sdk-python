@@ -146,7 +146,7 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         self.assertIsNotNone(url)
 
     def test_client_find_url_by_config_name(self):
-        url = self.client._get_url(config_name="sap-rpt-1.6-small-latest")
+        url = self.client._get_url(config_name="sap-rpt-1.6-latest")
         self.assertIsNotNone(url)
 
     def test_client_find_url_with_invalid_model_name(self):

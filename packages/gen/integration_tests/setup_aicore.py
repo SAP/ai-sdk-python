@@ -175,7 +175,7 @@ def get_standard_models():
         ("sonar", "latest"),
         ("sonar-deep-research", "latest"),
         ("cohere--command-a-reasoning", "latest"),
-        ("sap-rpt-1.6-small","latest"),
+        ("sap-rpt-1.6","latest"),
     ]
 
 
