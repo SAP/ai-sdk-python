@@ -1,4 +1,4 @@
-# Sample Code - Work in Progress
+# Sample Code
 
 Sample code to demonstrate the usage of the SAP Cloud SDK for AI.
 
