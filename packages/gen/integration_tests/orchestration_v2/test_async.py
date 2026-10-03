@@ -1,6 +1,6 @@
 import unittest
 
-from httpx import TimeoutException
+from httpx2 import TimeoutException
 
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, ModuleConfig,
