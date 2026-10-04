@@ -73,7 +73,7 @@ dev = [
 
 [[package]]
 name = "aiobotocore"
-version = "3.8.0"
+version = "3.9.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -85,9 +85,9 @@ dependencies = [
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d8/a7/bc31b7046c610471f0630819ca5d2a57ac4efa8d47135cb53e43f2785390/aiobotocore-3.8.0.tar.gz", hash = "sha256:80a1eb64ea915f3af3c1518669975bae74a17b2f37c14eb0fa2f83b915974670", size = 131368, upload-time = "2026-07-17T03:10:30.258Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a5/95/4f7e0453d5e81bdb1b40ecf09f135bb88e12ce27fdb3efa125022dcca5d7/aiobotocore-3.9.2.tar.gz", hash = "sha256:8e32238c5bd77717ab1ac90077ff51ab141d025528115ccc7cc9b50b2d176e5f", size = 524343, upload-time = "2026-10-01T02:01:59.522Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/6d/f4/5a7d76dc844d3ff8ed1f1a043158aa393794aebb787d3e2f8c0fe87f674f/aiobotocore-3.8.0-py3-none-any.whl", hash = "sha256:8bc605132cadfe844a3f334635a0a64fa5e360a4a206e915d99d53db5b6deeba", size = 91169, upload-time = "2026-07-17T03:10:28.771Z" },
+    { url = "https://files.pythonhosted.org/packages/09/ab/c8f982c4dfaab49200e31820a4ffe6275356f7dcaaa1024735d8f8b4e048/aiobotocore-3.9.2-py3-none-any.whl", hash = "sha256:363b4892423b272eb84afbb58000da0be6ccd0cf8a68b98438c957d05b841efc", size = 102571, upload-time = "2026-10-01T02:01:57.883Z" },
 ]
 
 [[package]]
@@ -389,30 +389,30 @@ wheels = [
 
 [[package]]
 name = "boto3"
-version = "1.43.46"
+version = "1.43.106"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "botocore" },
     { name = "jmespath" },
     { name = "s3transfer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f2/e7/976bf3dfe0aa5d7f31bec2f2cf57c79641620c910a39bc843a237aa9592d/boto3-1.43.46.tar.gz", hash = "sha256:66c0d943b049a46a492ec4ec2ebe73c930b1842c7137bee83aad6d93e95d4d96", size = 112654, upload-time = "2026-07-10T19:32:12.498Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/49/01/97aaee4d3e94467983a0c1b986ed4f4da48960d7ebc948e7d739c818cb59/boto3-1.43.106.tar.gz", hash = "sha256:c11ad4c429a983493ba10014c7af9831a455c2c0eea91c1cefff74530e480277", size = 112730, upload-time = "2026-09-30T19:36:41.684Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/1d/c52e66ff32ba7911664e6c4c2ac62e1c6d2d1e7550c7ac185d3f4b70a8a4/boto3-1.43.46-py3-none-any.whl", hash = "sha256:69453e2c1bcb9fd9806527ab99950cacfc2826cb0dce9a3a0414d19270c06c3c", size = 140031, upload-time = "2026-07-10T19:32:11.129Z" },
+    { url = "https://files.pythonhosted.org/packages/72/d8/a01764ffd32fbcd66c5575eb85764ae9ea7b7d03dc591592e132c43af1f5/boto3-1.43.106-py3-none-any.whl", hash = "sha256:fdf2e304f9e8864b8613591b18b36ee995560c9666033622eda1cb9057866880", size = 140045, upload-time = "2026-09-30T19:36:40.228Z" },
 ]
 
 [[package]]
 name = "botocore"
-version = "1.43.46"
+version = "1.43.106"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jmespath" },
     { name = "python-dateutil" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/7d/f1/1917891851ac5ac09bb9f4862b8fc9252a009d7c24e8688bb67e4383d9e7/botocore-1.43.46.tar.gz", hash = "sha256:59f2e1ac3cdc66d191cae91c0804bc41847ce817dc8147cf43eaada8f76a5533", size = 15694635, upload-time = "2026-07-10T19:32:00.437Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/11/b9/10ca68d0092895d5ea60f485a61a9840d5aff9d732c66ed60da53a20b1d4/botocore-1.43.106.tar.gz", hash = "sha256:006870b3b4e40547232ad12c3bb4faec91bbbe0659aafaa3b7fa48a112c4ee97", size = 16271399, upload-time = "2026-09-30T19:36:35.836Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0e/f2/4bd8f2f419088feb3ce55f0ca91040ff902f402edfd197450b20a2e1d533/botocore-1.43.46-py3-none-any.whl", hash = "sha256:cb673891e623ae6e6a1bf24d94ef169504f3eb02584adb5d5bee2f6aae819b60", size = 15380350, upload-time = "2026-07-10T19:31:57.616Z" },
+    { url = "https://files.pythonhosted.org/packages/a8/eb/c51d3b54dfaa9267a687359d946dc2a1ca6a27fb4d381773e59b7bd72bf4/botocore-1.43.106-py3-none-any.whl", hash = "sha256:c1fb8818f9957cb5037f73db34ac1a12ba43562e31d6e7f9cb7e5fc64e1dba78", size = 15965506, upload-time = "2026-09-30T19:36:32.625Z" },
 ]
 
 [[package]]
@@ -1662,7 +1662,7 @@ wheels = [
 
 [[package]]
 name = "langchain-aws"
-version = "1.7.0"
+version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boto3" },
@@ -1672,9 +1672,9 @@ dependencies = [
     { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pydantic" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/64/ca/88fd983e4ffb2b0a765efdd57da75b99be9f2077bedf75e57a7b7d6ac843/langchain_aws-1.7.0.tar.gz", hash = "sha256:e4e8d578b4be8fd3ad970373fc72c3e321fea7f955cb6c075464e30636ec583d", size = 609279, upload-time = "2026-08-05T18:45:38.166Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/9a/f9/7fc564afa32bb452f383bb5cc0244530ad330ffcecef157a534512138c40/langchain_aws-1.8.0.tar.gz", hash = "sha256:fac880f42a6904c30bbc59971e25fd27b732ec0a114baf24b5dca1a39c6d401a", size = 784117, upload-time = "2026-09-30T17:56:22.113Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e1/4c/85e6c625b04c2637ad053c28ed7eda9aa4b89f77e6763b3a41f126427ded/langchain_aws-1.7.0-py3-none-any.whl", hash = "sha256:25ccaebeec0bd718df4a1dce44c725591e177690bc19df7caa0cd2d601df27a0", size = 214878, upload-time = "2026-08-05T18:45:36.583Z" },
+    { url = "https://files.pythonhosted.org/packages/82/d3/28a3cc7acf4ed7a7de840ccfb17eb5ee8400a392494938c34f488cebbdc4/langchain_aws-1.8.0-py3-none-any.whl", hash = "sha256:554e5367684339192b615e3bb597d3f318313cc1c53084d6ea6dfddbe143b16b", size = 244440, upload-time = "2026-09-30T17:56:20.589Z" },
 ]
 
 [[package]]
@@ -1698,7 +1698,7 @@ wheels = [
 
 [[package]]
 name = "langchain-core"
-version = "1.6.2"
+version = "1.6.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -1712,9 +1712,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "uuid-utils" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/89/7b/406b4a8dd43dd01f69e04aafdee206809a2097134b2f944e12802eae7948/langchain_core-1.6.2.tar.gz", hash = "sha256:1ec6d3a98f7c8cdbb5bb0deff86e7ca37e16bf4f8f49f022d10723656c62352d", size = 1004390, upload-time = "2026-09-04T21:29:22.769Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/18/87/9e5d393bbcec068c51becc255a15aacfd8a14ac5826179751c1c320e5258/langchain_core-1.6.6.tar.gz", hash = "sha256:67616d984c085009be2c381c2efd330d32429a58aebab295b4f51b6573964511", size = 1007227, upload-time = "2026-09-29T14:52:54.598Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a8/62/d3fb7c215cb2f237c3fe84880bf347a38deafef6033b6d5f1339ba8ca401/langchain_core-1.6.2-py3-none-any.whl", hash = "sha256:21e6c7cf097c68b777fd69ea00864f09bd9ca76ac73e3e3fa14e1ee366eb4711", size = 571690, upload-time = "2026-09-04T21:29:21.175Z" },
+    { url = "https://files.pythonhosted.org/packages/90/10/8c00b4dc094886314c907ec7ead258dfee28948cf44175976cc4fba9aba8/langchain_core-1.6.6-py3-none-any.whl", hash = "sha256:d9a71e312ab7443701238750e04a57aefc037c4f1ec82837c8a1609d9a14a9b1", size = 572080, upload-time = "2026-09-29T14:52:53.213Z" },
 ]
 
 [[package]]
@@ -4233,7 +4233,7 @@ requires-dist = [
     { name = "h11", specifier = ">=0.16.0" },
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "langchain", specifier = "~=1.4.0" },
-    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
+    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.8.0" },
     { name = "langchain-classic", specifier = "~=1.0.0" },
     { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0" },
     { name = "langchain-openai", specifier = "~=1.6.0" },
