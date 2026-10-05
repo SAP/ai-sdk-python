@@ -1699,13 +1699,13 @@ def openai_responses_structured_outputs_mocker(deployment_url):
         yield
 
 @contextmanager
-def sap_rpt_moke_response_code_0(url: str):
+def sap_rpt_mock_response_code_0(url: str):
     with respx.mock:
         respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0))
         yield
 
 @contextmanager
-def sap_rpt_moke_response_code_0_with_explanations(url: str):
+def sap_rpt_mock_response_code_0_with_explanations(url: str):
     with respx.mock:
         respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS))
         yield
@@ -1730,7 +1730,7 @@ RPT_RESPONSE_CODE_2 = {
 }
 
 @contextmanager
-def sap_rpt_moke_response_code_2(url: str):
+def sap_rpt_mock_response_code_2(url: str):
     with respx.mock:
         respx.post(f"{url}/predict").mock(return_value=Response(422, json=RPT_RESPONSE_CODE_2))
         yield

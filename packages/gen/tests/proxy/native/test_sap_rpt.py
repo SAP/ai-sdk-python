@@ -8,9 +8,11 @@ from gen_ai_hub.proxy.native.sap.models import (
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from tests.mock import (
     get_mocked_ai_core_client,
-    sap_rpt_moke_response_code_0,
-    sap_rpt_moke_response_code_0_with_explanations,
-    sap_rpt_moke_response_code_2,
+    sap_rpt_mock_response_code_0,
+    sap_rpt_mock_response_code_0_with_explanations,
+    sap_rpt_mock_response_code_2,
+    RPT_RESPONSE_CODE_0,
+    RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS,
 )
 
 mock_url = "https://mock-rpt-deployment"
@@ -173,7 +175,7 @@ class RPTRequestModels(unittest.TestCase):
 
     def test_prediction_item_confidence_interval_regression(self):
         item = PredictionItem(prediction=195.09, confidence_interval=(191.42, 198.76))
-        self.assertEqual(item.confidence_interval, (191.42, 198.76))
+        self.assertEqual(item.confidence_interval, [191.42, 198.76])
         self.assertIsNone(item.confidence)
 
     def test_prediction_item_confidence_interval_none_for_classification(self):
@@ -206,31 +208,26 @@ class RPTRequestModels(unittest.TestCase):
         self.assertIsNone(result.top_relevant_context_rows)
 
     def test_response_metadata_includes_context_mode(self):
-        from tests.mock import RPT_RESPONSE_CODE_0
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         self.assertEqual(response.metadata.context_mode, "default")
 
     def test_response_explanations_none_by_default(self):
-        from tests.mock import RPT_RESPONSE_CODE_0
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         self.assertIsNone(response.explanations)
 
     def test_response_with_explanations(self):
-        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
         response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
         self.assertIsNotNone(response.explanations)
         self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.08)
         self.assertEqual(response.explanations.top_relevant_context_rows[0], [3, 4, 1])
 
     def test_response_confidence_interval_in_regression_prediction(self):
-        from tests.mock import RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS
         response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
         discount_rate_predictions = response.predictions[0]["DISCOUNT_RATE"]
-        self.assertEqual(discount_rate_predictions[0]["confidence_interval"], [0.12, 0.18])
-        self.assertIsNone(discount_rate_predictions[0]["confidence"])
+        self.assertEqual(discount_rate_predictions[0].confidence_interval, [0.12, 0.18])
+        self.assertIsNone(discount_rate_predictions[0].confidence)
 
     def test_response_confidence_interval_none_for_classification(self):
-        from tests.mock import RPT_RESPONSE_CODE_0
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         costcenter_predictions = response.predictions[0]["COSTCENTER"]
         self.assertIsNone(costcenter_predictions[0].confidence_interval)
@@ -253,7 +250,7 @@ class RPTClientTests(unittest.TestCase):
 
     def test_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_moke_response_code_0(url_mock.return_value):
+            with sap_rpt_mock_response_code_0(url_mock.return_value):
                 response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
@@ -262,7 +259,7 @@ class RPTClientTests(unittest.TestCase):
                 self.assertEqual(response.metadata.num_predictions,1)
 
     def test_request_with_response_code_0_request_by_api_url(self):
-        with sap_rpt_moke_response_code_0(mock_url):
+        with sap_rpt_mock_response_code_0(mock_url):
             response = self.client.predict(body=request_by_row_dict, deployment_url=mock_url)
             self.assertIsInstance(response, RPTResponse)
             self.assertEqual(response.status.code, 0)
@@ -271,7 +268,7 @@ class RPTClientTests(unittest.TestCase):
 
     def test_request_with_response_code_2(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_moke_response_code_2(url_mock.return_value):
+            with sap_rpt_mock_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
                     self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)
@@ -285,6 +282,20 @@ class RPTClientTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.client.predict(body=request_by_row_dict)
 
+    def test_request_happy_path_rpt_1_0(self):
+        with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
+            with sap_rpt_mock_response_code_0(url_mock.return_value):
+                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1-small")
+                self.assertIsInstance(response, RPTResponse)
+                self.assertEqual(response.status.code, 0)
+
+    def test_request_happy_path_rpt_1_5(self):
+        with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
+            with sap_rpt_mock_response_code_0(url_mock.return_value):
+                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.5")
+                self.assertIsInstance(response, RPTResponse)
+                self.assertEqual(response.status.code, 0)
+
     def test_timeout_determination(self):
         self.assertEqual(self.client._determine_timeout(10), 10)
 
@@ -296,7 +307,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_async_request_with_response_code_0(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_moke_response_code_0(url_mock.return_value):
+            with sap_rpt_mock_response_code_0(url_mock.return_value):
                 response = await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
@@ -306,7 +317,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_async_request_with_response_code_2(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_moke_response_code_2(url_mock.return_value):
+            with sap_rpt_mock_response_code_2(url_mock.return_value):
                 with self.assertRaises(RPTException) as err:
                     await self.client.apredict(body=request_by_row_dict, model_name="sap-rpt-1.6")
                     self.assertEqual(err.exception.status.code, 2)

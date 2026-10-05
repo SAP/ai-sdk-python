@@ -1,4 +1,4 @@
-from typing import Optional, Literal, Union, Any
+from typing import Annotated, Optional, Literal, Union, Any
 from pydantic import BaseModel, Field, RootModel, model_validator
 
 
@@ -189,7 +189,7 @@ class PredictionItem(BaseModel):
 
     prediction: Union[str, float]
     confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    confidence_interval: Optional[tuple[float, float]] = None
+    confidence_interval: Optional[Annotated[list[float], Field(min_length=2, max_length=2)]] = None
 
 
 class Prediction(RootModel[dict[str, Union[list[PredictionItem], Any]]]):
