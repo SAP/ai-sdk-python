@@ -8,11 +8,11 @@ from ai_core_sdk.credentials import (
     Service,
     Source,
     VCAPEnvironment,
-    extract_credentials as _extract_core_credentials,
-    fetch_credentials as _fetch_core_credentials,
+    extract_credentials as _do_extract_credentials,
+    fetch_credentials as _do_fetch_credentials,
     get_nested_value,
     init_conf,
-    resolve_credentials as _resolve_core_credentials,
+    resolve_credentials as _do_resolve_credentials,
     resolve_resource_group,
     validate_credentials,
 )
@@ -49,12 +49,12 @@ CREDENTIAL_VALUES: Final[List[CredentialsValue]] = EVAL_CREDENTIAL_VALUES
 
 def extract_credentials(source: Source, exclude: List[str] = None) -> Dict[str, str]:
     """Extract all evaluation credentials from a source."""
-    return _extract_core_credentials(source, credential_values=EVAL_CREDENTIAL_VALUES, exclude=exclude)
+    return _do_extract_credentials(source, credential_values=EVAL_CREDENTIAL_VALUES, exclude=exclude)
 
 
 def resolve_credentials(sources: List[Source]) -> Dict[str, str]:
     """Extract evaluation credentials from the first source that has any defined."""
-    return _resolve_core_credentials(sources, credential_values=EVAL_CREDENTIAL_VALUES)
+    return _do_resolve_credentials(sources, credential_values=EVAL_CREDENTIAL_VALUES)
 
 
 def fetch_credentials(profile: str = None, **kwargs) -> Dict[str, str]:
@@ -64,4 +64,4 @@ def fetch_credentials(profile: str = None, **kwargs) -> Dict[str, str]:
     Precedence order: kwargs > AICORE_SERVICE_KEY > environment variables > config file > VCAP service
     (see ai_core_sdk.credentials.fetch_credentials for the full behavior).
     """
-    return _fetch_core_credentials(profile=profile, credential_values=EVAL_CREDENTIAL_VALUES, **kwargs)
+    return _do_fetch_credentials(profile=profile, credential_values=EVAL_CREDENTIAL_VALUES, **kwargs)
