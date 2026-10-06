@@ -32,8 +32,8 @@ class ExplanationConfig(BaseModel):
     :type top_relevant_context_rows: int
     """
 
-    top_column_scores: int = 0
-    top_relevant_context_rows: int = 0
+    top_column_scores: int = Field(default=0, ge=0, le=20)
+    top_relevant_context_rows: int = Field(default=0, ge=0, le=20)
 
 
 class ExplanationResult(BaseModel):
