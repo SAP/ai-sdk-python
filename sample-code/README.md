@@ -14,8 +14,6 @@ Before running the application, ensure the following prerequisites are met:
   - `text-embedding-3-small`
   - `anthropic--claude-4.6-sonnet`
   - `gemini-3.5-flash`
-  - `sap-rpt-1-small`
-  - `sap-rpt-1.5`
   - `sap-rpt-1.6`
 
 ## Local Deployment
