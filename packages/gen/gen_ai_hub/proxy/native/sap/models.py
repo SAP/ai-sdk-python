@@ -59,12 +59,12 @@ class PredictionConfig(BaseModel):
     :param explanations: Optional configuration for explainability outputs (column scores and relevant context rows).
     :type explanations: Optional[ExplanationConfig]
     :param context_mode: Context mode for predictions. Set it to \"default\" for the best balance between accuracy and latency/cost. Set it to \"deep\" for higher accuracy with >8k context rows at increased latency and cost (only for \"sap-rpt-1.6-large\").
-    :type context_mode: Literal['default', 'deep']
+    :type context_mode: Optional[Literal['default', 'deep']]
     """
 
     target_columns: list[TargetColumn]
     explanations: Optional[ExplanationConfig] = None
-    context_mode: Literal['default', 'deep'] = 'default'
+    context_mode: Optional[Literal['default', 'deep']] = None
 
 
 class DataType(BaseModel):

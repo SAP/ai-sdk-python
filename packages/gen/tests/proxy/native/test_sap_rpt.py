@@ -120,7 +120,7 @@ class RPTRequestModels(unittest.TestCase):
                 }
             ],
             "explanations": None,
-            "context_mode": "default"
+            "context_mode": None
         }
         prediction_config = PredictionConfig(target_columns=[
             TargetColumn(name="COSTCENTER", prediction_placeholder="[PREDICT]", task_type="classification")
@@ -232,6 +232,20 @@ class RPTRequestModels(unittest.TestCase):
         costcenter_predictions = response.predictions[0]["COSTCENTER"]
         self.assertIsNone(costcenter_predictions[0].confidence_interval)
         self.assertEqual(costcenter_predictions[0].confidence, 0.96)
+
+    def test_rpt_request_omits_context_mode_when_not_set(self):
+        request = RPTRequest.model_validate(request_by_row_dict)
+        self.assertNotIn("context_mode", request.model_dump()["prediction_config"])
+
+    def test_rpt_request_includes_context_mode_when_set(self):
+        request = RPTRequest(
+            prediction_config=PredictionConfig(
+                target_columns=[TargetColumn(name="COSTCENTER", prediction_placeholder="[PREDICT]", task_type="classification")],
+                context_mode="deep"
+            ),
+            rows=request_by_row_dict["rows"]
+        )
+        self.assertEqual(request.model_dump()["prediction_config"]["context_mode"], "deep")
 
     def test_rpt_request_columns_and_rows_provided(self):
         with self.assertRaises(ValueError) as err:
