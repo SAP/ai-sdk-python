@@ -9,7 +9,6 @@ from gen_ai_hub.proxy.native.sap.client import RPTClient
 from tests.mock import (
     get_mocked_ai_core_client,
     sap_rpt_mock_response_code_0,
-    sap_rpt_mock_response_code_0_with_explanations,
     sap_rpt_mock_response_code_2,
     RPT_RESPONSE_CODE_0,
     RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS,
