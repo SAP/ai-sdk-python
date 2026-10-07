@@ -1,6 +1,6 @@
 import unittest
 
-from integration_tests.constants import SAP_RPT_1_6_TEST_MODEL
+from integration_tests.constants import SAP_RPT_1_0_TEST_MODEL, SAP_RPT_1_5_TEST_MODEL, SAP_RPT_1_6_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from gen_ai_hub.proxy.native.sap.models import RPTRequest, RPTResponse, PredictionConfig, TargetColumn
@@ -277,6 +277,20 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         self.assertIsNotNone(response.explanations.top_column_scores)
         self.assertIsNotNone(response.explanations.top_relevant_context_rows)
 
+
+    def test_happy_path_rpt_1_0(self):
+        body = RPTRequest(**request_by_row_dict)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_0_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        self.assertIn("COSTCENTER", response.predictions[0].model_dump())
+
+    def test_happy_path_rpt_1_5(self):
+        body = RPTRequest(**request_by_row_dict)
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_5_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        self.assertIn("COSTCENTER", response.predictions[0].model_dump())
 
 class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTestCase):
 

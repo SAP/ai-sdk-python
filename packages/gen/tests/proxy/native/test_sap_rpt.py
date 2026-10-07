@@ -214,7 +214,7 @@ class RPTRequestModels(unittest.TestCase):
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         self.assertIsNone(response.explanations)
 
-    def test_response_with_explanations(self):
+    def test_response(self):
         response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
         self.assertIsNotNone(response.explanations)
         self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.08)
@@ -295,20 +295,6 @@ class RPTClientTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.client.predict(body=request_by_row_dict)
 
-    def test_request_happy_path_rpt_1_0(self):
-        with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_mock_response_code_0(url_mock.return_value):
-                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1-small")
-                self.assertIsInstance(response, RPTResponse)
-                self.assertEqual(response.status.code, 0)
-
-    def test_request_happy_path_rpt_1_5(self):
-        with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:
-            with sap_rpt_mock_response_code_0(url_mock.return_value):
-                response = self.client.predict(body=request_by_row_dict, model_name="sap-rpt-1.5")
-                self.assertIsInstance(response, RPTResponse)
-                self.assertEqual(response.status.code, 0)
-
     def test_timeout_determination(self):
         self.assertEqual(self.client._determine_timeout(10), 10)
 
@@ -337,6 +323,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
                     self.assertIsNotNone(err.exception.detail)
 
 def test_flat_import_sap_rpt_client():
+    # here inline import is OK
     from gen_ai_hub.proxy.native.sap.client import RPTClient as client
     from gen_ai_hub.proxy.native.sap import RPTClient as client_flat
     assert client == client_flat

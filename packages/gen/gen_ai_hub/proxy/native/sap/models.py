@@ -8,7 +8,7 @@ class TargetColumn(BaseModel):
     :param name: Name of the target column.
     :type name: str
     :param prediction_placeholder: The prediction placeholder in any column for which to predict a value. The model will predict a value for all table cells containing this value.
-    :type prediction_placeholder: Optional[Union[str, int, float]]
+    :type prediction_placeholder: Union[str, int, float, None]]
     :param task_type: Task type of the target column.
         One of ``"classification"`` or ``"regression"``. Defaults to ``None``.
     :type task_type: Optional[Literal["classification", "regression"]]
@@ -17,7 +17,7 @@ class TargetColumn(BaseModel):
     """
 
     name: str
-    prediction_placeholder: Optional[Union[str, int, float]]
+    prediction_placeholder: Union[str, int, float, None]
     task_type: Optional[Literal["classification", "regression"]] = None
     top_k: Optional[int] = None
 
