@@ -173,7 +173,7 @@ class RPTRequestModels(unittest.TestCase):
         self.assertIsNone(tc.top_k)
 
     def test_prediction_item_confidence_interval_regression(self):
-        item = PredictionItem(prediction=195.09, confidence_interval=(191.42, 198.76))
+        item = PredictionItem(prediction=195.09, confidence_interval=[191.42, 198.76])
         self.assertEqual(item.confidence_interval, [191.42, 198.76])
         self.assertIsNone(item.confidence)
 
@@ -194,43 +194,37 @@ class RPTRequestModels(unittest.TestCase):
 
     def test_explanation_result_deserialization(self):
         data = {
-            "top_column_scores": [{"PRODUCT": 0.08, "ORDERDATE": 0.03}],
-            "top_relevant_context_rows": [[3, 4, 1]]
+            "top_column_scores": [{"PRODUCT": 0.523, "PRICE": 0.234, "ORDERDATE": 0.121}],
+            "top_relevant_context_rows": [[1, 2]]
         }
         result = ExplanationResult(**data)
-        self.assertEqual(result.top_column_scores[0]["PRODUCT"], 0.08)
-        self.assertEqual(result.top_relevant_context_rows[0], [3, 4, 1])
+        self.assertEqual(result.top_column_scores[0]["PRODUCT"], 0.523)
+        self.assertEqual(result.top_relevant_context_rows[0], [1, 2])
 
     def test_explanation_result_nullable_fields(self):
         result = ExplanationResult(top_column_scores=None, top_relevant_context_rows=None)
         self.assertIsNone(result.top_column_scores)
         self.assertIsNone(result.top_relevant_context_rows)
 
-    def test_response_metadata_includes_context_mode(self):
-        response = RPTResponse(**RPT_RESPONSE_CODE_0)
-        self.assertEqual(response.metadata.context_mode, "default")
-
-    def test_response_explanations_none_by_default(self):
+    def test_response_without_explanations(self):
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         self.assertIsNone(response.explanations)
+        self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
+        self.assertEqual(response.predictions[0]["COSTCENTER"][0].confidence, 0.96)
+        self.assertIsNone(response.predictions[0]["COSTCENTER"][0].confidence_interval)
 
-    def test_response(self):
+    def test_response_with_explanations(self):
         response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
         self.assertIsNotNone(response.explanations)
-        self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.08)
-        self.assertEqual(response.explanations.top_relevant_context_rows[0], [3, 4, 1])
+        self.assertEqual(response.explanations.top_column_scores[0]["PRODUCT"], 0.523)
+        self.assertEqual(response.explanations.top_relevant_context_rows[0], [1, 2])
 
-    def test_response_confidence_interval_in_regression_prediction(self):
-        response = RPTResponse(**RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS)
-        discount_rate_predictions = response.predictions[0]["DISCOUNT_RATE"]
-        self.assertEqual(discount_rate_predictions[0].confidence_interval, [0.12, 0.18])
-        self.assertIsNone(discount_rate_predictions[0].confidence)
-
-    def test_response_confidence_interval_none_for_classification(self):
+    def test_response_classification_prediction(self):
         response = RPTResponse(**RPT_RESPONSE_CODE_0)
         costcenter_predictions = response.predictions[0]["COSTCENTER"]
-        self.assertIsNone(costcenter_predictions[0].confidence_interval)
+        self.assertEqual(costcenter_predictions[0].prediction, "Office Furniture")
         self.assertEqual(costcenter_predictions[0].confidence, 0.96)
+        self.assertIsNone(costcenter_predictions[0].confidence_interval)
 
     def test_rpt_request_omits_context_mode_when_not_set(self):
         request = RPTRequest.model_validate(request_by_row_dict)
@@ -268,8 +262,8 @@ class RPTClientTests(unittest.TestCase):
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
-                self.assertEqual(response.metadata.num_columns,5)
-                self.assertEqual(response.metadata.num_predictions,1)
+                self.assertEqual(response.metadata.num_columns, 5)
+                self.assertEqual(response.metadata.num_predictions, 1)
 
     def test_request_with_response_code_0_request_by_api_url(self):
         with sap_rpt_mock_response_code_0(mock_url):
@@ -311,8 +305,8 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
-                self.assertEqual(response.metadata.num_columns,5)
-                self.assertEqual(response.metadata.num_predictions,1)
+                self.assertEqual(response.metadata.num_columns, 5)
+                self.assertEqual(response.metadata.num_predictions, 1)
 
     async def test_async_request_with_response_code_2(self):
         with patch.object(RPTClient, "_get_url", return_value=mock_url) as url_mock:

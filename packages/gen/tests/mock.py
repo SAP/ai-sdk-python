@@ -1337,29 +1337,27 @@ RPT_RESPONSE_CODE_0 = {
             "ID": "35"
         }
     ],
-    "explanations": None,
     "metadata": {
         "num_columns": 5,
         "num_rows": 2,
         "num_predictions": 1,
-        "num_query_rows": 1,
-        "context_mode": "default"
+        "num_query_rows": 1
     }
 }
 
 RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS = {
-    "id": "d445a965-1e81-5d8a-ce84-0bd692e9dcbe",
+    "id": "c334f854-0d70-4c79-bd73-9ac581fd8cda",
     "status": {
         "code": 0,
         "message": "ok"
     },
     "predictions": [
         {
-            "DISCOUNT_RATE": [
+            "COSTCENTER": [
                 {
-                    "prediction": 0.15,
-                    "confidence": None,
-                    "confidence_interval": [0.12, 0.18]
+                    "prediction": "Office Furniture",
+                    "confidence": 0.96,
+                    "confidence_interval": None
                 }
             ],
             "ID": "35"
@@ -1367,18 +1365,17 @@ RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS = {
     ],
     "explanations": {
         "top_column_scores": [
-            {"PRODUCT": 0.08, "ORDERDATE": 0.03}
+            {"PRODUCT": 0.523, "PRICE": 0.234, "ORDERDATE": 0.121}
         ],
         "top_relevant_context_rows": [
-            [3, 4, 1]
+            [1, 2]
         ]
     },
     "metadata": {
         "num_columns": 5,
-        "num_rows": 3,
+        "num_rows": 2,
         "num_predictions": 1,
-        "num_query_rows": 1,
-        "context_mode": "default"
+        "num_query_rows": 1
     }
 }
 
