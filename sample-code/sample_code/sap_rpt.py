@@ -1,115 +1,143 @@
+from typing import Any
+
+from fastapi import Body
+from pydantic import BaseModel, Field
+
 from gen_ai_hub.proxy.native.sap.client import RPTClient
 from gen_ai_hub.proxy.native.sap.models import DataType, PredictionConfig, RPTRequest, TargetColumn
 
-CLASSIFICATION_SCHEMA = {
-    "PRODUCT": DataType(dtype="string"),
-    "PRICE": DataType(dtype="numeric"),
-    "ORDERDATE": DataType(dtype="date"),
-    "ID": DataType(dtype="string"),
-    "COSTCENTER": DataType(dtype="string"),
-}
+_DATE_COLS = {"ORDERDATE"}
 
-CLASSIFICATION_ROWS = [
-    {"PRODUCT": "Couch", "PRICE": 999.99, "ORDERDATE": "28-11-2025", "ID": "35", "COSTCENTER": "[PREDICT]"},
-    {"PRODUCT": "Office Chair", "PRICE": 150.8, "ORDERDATE": "02-11-2025", "ID": "44", "COSTCENTER": "Office Furniture"},
-    {"PRODUCT": "Server Rack", "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "COSTCENTER": "Data Infrastructure"},
+_DEFAULT_CLASSIFICATION_ROWS = [
+    {"PRODUCT": "Couch",        "PRICE": 999.99,  "ORDERDATE": "28-11-2025", "ID": "35",  "COSTCENTER": "[PREDICT]"},
+    {"PRODUCT": "Office Chair", "PRICE": 150.80,  "ORDERDATE": "02-11-2025", "ID": "44",  "COSTCENTER": "Office Furniture"},
+    {"PRODUCT": "Server Rack",  "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "COSTCENTER": "Data Infrastructure"},
 ]
 
-CLASSIFICATION_COLUMNS = {
-    "PRODUCT": ["Couch", "Office Chair", "Server Rack"],
-    "PRICE": [999.99, 150.8, 2200.00],
-    "ORDERDATE": ["28-11-2025", "02-11-2025", "01-11-2025"],
-    "ID": ["35", "44", "104"],
+_DEFAULT_CLASSIFICATION_COLUMNS = {
+    "PRODUCT":    ["Couch", "Office Chair", "Server Rack"],
+    "PRICE":      [999.99, 150.8, 2200.00],
+    "ORDERDATE":  ["28-11-2025", "02-11-2025", "01-11-2025"],
+    "ID":         ["35", "44", "104"],
     "COSTCENTER": ["[PREDICT]", "Office Furniture", "Data Infrastructure"],
 }
 
-REGRESSION_ROWS = [
-    {"PRODUCT": "Couch", "PRICE": 999.99, "ORDERDATE": "28-11-2025", "ID": "35", "DISCOUNT_RATE": "[PREDICT]"},
-    {"PRODUCT": "Office Chair", "PRICE": 150.80, "ORDERDATE": "02-11-2025", "ID": "44", "DISCOUNT_RATE": 0.12},
-    {"PRODUCT": "Server Rack", "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "DISCOUNT_RATE": 0.05},
-    {"PRODUCT": "Standing Desk", "PRICE": 640.00, "ORDERDATE": "05-11-2025", "ID": "205", "DISCOUNT_RATE": 0.10},
-    {"PRODUCT": "Monitor 27 inch", "PRICE": 289.99, "ORDERDATE": "08-11-2025", "ID": "306", "DISCOUNT_RATE": "[PREDICT]"},
+_DEFAULT_REGRESSION_ROWS = [
+    {"PRODUCT": "Couch",           "PRICE": 999.99,  "ORDERDATE": "28-11-2025", "ID": "35",  "DISCOUNT_RATE": "[PREDICT]"},
+    {"PRODUCT": "Office Chair",    "PRICE": 150.80,  "ORDERDATE": "02-11-2025", "ID": "44",  "DISCOUNT_RATE": 0.12},
+    {"PRODUCT": "Server Rack",     "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "DISCOUNT_RATE": 0.05},
+    {"PRODUCT": "Standing Desk",   "PRICE": 640.00,  "ORDERDATE": "05-11-2025", "ID": "205", "DISCOUNT_RATE": 0.10},
+    {"PRODUCT": "Monitor 27 inch", "PRICE": 289.99,  "ORDERDATE": "08-11-2025", "ID": "306", "DISCOUNT_RATE": "[PREDICT]"},
 ]
 
-REGRESSION_SCHEMA = {
-    "PRODUCT": DataType(dtype="string"),
-    "PRICE": DataType(dtype="numeric"),
-    "ORDERDATE": DataType(dtype="date"),
-    "ID": DataType(dtype="string"),
-    "DISCOUNT_RATE": DataType(dtype="numeric"),
-}
+
+def _infer_schema(rows: list[dict[str, Any]]) -> dict[str, DataType]:
+    """Derive column DataTypes from the first fully-populated (non-predict) row."""
+    for row in rows:
+        if "[PREDICT]" not in row.values():
+            return {
+                k: DataType(dtype="date" if k in _DATE_COLS else ("numeric" if isinstance(v, (int, float)) else "string"))
+                for k, v in row.items()
+            }
+    return {}
 
 
-def predict_by_rows():
-    """
-    Classify a target column using row-oriented input data.
-
-    Context rows supply known COSTCENTER values; the query row marked
-    with "[PREDICT]" receives a predicted classification.
-
-    Returns:
-        The prediction result.
-    """
-    client = RPTClient()
-    body = RPTRequest(
-        prediction_config=PredictionConfig(
-            target_columns=[
-                TargetColumn(
-                    name="COSTCENTER",
-                    prediction_placeholder="[PREDICT]",
-                    task_type="classification",
-                )
-            ]
-        ),
-        index_column="ID",
-        rows=CLASSIFICATION_ROWS,
-        data_schema=CLASSIFICATION_SCHEMA,
+class PredictByRowsRequest(BaseModel):
+    rows: list[dict[str, Any]] = Field(
+        default=_DEFAULT_CLASSIFICATION_ROWS,
+        description="Row-oriented data. Mark cells to predict with the prediction_placeholder value.",
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    target_column: str = Field(default="COSTCENTER", description="Column to predict.")
+    task_type: str = Field(default="classification", description="'classification' or 'regression'.")
+    prediction_placeholder: str = Field(default="[PREDICT]", description="Sentinel value marking cells to predict.")
+    index_column: str = Field(default="ID", description="Row identifier column.")
+    model_name: str = Field(default="sap-rpt-1-small", description="SAP RPT model to use.")
 
 
-def predict_by_columns():
-    """
-    Classify a target column using column-oriented input data.
-
-    Equivalent to predict_by_rows but uses the columns format instead of rows.
-
-    Returns:
-        The prediction result.
-    """
-    client = RPTClient()
-    body = RPTRequest(
-        prediction_config=PredictionConfig(
-            target_columns=[
-                TargetColumn(
-                    name="COSTCENTER",
-                    prediction_placeholder="[PREDICT]",
-                    task_type="classification",
-                )
-            ]
-        ),
-        columns=CLASSIFICATION_COLUMNS,
-        data_schema=CLASSIFICATION_SCHEMA,
+class PredictByColumnsRequest(BaseModel):
+    columns: dict[str, list[Any]] = Field(
+        default=_DEFAULT_CLASSIFICATION_COLUMNS,
+        description="Column-oriented data. Each key is a column name, value is the list of cells.",
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    target_column: str = Field(default="COSTCENTER")
+    task_type: str = Field(default="classification")
+    prediction_placeholder: str = Field(default="[PREDICT]")
+    model_name: str = Field(default="sap-rpt-1-small")
 
 
-def regression():
+class RegressionRequest(BaseModel):
+    rows: list[dict[str, Any]] = Field(
+        default=_DEFAULT_REGRESSION_ROWS,
+        description="Row-oriented data with a numeric target column.",
+    )
+    target_column: str = Field(default="DISCOUNT_RATE")
+    prediction_placeholder: str = Field(default="[PREDICT]")
+    index_column: str = Field(default="ID")
+    model_name: str = Field(default="sap-rpt-1-small")
+
+
+def predict_by_rows(body: PredictByRowsRequest = Body(default=None)):
+    """
+    Classify or regress a target column using row-oriented input.
+
+    Omit the request body to use the built-in sample data.
+    Provide your own rows to run predictions on custom data.
+    """
+    if body is None:
+        body = PredictByRowsRequest()
+    rpt_body = RPTRequest(
+        prediction_config=PredictionConfig(
+            target_columns=[TargetColumn(
+                name=body.target_column,
+                prediction_placeholder=body.prediction_placeholder,
+                task_type=body.task_type,
+            )]
+        ),
+        index_column=body.index_column,
+        rows=body.rows,
+        data_schema=_infer_schema(body.rows),
+    )
+    return RPTClient().predict(body=rpt_body, model_name=body.model_name)
+
+
+def predict_by_columns(body: PredictByColumnsRequest = Body(default=None)):
+    """
+    Classify a target column using column-oriented input.
+
+    Omit the request body to use the built-in sample data.
+    """
+    if body is None:
+        body = PredictByColumnsRequest()
+    n = max(len(v) for v in body.columns.values())
+    rows = [{k: body.columns[k][i] for k in body.columns} for i in range(n)]
+    rpt_body = RPTRequest(
+        prediction_config=PredictionConfig(
+            target_columns=[TargetColumn(
+                name=body.target_column,
+                prediction_placeholder=body.prediction_placeholder,
+                task_type=body.task_type,
+            )]
+        ),
+        columns=body.columns,
+        data_schema=_infer_schema(rows),
+    )
+    return RPTClient().predict(body=rpt_body, model_name=body.model_name)
+
+
+def regression(body: RegressionRequest = Body(default=None)):
     """
     Predict a numeric target column (regression).
 
-    Rows with "[PREDICT]" in DISCOUNT_RATE receive a predicted numeric value.
-
-    Returns:
-        The prediction result.
+    Omit the request body to use the built-in sample data.
     """
-    client = RPTClient()
-    body = RPTRequest(
+    if body is None:
+        body = RegressionRequest()
+    rpt_body = RPTRequest(
         prediction_config=PredictionConfig(
-            target_columns=[TargetColumn(name="DISCOUNT_RATE", task_type="regression")]
+            target_columns=[TargetColumn(name=body.target_column, task_type="regression")]
         ),
-        index_column="ID",
-        rows=REGRESSION_ROWS,
-        data_schema=REGRESSION_SCHEMA,
+        index_column=body.index_column,
+        rows=body.rows,
+        data_schema=_infer_schema(body.rows),
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    return RPTClient().predict(body=rpt_body, model_name=body.model_name)
