@@ -262,6 +262,7 @@ class RPTClientTests(unittest.TestCase):
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
+                self.assertIsNotNone(response.explanations)
                 self.assertEqual(response.metadata.num_columns, 5)
                 self.assertEqual(response.metadata.num_predictions, 1)
 
@@ -305,6 +306,7 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIsInstance(response, RPTResponse)
                 self.assertEqual(response.status.code, 0)
                 self.assertEqual(response.predictions[0]["COSTCENTER"][0].prediction, "Office Furniture")
+                self.assertIsNotNone(response.explanations)
                 self.assertEqual(response.metadata.num_columns, 5)
                 self.assertEqual(response.metadata.num_predictions, 1)
 
