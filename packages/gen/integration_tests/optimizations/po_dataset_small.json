@@ -1,0 +1,20 @@
+[
+    {
+        "fields": {
+            "input": "Subject: Urgent Assistance Required for Specialized Cleaning Services\n\nDear ProCare Facility Solutions Support Team,\n..."
+        },
+        "answer": "{\"categories\": {\"routine_maintenance_requests\": false, \"customer_feedback_and_complaints\": false, \"training_and_support_requests\": false, \"quality_and_safety_concerns\": false, \"sustainability_and_environmental_practices\": false, \"cleaning_services_scheduling\": false, \"specialized_cleaning_services\": true, \"emergency_repair_services\": false, \"facility_management_issues\": false, \"general_inquiries\": false}, \"sentiment\": \"neutral\", \"urgency\": \"high\"}"
+    },
+    {
+        "fields": {
+            "input": "Subject: Weekly Office Cleaning Schedule\n\nHello,\n\nWe need to schedule our regular weekly office cleaning for next month. Please let me know your available time slots for Mondays and Wednesdays."
+        },
+        "answer": "{\"categories\": {\"routine_maintenance_requests\": false, \"customer_feedback_and_complaints\": false, \"training_and_support_requests\": false, \"quality_and_safety_concerns\": false, \"sustainability_and_environmental_practices\": false, \"cleaning_services_scheduling\": true, \"specialized_cleaning_services\": false, \"emergency_repair_services\": false, \"facility_management_issues\": false, \"general_inquiries\": false}, \"sentiment\": \"neutral\", \"urgency\": \"low\"}"
+    },
+    {
+        "fields": {
+            "input": "Subject: EMERGENCY - Water Leak in Main Conference Room\n\nURGENT: We have a major water leak in our main conference room. Water is spreading to adjacent offices. Need immediate assistance!"
+        },
+        "answer": "{\"categories\": {\"routine_maintenance_requests\": false, \"customer_feedback_and_complaints\": false, \"training_and_support_requests\": false, \"quality_and_safety_concerns\": true, \"sustainability_and_environmental_practices\": false, \"cleaning_services_scheduling\": false, \"specialized_cleaning_services\": false, \"emergency_repair_services\": true, \"facility_management_issues\": true, \"general_inquiries\": false}, \"sentiment\": \"negative\", \"urgency\": \"high\"}"
+    }
+]
