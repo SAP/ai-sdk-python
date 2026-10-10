@@ -5,7 +5,7 @@ import re
 from contextlib import contextmanager
 from typing import Optional, Union, List, TypeVar, Iterable
 
-import httpx
+import httpx2
 from openai import AsyncOpenAI as AsyncOpenAI_
 from openai import OpenAI as OpenAI_
 from openai import resources
@@ -965,15 +965,15 @@ class AsyncOpenAIWithRawResponse:
         self.beta = None
 
 
-def _prepare_url(url: str) -> httpx.URL:
+def _prepare_url(url: str) -> httpx2.URL:
     deployment = get_current_deployment()
     prediction_url = deployment.prediction_url
     if prediction_url:
-        return httpx.URL(prediction_url)
+        return httpx2.URL(prediction_url)
 
-    url = httpx.URL(url)
+    url = httpx2.URL(url)
     if url.is_relative_url:
-        deployment_url = httpx.URL(get_current_deployment().url.rstrip('/') + '/')
+        deployment_url = httpx2.URL(get_current_deployment().url.rstrip('/') + '/')
         url = deployment_url.raw_path + url.raw_path.lstrip(b"/")
         return deployment_url.copy_with(raw_path=url)
     return url
@@ -1056,7 +1056,7 @@ class OpenAI(OpenAI_):
         headers.update(self.proxy_client.request_header)
         return headers
 
-    def _prepare_url(self, url: str) -> httpx.URL:
+    def _prepare_url(self, url: str) -> httpx2.URL:
         return _prepare_url(url)
 
     def request(self, cast_to, options, *args, **kwargs):
@@ -1141,7 +1141,7 @@ class AsyncOpenAI(AsyncOpenAI_):
         headers.update(self.proxy_client.request_header)
         return headers
 
-    def _prepare_url(self, url: str) -> httpx.URL:
+    def _prepare_url(self, url: str) -> httpx2.URL:
         return _prepare_url(url)
 
     def request(self, cast_to, options, *args, **kwargs):

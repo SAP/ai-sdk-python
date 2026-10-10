@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock, patch
-import httpx
+import httpx2
 from gen_ai_hub.proxy.native.google_genai.clients import (
     _rewrite_request,
     AICoreDynamicTransport,
@@ -20,9 +20,9 @@ class TestRewriteRequest(unittest.TestCase):
         self.transport_instance.get_selector_kwargs.return_value = {}
 
     def test_rewrite_request_with_valid_model(self):
-        request = httpx.Request(
+        request = httpx2.Request(
             method="POST",
-            url=httpx.URL("https://api.base_url.com/models/test-model:generateContent"),
+            url=httpx2.URL("https://api.base_url.com/models/test-model:generateContent"),
         )
         modified_request = _rewrite_request(self.transport_instance, request)
 
@@ -32,9 +32,9 @@ class TestRewriteRequest(unittest.TestCase):
         self.assertEqual(modified_request.headers["Custom-Header"], "CustomValue")
 
     def test_rewrite_request_with_discovery_call(self):
-        request = httpx.Request(
+        request = httpx2.Request(
             method="GET",
-            url=httpx.URL("https://api.base_url.com/models/"),
+            url=httpx2.URL("https://api.base_url.com/models/"),
         )
         modified_request = _rewrite_request(self.transport_instance, request)
 
@@ -49,13 +49,13 @@ class TestAICoreDynamicTransport(unittest.TestCase):
             url="https://base_url.com/deployment"
         )
 
-    @patch("httpx.HTTPTransport.handle_request")
+    @patch("httpx2.HTTPTransport.handle_request")
     def test_handle_request(self, mock_handle_request):
-        request = httpx.Request(
+        request = httpx2.Request(
             method="POST",
-            url=httpx.URL("https://api.base_url.com/models/test-model:generateContent"),
+            url=httpx2.URL("https://api.base_url.com/models/test-model:generateContent"),
         )
-        mock_response = httpx.Response(200, text="Success")
+        mock_response = httpx2.Response(200, text="Success")
         mock_handle_request.return_value = mock_response
 
         response = self.transport.handle_request(request)
@@ -77,13 +77,13 @@ class TestAsyncAICoreDynamicTransport(unittest.IsolatedAsyncioTestCase):
             url="https://base_url.com/deployment"
         )
 
-    @patch("httpx.AsyncHTTPTransport.handle_async_request")
+    @patch("httpx2.AsyncHTTPTransport.handle_async_request")
     async def test_handle_async_request(self, mock_handle_async_request):
-        request = httpx.Request(
+        request = httpx2.Request(
             method="POST",
-            url=httpx.URL("https://api.base_url.com/models/test-model:generateContent"),
+            url=httpx2.URL("https://api.base_url.com/models/test-model:generateContent"),
         )
-        mock_response = httpx.Response(200, text="Success")
+        mock_response = httpx2.Response(200, text="Success")
         mock_handle_async_request.return_value = mock_response
 
         response = await self.transport.handle_async_request(request)

@@ -1,4 +1,4 @@
-from httpx import TimeoutException
+from httpx2 import TimeoutException
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.llm import LLM
 from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage

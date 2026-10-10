@@ -5,8 +5,8 @@ Unit tests for the BatchService client — synchronous methods.
 import unittest
 from unittest.mock import patch
 
-import httpx
-from httpx import Response
+import httpx2
+from httpx2 import Response
 
 from gen_ai_hub.batch_service.exceptions import BatchServiceError
 from gen_ai_hub.batch_service.models.response import (
@@ -171,7 +171,7 @@ class TestBatchService(unittest.TestCase):
         with patch.object(self.client.client, "post", side_effect=capture_post):
             self.client.create(type="llm-native", input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
 
-        self.assertEqual(captured["timeout"], httpx.USE_CLIENT_DEFAULT)
+        self.assertEqual(captured["timeout"], httpx2.USE_CLIENT_DEFAULT)
 
     def test_timeout_priority_service_default(self):
         client = BatchService(proxy_client=self.proxy_client, timeout=99.0)

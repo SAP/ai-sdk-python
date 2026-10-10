@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import asyncio
 import json
 import os
@@ -9,8 +10,79 @@ from typing import Any, Dict, Final, List, Tuple, Type
 
 import numpy as np
 import requests_mock
-import respx
-from httpx import Response, AsyncByteStream
+import httpx2 as _httpx2_mod
+from pytest_httpx2 import HTTPXMock as _HTTPXMockBase
+from pytest_httpx2._options import _HTTPXMockOptions
+from pytest_httpx2._httpx_internals import IteratorStream
+
+
+class _HTTPXMock:
+    """
+    Standalone context manager wrapping HTTPXMock for use inside
+    unittest.TestCase and @contextmanager helpers that cannot receive
+    pytest fixtures.
+
+    Patches httpx2.HTTPTransport / httpx2.AsyncHTTPTransport for the
+    duration of the ``with`` block, then restores the originals and
+    asserts all registered responses were consumed (matching the
+    default fixture behaviour).
+    """
+
+    def __init__(
+        self,
+        *,
+        assert_all_responses_were_requested: bool = True,
+        assert_all_requests_were_expected: bool = True,
+        can_send_already_matched_responses: bool = True,
+    ) -> None:
+        options = _HTTPXMockOptions(
+            assert_all_responses_were_requested=assert_all_responses_were_requested,
+            assert_all_requests_were_expected=assert_all_requests_were_expected,
+            can_send_already_matched_responses=can_send_already_matched_responses,
+        )
+        self._mock = _HTTPXMockBase(options)
+        self._real_handle_request = None
+        self._real_handle_async_request = None
+
+    # --- public API (delegated to _HTTPXMockBase) ---
+
+    def add_response(self, **kwargs):
+        self._mock.add_response(**kwargs)
+
+    def add_callback(self, callback, **kwargs):
+        self._mock.add_callback(callback, **kwargs)
+
+    # --- context manager ---
+
+    def __enter__(self):
+        mock = self._mock
+        options = mock._options
+        self._real_handle_request = _httpx2_mod.HTTPTransport.handle_request
+        self._real_handle_async_request = _httpx2_mod.AsyncHTTPTransport.handle_async_request
+        _real_sync = self._real_handle_request
+        _real_async = self._real_handle_async_request
+
+        def _mocked_sync(transport, request):
+            if options.should_mock(request):
+                return mock._handle_request(transport, request)
+            return _real_sync(transport, request)
+
+        async def _mocked_async(transport, request):
+            if options.should_mock(request):
+                return await mock._handle_async_request(transport, request)
+            return await _real_async(transport, request)
+
+        _httpx2_mod.HTTPTransport.handle_request = _mocked_sync
+        _httpx2_mod.AsyncHTTPTransport.handle_async_request = _mocked_async
+        return self
+
+    def __exit__(self, *exc_info):
+        _httpx2_mod.HTTPTransport.handle_request = self._real_handle_request
+        _httpx2_mod.AsyncHTTPTransport.handle_async_request = self._real_handle_async_request
+        if exc_info[0] is None:
+            self._mock._assert_options()
+        self._mock.reset()
+from httpx2 import Response, AsyncByteStream
 
 from gen_ai_hub.prompt_registry.models.prompt_template import (PromptTemplateSpec, PromptTemplateListResponse,
                                                                PromptTemplateGetResponse, PromptTemplatePostResponse,
@@ -843,14 +915,14 @@ GET_ORCHESTRATION_V2_COMPLETION_RESPONSE = {
 
 @contextmanager
 def orchestration_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_COMPLETION_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, json=GET_ORCHESTRATION_COMPLETION_RESPONSE)
         yield
 
 @contextmanager
 def orchestration_completion_v2_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_COMPLETION_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, json=GET_ORCHESTRATION_V2_COMPLETION_RESPONSE)
         yield
 
 GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE = {
@@ -933,36 +1005,35 @@ GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE = {
 
 @contextmanager
 def orchestration_embeddings_v2_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_RESPONSE)
         yield
 
 
 @contextmanager
 def orchestration_embeddings_v2_batch_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_BATCH_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_BATCH_RESPONSE)
         yield
 
 
 @contextmanager
 def orchestration_embeddings_v2_with_masking_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, json=GET_ORCHESTRATION_V2_EMBEDDINGS_WITH_MASKING_RESPONSE)
         yield
 
 
 @contextmanager
 def orchestration_deployment_not_found_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(404, content=b'deployment not found'))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=404, content=b'deployment not found')
         yield
 
 @contextmanager
 def orchestration_too_many_requests_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(429, headers={"X-Custom-Header": "value"},
-                                                              json={"error": {"message": "too many requests"}}))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=429, headers={"X-Custom-Header": "value"}, json={"error": {"message": "too many requests"}})
         yield
 
 
@@ -1124,18 +1195,14 @@ def generate_v2_events():
 
 @contextmanager
 def orchestration_stream_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(
-            return_value=Response(200, stream=generate_events())
-        )
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, stream=IteratorStream(generate_events()))
         yield
 
 @contextmanager
 def orchestration_stream_v2_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(
-            return_value=Response(200, stream=generate_v2_events())
-        )
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, stream=IteratorStream(generate_v2_events()))
         yield
 
 # Wrap the synchronous generator in an async generator.
@@ -1162,18 +1229,14 @@ class AsyncIteratorStream(AsyncByteStream):
 
 @asynccontextmanager
 async def orchestration_stream_completion_mocker_async(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(
-            return_value=Response(200, stream=AsyncIteratorStream(async_generate_events()))
-        )
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, stream=AsyncIteratorStream(async_generate_events()))
         yield
 
 @asynccontextmanager
 async def orchestration_v2_stream_completion_mocker_async(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(
-            return_value=Response(200, stream=AsyncIteratorStream(async_generate_v2_events()))
-        )
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=deployment_url, method="POST", status_code=200, stream=AsyncIteratorStream(async_generate_v2_events()))
         yield
 
 OPENAI_CHAT_COMPLETION_RESPONSE = {
@@ -1222,15 +1285,15 @@ COHERE_CHAT_COMPLETION_RESPONSE = {
 
 @contextmanager
 def openai_chat_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_CHAT_COMPLETION_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_CHAT_COMPLETION_RESPONSE)
         yield
 
 
 @contextmanager
 def cohere_chat_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=COHERE_CHAT_COMPLETION_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=COHERE_CHAT_COMPLETION_RESPONSE)
         yield
 
 
@@ -1256,8 +1319,8 @@ OPENAI_STRUCTRED_OUTPUTS_RESPONSE = {
 
 @contextmanager
 def openai_structured_outputs_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_STRUCTRED_OUTPUTS_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_STRUCTRED_OUTPUTS_RESPONSE)
         yield
 
 
@@ -1281,8 +1344,8 @@ OPENAI_EMBEDDINGS_RESPONSE = {
 
 @contextmanager
 def openai_embeddings_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_EMBEDDINGS_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_EMBEDDINGS_RESPONSE)
         yield
 
 
@@ -1315,8 +1378,8 @@ OPENAI_GPT35_INSTRUCT_RESPONSE = {
 
 @contextmanager
 def openai_completion_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_GPT35_INSTRUCT_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_GPT35_INSTRUCT_RESPONSE)
         yield
 
 RPT_RESPONSE_CODE_0 = {
@@ -1485,8 +1548,8 @@ OPENAI_RESPONSES_RESPONSE = {
 
 @contextmanager
 def openai_responses_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_RESPONSES_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_RESPONSES_RESPONSE)
         yield
 
 OPENAI_RESPONSES_RESPONSE_PARSE = {
@@ -1656,14 +1719,14 @@ OPENAI_RESPONSES_RESPONSE_PARSE = {
 
 @contextmanager
 def openai_responses_structured_outputs_mocker(deployment_url):
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=OPENAI_RESPONSES_RESPONSE_PARSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=OPENAI_RESPONSES_RESPONSE_PARSE)
         yield
 
 @contextmanager
 def sap_rpt_moke_response_code_0(url: str):
-    with respx.mock:
-        respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{url}/predict", method="POST", status_code=200, json=RPT_RESPONSE_CODE_0)
         yield
 
 RPT_RESPONSE_CODE_2 = {
@@ -1687,8 +1750,8 @@ RPT_RESPONSE_CODE_2 = {
 
 @contextmanager
 def sap_rpt_moke_response_code_2(url: str):
-    with respx.mock:
-        respx.post(f"{url}/predict").mock(return_value=Response(422, json=RPT_RESPONSE_CODE_2))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{url}/predict", method="POST", status_code=422, json=RPT_RESPONSE_CODE_2)
         yield
 
 @contextmanager
@@ -1714,8 +1777,8 @@ def openai_stream_completion_mocker(deployment_url):
                 )
             )
 
-    with respx.mock:
-        respx.post(deployment_url).mock(return_value=Response(200, json=list(stream_events())))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=(re.compile(re.escape(deployment_url) + r'(\?.*)?$') if deployment_url else None), method="POST", status_code=200, json=list(stream_events()))
         yield
 
 
@@ -2266,97 +2329,97 @@ BATCH_ERROR_RESPONSE = {
 
 @contextmanager
 def batch_create_mocker():
-    with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=BATCHES_URL, method="POST", status_code=202, json=BATCH_CREATE_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_list_mocker():
-    with respx.mock:
-        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=BATCHES_URL, method="GET", status_code=200, json=BATCH_LIST_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_get_mocker(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}", method="GET", status_code=200, json=BATCH_DETAIL_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_status_mocker(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}/status", method="GET", status_code=200, json=BATCH_STATUS_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_cancel_mocker(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}/cancel", method="PATCH", status_code=202, json=BATCH_CANCEL_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_delete_mocker(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}", method="DELETE", status_code=202, json=BATCH_DELETE_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_not_found_mocker(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(404, json=BATCH_ERROR_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}", method="GET", status_code=404, json=BATCH_ERROR_RESPONSE)
         yield
 
 
 @contextmanager
 def batch_create_error_mocker():
-    with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(400, json=BATCH_ERROR_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=BATCHES_URL, method="POST", status_code=400, json=BATCH_ERROR_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_create_mocker_async():
-    with respx.mock:
-        respx.post(BATCHES_URL).mock(return_value=Response(202, json=BATCH_CREATE_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=BATCHES_URL, method="POST", status_code=202, json=BATCH_CREATE_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_list_mocker_async():
-    with respx.mock:
-        respx.get(BATCHES_URL).mock(return_value=Response(200, json=BATCH_LIST_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=BATCHES_URL, method="GET", status_code=200, json=BATCH_LIST_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_get_mocker_async(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(200, json=BATCH_DETAIL_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}", method="GET", status_code=200, json=BATCH_DETAIL_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_status_mocker_async(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.get(f"{BATCHES_URL}/{batch_id}/status").mock(return_value=Response(200, json=BATCH_STATUS_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}/status", method="GET", status_code=200, json=BATCH_STATUS_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_cancel_mocker_async(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.patch(f"{BATCHES_URL}/{batch_id}/cancel").mock(return_value=Response(202, json=BATCH_CANCEL_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}/cancel", method="PATCH", status_code=202, json=BATCH_CANCEL_RESPONSE)
         yield
 
 
 @asynccontextmanager
 async def batch_delete_mocker_async(batch_id: str = BATCH_ID):
-    with respx.mock:
-        respx.delete(f"{BATCHES_URL}/{batch_id}").mock(return_value=Response(202, json=BATCH_DELETE_RESPONSE))
+    with _HTTPXMock() as _mock:
+        _mock.add_response(url=f"{BATCHES_URL}/{batch_id}", method="DELETE", status_code=202, json=BATCH_DELETE_RESPONSE)
         yield
