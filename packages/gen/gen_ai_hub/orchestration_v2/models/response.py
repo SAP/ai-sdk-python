@@ -9,7 +9,6 @@ from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
-
 class CacheCreationTokenDetails(ResponseBaseModel):
     """
     Per-TTL breakdown of tokens written to the prompt cache.
