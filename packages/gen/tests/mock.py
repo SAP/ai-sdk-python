@@ -1330,12 +1330,47 @@ RPT_RESPONSE_CODE_0 = {
             "COSTCENTER": [
                 {
                     "prediction": "Office Furniture",
-                    "confidence": 0.96
+                    "confidence": 0.96,
+                    "confidence_interval": None
                 }
             ],
             "ID": "35"
         }
     ],
+    "metadata": {
+        "num_columns": 5,
+        "num_rows": 2,
+        "num_predictions": 1,
+        "num_query_rows": 1
+    }
+}
+
+RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS = {
+    "id": "c334f854-0d70-4c79-bd73-9ac581fd8cda",
+    "status": {
+        "code": 0,
+        "message": "ok"
+    },
+    "predictions": [
+        {
+            "COSTCENTER": [
+                {
+                    "prediction": "Office Furniture",
+                    "confidence": 0.96,
+                    "confidence_interval": None
+                }
+            ],
+            "ID": "35"
+        }
+    ],
+    "explanations": {
+        "top_column_scores": [
+            {"PRODUCT": 0.523, "PRICE": 0.234, "ORDERDATE": 0.121}
+        ],
+        "top_relevant_context_rows": [
+            [1, 2]
+        ]
+    },
     "metadata": {
         "num_columns": 5,
         "num_rows": 2,
@@ -1661,9 +1696,9 @@ def openai_responses_structured_outputs_mocker(deployment_url):
         yield
 
 @contextmanager
-def sap_rpt_moke_response_code_0(url: str):
+def sap_rpt_mock_response_code_0(url: str):
     with respx.mock:
-        respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0))
+        respx.post(f"{url}/predict").mock(return_value=Response(200, json=RPT_RESPONSE_CODE_0_WITH_EXPLANATIONS))
         yield
 
 RPT_RESPONSE_CODE_2 = {
@@ -1686,7 +1721,7 @@ RPT_RESPONSE_CODE_2 = {
 }
 
 @contextmanager
-def sap_rpt_moke_response_code_2(url: str):
+def sap_rpt_mock_response_code_2(url: str):
     with respx.mock:
         respx.post(f"{url}/predict").mock(return_value=Response(422, json=RPT_RESPONSE_CODE_2))
         yield

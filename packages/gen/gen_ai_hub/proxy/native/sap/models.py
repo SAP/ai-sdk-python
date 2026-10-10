@@ -1,5 +1,5 @@
-from typing import Optional, Literal, Union, Any
-from pydantic import BaseModel, RootModel, model_validator
+from typing import Annotated, Optional, Literal, Union, Any
+from pydantic import BaseModel, Field, RootModel, model_validator
 
 
 class TargetColumn(BaseModel):
@@ -7,17 +7,47 @@ class TargetColumn(BaseModel):
 
     :param name: Name of the target column.
     :type name: str
-    :param prediction_placeholder: Placeholder string denoting where predictions will be inserted.
-        Defaults to ``"[PREDICT]"``.
-    :type prediction_placeholder: str
+    :param prediction_placeholder: The prediction placeholder in any column for which to predict a value. The model will predict a value for all table cells containing this value.
+    :type prediction_placeholder: Union[str, int, float, None]]
     :param task_type: Task type of the target column.
         One of ``"classification"`` or ``"regression"``. Defaults to ``None``.
     :type task_type: Optional[Literal["classification", "regression"]]
+    :param top_k: How many predictions to output for this classification column.If not provided, only a single prediction is returned. Only relevant for classification.
+    :type top_k: Optional[int]
     """
 
     name: str
-    prediction_placeholder: str = "[PREDICT]"
+    prediction_placeholder: Union[str, int, float, None]
     task_type: Optional[Literal["classification", "regression"]] = None
+    top_k: Optional[int] = None
+
+
+class ExplanationConfig(BaseModel):
+    """
+    Configuration for explainability outputs.
+
+    :param top_column_scores: For how many columns to output column scores (optional, default is 0). 0 by default (no explainability). Max value is 20.
+    :type top_column_scores: int
+    :param top_relevant_context_rows: For how many context rows to return indices per query row (optional, default is 0). 0 by default (no explainability). Max value is 20.
+    :type top_relevant_context_rows: int
+    """
+
+    top_column_scores: int = Field(default=0, ge=0, le=20)
+    top_relevant_context_rows: int = Field(default=0, ge=0, le=20)
+
+
+class ExplanationResult(BaseModel):
+    """
+    Explanation data for predictions.
+
+    :param top_column_scores: Column scores per query row extracted from the model (higher means more weight was put on this column).
+    :type top_column_scores: Optional[list[dict[str, Union[int, float]]]]
+    :param top_relevant_context_rows: 2D array where each subarray contains indices of most relevant context rows for that query row. The first dimension indexes query rows, the second dimension indexes all rows as a sequential integer index.
+    :type top_relevant_context_rows: Optional[list[list[int]]]
+    """
+
+    top_column_scores: Optional[list[dict[str, Union[int, float]]]]
+    top_relevant_context_rows: Optional[list[list[int]]]
 
 
 class PredictionConfig(BaseModel):
@@ -26,19 +56,32 @@ class PredictionConfig(BaseModel):
 
     :param target_columns: List of target columns to predict.
     :type target_columns: list[TargetColumn]
+    :param explanations: Optional configuration for explainability outputs (column scores and relevant context rows).
+    :type explanations: Optional[ExplanationConfig]
+    :param context_mode: Context mode for predictions. Set it to \"default\" for the best balance between accuracy and latency/cost. Set it to \"deep\" for higher accuracy with >8k context rows at increased latency and cost (only for \"sap-rpt-1.6-large\").
+    :type context_mode: Optional[Literal['default', 'deep']]
     """
 
     target_columns: list[TargetColumn]
+    explanations: Optional[ExplanationConfig] = None
+    context_mode: Optional[Literal['default', 'deep']] = None
 
 
 class DataType(BaseModel):
     """Schema definition for a column.
 
     :param dtype: The data type of the column.
-    :type dtype: Literal["string", "numeric", "date"]
+    :type dtype: Literal['string', 'numeric', 'date',
+        'time', 'boolean', 'largestring', 'uuid', 'integer', 'int16',
+        'int32', 'int64', 'uint8', 'decimal',
+        'double', 'datetime', 'timestamp']
     """
 
-    dtype: Literal["string", "numeric", "date"]
+    dtype: Literal['string', 'numeric', 'date',
+                   'time', 'boolean', 'largestring',
+                   'uuid', 'integer', 'int16',
+                   'int32', 'int64', 'uint8', 'decimal',
+                   'double', 'datetime', 'timestamp']
 
 
 class RPTRequest(BaseModel):
@@ -109,12 +152,15 @@ class ResponseMetadata(BaseModel):
     :type num_predictions: int
     :param num_query_rows: Number of query rows for which a prediction was made.
     :type num_query_rows: int
+    :param context_mode: The context mode used for this prediction request.
+    :type context_mode: Literal['default', 'deep']
     """
 
     num_rows: int
     num_columns: int
     num_predictions: int
     num_query_rows: int
+    context_mode: Literal['default', 'deep'] = 'default'
 
 
 class ResponseStatus(BaseModel):
@@ -135,12 +181,15 @@ class PredictionItem(BaseModel):
 
     :param prediction: The predicted value.
     :type prediction: Union[str, float]
-    :param confidence: Confidence score for classification tasks. Defaults to ``None``.
+    :param confidence: Confidence score for classification tasks, in the range ``[0.0, 1.0]``. Defaults to ``None``.
     :type confidence: Optional[float]
+    :param confidence_interval: Lower and upper bounds of the confidence interval. Null for classification predictions.
+    :type confidence_interval: Optional[tuple[float, float]]
     """
 
     prediction: Union[str, float]
-    confidence: Optional[float] = None
+    confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    confidence_interval: Optional[Annotated[list[float], Field(min_length=2, max_length=2)]] = None
 
 
 class Prediction(RootModel[dict[str, Union[list[PredictionItem], Any]]]):
@@ -166,6 +215,8 @@ class RPTResponse(BaseModel):
     :type status: ResponseStatus
     :param predictions: Prediction data returned by the service.
     :type predictions: list[Prediction]
+    :param explanations: Explanation data containing context row and column scores.
+    :type explanations: Optional[ExplanationResult]
     :param metadata: Metadata about the request/response.
     :type metadata: ResponseMetadata
     """
@@ -173,6 +224,7 @@ class RPTResponse(BaseModel):
     id: str
     status: ResponseStatus
     predictions: list[Prediction]
+    explanations: Optional[ExplanationResult] = None
     metadata: ResponseMetadata
 
 
