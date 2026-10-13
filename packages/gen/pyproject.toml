@@ -45,7 +45,7 @@ dependencies = [
     "pandas>=2.2.0",
     "langchain~=1.4.0",
     "langchain-classic~=1.0.0",
-    "langchain-openai~=1.6.0",
+    "langchain-openai~=1.7.0",
 ]
 
 [project.optional-dependencies]
