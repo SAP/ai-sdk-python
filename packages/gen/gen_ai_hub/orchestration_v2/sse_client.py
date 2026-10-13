@@ -10,7 +10,7 @@ when iteration is complete.
 import json
 from typing import Iterable, Iterator, AsyncIterator
 
-import httpx
+import httpx2
 
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError, OrchestrationErrorList
 from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResponse
@@ -39,7 +39,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
         if isinstance(error_event, dict):
             raise OrchestrationError(
                 request_id=error_event.get("request_id"),
-                headers=httpx.Headers({}),
+                headers={},
                 message=error_event.get("message"),
                 code=error_event.get("code"),
                 location=error_event.get("location"),
@@ -49,7 +49,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
             errors = [
                 OrchestrationError(
                     request_id=e.get("request_id"),
-                    headers=httpx.Headers({}),
+                    headers={},
                     message=e.get("message"),
                     code=e.get("code"),
                     location=e.get("location"),
@@ -64,7 +64,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
 
 class SSEClient:
     """
-    A synchronous Server-Sent Events (SSE) client that wraps an httpx.Response for iterating
+    A synchronous Server-Sent Events (SSE) client that wraps an httpx2.Response for iterating
     over streaming responses.
 
     This client reads data chunks from the HTTP stream and parses each SSE event.
@@ -74,8 +74,8 @@ class SSEClient:
     def __init__(self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"):
         """Initializes the SSEClient.
 
-        :param response_cm: An httpx.Response context manager for the streaming response.
-        :type response_cm: httpx.Response
+        :param response_cm: An httpx2.Response context manager for the streaming response.
+        :type response_cm: httpx2.Response
         :param prefix: The prefix string that identifies SSE event data, defaults to data:
         :type prefix: str, optional
         :param final_message: The message that indicates the end of the stream, defaults to [DONE]
@@ -101,9 +101,9 @@ class SSEClient:
         self._response = self.response_cm.__enter__()
         try:
             self._response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             content = self._response.read()
-            error_response = httpx.Response(
+            error_response = httpx2.Response(
                 status_code=self._response.status_code,
                 headers=self._response.headers,
                 content=content,
@@ -187,7 +187,7 @@ class AsyncSSEClient:
         """Initializes the AsyncSSEClient.
 
         :param response_cm: An asynchronous context manager for the HTTP streaming response.
-        :type response_cm: typing.AsyncContextManager[httpx.Response]
+        :type response_cm: typing.AsyncContextManager[httpx2.Response]
         :param prefix: the SSE data prefix, defaults to "data: "
         :type prefix: str, optional
         :param final_message: the message indicating the end of the stream, defaults to "[DONE]"
@@ -213,9 +213,9 @@ class AsyncSSEClient:
         self._response = await self.response_cm.__aenter__()
         try:
             self._response.raise_for_status()
-        except httpx.HTTPStatusError as error:
+        except httpx2.HTTPStatusError as error:
             content = await self._response.aread()
-            error_response = httpx.Response(
+            error_response = httpx2.Response(
                 status_code=self._response.status_code,
                 headers=self._response.headers,
                 content=content,
@@ -297,13 +297,13 @@ class AsyncSSEClient:
             raise StopAsyncIteration
 
 
-def _handle_http_error(error, response: httpx.Response):
+def _handle_http_error(error, response: httpx2.Response):
     """
     Handles HTTP errors by raising an OrchestrationError with details from the response.
 
     Args:
         error: The original HTTP error.
-        response: The httpx.Response object containing error details incl. headers.
+        response: The httpx2.Response object containing error details incl. headers.
 
     Raises:
         OrchestrationError with information extracted from the response.

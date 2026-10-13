@@ -170,7 +170,7 @@ class TestClientHeaderInjection(unittest.TestCase):
         self.assertEqual(call_kwargs['headers']['X-Instance'], 'value1')
         self.assertEqual(call_kwargs['headers']['X-Temp'], 'value2')
 
-    @patch('httpx.Client.post')
+    @patch('httpx2.Client.post')
     def test_orchestration_service_injects_headers(self, mock_post):
         """Test OrchestrationService passes headers via request_header."""
         mock_response = MagicMock()
@@ -208,7 +208,7 @@ class TestClientHeaderInjection(unittest.TestCase):
         self.assertEqual(call_kwargs['headers']['X-Instance'], 'value1')
         self.assertEqual(call_kwargs['headers']['X-Temp'], 'value2')
 
-    @patch('httpx.Client.post')
+    @patch('httpx2.Client.post')
     def test_orchestration_service_v2_injects_headers(self, mock_post):
         """Test OrchestrationService V2 passes headers via request_header."""
         mock_response = MagicMock()
