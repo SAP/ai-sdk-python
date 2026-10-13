@@ -9,6 +9,7 @@ requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
     "sap-ai-sdk-gen[all]",
+    "streamlit>=1.40.0",
     "uvicorn>=0.52.1",
 ]
 

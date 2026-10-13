@@ -1,3 +1,4 @@
+from fastapi import Query
 from fastapi.responses import StreamingResponse
 from gen_ai_hub.orchestration_v2 import (
     AzureContentSafetyInput,
@@ -47,24 +48,16 @@ from gen_ai_hub.orchestration_v2 import (
 )
 
 
-def completion():
-    """
-    Run chat example through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the model response as result.
-    """
+def completion(
+    message: str = Query(default="What is the longest river on planet earth?", description="User message to send to the LLM."),
+    model: str = Query(default="gpt-5.4-nano", description="LLM model name."),
+):
+    """Run a single-turn chat completion through the Orchestration Service."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model),
             )
         )
     )
@@ -74,24 +67,16 @@ def completion():
     return {"result": result.final_result.choices[0].message.content}
 
 
-async def completion_async():
-    """
-    Run async chat example through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the model response as result.
-    """
+async def completion_async(
+    message: str = Query(default="What is the longest river on planet earth?"),
+    model: str = Query(default="gpt-5.4-nano"),
+):
+    """Run an async single-turn chat completion through the Orchestration Service."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model),
             )
         )
     )
@@ -101,24 +86,16 @@ async def completion_async():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def completion_stream():
-    """
-    Run chat example with a streaming response through the Orchestration Service API.
-
-    Returns:
-        Plain text stream containing the model response.
-    """
+def completion_stream(
+    message: str = Query(default="What is the longest river on planet earth?"),
+    model: str = Query(default="gpt-5.4-nano"),
+):
+    """Stream a chat completion response token by token."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model),
             )
         ),
         stream=GlobalStreamOptions(enabled=True),
@@ -137,12 +114,14 @@ def completion_stream():
     return StreamingResponse(generate(), media_type="text/plain")
 
 
-def completion_json():
+def completion_json(
+    model: str = Query(default="gpt-5.4-nano"),
+):
     """
-    Run chat example with structured output (JSON) through the Orchestration Service API.
+    Run a structured-output (JSON) chat completion.
 
-    Returns:
-        JSON object containing the model response as result.
+    Returns a JSON object matching the Person schema: { firstName, lastName }.
+    The question is fixed: "Who was the first person on the moon?"
     """
     json_schema = {
         "title": "Person",
@@ -152,7 +131,6 @@ def completion_json():
             "lastName": {"type": "string", "description": "The person's last name."},
         },
     }
-
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
@@ -161,7 +139,6 @@ def completion_json():
                         SystemMessage(content="Format the response as json."),
                         UserMessage(content="Who was the first person on the moon?"),
                     ],
-                    # setting ResponseFormatJsonObject() enables JSON responses without a fixed schema
                     response_format=ResponseFormatJsonSchema(
                         json_schema=JSONResponseSchema(
                             name="person",
@@ -170,7 +147,7 @@ def completion_json():
                         )
                     ),
                 ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                model=LLMModelDetails(name=model),
             )
         )
     )
@@ -180,66 +157,55 @@ def completion_json():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def completion_template():
+def completion_template(
+    country: str = Query(default="Denmark", description="Value to substitute into the {{?country}} placeholder."),
+    model: str = Query(default="gpt-5.4-nano"),
+):
     """
-    Run chat example with a template including placeholders through the Orchestration Service API.
+    Run a templated chat completion.
 
-    Returns:
-        JSON object containing the model response as result.
+    The template is: "What is the capital of {{?country}}?"
+    Supply a different `country` query parameter to customise the prompt.
     """
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
                 prompt=Template(
-                    template=[
-                        # add placeholder by wrapping it with {{?...}}
-                        UserMessage(content="What is the capital of {{?country}}?")
-                    ]
+                    template=[UserMessage(content="What is the capital of {{?country}}?")]
                 ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                model=LLMModelDetails(name=model),
             )
         )
     )
     service = OrchestrationService(config=config)
-    # provide placeholder values
-    result = service.run(placeholder_values={"country": "Denmark"})
+    result = service.run(placeholder_values={"country": country})
     service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
-def completion_with_fallback():
+def completion_with_fallback(
+    message: str = Query(default="What is the longest river on planet earth?"),
+    primary_model: str = Query(default="dummy-model", description="Primary model. Use an invalid name to trigger fallback."),
+    fallback_model: str = Query(default="anthropic--claude-4.6-sonnet", description="Fallback model, used when the primary fails."),
+):
     """
-    Run chat example with fallback configurations through the Orchestration Service API.
+    Run a chat completion with automatic model fallback.
 
-    Returns:
-        JSON object containing the model response as result.
+    If `primary_model` fails (e.g. invalid name, quota exceeded), the service
+    automatically retries with `fallback_model`.
     """
     config = OrchestrationConfig(
         modules=[
-            # Trigger fallback with non-orchestration model
             ModuleConfig(
                 prompt_templating=PromptTemplatingModuleConfig(
-                    prompt=Template(
-                        template=[
-                            UserMessage(
-                                content="What is the longest river on planet earth?"
-                            )
-                        ]
-                    ),
-                    model=LLMModelDetails(name="dummy-model"),
+                    prompt=Template(template=[UserMessage(content=message)]),
+                    model=LLMModelDetails(name=primary_model),
                 )
             ),
-            # Second configuration will succeed
             ModuleConfig(
                 prompt_templating=PromptTemplatingModuleConfig(
-                    prompt=Template(
-                        template=[
-                            UserMessage(
-                                content="What is the longest river on planet earth?"
-                            )
-                        ]
-                    ),
-                    model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
+                    prompt=Template(template=[UserMessage(content=message)]),
+                    model=LLMModelDetails(name=fallback_model),
                 )
             ),
         ]
@@ -250,24 +216,16 @@ def completion_with_fallback():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def completion_abap():
-    """
-    Run chat example with SAP ABAP through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the model response as result.
-    """
+def completion_abap(
+    message: str = Query(default="Explain the concept of internal tables in ABAP"),
+    model: str = Query(default="sap-abap-1"),
+):
+    """Run a chat completion using the SAP ABAP-specialised model."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="Explain the concept of internal tables in ABAP"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="sap-abap-1"),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model),
             )
         )
     )
@@ -279,36 +237,29 @@ def completion_abap():
 
 def message_history():
     """
-    Run chat example with message history through the Orchestration Service API.
+    Run a two-turn conversation demonstrating message history.
 
-    Returns:
-        JSON object containing the model response as result.
+    Turn 1: "What is the capital of France?"
+    Turn 2: "What is the typical food there?" (uses turn 1 history for context)
+    Both turns use gpt-5.4-nano. The prompts are fixed to keep the demo coherent.
     """
-    # the service can also be started without providing a default config
-    # in this case, each call to service.run has to pass a config to use
     service = OrchestrationService()
     first_config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[UserMessage(content="What is the capital of France?")]
-                ),
+                prompt=Template(template=[UserMessage(content="What is the capital of France?")]),
                 model=LLMModelDetails(name="gpt-5.4-nano"),
             )
         )
     )
-
     first_response = service.run(config=first_config)
-    # first_response.intermediate_results.templating contains the history
     history = first_response.intermediate_results.templating or []
     history.append(first_response.final_result.choices[0].message)
 
     second_config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[UserMessage(content="What is the typical food there?")]
-                ),
+                prompt=Template(template=[UserMessage(content="What is the typical food there?")]),
                 model=LLMModelDetails(name="gpt-5.4-nano"),
             )
         )
@@ -320,35 +271,17 @@ def message_history():
 
 def completion_image():
     """
-    Run multimodal example with image input through the Orchestration Service API.
+    Run a multimodal completion with an image input.
 
-    Returns:
-        JSON object containing the model response as result.
+    Sends a publicly accessible image and asks the model to describe prominent objects.
+    The image URL is fixed for demo purposes.
     """
-    # First option: load image from a standard, publicly accessible url
     image = ImageItem(url="https://picsum.photos/id/1/200/300")
-    # Second option: pass the image content as base64-encoded data url
-    # with the format "data:[<mediatype>][;base64],<data>"
-    # image = ImageItem(
-    #    url="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAE0lEQVR4nGP8z4APMOGVZRip0gBBLAETee26JgAAAABJRU5ErkJggg=="
-    # )
-    # Third option: load the image from a local file path
-    # try:
-    #     image = ImageItem.from_file("path/to/your/local/image.jpeg")
-    # except FileNotFoundError:
-    #     print("Error: The specified image file was not found.")
-    # except Exception as e:
-    #     print(f"An error occurred while loading the image: {e}")
     multimodal_content = [image, "What objects are prominent in this image?"]
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        # add placeholder by wrapping it with {{?...}}
-                        UserMessage(content=multimodal_content)
-                    ]
-                ),
+                prompt=Template(template=[UserMessage(content=multimodal_content)]),
                 model=LLMModelDetails(name="gpt-5.4-nano"),
             )
         )
@@ -359,26 +292,26 @@ def completion_image():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def input_filtering():
+def input_filtering(
+    message: str = Query(
+        default="My social insurance number is ABC123456789.",
+        description="Input prompt to test. Should contain PII or sensitive content to trigger the filter.",
+    ),
+):
     """
-    Run input filtering example through the Orchestration Service API.
+    Test input filtering with LlamaGuard (privacy category) and Azure Content Safety.
 
-    Returns:
-        JSON object containing a message confirming successful filtering.
-    Raises:
-        RuntimeError: Raised if the filtering is unsuccesful.
+    A 400 response from the Orchestration Service indicates the input was correctly blocked.
     """
     content_filter_config = FilteringModuleConfig(
         input=InputFiltering(
             filters=[
                 AzureContentSafetyInputFilterConfig(
-                    # only safe content allowed for hate and violence
                     config=AzureContentSafetyInput(
                         hate=AzureThreshold.ALLOW_SAFE,
                         violence=AzureThreshold.ALLOW_SAFE,
                     )
                 ),
-                # category 'privacy' enabled
                 LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
             ]
         )
@@ -386,14 +319,7 @@ def input_filtering():
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            # should be filtered by Llama Guard
-                            content="My social insurance number is ABC123456789."
-                        )
-                    ]
-                ),
+                prompt=Template(template=[UserMessage(content=message)]),
                 model=LLMModelDetails(name="gpt-5.4-nano"),
             ),
             filtering=content_filter_config,
@@ -412,26 +338,26 @@ def input_filtering():
         service.close_http_connection()
 
 
-def output_filtering():
+def output_filtering(
+    message: str = Query(
+        default="Reparaphrase the sentence in 30 ways with strong feelings: 'I hate you!'.",
+        description="Prompt expected to produce harmful output that will be suppressed.",
+    ),
+):
     """
-    Run output filtering example through the Orchestration Service API.
+    Test output filtering with Azure Content Safety (hate/violence).
 
-    Returns:
-        JSON object containing a message confirming successful filtering.
-    Raises:
-        RuntimeError: Raised if the filtering is unsuccesful.
+    The model response is suppressed if it violates the configured policy.
     """
     content_filter_config = FilteringModuleConfig(
         output=OutputFiltering(
             filters=[
                 AzureContentSafetyOutputFilterConfig(
-                    # only safe content allowed for hate and violence
                     config=AzureContentSafetyOutput(
                         hate=AzureThreshold.ALLOW_SAFE,
                         violence=AzureThreshold.ALLOW_SAFE,
                     )
                 ),
-                # category 'privacy' enabled
                 LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
             ]
         )
@@ -439,14 +365,7 @@ def output_filtering():
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            # should be filtered by Azure content filter
-                            content="Reparaphrase the sentence in 30 ways with strong feelings: 'I hate you!'."
-                        )
-                    ]
-                ),
+                prompt=Template(template=[UserMessage(content=message)]),
                 model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
             ),
             filtering=content_filter_config,
@@ -455,19 +374,28 @@ def output_filtering():
     service = OrchestrationService(config=config)
     result = service.run()
     service.close_http_connection()
-    # should be filtered by the Azure content filter, hence content should be empty
     if result.final_result.choices[0].message.content:
         raise RuntimeError("Output was not filtered as expected")
     else:
         return {"result": "Output was filtered as expected"}
 
 
-def completion_masking():
+def completion_masking(
+    message: str = Query(
+        default=(
+            "Generate HTML that shows the contact info for Jane Doe, born on 1975-03-05, "
+            "living at 10 Downing Street, London UK with email 'jane.doe@mailprovider.com' "
+            "and phone number +4902044123221."
+        ),
+        description="Prompt that may contain PII. PII is pseudonymized before reaching the LLM.",
+    ),
+    model: str = Query(default="gpt-5.4-nano"),
+):
     """
-    Run masked (pseudonymized) chat example through the Orchestration Service API.
+    Run a chat completion with DPI data masking (pseudonymization).
 
-    Returns:
-        JSON object containing the model response as result.
+    PII entities (name, address, email, phone, date) are replaced with stable
+    pseudonyms before the prompt is sent to the LLM.
     """
     data_masking_config = MaskingModuleConfig(
         providers=[
@@ -489,14 +417,8 @@ def completion_masking():
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="Generate HTML that shows the contact info for Jane Doe, born on 1975-03-05, living at 10 Downing Street, London UK with email 'jane.doe@mailprovider.com' and phone number +4902044123221."
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gpt-5.4-nano"),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model),
             ),
             masking=data_masking_config,
         )
@@ -507,65 +429,53 @@ def completion_masking():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def reasoning_content():
-    """
-    Run chat example with reasoning effort 'high' through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the model response as result including the reasoning content.
-    """
+def reasoning_content(
+    message: str = Query(default="What is the longest river on planet earth?"),
+    model: str = Query(default="gemini-3.5-flash"),
+    reasoning_effort: str = Query(default="high", description="Reasoning effort level: 'low', 'medium', or 'high'."),
+):
+    """Run a completion with extended reasoning and return both the answer and reasoning content."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gemini-3.5-flash", params={ "reasoning_effort": "high" }),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model, params={"reasoning_effort": reasoning_effort}),
             )
         )
     )
     service = OrchestrationService(config=config)
     result = service.run()
     service.close_http_connection()
-    return {"result": result.final_result.choices[0].message.content, "reasoning_content": result.final_result.choices[0].message.reasoning_content}
+    return {
+        "result": result.final_result.choices[0].message.content,
+        "reasoning_content": result.final_result.choices[0].message.reasoning_content,
+    }
 
 
-def reasoning_content_stream():
-    """
-    Run chat example with reasoning effort 'high' and streaming response through the Orchestration Service API.
-
-    Returns:
-        Plain text stream containing the reasoning content.
-    """
+def reasoning_content_stream(
+    message: str = Query(default="What is the longest river on planet earth?"),
+    model: str = Query(default="gemini-3.5-flash"),
+    reasoning_effort: str = Query(default="high"),
+):
+    """Stream the reasoning content chunks from a high-effort completion."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
-                model=LLMModelDetails(name="gemini-3.5-flash", params={ "reasoning_effort": "high" }),
+                prompt=Template(template=[UserMessage(content=message)]),
+                model=LLMModelDetails(name=model, params={"reasoning_effort": reasoning_effort}),
             )
         ),
         stream=GlobalStreamOptions(enabled=True),
     )
-
     service = OrchestrationService(config=config)
 
     def generate():
         stream = service.stream()
         for chunk in stream:
             if chunk.final_result:
-                reasoning_content_chunk = chunk.final_result.choices[0].delta.reasoning_content
-                if reasoning_content_chunk:
-                    yield "".join([block.content for block in reasoning_content_chunk])
+                rc = chunk.final_result.choices[0].delta.reasoning_content
+                if rc:
+                    yield "".join([block.content for block in rc])
         service.close_http_connection()
 
     return StreamingResponse(generate(), media_type="text/plain")
@@ -573,33 +483,23 @@ def reasoning_content_stream():
 
 def translation():
     """
-    Run chat example with prompt and output translation through the Orchestration Service API.
+    Run a completion with SAP Document Translation on both input and output.
 
-    Returns:
-        JSON object containing the model response as result.
+    Input is translated EN→DE before reaching the model; output is translated DE→FR.
+    The prompt and language pair are fixed for the demo.
     """
     translation_config = TranslationModuleConfig(
         input=SAPDocumentTranslationInput(
-            config=InputTranslationConfig(
-                source_language="en-US", target_language="de-DE"
-            )
+            config=InputTranslationConfig(source_language="en-US", target_language="de-DE")
         ),
         output=SAPDocumentTranslationOutput(
-            config=OutputTranslationConfig(
-                source_language="de-DE", target_language="fr-FR"
-            )
+            config=OutputTranslationConfig(source_language="de-DE", target_language="fr-FR")
         ),
     )
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What is the longest river on planet earth?"
-                        )
-                    ]
-                ),
+                prompt=Template(template=[UserMessage(content="What is the longest river on planet earth?")]),
                 model=LLMModelDetails(name="gpt-5.4-nano"),
             ),
             translation=translation_config,
@@ -611,23 +511,14 @@ def translation():
     return {"result": result.final_result.choices[0].message.content}
 
 
-def sonar_with_citations():
-    """
-    Run chat example with citations (Sonar model) through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the model response (text and citations) as result.
-    """
+def sonar_with_citations(
+    message: str = Query(default="What are the latest developments in quantum computing?"),
+):
+    """Run a completion using the Sonar model and return the response with web citations."""
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(
-                    template=[
-                        UserMessage(
-                            content="What are the latest developments in quantum computing?"
-                        )
-                    ]
-                ),
+                prompt=Template(template=[UserMessage(content=message)]),
                 model=LLMModelDetails(name="sonar"),
             )
         )
@@ -643,66 +534,53 @@ def sonar_with_citations():
     }
 
 
-def embedding():
-    """
-    Run embedding example through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the embedding as result.
-    """
+def embedding(
+    text: str = Query(default="Hello World!", description="Text to embed."),
+    model: str = Query(default="text-embedding-3-small"),
+):
+    """Generate a single text embedding vector."""
     embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
-            embeddings=EmbeddingsModelConfig(
-                model=EmbeddingsModelDetails(name="text-embedding-3-small")
-            )
+            embeddings=EmbeddingsModelConfig(model=EmbeddingsModelDetails(name=model))
         )
     )
-
     service = OrchestrationService()
-    response = service.embed(
-        config=embedding_config, input=EmbeddingsInput(text="Hello World!")
-    )
+    response = service.embed(config=embedding_config, input=EmbeddingsInput(text=text))
     service.close_http_connection()
     return {"result": response.final_result.data[0].embedding}
 
 
 def embedding_batched():
     """
-    Run batched embedding example through the Orchestration Service API.
+    Generate embeddings for a fixed batch of two texts.
 
-    Returns:
-        JSON object containing the embedding as result.
+    The input texts are fixed for this demo endpoint:
+    ["Hello World!", "This is your captain speaking"]
     """
     embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
-            embeddings=EmbeddingsModelConfig(
-                model=EmbeddingsModelDetails(name="text-embedding-3-small")
-            )
+            embeddings=EmbeddingsModelConfig(model=EmbeddingsModelDetails(name="text-embedding-3-small"))
         )
     )
-
-    input_list = ["Hello World!", "This is your captain speaking"]
-
     service = OrchestrationService()
     response = service.embed(
-        config=embedding_config, input=EmbeddingsInput(text=input_list)
+        config=embedding_config,
+        input=EmbeddingsInput(text=["Hello World!", "This is your captain speaking"]),
     )
     service.close_http_connection()
     return {"result": response.final_result.data}
 
 
-def embedding_masked():
-    """
-    Run masked (anonymized )embedding example through the Orchestration Service API.
-
-    Returns:
-        JSON object containing the embedding as result.
-    """
+def embedding_masked(
+    text: str = Query(
+        default="Contact John Smith at john.smith@example.com or call 555-123-4567.",
+        description="Text with PII. Person, email, and phone will be anonymized before embedding.",
+    ),
+):
+    """Generate an embedding with PII anonymized before the text reaches the embedding model."""
     embedding_config = EmbeddingsOrchestrationConfig(
         modules=EmbeddingsModuleConfigs(
-            embeddings=EmbeddingsModelConfig(
-                model=EmbeddingsModelDetails(name="text-embedding-3-small")
-            ),
+            embeddings=EmbeddingsModelConfig(model=EmbeddingsModelDetails(name="text-embedding-3-small")),
             masking=MaskingModuleConfig(
                 providers=[
                     MaskingProviderConfig(
@@ -717,50 +595,42 @@ def embedding_masked():
             ),
         )
     )
-
     service = OrchestrationService()
-    response = service.embed(
-        config=embedding_config,
-        input=EmbeddingsInput(
-            text="Contact John Smith at john.smith@example.com or call 555-123-4567."
-        ),
-    )
+    response = service.embed(config=embedding_config, input=EmbeddingsInput(text=text))
     service.close_http_connection()
     return {"result": response.final_result.data[0].embedding}
 
 
-def tool_call_decorator():
+def tool_call_decorator(
+    a: int = Query(default=279, description="First operand."),
+    b: int = Query(default=929, description="Second operand."),
+):
     """
-    Run chat example with tool calls using the `function_tool` decorator through the Orchestration Service API.
+    Run a tool-call completion using the @function_tool decorator.
 
-    Returns:
-        JSON object containing the model response as result.
+    The LLM calls add(a, b) and uses the result to answer the question.
     """
 
     @function_tool
-    def add(a: int, b: int) -> int:
+    def add(x: int, y: int) -> int:
         """Add two numbers."""
-        return a + b
+        return x + y
 
-    tools = [add]
-
+    question = f"What is {a} + {b}?"
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
                 prompt=Template(
                     template=[
-                        SystemMessage(
-                            content="You are a helpful AI that performs the addition of two numbers."
-                        ),
-                        UserMessage(content="What is 279 + 929?"),
+                        SystemMessage(content="You are a helpful AI that performs addition."),
+                        UserMessage(content=question),
                     ],
-                    tools=tools,
+                    tools=[add],
                 ),
                 model=LLMModelDetails(name="gpt-4o"),
             )
         )
     )
-
     service = OrchestrationService()
     result = service.run(config=config)
     tool_calls = result.final_result.choices[0].message.tool_calls
@@ -769,31 +639,29 @@ def tool_call_decorator():
 
     history = list(result.intermediate_results.templating or [])
     history.append(result.final_result.choices[0].message)
-    for tool_call in tool_calls:
-        if tool_call.function.name != "add":
-            raise RuntimeError(
-                f"Unexpectedly called '{tool_call.function.name}' instead of 'add'"
-            )
-        result = add.execute(**tool_call.function.parse_arguments())
-        tool_message = ToolChatMessage(content=str(result), tool_call_id=tool_call.id)
-        history.append(tool_message)
+    for tc in tool_calls:
+        args = tc.function.parse_arguments()
+        tool_result = add.execute(**args)
+        history.append(ToolChatMessage(content=str(tool_result), tool_call_id=tc.id))
 
     result = service.run(config=config, history=history)
     service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
-def tool_call_function_tool():
+def tool_call_function_tool(
+    a: int = Query(default=279, description="First operand."),
+    b: int = Query(default=929, description="Second operand."),
+):
     """
-    Run chat example with tool calls using the `FunctionTool` class through the Orchestration Service API.
+    Run a tool-call completion using the FunctionTool class.
 
-    Returns:
-        JSON object containing the model response as result.
+    Equivalent to tool_call_decorator but uses explicit FunctionTool construction.
     """
 
-    def add(a: int, b: int) -> int:
+    def add(x: int, y: int) -> int:
         """Add two numbers."""
-        return a + b
+        return x + y
 
     add_tool = FunctionTool(
         function=FunctionObject(
@@ -802,16 +670,10 @@ def tool_call_function_tool():
             parameters={
                 "type": "object",
                 "properties": {
-                    "a": {
-                        "type": "number",
-                        "description": "First operand of the addition function",
-                    },
-                    "b": {
-                        "type": "number",
-                        "description": "Second operand of the addition function",
-                    },
+                    "x": {"type": "number", "description": "First operand."},
+                    "y": {"type": "number", "description": "Second operand."},
                 },
-                "required": ["a", "b"],
+                "required": ["x", "y"],
                 "additionalProperties": False,
             },
             strict=True,
@@ -819,24 +681,21 @@ def tool_call_function_tool():
         )
     )
 
-    tools = [add_tool]
+    question = f"What is {a} + {b}?"
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
                 prompt=Template(
                     template=[
-                        SystemMessage(
-                            content="You are a helpful AI that performs the addition of two numbers."
-                        ),
-                        UserMessage(content="What is 279 + 929?"),
+                        SystemMessage(content="You are a helpful AI that performs addition."),
+                        UserMessage(content=question),
                     ],
-                    tools=tools,
+                    tools=[add_tool],
                 ),
                 model=LLMModelDetails(name="gpt-4o"),
             )
         )
     )
-
     service = OrchestrationService()
     result = service.run(config=config)
     tool_calls = result.final_result.choices[0].message.tool_calls
@@ -845,28 +704,24 @@ def tool_call_function_tool():
 
     history = list(result.intermediate_results.templating or [])
     history.append(result.final_result.choices[0].message)
-    for tool_call in tool_calls:
-        if tool_call.function.name != "add":
-            raise RuntimeError(
-                f"Unexpectedly called '{tool_call.function.name}' instead of 'add'"
-            )
-        result = add_tool.execute(**tool_call.function.parse_arguments())
-        tool_message = ToolChatMessage(content=str(result), tool_call_id=tool_call.id)
-        history.append(tool_message)
+    for tc in tool_calls:
+        tool_result = add_tool.execute(**tc.function.parse_arguments())
+        history.append(ToolChatMessage(content=str(tool_result), tool_call_id=tc.id))
 
     result = service.run(config=config, history=history)
     service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
 
 
-def tool_call_json():
+def tool_call_json(
+    a: int = Query(default=279, description="First operand."),
+    b: int = Query(default=929, description="Second operand."),
+):
     """
-    Run chat example with tool calls using a JSON schema dictionary through the Orchestration Service API.
+    Run a tool-call completion using a raw JSON tool schema dict.
 
-    Returns:
-        JSON object containing the model response as result.
+    Useful when the tool does not map to a local Python function.
     """
-    # this is helpful if the tool call doesn't map to a Python function
     tools = [
         {
             "type": "function",
@@ -876,14 +731,8 @@ def tool_call_json():
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "a": {
-                            "type": "number",
-                            "description": "First operand of the addition function",
-                        },
-                        "b": {
-                            "type": "number",
-                            "description": "Second operand of the addition function",
-                        },
+                        "a": {"type": "number", "description": "First operand."},
+                        "b": {"type": "number", "description": "Second operand."},
                     },
                     "required": ["a", "b"],
                     "additionalProperties": False,
@@ -892,15 +741,14 @@ def tool_call_json():
             },
         }
     ]
+    question = f"What is {a} + {b}?"
     config = OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
                 prompt=Template(
                     template=[
-                        SystemMessage(
-                            content="You are a helpful AI that performs the addition of two numbers."
-                        ),
-                        UserMessage(content="What is 279 + 929?"),
+                        SystemMessage(content="You are a helpful AI that performs addition."),
+                        UserMessage(content=question),
                     ],
                     tools=tools,
                 ),
@@ -908,7 +756,6 @@ def tool_call_json():
             )
         )
     )
-
     service = OrchestrationService()
     result = service.run(config=config)
     tool_calls = result.final_result.choices[0].message.tool_calls
@@ -917,14 +764,9 @@ def tool_call_json():
 
     history = list(result.intermediate_results.templating or [])
     history.append(result.final_result.choices[0].message)
-    for tool_call in tool_calls:
-        if tool_call.function.name != "add":
-            raise RuntimeError(
-                f"Unexpectedly called '{tool_call.function.name}' instead of 'add'"
-            )
-        result = sum(tool_call.function.parse_arguments().values())
-        tool_message = ToolChatMessage(content=str(result), tool_call_id=tool_call.id)
-        history.append(tool_message)
+    for tc in tool_calls:
+        tool_result = sum(tc.function.parse_arguments().values())
+        history.append(ToolChatMessage(content=str(tool_result), tool_call_id=tc.id))
 
     result = service.run(config=config, history=history)
     service.close_http_connection()
