@@ -94,13 +94,13 @@ request_by_columns_dict = {
   }
 }
 
-rows_regression = [
+rows_regression_template = lambda prediction_placeholder: [
     {
         "PRODUCT": "Couch",
         "PRICE": 999.99,
         "ORDERDATE": "28-11-2025",
         "ID": "35",
-        "DISCOUNT_RATE": "[PREDICT]",
+        "DISCOUNT_RATE": prediction_placeholder,
     },
     {
         "PRODUCT": "Office Chair",
@@ -128,9 +128,12 @@ rows_regression = [
         "PRICE": 289.99,
         "ORDERDATE": "08-11-2025",
         "ID": "306",
-        "DISCOUNT_RATE": "[PREDICT]",
+        "DISCOUNT_RATE": prediction_placeholder,
     },
 ]
+
+rows_regression = rows_regression_template("[PREDICT]")
+rows_regression_with_none = rows_regression_template(None)
 
 class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
@@ -190,6 +193,20 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
                     TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder="[PREDICT]")
                 ]),
             rows=rows_regression
+        )
+        response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
+        self.assertIsInstance(response, RPTResponse)
+        self.assertEqual(response.status.code, 0)
+        self.assertEqual(response.metadata.num_predictions, 2)
+        self.assertIn("DISCOUNT_RATE", response.predictions[0].model_dump())
+
+    def test_regression_prediction_with_none_placeholder(self):
+        body = RPTRequest(
+            prediction_config=PredictionConfig(
+                target_columns=[
+                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder=None)
+                ]),
+            rows=rows_regression_with_none
         )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
