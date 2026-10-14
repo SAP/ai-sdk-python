@@ -28,6 +28,13 @@ class TestLLModelDetails(unittest.TestCase):
         json_data = llm.model_dump()
         self.assertEqual(json_data, expected_dict)
 
+    def test_llm_timeout_upper_bound(self):
+        llm = LLMModelDetails(name="gpt-4o-mini", timeout=1200)
+        self.assertEqual(llm.timeout, 1200)
+
+        with self.assertRaises(ValueError):
+            LLMModelDetails(name="gpt-4o-mini", timeout=1201)
+
     def test_llm_model_details_with_unsupported_properties(self):
         with self.assertRaises(ValueError):
             LLMModelDetails(name="gpt-4o-mini", max_retries=10)
