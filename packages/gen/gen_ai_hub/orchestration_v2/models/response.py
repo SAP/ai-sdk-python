@@ -144,12 +144,17 @@ class LLMChoice(ResponseBaseModel):
 
                        - 'content_filter' if content was omitted due to a filter enforced by the LLM model provider
                                           or the content filtering module
+
+        provider_specific_fields: Provider-specific fields not representable in the OpenAI schema.
+                                  When not identical, includes 'finish_reason' with the raw, unmapped
+                                  finish reason string from the provider.
     """
 
     index: int
     message: ResponseChatMessage
     logprobs: Optional[ChoiceLogprobs] = None
     finish_reason: str
+    provider_specific_fields: Optional[dict[str, Any]] = None
 
 
 class StreamFunctionObject(FunctionCall):
@@ -197,6 +202,7 @@ class StreamLLMChoice(ResponseBaseModel):
     delta: StreamDelta
     logprobs: Optional[ChoiceLogprobs] = None
     finish_reason: Optional[str] = None
+    provider_specific_fields: Optional[dict[str, Any]] = None
 
 
 class Citation(ResponseBaseModel):
