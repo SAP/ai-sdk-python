@@ -1,5 +1,5 @@
 from typing import Annotated, Optional, Literal, Union, Any
-from pydantic import BaseModel, Field, RootModel, model_validator
+from pydantic import BaseModel, Field, RootModel, model_validator, model_serializer, SerializationInfo
 
 
 class TargetColumn(BaseModel):
@@ -20,6 +20,13 @@ class TargetColumn(BaseModel):
     prediction_placeholder: Union[str, int, float, None]
     task_type: Optional[Literal["classification", "regression"]] = None
     top_k: Optional[int] = None
+
+    @model_serializer(mode='wrap')
+    def _serialize(self, handler, info: SerializationInfo) -> dict[str, Any]:
+        d = handler(self)
+        if info.exclude_none and self.prediction_placeholder is None:
+            d['prediction_placeholder'] = None
+        return d
 
 
 class ExplanationConfig(BaseModel):
