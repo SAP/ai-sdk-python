@@ -28,7 +28,7 @@ class LLMModelDetails(BaseModel):
     name: str
     version: Optional[str] = "latest"
     params: Optional[Dict] = None
-    timeout: Optional[int] = Field(default=600, ge=1, le=600)
+    timeout: Optional[int] = Field(default=600, ge=1, le=1200)
     max_retries: Optional[int] = Field(default=2, ge=0, le=5)
 
 __all__ = ["LLMModelDetails"]
