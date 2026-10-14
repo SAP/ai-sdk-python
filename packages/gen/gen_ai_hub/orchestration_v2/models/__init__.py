@@ -20,7 +20,8 @@ from .llama_guard_3_filter import LlamaGuard38bFilter
 from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
                      ResponseChatMessage, FunctionCall, MessageToolCall, ReasoningBlock)
-from .multimodal_items import ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem
+from .multimodal_items import (ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem,
+                               FileContent, FilePart, FileItem)
 from .response import (CacheCreationTokenDetails, PromptTokensDetails, CompletionTokensDetails, TokenUsage, GenericModuleResult, TopLogprob,
                       ChatCompletionTokenLogprob, ChoiceLogprobs, LLMChoice, StreamFunctionObject, StreamToolCall,
                       StreamDelta, StreamLLMChoice, Citation, LLMModuleResult, StreamLLMModuleResult, ModuleResults,
@@ -81,6 +82,7 @@ __all__ = [
     
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
+    "FileContent", "FilePart", "FileItem",
     
     # response
     "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",

@@ -43,6 +43,7 @@ expected = {
 
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
+    "FileContent", "FilePart", "FileItem",
 
     # response
     "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
