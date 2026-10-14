@@ -23,7 +23,8 @@ class TestLLModelDetails(unittest.TestCase):
             "version": "v1",
             "params": {"temperature": 0.7},
             "max_retries": 2,
-            "timeout": 600
+            "timeout": 600,
+            "drop_unsupported_params": True
         }
         json_data = llm.model_dump()
         self.assertEqual(json_data, expected_dict)
@@ -34,6 +35,14 @@ class TestLLModelDetails(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             LLMModelDetails(name="gpt-4o-mini", timeout=1201)
+
+    def test_llm_drop_unsupported_params(self):
+        llm = LLMModelDetails(name="gpt-4o-mini")
+        self.assertEqual(llm.drop_unsupported_params, True)
+
+        llm = LLMModelDetails(name="gpt-4o-mini", drop_unsupported_params=False)
+        self.assertEqual(llm.drop_unsupported_params, False)
+        self.assertEqual(llm.model_dump()["drop_unsupported_params"], False)
 
     def test_llm_model_details_with_unsupported_properties(self):
         with self.assertRaises(ValueError):
