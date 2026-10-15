@@ -33,6 +33,14 @@ class TestOrchestrationConfigV2(unittest.TestCase):
         )
         self.assertNotIn("filtering_module_config", json_data["modules"])
 
+    def test_prompt_optional(self):
+        # prompt is no longer required; it is omitted from the payload when not provided
+        # (messages_history must then be supplied in the request).
+        prompt_template = PromptTemplatingModuleConfig(model=self.llm)
+        self.assertIsNone(prompt_template.prompt)
+        dumped = prompt_template.model_dump()
+        self.assertNotIn("prompt", dumped)
+
     def test_input_filtering(self):
         input_filtering = InputFiltering(filters=[
                 AzureContentSafetyInputFilterConfig(config=AzureContentSafetyInput(hate=0))
