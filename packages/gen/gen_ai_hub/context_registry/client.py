@@ -17,7 +17,11 @@ def _get_base_url(client: BaseProxyClient) -> str:
     ai_core = getattr(client, "ai_core_client", None)
     if ai_core is None:
         raise ValueError("proxy client has no ai_core_client configured")
-    return ai_core.base_url.rstrip("/") + "/v2/tcr"
+    base = ai_core.base_url.rstrip("/")
+    # AICORE_BASE_URL may or may not already include the /v2 API version segment.
+    if base.endswith("/v2"):
+        base = base[: -len("/v2")]
+    return base + "/v2/tcr"
 
 
 class _SapRESTClientObject(RESTClientObject):
