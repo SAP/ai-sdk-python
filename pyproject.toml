@@ -19,6 +19,7 @@ sap-ai-sdk-prompt-registry = { workspace = true }
 sap-ai-sdk-document-grounding = { workspace = true }
 sap-ai-sdk-batch = { workspace = true }
 sap-ai-sdk-evaluations = { workspace = true }
+sap-ai-sdk-gen = { workspace = true }
 
 [tool.uv.workspace]
 members = [

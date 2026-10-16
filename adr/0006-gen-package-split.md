@@ -116,3 +116,42 @@ Keep `sap-ai-sdk-gen` whole and gate `pandas`/`langchain`/providers behind extra
 **Cons:** does not deliver independent release/ownership; the base install still
 carries the non-extra heavy deps (e.g. langchain-openai); does not match the goal of
 exploring package separation.
+
+## Addendum — opt-in `sap-ai-sdk-gen` compatibility package
+
+The no-shim decision above was **partially reversed** by re-introducing
+`sap-ai-sdk-gen` as a thin *compatibility meta package* (`packages/gen`). It ships no
+logic: it depends on the new `sap-ai-sdk-*` distributions and re-exposes the legacy
+`gen_ai_hub.*` import paths as forwarders (PEP 562 / `sys.modules` aliasing in
+`gen_ai_hub/_alias.py`), preserving object identity so cross-package `isinstance`/
+pydantic reuse keeps working. This is a migration aid, not a return to the single-
+distribution model: the split packages remain the canonical, independently released
+units, and new code should import the `sap_ai_sdk_*` roots directly.
+
+The footprint win is largely preserved — the base `sap-ai-sdk-gen` install forwards
+proxy/orchestration/prompt-registry/document-grounding/batch/evaluations, while the
+heavy providers and langchain stay behind extras: `[amazon]`, `[google]`,
+`[langchain]`, and `[all]`.
+
+**Known fidelity gap (intentional, deferred):** the pre-split
+`gen_ai_hub.proxy.langchain` namespace re-exported OpenAI **and** Bedrock **and**
+Google symbols from one module. Those provider adapters now live in
+`sap_ai_sdk_amazon.langchain` / `sap_ai_sdk_google.langchain`. The shim forwards only
+the OpenAI subset; re-aggregating the provider symbols would force `sap-ai-sdk-gen` to
+depend on amazon+google and pull `boto3`/`google-genai` back into the base install.
+A `TODO(compat)` in `gen_ai_hub/proxy/langchain/__init__.py` records exactly how to
+complete it if full fidelity is later required.
+
+**Not yet wired for release (intentional):** `packages/gen` is registered in the uv
+workspace (`[tool.uv.sources]`) and builds/installs locally, but it is **deliberately
+left out of CI and the release pipeline** — it is currently a local compatibility
+convenience only. To actually publish `sap-ai-sdk-gen`, the following is needed:
+- add `gen` to the `inputs.package.options` list in `.github/workflows/bump.yml`;
+- add `gen` to the publish matrix / tag triggers in `.github/workflows/publish.yml`,
+  `api-doc.yml`, `draft-release.yml`, and `snapshot-release.yml` (publishing last,
+  after all six dependency packages, since it depends on them);
+- optionally add a unit-test matrix entry in `.github/workflows/ci.yml` (the package
+  has no tests of its own — it only forwards — so this is low value);
+- register the `sap-ai-sdk-gen` PyPI project + Trusted Publisher environment
+  (`pypi:sap-ai-sdk-gen`); the `publish.yml` environment name is already derived
+  dynamically from the parsed tag.

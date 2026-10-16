@@ -27,6 +27,7 @@ members = [
     "sap-ai-sdk-core",
     "sap-ai-sdk-document-grounding",
     "sap-ai-sdk-evaluations",
+    "sap-ai-sdk-gen",
     "sap-ai-sdk-google",
     "sap-ai-sdk-langchain",
     "sap-ai-sdk-orchestration",
@@ -4414,6 +4415,66 @@ dev = [
     { name = "respx", specifier = "==0.23.1" },
     { name = "sphinx", specifier = "<9.0.0" },
     { name = "sphinxawesome-theme" },
+]
+
+[[package]]
+name = "sap-ai-sdk-gen"
+version = "1.0.0"
+source = { editable = "packages/gen" }
+dependencies = [
+    { name = "sap-ai-sdk-batch" },
+    { name = "sap-ai-sdk-document-grounding" },
+    { name = "sap-ai-sdk-evaluations" },
+    { name = "sap-ai-sdk-orchestration" },
+    { name = "sap-ai-sdk-prompt-registry" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+all = [
+    { name = "sap-ai-sdk-amazon" },
+    { name = "sap-ai-sdk-google" },
+    { name = "sap-ai-sdk-langchain" },
+]
+amazon = [
+    { name = "sap-ai-sdk-amazon" },
+]
+google = [
+    { name = "sap-ai-sdk-google" },
+]
+langchain = [
+    { name = "sap-ai-sdk-langchain" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pylint" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-dotenv" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "sap-ai-sdk-amazon", marker = "extra == 'amazon'", editable = "packages/amazon" },
+    { name = "sap-ai-sdk-batch", editable = "packages/batch" },
+    { name = "sap-ai-sdk-document-grounding", editable = "packages/document-grounding" },
+    { name = "sap-ai-sdk-evaluations", editable = "packages/evaluations" },
+    { name = "sap-ai-sdk-gen", extras = ["langchain", "amazon", "google"], marker = "extra == 'all'", editable = "packages/gen" },
+    { name = "sap-ai-sdk-google", marker = "extra == 'google'", editable = "packages/google" },
+    { name = "sap-ai-sdk-langchain", marker = "extra == 'langchain'", editable = "packages/langchain" },
+    { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
+    { name = "sap-ai-sdk-prompt-registry", editable = "packages/prompt-registry" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["langchain", "amazon", "google", "all"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pylint", specifier = "==4.0.8" },
+    { name = "pytest", specifier = "==9.1.1" },
+    { name = "pytest-cov", specifier = "==7.1.0" },
+    { name = "pytest-dotenv", specifier = ">=0.5.2" },
 ]
 
 [[package]]
