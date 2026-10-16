@@ -15,7 +15,8 @@ from .document_grounding import (GroundingType, DataRepositoryType, DocumentGrou
                                 KeyValueListPair, DocumentMetadataKeyValueListPairs, GroundingSearchConfig)
 from .embeddings import (EmbeddingsEncodingFormat, EmbeddingsInputType, EmbeddingsModelParams, EmbeddingsModelDetails,
                         EmbeddingsModelConfig, EmbeddingsModuleConfigs, EmbeddingsOrchestrationConfig, EmbeddingsInput,
-                        EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse, EmbeddingsPostResponse, EmbeddingsRequest)
+                        EmbeddingMultiFormat, EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse,
+                        EmbeddingsPostResponse, EmbeddingsRequest)
 from .llama_guard_3_filter import LlamaGuard38bFilter
 from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
@@ -68,7 +69,8 @@ __all__ = [
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse", "EmbeddingsPostResponse", "EmbeddingsRequest",
+    "EmbeddingMultiFormat", "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsPostResponse", "EmbeddingsRequest",
     
     # llama_guard_3_filter
     "LlamaGuard38bFilter",

@@ -33,7 +33,8 @@ __all__ = [
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse", "EmbeddingsPostResponse", "EmbeddingsRequest",
+    "EmbeddingMultiFormat", "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsPostResponse", "EmbeddingsRequest",
 
     # llama_guard_3_filter
     "LlamaGuard38bFilter",
