@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch \
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations \
             --errors-only \
             --output-format=json \
 
@@ -71,6 +71,9 @@ jobs:
           - name: batch
             path: packages/batch/tests
             source: packages/batch/sap_ai_sdk_batch
+          - name: evaluations
+            path: packages/evaluations/tests
+            source: packages/evaluations/sap_ai_sdk_evaluations
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
