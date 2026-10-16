@@ -36,7 +36,7 @@ class Template(BaseModel):
 
 
 class PromptTemplatingModuleConfig(BaseModel):
-    prompt: Template | TemplateRef
+    prompt: Optional[Template | TemplateRef] = None
     model: LLMModelDetails
 
 __all__ = ["Template", "PromptTemplatingModuleConfig"]

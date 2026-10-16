@@ -47,6 +47,7 @@ __all__ = [
 
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
+    "FileContent", "FilePart", "FileItem",
 
     # response
     "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
