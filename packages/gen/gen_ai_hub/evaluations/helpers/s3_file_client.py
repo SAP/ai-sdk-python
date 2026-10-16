@@ -1,4 +1,3 @@
-import boto3
 import os
 from typing import Dict, List, Any
 import json
@@ -7,13 +6,46 @@ import pandas as pd
 import sqlite3
 from io import StringIO
 import tempfile
-from botocore.exceptions import BotoCoreError, ClientError, NoCredentialsError
 from gen_ai_hub.evaluations.helpers.collector import ValidationCollector
 from gen_ai_hub.evaluations.exceptions.error_codes import ErrorCode
 from gen_ai_hub.evaluations.helpers.logging import get_logger
 from gen_ai_hub.evaluations.constants import CONTENT_TYPE
 
 logger = get_logger()
+
+# boto3/botocore are optional: they ship with the ``[amazon]`` extra. They are
+# imported lazily so that evaluations users who never touch S3 do not need the
+# AWS SDK installed.
+boto3 = None
+BotoCoreError = ClientError = NoCredentialsError = None
+
+
+def _require_boto3():
+    """Imports boto3/botocore on demand and binds them to module globals.
+
+    :raises ImportError: if the AWS SDK is not installed
+    """
+    global boto3, BotoCoreError, ClientError, NoCredentialsError
+    if boto3 is not None:
+        return
+    try:
+        import boto3 as _boto3
+        from botocore.exceptions import (
+            BotoCoreError as _BotoCoreError,
+            ClientError as _ClientError,
+            NoCredentialsError as _NoCredentialsError,
+        )
+    except ImportError as exc:
+        raise ImportError(
+            "S3FileClient requires the AWS SDK. Install it with "
+            "'pip install sap-ai-sdk-evaluations[amazon]'."
+        ) from exc
+    boto3 = _boto3
+    BotoCoreError, ClientError, NoCredentialsError = (
+        _BotoCoreError,
+        _ClientError,
+        _NoCredentialsError,
+    )
 
 
 class S3FileClient:
@@ -42,6 +74,8 @@ class S3FileClient:
         """
         self.bucket_name = bucket_name
         self.error_collector = error_collector
+
+        _require_boto3()
 
         try:
             session = boto3.Session(
