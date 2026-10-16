@@ -2,7 +2,7 @@ import unittest
 
 from google.genai.types import GenerateContentResponse, GenerateContentConfig, Content, EmbedContentResponse, Part
 
-from gen_ai_hub.proxy.native.google_genai.clients import Client
+from sap_ai_sdk_google.clients import Client
 from integration_tests.constants import GEMINI_2_5_FLASH_LITE_TEST_MODEL, GOOGLE_EMBEDDING_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 

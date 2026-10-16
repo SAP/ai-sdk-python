@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from botocore.config import Config
 from aiobotocore.config import AioConfig
 
-from gen_ai_hub.proxy.native.amazon.clients import Session, ClientWrapper, AsyncSession, AsyncClientWrapper
+from sap_ai_sdk_amazon.clients import Session, ClientWrapper, AsyncSession, AsyncClientWrapper
 from tests.mock import (AMAZON_BEDROCK_RESPONSE,
                         AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE,
                         get_mocked_ai_core_client,
@@ -60,7 +60,7 @@ class TestAmazonModels(unittest.TestCase):
         cls.http_mock.status_code = 200
         cls.parsed_response_mock = MagicMock()
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_completion(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -78,7 +78,7 @@ class TestAmazonModels(unittest.TestCase):
             deployment.url + "/invoke",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_completion_streaming(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -96,7 +96,7 @@ class TestAmazonModels(unittest.TestCase):
             deployment.url + "/invoke-with-response-stream",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_completion_streaming_with_deprecated_timeout(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -116,7 +116,7 @@ class TestAmazonModels(unittest.TestCase):
             )
 
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_completion_stream_chunks(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -129,7 +129,7 @@ class TestAmazonModels(unittest.TestCase):
         stream = response["body"]
         self.assertTrue(all(isinstance(json.loads(event["chunk"]["bytes"])["type"], str) for event in stream))
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_broken_stream_chunks(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE)
         bedrock = Session().client(
@@ -143,7 +143,7 @@ class TestAmazonModels(unittest.TestCase):
             for event in response['body']:
                 json.loads(event["chunk"]["bytes"])
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_stream_is_not_buffered(self, mock_make_request):
         delay = 1
         self.http_mock.iter_lines.return_value = (
@@ -165,7 +165,7 @@ class TestAmazonModels(unittest.TestCase):
         for i in range(1, len(times)):
             self.assertGreaterEqual(times[i] - times[i - 1], delay - 0.25)
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_chat_completion(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -186,7 +186,7 @@ class TestAmazonModels(unittest.TestCase):
             deployment.url + "/converse",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.BaseClient._make_request")
     def test_chat_converse_streaming(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
@@ -254,7 +254,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
                                         proxy_client=self.proxy_client,
                                         service_name="Claude")
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.AioBaseClient._make_request")
     async def test_async_invoke_model(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = await AsyncSession().async_client(
@@ -272,7 +272,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             deployment.url + "/invoke",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.AioBaseClient._make_request")
     async def test_async_converse(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = await AsyncSession().async_client(
@@ -293,7 +293,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             deployment.url + "/converse",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.AioBaseClient._make_request")
     async def test_async_converse_streaming(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = await AsyncSession().async_client(
@@ -315,7 +315,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         )
 
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.AioBaseClient._make_request")
     async def test_async_invoke_streaming(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
 
@@ -334,7 +334,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             deployment.url + "/invoke-with-response-stream",
         )
 
-    @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
+    @patch("sap_ai_sdk_amazon.clients.AioBaseClient._make_request")
     async def test_async_invoke_streaming_reads_response_on_error(self, mock_make_request):
         mock_make_request.side_effect = Exception("Error")
 
@@ -432,6 +432,6 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         await original_context_manager.__aexit__(None, None, None)
 
 def test_flat_import_amazon():
-    from gen_ai_hub.proxy.native.amazon import ClientWrapper as client_wrapper_flat_import
-    from gen_ai_hub.proxy.native.amazon.clients import ClientWrapper as client_wrapper_nested_import
+    from sap_ai_sdk_amazon import ClientWrapper as client_wrapper_flat_import
+    from sap_ai_sdk_amazon.clients import ClientWrapper as client_wrapper_nested_import
     assert client_wrapper_flat_import == client_wrapper_nested_import

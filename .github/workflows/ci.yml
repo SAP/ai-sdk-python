@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain \
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google \
             --errors-only \
             --output-format=json \
 
@@ -53,6 +53,12 @@ jobs:
           - name: langchain
             path: packages/langchain/tests
             source: packages/langchain/sap_ai_sdk_langchain
+          - name: amazon
+            path: packages/amazon/tests
+            source: packages/amazon/sap_ai_sdk_amazon
+          - name: google
+            path: packages/google/tests
+            source: packages/google/sap_ai_sdk_google
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:

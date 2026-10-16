@@ -4,7 +4,7 @@ from typing import Callable
 from langchain_classic.chains import LLMChain
 from langchain_classic.prompts import PromptTemplate
 
-from gen_ai_hub.proxy.langchain.init_models import ModelType, init_embedding_model, init_llm, _get_init_func
+from sap_ai_sdk_langchain.init_models import ModelType, init_embedding_model, init_llm, _get_init_func
 from integration_tests.constants import (OPENAI_GPT_4O_MINI_TEST_MODEL,
                                          AMAZON_TITAN_EMBEDDING_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
                                          GEMINI_2_5_FLASH_LITE_TEST_MODEL)

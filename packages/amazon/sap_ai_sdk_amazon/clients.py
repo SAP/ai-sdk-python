@@ -16,9 +16,9 @@ from botocore import UNSIGNED
 from botocore.client import BaseClient
 from botocore.config import Config
 
-from gen_ai_hub.proxy.core import get_proxy_client
-from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.core.utils import if_str_set, kwargs_if_set
+from sap_ai_sdk_proxy.core import get_proxy_client
+from sap_ai_sdk_proxy.core.base import BaseProxyClient
+from sap_ai_sdk_proxy.core.utils import if_str_set, kwargs_if_set
 
 # required for testing framework in llm-commons
 _current_deployment = contextvars.ContextVar("current_deployment")

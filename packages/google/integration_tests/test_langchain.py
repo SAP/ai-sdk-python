@@ -12,9 +12,9 @@ from langchain_core.chat_history import BaseChatMessageHistory, InMemoryChatMess
 from langchain_core.messages import AIMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
-from gen_ai_hub.proxy.langchain import init_llm
-from gen_ai_hub.proxy.langchain.google_genai import ChatGoogleGenerativeAI
-from gen_ai_hub.proxy.langchain.google_genai import GoogleGenerativeAIEmbeddings
+from sap_ai_sdk_langchain import init_llm
+from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI
+from sap_ai_sdk_google.langchain import GoogleGenerativeAIEmbeddings
 from integration_tests.constants import GOOGLE_EMBEDDING_TEST_MODEL, GEMINI_2_5_FLASH_LITE_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 

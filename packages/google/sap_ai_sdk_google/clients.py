@@ -5,9 +5,9 @@ from google.genai import types
 from google.genai.models import Models as GoogleModels
 from google.oauth2.credentials import Credentials
 
-from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client
-from gen_ai_hub.proxy.core.utils import kwargs_if_set
+from sap_ai_sdk_proxy.core.base import BaseProxyClient
+from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client
+from sap_ai_sdk_proxy.core.utils import kwargs_if_set
 
 _deployment_cache = {}
 

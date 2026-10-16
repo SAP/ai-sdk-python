@@ -4,8 +4,8 @@ import unittest
 import pytest
 from parameterized import parameterized
 
-from gen_ai_hub.proxy.native.amazon.clients import AsyncSession
-from gen_ai_hub.proxy.native.amazon.clients import Session
+from sap_ai_sdk_amazon.clients import AsyncSession
+from sap_ai_sdk_amazon.clients import Session
 from integration_tests.constants import (AMAZON_NOVA_MICRO_TEST_MODEL, AMAZON_NOVA_PREMIER_TEST_MODEL,
                                          AMAZON_TITAN_EMBEDDING_TEST_MODEL, CLAUDE_4_5_SONNET_TEST_MODEL,
                                          CLAUDE_4_5_HAIKU_TEST_MODEL)

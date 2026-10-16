@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import httpx
-from gen_ai_hub.proxy.native.google_genai.clients import (
+from sap_ai_sdk_google.clients import (
     _rewrite_request,
     AICoreDynamicTransport,
     AsyncAICoreDynamicTransport,
@@ -98,6 +98,6 @@ class TestAsyncAICoreDynamicTransport(unittest.IsolatedAsyncioTestCase):
             mock_aclose.assert_called_once()
 
 def test_flat_import_google_genai_clients():
-    from gen_ai_hub.proxy.native.google_genai.clients import Client as client
-    from gen_ai_hub.proxy.native.google_genai import Client as client_flat
+    from sap_ai_sdk_google.clients import Client as client
+    from sap_ai_sdk_google import Client as client_flat
     assert client == client_flat

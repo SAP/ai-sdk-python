@@ -7,10 +7,10 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings as GoogleGenerat
 from langchain_google_genai.chat_models import _ClientCleanup  # private upstream name, since 4.3.7
 from pydantic import model_validator, ConfigDict
 
-from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.core.utils import if_str_set
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.native.google_genai.clients import Client as GenAIHubNativeClient
+from sap_ai_sdk_proxy.core.base import BaseProxyClient
+from sap_ai_sdk_proxy.core.utils import if_str_set
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import Deployment
+from sap_ai_sdk_google.clients import Client as GenAIHubNativeClient
 
 
 class _BaseGoogleGenerativeAI:

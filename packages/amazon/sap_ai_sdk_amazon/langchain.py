@@ -5,9 +5,9 @@ from botocore.config import Config
 from langchain_aws import ChatBedrock as ChatBedrock_, ChatBedrockConverse as ChatBedrockConverse_, BedrockEmbeddings as BedrockEmbeddings_
 from pydantic import BaseModel, ConfigDict, model_validator
 
-from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.native.amazon.clients import Session
+from sap_ai_sdk_proxy.core.base import BaseProxyClient
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import Deployment
+from sap_ai_sdk_amazon.clients import Session
 
 
 def _parse_minor_version(raw: str) -> tuple:
