@@ -17,6 +17,8 @@ sap-ai-sdk-amazon = { workspace = true }
 sap-ai-sdk-google = { workspace = true }
 sap-ai-sdk-orchestration = { workspace = true }
 sap-ai-sdk-prompt-registry = { workspace = true }
+sap-ai-sdk-document-grounding = { workspace = true }
+sap-ai-sdk-batch = { workspace = true }
 
 [tool.uv.workspace]
 members = [

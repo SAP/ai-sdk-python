@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry \
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch \
             --errors-only \
             --output-format=json \
 
@@ -65,6 +65,12 @@ jobs:
           - name: prompt-registry
             path: packages/prompt-registry/tests
             source: packages/prompt-registry/sap_ai_sdk_prompt_registry
+          - name: document-grounding
+            path: packages/document-grounding/tests
+            source: packages/document-grounding/sap_ai_sdk_document_grounding
+          - name: batch
+            path: packages/batch/tests
+            source: packages/batch/sap_ai_sdk_batch
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:
