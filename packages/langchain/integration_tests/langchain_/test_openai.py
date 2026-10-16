@@ -16,7 +16,7 @@ try:
 except ImportError:
     no_openai = True
 try:
-    from gen_ai_hub.proxy.langchain.openai import ChatOpenAI, OpenAIEmbeddings
+    from sap_ai_sdk_langchain.openai import ChatOpenAI, OpenAIEmbeddings
     from langchain_classic.chains import LLMChain
     from langchain_classic.prompts.chat import (
         AIMessagePromptTemplate,

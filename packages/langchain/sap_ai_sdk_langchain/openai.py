@@ -9,10 +9,10 @@ from langchain_openai import OpenAI as OpenAI_  # pylint: disable=import-error, 
 from langchain_openai import OpenAIEmbeddings as OpenAIEmbeddings_  # pylint: disable=import-error, no-name-in-module
 from pydantic import Field, model_validator, ConfigDict
 
-from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
-from gen_ai_hub.proxy.native.openai import AsyncOpenAI as AsyncOpenAIClient
-from gen_ai_hub.proxy.native.openai import OpenAI as OpenAIClient
-from gen_ai_hub.proxy.native.openai.clients import DEFAULT_API_VERSION
+from sap_ai_sdk_proxy.core.base import BaseDeployment, BaseProxyClient
+from sap_ai_sdk_proxy.native.openai import AsyncOpenAI as AsyncOpenAIClient
+from sap_ai_sdk_proxy.native.openai import OpenAI as OpenAIClient
+from sap_ai_sdk_proxy.native.openai.clients import DEFAULT_API_VERSION
 from .base import BaseAuth
 
 

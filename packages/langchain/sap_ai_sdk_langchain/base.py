@@ -2,7 +2,7 @@ from typing import Any, Optional
 
 from pydantic import BaseModel
 
-from gen_ai_hub.proxy.core import get_proxy_client
+from sap_ai_sdk_proxy.core import get_proxy_client
 
 _VALUES = [('proxy_model_name', 'model_name'), ('deployment_id', 'deployment_id'), ('config_id', 'config_id'),
            ('config_name', 'config_name')]

@@ -6,9 +6,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 from langchain_core.embeddings import Embeddings  # pylint: disable=import-error, no-name-in-module
 from langchain_core.language_models import BaseLanguageModel
 
-from gen_ai_hub.proxy.core import get_proxy_client
-from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
-from gen_ai_hub.proxy.langchain import amazon, google_genai, openai
+from sap_ai_sdk_proxy.core import get_proxy_client
+from sap_ai_sdk_proxy.core.base import BaseDeployment, BaseProxyClient
+from sap_ai_sdk_langchain import openai
 
 
 def default_f_select_deployment(proxy_client: BaseProxyClient,
@@ -68,13 +68,41 @@ def _init_custom_model(proxy_client: BaseProxyClient, init_func: Callable, args:
     return init_func(proxy_client=proxy_client, deployment=deployment, **model_kwargs)
 
 
+def _import_provider_langchain(provider: str, distribution: str):
+    """Imports a provider's langchain adapter module lazily.
+
+    The provider adapters live in their own distributions
+    (``sap-ai-sdk-amazon`` / ``sap-ai-sdk-google``) and are only required when a
+    model served by that provider is initialized. They are imported on demand so
+    that ``sap-ai-sdk-langchain`` does not hard-depend on every provider.
+
+    :param provider: the provider import root, e.g. ``sap_ai_sdk_amazon``
+    :type provider: str
+    :param distribution: the pip distribution name to suggest on failure
+    :type distribution: str
+    :raises ImportError: with an actionable install hint if the provider package
+        (with its ``[langchain]`` extra) is not installed
+    :return: the provider's ``langchain`` adapter module
+    """
+    try:
+        import importlib
+        return importlib.import_module(f'{provider}.langchain')
+    except ImportError as exc:
+        raise ImportError(
+            f"Initializing this model requires the {distribution} package with its "
+            f"langchain support. Install it with 'pip install \"{distribution}[langchain]\"'."
+        ) from exc
+
+
 def _get_init_func(model_name: str, model_type: ModelType):
     if any(model_name.startswith(prefix) for prefix in ['amazon', 'anthropic']):
+        amazon = _import_provider_langchain('sap_ai_sdk_amazon', 'sap-ai-sdk-amazon')
         if model_type == ModelType.EMBEDDINGS:
             return amazon.init_embedding_model
         else:
             return amazon.init_chat_model
     elif any(model_name.startswith(prefix) for prefix in ['google', 'gemini']):
+        google_genai = _import_provider_langchain('sap_ai_sdk_google', 'sap-ai-sdk-google')
         if model_type == ModelType.EMBEDDINGS:
             return google_genai.init_embedding_model
         else:

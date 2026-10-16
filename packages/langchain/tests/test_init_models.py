@@ -1,3 +1,6 @@
+import importlib
+import importlib.util
+import sys
 import unittest
 import unittest.mock
 from datetime import datetime
@@ -5,25 +8,23 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import Deployment
-from gen_ai_hub.proxy.langchain import amazon, google_genai, openai
-from gen_ai_hub.proxy.langchain.init_models import (
+from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client, proxy_version_context
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import Deployment
+from sap_ai_sdk_langchain import openai
+from sap_ai_sdk_langchain.init_models import (
     ModelType,
     init_embedding_model,
     init_llm,
 )
 
+# Provider adapters (amazon/google) live in their own packages; here we only
+# exercise the openai path and the lazy dispatch to absent providers.
 EMBEDDING_TEST_MODELS_TO_MODEL_CLASS_MAP = {
-    "gemini-embedding": google_genai.GoogleGenerativeAIEmbeddings,
     "text-embedding-3-small": openai.OpenAIEmbeddings,
     "nvidia--llama-3.2-nv-embedqa-1b": openai.OpenAIEmbeddings
 }
 
 LLM_TEST_MODELS_MODEL_CLASS_MAP = {
-    "amazon--nova-micro": amazon.ChatBedrock,
-    "anthropic--claude-4-sonnet": amazon.ChatBedrock,
-    "gemini-2.5-flash-lite": google_genai.ChatGoogleGenerativeAI,
     "gpt-5": openai.ChatOpenAI,
     "mistralai--mistral-small-instruct": openai.ChatOpenAI
 }
@@ -79,7 +80,7 @@ class TestInitModels(unittest.TestCase):
     def test_init_llm_without_proxy_client(self):
         """init_llm should fall back to get_proxy_client() when proxy_client is not passed."""
         with unittest.mock.patch(
-            'gen_ai_hub.proxy.langchain.init_models.get_proxy_client',
+            'sap_ai_sdk_langchain.init_models.get_proxy_client',
             return_value=self.proxy_client,
         ):
             model = init_llm('gpt-5')
@@ -88,7 +89,7 @@ class TestInitModels(unittest.TestCase):
     def test_init_embedding_model_without_proxy_client(self):
         """init_embedding_model should fall back to get_proxy_client() when proxy_client is not passed."""
         with unittest.mock.patch(
-            'gen_ai_hub.proxy.langchain.init_models.get_proxy_client',
+            'sap_ai_sdk_langchain.init_models.get_proxy_client',
             return_value=self.proxy_client,
         ):
             model = init_embedding_model('text-embedding-3-small')
@@ -108,40 +109,28 @@ class TestInitModels(unittest.TestCase):
 
     def test_custom_model(self):
         model_name = 'test-custom-model'
-        init_func = google_genai.init_chat_model
-        model_class = google_genai.ChatGoogleGenerativeAI
+        init_func = openai.init_chat_model
+        model_class = openai.ChatOpenAI
         custom_deployment = self.create_deployment(model_name)
         self.proxy_client._deployments.append(custom_deployment)
         model = init_llm(model_name, proxy_client=self.proxy_client, init_func=init_func)
         self.assertIsInstance(model, model_class)
         self.proxy_client._get_scenario_deployments.assert_not_called()
 
-    def test_custom_amazon_model(self):
-        model_name = 'test-custom-amazon-model'
-        model_id = f'{model_name}-id'
-        init_func = amazon.init_chat_model
-        model_class = amazon.ChatBedrock
-        custom_deployment = self.create_deployment(model_name)
-        self.proxy_client._deployments.append(custom_deployment)
-        model = init_llm(model_name, model_id=model_id, proxy_client=self.proxy_client, init_func=init_func)
-        self.assertIsInstance(model, model_class)
-        self.proxy_client._get_scenario_deployments.assert_not_called()
-
-    def test_custom_amazon_embedding_model(self):
+    def test_custom_embedding_model(self):
         model_name = 'test-custom-embed-model'
-        model_id = f'{model_name}-id'
-        init_func = amazon.init_embedding_model
-        model_class = amazon.BedrockEmbeddings
+        init_func = openai.init_embedding_model
+        model_class = openai.OpenAIEmbeddings
         custom_deployment = self.create_deployment(model_name)
         self.proxy_client._deployments.append(custom_deployment)
-        model = init_embedding_model(model_name, model_id=model_id, proxy_client=self.proxy_client, init_func=init_func)
+        model = init_embedding_model(model_name, proxy_client=self.proxy_client, init_func=init_func)
         self.assertIsInstance(model, model_class)
         self.proxy_client._get_scenario_deployments.assert_not_called()
 
     def test_update_deployments_called_for_custom_model(self):
         model_name = 'test-custom-model'
-        init_func = google_genai.init_chat_model
-        model_class = google_genai.ChatGoogleGenerativeAI
+        init_func = openai.init_chat_model
+        model_class = openai.ChatOpenAI
         custom_deployment = self.create_deployment(model_name)
         deployments = self.create_gen_ai_hub_deployments()
         deployments.append(custom_deployment)
@@ -156,8 +145,7 @@ class TestInitModels(unittest.TestCase):
 
     def test_custom_model_fails_if_deployment_does_not_exist(self):
         model_name = 'not-existing-model'
-        init_func = google_genai.init_chat_model
-        model_class = google_genai.ChatGoogleGenerativeAI
+        init_func = openai.init_chat_model
         deployments = self.create_gen_ai_hub_deployments()
         deployments_dict = {}
         for i in range(len(deployments)):
@@ -168,3 +156,34 @@ class TestInitModels(unittest.TestCase):
             init_llm(model_name, proxy_client=self.proxy_client, init_func=init_func)
         self.assertIn('No deployment found', cm.exception.args[0])
         self.assertIn(model_name, cm.exception.args[0])
+
+
+class TestLazyProviderDispatch(unittest.TestCase):
+    """The provider adapters (amazon/google) live in separate packages and are
+    imported lazily. When the provider package is not installed, dispatching to
+    it must raise an actionable ImportError naming the pip install command."""
+
+    def _assert_actionable_import_error(self, model_name: str, provider_module: str, distribution: str):
+        proxy_client = MagicMock()
+        proxy_client.deployment_class.get_main_model_identification_kwargs.return_value = 'model_name'
+        proxy_client.deployment_class.get_model_identification_kwargs.return_value = ['model_name']
+
+        # Simulate the provider package being absent.
+        with unittest.mock.patch.dict(sys.modules, {f'{provider_module}.langchain': None}):
+            # Drop any cached import so the patched (missing) module is seen.
+            sys.modules.pop(f'{provider_module}.langchain', None)
+            with self.assertRaises(ImportError) as cm:
+                init_llm(model_name, proxy_client=proxy_client)
+        message = str(cm.exception)
+        self.assertIn(distribution, message)
+        self.assertIn('[langchain]', message)
+
+    def test_amazon_dispatch_raises_actionable_error_when_absent(self):
+        if importlib.util.find_spec('sap_ai_sdk_amazon') is not None:
+            self.skipTest('sap-ai-sdk-amazon is installed; lazy-error path not exercised')
+        self._assert_actionable_import_error('amazon--nova-micro', 'sap_ai_sdk_amazon', 'sap-ai-sdk-amazon')
+
+    def test_google_dispatch_raises_actionable_error_when_absent(self):
+        if importlib.util.find_spec('sap_ai_sdk_google') is not None:
+            self.skipTest('sap-ai-sdk-google is installed; lazy-error path not exercised')
+        self._assert_actionable_import_error('gemini-2.5-flash-lite', 'sap_ai_sdk_google', 'sap-ai-sdk-google')
