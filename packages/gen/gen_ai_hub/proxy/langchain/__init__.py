@@ -1,13 +1,19 @@
-"""Shim for ``gen_ai_hub.proxy.langchain`` (OpenAI subset only).
+"""Shim for ``gen_ai_hub.proxy.langchain``.
 
-Requires the ``[langchain]`` extra (``pip install "sap-ai-sdk-gen[langchain]"``).
+The ``openai`` / ``init_models`` / ``amazon`` / ``google_genai`` submodules of this
+package are available as separate forwarders (the latter two require the ``[amazon]`` /
+``[google]`` extras). This ``__init__`` re-exports the OpenAI subset of the old merged
+namespace; it requires the ``[langchain]`` extra.
 
-TODO(compat): the pre-split ``gen_ai_hub.proxy.langchain`` root re-exported OpenAI +
-Bedrock + Google symbols from one namespace. Bedrock/Google now live in
-``sap_ai_sdk_amazon.langchain`` / ``sap_ai_sdk_google.langchain``. Re-aggregating them
-here would make ``sap-ai-sdk-gen`` depend on amazon+google (pulling boto3/google-genai
-back into the base install), so it is intentionally omitted for now. To restore full
-fidelity later, extend this module with::
+TODO(compat): the pre-split ``gen_ai_hub.proxy.langchain`` root *also* re-exported the
+Bedrock + Google symbols (``ChatBedrock``, ``ChatGoogleGenerativeAI``, …) at this top
+level, so ``from gen_ai_hub.proxy.langchain import ChatBedrock`` used to work. Those
+adapters now live in ``sap_ai_sdk_amazon.langchain`` / ``sap_ai_sdk_google.langchain``
+and are reachable here only via the submodule paths
+(``gen_ai_hub.proxy.langchain.amazon`` / ``.google_genai``). Re-aggregating them at this
+top level would make ``sap-ai-sdk-gen`` depend on amazon+google (pulling
+boto3/google-genai into the base install), so it is intentionally omitted for now. To
+restore full fidelity later, extend this module with::
 
     from sap_ai_sdk_amazon.langchain import (
         ChatBedrock, ChatBedrockConverse, BedrockEmbeddings, AICoreBedrockBaseModel,
@@ -16,8 +22,8 @@ fidelity later, extend this module with::
         ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings,
     )
 
-and add langchain+amazon+google to the package dependencies (or gate behind an extra).
-Until then, import those adapters from their new provider packages directly.
+and add amazon+google to the package dependencies (or gate behind an extra). Until
+then, import those symbols from the submodules or the new provider packages directly.
 """
 
 from sap_ai_sdk_langchain import (

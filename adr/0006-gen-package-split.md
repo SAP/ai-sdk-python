@@ -135,12 +135,14 @@ heavy providers and langchain stay behind extras: `[amazon]`, `[google]`,
 
 **Known fidelity gap (intentional, deferred):** the pre-split
 `gen_ai_hub.proxy.langchain` namespace re-exported OpenAI **and** Bedrock **and**
-Google symbols from one module. Those provider adapters now live in
-`sap_ai_sdk_amazon.langchain` / `sap_ai_sdk_google.langchain`. The shim forwards only
-the OpenAI subset; re-aggregating the provider symbols would force `sap-ai-sdk-gen` to
-depend on amazon+google and pull `boto3`/`google-genai` back into the base install.
-A `TODO(compat)` in `gen_ai_hub/proxy/langchain/__init__.py` records exactly how to
-complete it if full fidelity is later required.
+Google symbols at its top level (`from gen_ai_hub.proxy.langchain import ChatBedrock`).
+The submodule paths are fully restored (`gen_ai_hub.proxy.langchain.{openai,
+init_models,amazon,google_genai}` all forward, the provider ones behind the `[amazon]`/
+`[google]` extras), but the **merged top-level re-export** forwards only the OpenAI
+subset: re-aggregating the provider symbols at that top level would force
+`sap-ai-sdk-gen` to depend on amazon+google and pull `boto3`/`google-genai` into the
+base install. A `TODO(compat)` in `gen_ai_hub/proxy/langchain/__init__.py` records
+exactly how to complete it if full fidelity is later required.
 
 **Not yet wired for release (intentional):** `packages/gen` is registered in the uv
 workspace (`[tool.uv.sources]`) and builds/installs locally, but it is **deliberately

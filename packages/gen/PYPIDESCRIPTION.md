@@ -30,10 +30,12 @@ Selective extras:
 ## Known migration gap
 
 The old `gen_ai_hub.proxy.langchain` namespace re-exported OpenAI **and** Amazon
-(`ChatBedrock`, …) **and** Google (`ChatGoogleGenerativeAI`, …) symbols from a single
-module. Those provider adapters now live in separate packages. For now this meta
-package only forwards the OpenAI subset of `gen_ai_hub.proxy.langchain`. Import the
-Bedrock/Google LangChain adapters from their new homes:
+(`ChatBedrock`, …) **and** Google (`ChatGoogleGenerativeAI`, …) symbols at its *top
+level*. The submodule paths are preserved — `gen_ai_hub.proxy.langchain.amazon` /
+`.google_genai` forward to the new provider adapters (behind the `[amazon]` / `[google]`
+extras) — but the merged **top-level** re-export forwards only the OpenAI subset. Import
+the Bedrock/Google adapters from the submodule or their new home:
 
+    from gen_ai_hub.proxy.langchain.amazon import ChatBedrock          # legacy submodule path
     from sap_ai_sdk_amazon.langchain import ChatBedrock, ChatBedrockConverse, BedrockEmbeddings
     from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings

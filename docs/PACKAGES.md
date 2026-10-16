@@ -171,15 +171,18 @@ from gen_ai_hub.document_grounding.client import PipelineAPIClient
 from gen_ai_hub.batch_service import BatchService
 from gen_ai_hub.evaluations import EvaluationClient
 from gen_ai_hub.proxy.langchain.openai import ChatOpenAI   # [langchain]
+from gen_ai_hub.proxy.langchain.amazon import ChatBedrock  # [amazon]
 from gen_ai_hub.proxy.native.amazon import Session          # [amazon]
 ```
 
 **Known migration gap.** The old `gen_ai_hub.proxy.langchain` namespace re-exported the
-OpenAI **and** Bedrock **and** Google LangChain symbols from one module. The compat
-package forwards only the OpenAI subset; the provider adapters now live in their own
-packages and must be imported from there:
+OpenAI **and** Bedrock **and** Google LangChain symbols at its *top level*. The submodule
+paths still work (`gen_ai_hub.proxy.langchain.amazon` / `.google_genai`, behind the
+`[amazon]` / `[google]` extras), but the merged **top-level** re-export forwards only the
+OpenAI subset. Import the Bedrock/Google adapters from the submodule or their new home:
 
 ```python
+from gen_ai_hub.proxy.langchain.amazon import ChatBedrock          # legacy submodule path
 from sap_ai_sdk_amazon.langchain import ChatBedrock, ChatBedrockConverse, BedrockEmbeddings
 from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 ```
