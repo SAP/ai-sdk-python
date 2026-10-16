@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration \
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry \
             --errors-only \
             --output-format=json \
 
@@ -62,6 +62,9 @@ jobs:
           - name: orchestration
             path: packages/orchestration/tests
             source: packages/orchestration/sap_ai_sdk_orchestration
+          - name: prompt-registry
+            path: packages/prompt-registry/tests
+            source: packages/prompt-registry/sap_ai_sdk_prompt_registry
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:

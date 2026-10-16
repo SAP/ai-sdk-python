@@ -5,20 +5,20 @@ import tempfile
 from PIL import Image
 from typing import Dict, Any, List
 
-from gen_ai_hub import GenAIHubProxyClient
-from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
-from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem
-from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, ChatMessage
-from gen_ai_hub.orchestration_v2.models.response_format import ResponseFormatJsonObject, ResponseFormatText, ResponseFormatJsonSchema, JSONResponseSchema
-from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
-from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef, TemplateRefByID, TemplateRefByScenarioNameVersion
-from gen_ai_hub.orchestration_v2.models.tools import function_tool
-from gen_ai_hub.orchestration_v2.service import OrchestrationService
-from gen_ai_hub.prompt_registry.client import PromptTemplateClient
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateSpec, PromptTemplate
-from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
+from sap_ai_sdk_proxy import GenAIHubProxyClient
+from sap_ai_sdk_orchestration.exceptions import OrchestrationError
+from sap_ai_sdk_orchestration.models.config import OrchestrationConfig, ModuleConfig
+from sap_ai_sdk_orchestration.models.llm_model_details import LLMModelDetails
+from sap_ai_sdk_orchestration.models.multimodal_items import ImageItem
+from sap_ai_sdk_orchestration.models.message import SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, ChatMessage
+from sap_ai_sdk_orchestration.models.response_format import ResponseFormatJsonObject, ResponseFormatText, ResponseFormatJsonSchema, JSONResponseSchema
+from sap_ai_sdk_orchestration.models.template import Template, PromptTemplatingModuleConfig
+from sap_ai_sdk_orchestration.models.template_ref import TemplateRef, TemplateRefByID, TemplateRefByScenarioNameVersion
+from sap_ai_sdk_orchestration.models.tools import function_tool
+from sap_ai_sdk_orchestration.service import OrchestrationService
+from sap_ai_sdk_prompt_registry.client import PromptTemplateClient
+from sap_ai_sdk_prompt_registry.models.prompt_template import PromptTemplateSpec, PromptTemplate
+from integration_tests.orchestration_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
 

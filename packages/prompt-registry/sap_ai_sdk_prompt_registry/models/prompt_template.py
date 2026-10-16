@@ -2,7 +2,7 @@ from typing import List, Optional, Dict, Any
 from pydantic.config import ConfigDict
 
 from pydantic import BaseModel, Field, field_validator
-from gen_ai_hub.orchestration_v2 import (ResponseFormatText, ResponseFormatJsonObject, ResponseFormatJsonSchema,
+from sap_ai_sdk_orchestration import (ResponseFormatText, ResponseFormatJsonObject, ResponseFormatJsonSchema,
                                          FunctionTool, ImagePart, TextPart, ImageItem, ImageUrl, ContentPart)
 
 

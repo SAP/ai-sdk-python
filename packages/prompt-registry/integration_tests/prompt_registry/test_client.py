@@ -3,28 +3,28 @@ from typing import cast
 
 from ai_api_client_sdk.exception import AIAPIServerException
 
-from gen_ai_hub import GenAIHubProxyClient
-from gen_ai_hub.prompt_registry.client import PromptTemplateClient, OrchestrationConfigClient
-from gen_ai_hub.prompt_registry.models.prompt_template import (PromptTemplate,
+from sap_ai_sdk_proxy import GenAIHubProxyClient
+from sap_ai_sdk_prompt_registry.client import PromptTemplateClient, OrchestrationConfigClient
+from sap_ai_sdk_prompt_registry.models.prompt_template import (PromptTemplate,
                                                                PromptTemplateSpec,
                                                                PromptTemplateListResponse,
                                                                PromptTemplatePostResponse,
                                                                PromptTemplateGetResponse,
                                                                PromptTemplateDeleteResponse,
                                                                PromptTemplateSubstitutionResponse)
-from gen_ai_hub.prompt_registry.models.orchestration_config import (OrchestrationConfigDeleteResponse,
+from sap_ai_sdk_prompt_registry.models.orchestration_config import (OrchestrationConfigDeleteResponse,
                                                                     OrchestrationConfigGetResponse,
                                                                     OrchestrationConfigPostResponse,
                                                                     OrchestrationConfigListResponse)
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
-from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
-from gen_ai_hub.orchestration_v2.models.message import UserMessage
-from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
-from gen_ai_hub.orchestration_v2.models.response_format import ResponseFormatJsonObject
-from gen_ai_hub.orchestration_v2.models.tools import FunctionTool
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem
+from sap_ai_sdk_orchestration.models.config import OrchestrationConfig, ModuleConfig
+from sap_ai_sdk_orchestration.models.llm_model_details import LLMModelDetails
+from sap_ai_sdk_orchestration.models.message import UserMessage
+from sap_ai_sdk_orchestration.models.template import Template, PromptTemplatingModuleConfig
+from sap_ai_sdk_orchestration.models.response_format import ResponseFormatJsonObject
+from sap_ai_sdk_orchestration.models.tools import FunctionTool
+from sap_ai_sdk_orchestration.models.multimodal_items import ImageItem
 
-from gen_ai_hub.proxy import get_proxy_client
+from sap_ai_sdk_proxy import get_proxy_client
 from tests.mock import TEMPLATE_YAML, ORCHESTRATION_CONFIG_YAML
 from integration_tests.test_helpers import retry_on_429_or_503
 

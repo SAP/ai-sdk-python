@@ -1,8 +1,8 @@
 from typing import Optional
 from abc import ABC
-from gen_ai_hub import GenAIHubProxyClient
-from gen_ai_hub.proxy import get_proxy_client
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubRestClient
+from sap_ai_sdk_proxy import GenAIHubProxyClient
+from sap_ai_sdk_proxy import get_proxy_client
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import GenAIHubRestClient
 from .models.prompt_template import (
     PromptTemplatePostRequest,
     PromptTemplatePostResponse,

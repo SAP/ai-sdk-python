@@ -28,6 +28,7 @@ members = [
     "sap-ai-sdk-google",
     "sap-ai-sdk-langchain",
     "sap-ai-sdk-orchestration",
+    "sap-ai-sdk-prompt-registry",
     "sap-ai-sdk-proxy",
 ]
 
@@ -4490,6 +4491,56 @@ dev = [
 requires-dist = [
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "myst-nb" },
+    { name = "parameterized", specifier = "==0.9.0" },
+    { name = "pillow", specifier = "==12.3.0" },
+    { name = "pylint", specifier = "==4.0.8" },
+    { name = "pytest", specifier = "==9.1.1" },
+    { name = "pytest-asyncio", specifier = "==1.4.0" },
+    { name = "pytest-cov", specifier = "==7.1.0" },
+    { name = "pytest-dotenv", specifier = ">=0.5.2" },
+    { name = "requests-mock", specifier = "==1.12.1" },
+    { name = "respx", specifier = "==0.23.1" },
+    { name = "sphinx", specifier = "<9.0.0" },
+    { name = "sphinxawesome-theme" },
+]
+
+[[package]]
+name = "sap-ai-sdk-prompt-registry"
+version = "1.0.0"
+source = { editable = "packages/prompt-registry" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-orchestration" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "myst-nb" },
+    { name = "parameterized" },
+    { name = "pillow" },
+    { name = "pylint" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "pytest-dotenv" },
+    { name = "requests-mock" },
+    { name = "respx" },
+    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "sphinx", version = "8.2.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "sphinxawesome-theme" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
 

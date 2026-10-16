@@ -3,10 +3,10 @@ from unittest.mock import patch
 
 from ai_api_client_sdk.exception import AIAPIServerException
 
-from gen_ai_hub.prompt_registry.client import (PromptTemplateClient, OrchestrationConfigClient,
+from sap_ai_sdk_prompt_registry.client import (PromptTemplateClient, OrchestrationConfigClient,
                                                PATH_SCENARIOS, PATH_PROMPT_TEMPLATES, CONTENT_TYPE_JSON_,
                                                PATH_REGISTRY_CONFIG, PATH_REGISTRY_SCENARIOS, )
-from gen_ai_hub.prompt_registry.models.prompt_template import (PromptTemplateSpec, PromptTemplate,
+from sap_ai_sdk_prompt_registry.models.prompt_template import (PromptTemplateSpec, PromptTemplate,
                                                                PromptTemplateSubstitutionResponse)
 from tests.mock import (TEMPLATE_NAME, TEMPLATE_ID, VERSION, SCENARIO, TEMPLATE_YAML, ORCHESTRATION_CONFIG_NAME,
                         ORCHESTRATION_CONFIG_ID, TEMPLATE_POST_RESPONSE, TEMPLATE_LIST_RESPONSE, TEMPLATE_GET_RESPONSE,
@@ -15,17 +15,17 @@ from tests.mock import (TEMPLATE_NAME, TEMPLATE_ID, VERSION, SCENARIO, TEMPLATE_
                         ORCHESTRATION_CONFIG_GET_RESPONSE, ORCHESTRATION_CONFIG_DELETE_RESPONSE,
                         ORCHESTRATION_CONFIG_YAML, ORCHESTRATION_CONFIG_LIST_RESPONSE_WITH_SPEC,
                         get_mocked_ai_core_client)
-from gen_ai_hub.prompt_registry.models.orchestration_config import (OrchestrationConfigDeleteResponse,
+from sap_ai_sdk_prompt_registry.models.orchestration_config import (OrchestrationConfigDeleteResponse,
                                                                     OrchestrationConfigGetResponse,
                                                                     OrchestrationConfigPostResponse,
                                                                     OrchestrationConfigListResponse)
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
-from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
-from gen_ai_hub.orchestration_v2.models.message import UserMessage, TextPart, ImagePart
-from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
-from gen_ai_hub.orchestration_v2.models.response_format import ResponseFormatJsonObject
-from gen_ai_hub.orchestration_v2.models.tools import FunctionTool
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem, ImageUrl
+from sap_ai_sdk_orchestration.models.config import OrchestrationConfig, ModuleConfig
+from sap_ai_sdk_orchestration.models.llm_model_details import LLMModelDetails
+from sap_ai_sdk_orchestration.models.message import UserMessage, TextPart, ImagePart
+from sap_ai_sdk_orchestration.models.template import Template, PromptTemplatingModuleConfig
+from sap_ai_sdk_orchestration.models.response_format import ResponseFormatJsonObject
+from sap_ai_sdk_orchestration.models.tools import FunctionTool
+from sap_ai_sdk_orchestration.models.multimodal_items import ImageItem, ImageUrl
 
 
 class TestPromptTemplateModelContent(unittest.TestCase):

@@ -2,7 +2,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig
+from sap_ai_sdk_orchestration.models.config import OrchestrationConfig
 
 
 class OrchestrationConfigPostRequest(BaseModel):
