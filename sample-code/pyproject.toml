@@ -8,7 +8,13 @@ license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
-    "sap-ai-sdk-gen[all]",
+    "sap-ai-sdk-proxy",
+    "sap-ai-sdk-langchain",
+    "sap-ai-sdk-amazon",
+    "sap-ai-sdk-google",
+    "sap-ai-sdk-orchestration",
+    "sap-ai-sdk-prompt-registry",
+    "sap-ai-sdk-document-grounding",
     "uvicorn>=0.52.1",
 ]
 
@@ -20,4 +26,10 @@ build-backend = "uv_build"
 module-root = ""
 
 [tool.uv.sources]
-sap-ai-sdk-gen = { workspace = true, editable = true }
+sap-ai-sdk-proxy = { workspace = true, editable = true }
+sap-ai-sdk-langchain = { workspace = true, editable = true }
+sap-ai-sdk-amazon = { workspace = true, editable = true }
+sap-ai-sdk-google = { workspace = true, editable = true }
+sap-ai-sdk-orchestration = { workspace = true, editable = true }
+sap-ai-sdk-prompt-registry = { workspace = true, editable = true }
+sap-ai-sdk-document-grounding = { workspace = true, editable = true }

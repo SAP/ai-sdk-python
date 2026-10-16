@@ -14,14 +14,38 @@ docs:
 		packages/core/ai_core_sdk/helpers \
 		packages/core/ai_core_sdk/cli.py
 	uv run sphinx-apidoc -e -M -f -T \
-		-o docs/sphinx/_autogen/gen \
-		packages/gen/gen_ai_hub \
-		packages/gen/gen_ai_hub/evaluations/_internal \
-		packages/gen/gen_ai_hub/evaluations/helpers
+		-o docs/sphinx/_autogen/proxy \
+		packages/proxy/sap_ai_sdk_proxy
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/langchain \
+		packages/langchain/sap_ai_sdk_langchain
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/amazon \
+		packages/amazon/sap_ai_sdk_amazon
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/google \
+		packages/google/sap_ai_sdk_google
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/orchestration \
+		packages/orchestration/sap_ai_sdk_orchestration
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/prompt-registry \
+		packages/prompt-registry/sap_ai_sdk_prompt_registry
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/document-grounding \
+		packages/document-grounding/sap_ai_sdk_document_grounding
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/batch \
+		packages/batch/sap_ai_sdk_batch
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/evaluations \
+		packages/evaluations/sap_ai_sdk_evaluations \
+		packages/evaluations/sap_ai_sdk_evaluations/_internal \
+		packages/evaluations/sap_ai_sdk_evaluations/helpers
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
 lint:
-	uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations --errors-only --output-format=colorized
+	uv run pylint ai_api_client_sdk ai_core_sdk sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations --errors-only --output-format=colorized
 
 license-check:
 	uv run pip-licenses
@@ -32,7 +56,6 @@ sample-code-server:
 test:
 	uv run pytest packages/base/tests
 	uv run pytest packages/core/tests
-	uv run pytest packages/gen/tests
 	uv run pytest packages/proxy/tests
 	uv run pytest packages/langchain/tests
 	uv run pytest packages/amazon/tests
@@ -46,7 +69,6 @@ test:
 test-integration:
 	uv run pytest packages/base/integration_tests
 	uv run pytest packages/core/integration_tests
-	uv run pytest packages/gen/integration_tests
 	uv run pytest packages/proxy/integration_tests
 	uv run pytest packages/langchain/integration_tests
 	uv run pytest packages/amazon/integration_tests

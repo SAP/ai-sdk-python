@@ -4,6 +4,14 @@
 
 proposed
 
+> **Note:** This ADR was written when the monorepo contained three packages
+> (`sap-ai-sdk-base`, `sap-ai-sdk-core`, `sap-ai-sdk-gen`). `sap-ai-sdk-gen` has
+> since been split into provider- and service-specific packages (see
+> [ADR-0006](0006-gen-package-split.md)). The decision below — declare
+> cross-package dependencies rather than vendor them, and resolve them locally
+> via `[tool.uv.sources]` — applies unchanged to every package in the expanded
+> set; only the number of packages has grown.
+
 ## Context
 
 The monorepo contains three separately published packages: `sap-ai-sdk-base`, `sap-ai-sdk-core`, and `sap-ai-sdk-gen`. When the packages were merged from separate repositories into this monorepo, the question arose whether `sap-ai-sdk-gen` should continue to declare `sap-ai-sdk-core` as a runtime dependency or instead inline the core source code into the gen package at publish time.

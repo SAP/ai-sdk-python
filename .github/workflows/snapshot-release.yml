@@ -64,21 +64,46 @@ jobs:
           pin_dep base core
 
           bump core
-          pin_dep core gen
+          pin_dep core proxy
 
-          bump gen
+          bump proxy
+          pin_dep proxy langchain
+          pin_dep proxy amazon
+          pin_dep proxy google
+          pin_dep proxy orchestration
+          pin_dep proxy document-grounding
+          pin_dep proxy batch
+          pin_dep proxy evaluations
+
+          bump langchain
+          pin_dep langchain amazon
+          pin_dep langchain google
+
+          bump amazon
+          bump google
+
+          bump orchestration
+          pin_dep orchestration prompt-registry
+          pin_dep orchestration evaluations
+
+          bump prompt-registry
+          pin_dep prompt-registry evaluations
+
+          bump document-grounding
+          bump batch
+          bump evaluations
 
       - name: Update lockfile
         run: uv lock
 
       - name: Build packages
         run: |
-          for pkg in base core gen; do
+          for pkg in base core proxy langchain amazon google orchestration prompt-registry document-grounding batch evaluations; do
             uv build --package sap-ai-sdk-$pkg --out-dir packages/$pkg/dist
           done
 
       # - name: Release packages
       #   run: |
-      #     for pkg in base core gen; do
+      #     for pkg in base core proxy langchain amazon google orchestration prompt-registry document-grounding batch evaluations; do
       #       uv publish packages/$pkg/dist/
       #     done

@@ -4,6 +4,13 @@
 
 proposed
 
+> **Note:** This ADR was written when the monorepo contained three packages
+> (`sap-ai-sdk-base` ← `sap-ai-sdk-core` ← `sap-ai-sdk-gen`). `sap-ai-sdk-gen`
+> has since been split into provider- and service-specific packages (see
+> [ADR-0006](0006-gen-package-split.md)). The per-package versioning and
+> `<short>-v${version}` tag strategy below applies unchanged to every package in
+> the expanded dependency chain; only the number of packages has grown.
+
 ## Context
 
 The monorepo contains three separately published PyPI packages with a strict dependency chain: `sap-ai-sdk-base` ← `sap-ai-sdk-core` ← `sap-ai-sdk-gen`. Each package has an independent version today (`base` at 3.4.0, `core` at 3.3.0, `gen` at 7.0.0).

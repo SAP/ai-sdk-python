@@ -1,4 +1,4 @@
-from gen_ai_hub.proxy.native.amazon import Session
+from sap_ai_sdk_amazon import Session
 
 
 def converse():

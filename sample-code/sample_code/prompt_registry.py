@@ -1,9 +1,9 @@
-from gen_ai_hub.prompt_registry.client import OrchestrationConfigClient, PromptTemplateClient
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplate, PromptTemplateSpec
-from gen_ai_hub.orchestration_v2.models.config import ModuleConfig, OrchestrationConfig
-from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
-from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
-from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig, Template
+from sap_ai_sdk_prompt_registry.client import OrchestrationConfigClient, PromptTemplateClient
+from sap_ai_sdk_prompt_registry.models.prompt_template import PromptTemplate, PromptTemplateSpec
+from sap_ai_sdk_orchestration.models.config import ModuleConfig, OrchestrationConfig
+from sap_ai_sdk_orchestration.models.llm_model_details import LLMModelDetails
+from sap_ai_sdk_orchestration.models.message import SystemMessage, UserMessage
+from sap_ai_sdk_orchestration.models.template import PromptTemplatingModuleConfig, Template
 
 def create_prompt_template():
     """

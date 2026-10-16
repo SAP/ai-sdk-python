@@ -1,6 +1,6 @@
 from fastapi.responses import StreamingResponse
-from gen_ai_hub.proxy.core import get_proxy_client
-from gen_ai_hub.proxy.native.openai import AsyncOpenAI, chat, embeddings, responses
+from sap_ai_sdk_proxy.core import get_proxy_client
+from sap_ai_sdk_proxy.native.openai import AsyncOpenAI, chat, embeddings, responses
 from openai.types.responses import Response
 from pydantic import BaseModel
 

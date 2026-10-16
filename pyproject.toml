@@ -10,7 +10,6 @@ dev = ["pip-licenses>=5.5.5", "commitizen>=4", "sphinx>=7.0.0", "furo>=2025.12.1
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
 sap-ai-sdk-core = { workspace = true }
-sap-ai-sdk-gen = { workspace = true }
 sap-ai-sdk-proxy = { workspace = true }
 sap-ai-sdk-langchain = { workspace = true }
 sap-ai-sdk-amazon = { workspace = true }

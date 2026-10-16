@@ -1,5 +1,5 @@
 from fastapi.responses import StreamingResponse
-from gen_ai_hub.orchestration_v2 import (
+from sap_ai_sdk_orchestration import (
     AzureContentSafetyInput,
     AzureContentSafetyInputFilterConfig,
     AzureContentSafetyOutput,

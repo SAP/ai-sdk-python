@@ -1,14 +1,14 @@
-from gen_ai_hub.document_grounding.client import (
+from sap_ai_sdk_document_grounding.client import (
     PipelineAPIClient,
     RetrievalAPIClient,
     VectorAPIClient,
 )
-from gen_ai_hub.document_grounding.models.retrieval import (
+from sap_ai_sdk_document_grounding.models.retrieval import (
     RetrievalSearchConfiguration,
     RetrievalSearchFilter,
     RetrievalSearchInput,
 )
-from gen_ai_hub.document_grounding.models.vector import (
+from sap_ai_sdk_document_grounding.models.vector import (
     BaseDocument,
     CollectionCreateRequest,
     DocumentsCreateRequest,

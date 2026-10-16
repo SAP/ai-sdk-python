@@ -10,7 +10,15 @@ on:
         options:
           - base
           - core
-          - gen
+          - proxy
+          - langchain
+          - amazon
+          - google
+          - orchestration
+          - prompt-registry
+          - document-grounding
+          - batch
+          - evaluations
 
 jobs:
   bump:

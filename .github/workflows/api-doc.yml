@@ -3,9 +3,17 @@ name: api-doc
 on:
   push:
     tags:
-      - 'gen-v*'
       - 'base-v*'
       - 'core-v*'
+      - 'proxy-v*'
+      - 'langchain-v*'
+      - 'amazon-v*'
+      - 'google-v*'
+      - 'orchestration-v*'
+      - 'prompt-registry-v*'
+      - 'document-grounding-v*'
+      - 'batch-v*'
+      - 'evaluations-v*'
   workflow_dispatch: ~
 
 jobs:

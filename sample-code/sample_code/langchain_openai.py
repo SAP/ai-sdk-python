@@ -7,7 +7,7 @@ from langchain_core.tools import tool
 from langchain_core.vectorstores import InMemoryVectorStore
 from pydantic import BaseModel
 
-from gen_ai_hub.proxy.langchain.openai import ChatOpenAI, OpenAIEmbeddings
+from sap_ai_sdk_langchain.openai import ChatOpenAI, OpenAIEmbeddings
 
 
 class SampleSchema(BaseModel):
@@ -97,7 +97,7 @@ def invoke_rag_chain():
     """
     Build a RAG chain using SAP AI SDK embeddings and chat model with LangChain.
 
-    Documents are embedded with OpenAIEmbeddings from gen_ai_hub and stored in an
+    Documents are embedded with OpenAIEmbeddings from sap_ai_sdk_langchain and stored in an
     in-memory vector store. A retriever feeds relevant context into a prompt template
     that is then answered by ChatOpenAI.
 

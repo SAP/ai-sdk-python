@@ -5,7 +5,15 @@ on:
     tags:
       - 'base-v*'
       - 'core-v*'
-      - 'gen-v*'
+      - 'proxy-v*'
+      - 'langchain-v*'
+      - 'amazon-v*'
+      - 'google-v*'
+      - 'orchestration-v*'
+      - 'prompt-registry-v*'
+      - 'document-grounding-v*'
+      - 'batch-v*'
+      - 'evaluations-v*'
 
 jobs:
   draft-github-release:

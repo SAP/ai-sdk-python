@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations \
+          uv run pylint ai_api_client_sdk ai_core_sdk sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations \
             --errors-only \
             --output-format=json \
 
@@ -44,9 +44,6 @@ jobs:
           - name: core
             path: packages/core/tests
             source: packages/core/ai_core_sdk
-          - name: gen
-            path: packages/gen/tests
-            source: packages/gen/gen_ai_hub
           - name: proxy
             path: packages/proxy/tests
             source: packages/proxy/sap_ai_sdk_proxy
@@ -163,16 +160,29 @@ jobs:
             --disable-warnings \
             -m "not bedrock"
 
-  integration-tests-gen:
-    name: 'integration tests (gen)'
+  integration-tests-gen-packages:
+    name: 'integration tests (${{ matrix.package }})'
     runs-on: ubuntu-latest
     if: |
       github.event_name != 'pull_request' ||
       github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - proxy
+          - langchain
+          - amazon
+          - google
+          - orchestration
+          - prompt-registry
+          - document-grounding
+          - batch
+          - evaluations
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
 
-      - name: Run gen integration tests
+      - name: Run ${{ matrix.package }} integration tests
         env:
           AICORE_RESOURCE_GROUP: ${{ secrets.AICORE_RESOURCE_GROUP }}
           AICORE_BASE_URL: ${{ secrets.AICORE_BASE_URL }}
@@ -182,7 +192,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          uv run pytest packages/gen/integration_tests \
+          uv run pytest packages/${{ matrix.package }}/integration_tests \
             --verbosity=2 \
             -ra \
             --disable-warnings \
