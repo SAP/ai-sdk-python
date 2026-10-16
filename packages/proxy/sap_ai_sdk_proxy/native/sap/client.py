@@ -1,9 +1,9 @@
 from typing import Optional, Union
 import httpx
 
-from gen_ai_hub import GenAIHubProxyClient
-from gen_ai_hub.proxy import get_proxy_client
-from gen_ai_hub.proxy.native.sap.models import RPTResponse, RPTException, RPTRequest
+from sap_ai_sdk_proxy import GenAIHubProxyClient
+from sap_ai_sdk_proxy import get_proxy_client
+from sap_ai_sdk_proxy.native.sap.models import RPTResponse, RPTException, RPTRequest
 
 PREDICTION_SUFFIX = "/predict"
 

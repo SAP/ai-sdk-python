@@ -1,6 +1,6 @@
 import unittest
 
-from gen_ai_hub.proxy.core.proxy_clients import (
+from sap_ai_sdk_proxy.core.proxy_clients import (
     ProxyClients,
     get_proxy_client,
     get_proxy_version,

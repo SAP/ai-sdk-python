@@ -5,8 +5,8 @@ import os
 import unittest
 from unittest.mock import patch
 
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient, Deployment
+from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client, proxy_version_context
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient, Deployment
 from integration_tests.constants import OPENAI_GPT_4O_MINI_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 
@@ -60,7 +60,7 @@ class TestCustomHeaders(unittest.TestCase):
             os.environ['AI_CLIENT_TYPE'] = test_client_type
 
             # Setup: Reload the client module to pick up the new environment variable
-            from gen_ai_hub.proxy.gen_ai_hub_proxy import client
+            from sap_ai_sdk_proxy.gen_ai_hub_proxy import client
             importlib.reload(client)
             client.GenAIHubProxyClient.clear_cache()
 
@@ -78,7 +78,7 @@ class TestCustomHeaders(unittest.TestCase):
             else:
                 os.environ.pop('AI_CLIENT_TYPE', None)
 
-            from gen_ai_hub.proxy.gen_ai_hub_proxy import client
+            from sap_ai_sdk_proxy.gen_ai_hub_proxy import client
             importlib.reload(client)
             client.GenAIHubProxyClient.clear_cache()
 
@@ -88,7 +88,7 @@ class TestCustomHeaders(unittest.TestCase):
         try:
             # Setup: Remove the environment variable if it exists
             os.environ.pop('AI_CLIENT_TYPE', None)
-            from gen_ai_hub.proxy.gen_ai_hub_proxy import client
+            from sap_ai_sdk_proxy.gen_ai_hub_proxy import client
             importlib.reload(client)
             client.GenAIHubProxyClient.clear_cache()
 
@@ -107,6 +107,6 @@ class TestCustomHeaders(unittest.TestCase):
             else:
                 os.environ.pop('AI_CLIENT_TYPE', None)
 
-            from gen_ai_hub.proxy.gen_ai_hub_proxy import client
+            from sap_ai_sdk_proxy.gen_ai_hub_proxy import client
             importlib.reload(client)
             client.GenAIHubProxyClient.clear_cache()

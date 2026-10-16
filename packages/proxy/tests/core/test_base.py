@@ -4,7 +4,7 @@ import unittest
 from unittest import TestCase
 from unittest.mock import patch
 
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
+from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client, proxy_version_context
 from tests.mock import MockDeployment, MockProxyClient
 
 

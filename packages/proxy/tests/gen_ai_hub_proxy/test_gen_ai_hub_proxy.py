@@ -6,8 +6,8 @@ import unittest
 from datetime import datetime
 from unittest.mock import MagicMock
 
-from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
-from gen_ai_hub.proxy.gen_ai_hub_proxy.client import (GenAIHubProxyClient, Deployment, temporary_headers_addition)
+from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client, proxy_version_context
+from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import (GenAIHubProxyClient, Deployment, temporary_headers_addition)
 from tests.mock import get_mocked_ai_core_client, ai_core_ai_api_mocker
 
 
@@ -98,8 +98,8 @@ class TestProxyClient(unittest.TestCase):
         self.assertIsInstance(proxy_client.request_header, dict)
 
     def test_client_mock_discovery_with_additional_fm_scenario(self):
-        from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient
-        from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
+        from sap_ai_sdk_proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient
+        from sap_ai_sdk_proxy.core.proxy_clients import get_proxy_client, proxy_version_context
 
         with proxy_version_context('gen-ai-hub'):
             kwargs = dict(

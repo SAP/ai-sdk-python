@@ -1,7 +1,7 @@
 import time
 import unittest
 
-from gen_ai_hub.proxy.core.utils import lru_cache_extended
+from sap_ai_sdk_proxy.core.utils import lru_cache_extended
 
 
 class TestLRUCacheDecorators(unittest.TestCase):

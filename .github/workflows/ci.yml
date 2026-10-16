@@ -23,7 +23,7 @@ jobs:
 
       - name: Run pylint
         run: |
-          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub \
+          uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy \
             --errors-only \
             --output-format=json \
 
@@ -47,6 +47,9 @@ jobs:
           - name: gen
             path: packages/gen/tests
             source: packages/gen/gen_ai_hub
+          - name: proxy
+            path: packages/proxy/tests
+            source: packages/proxy/sap_ai_sdk_proxy
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
         with:

@@ -7,8 +7,8 @@ from openai.types import Completion, CreateEmbeddingResponse
 from openai.types.chat import ChatCompletion, ChatCompletionUserMessageParam
 from openai.types.responses import Response
 
-from gen_ai_hub.proxy.native.openai import OpenAI, AsyncOpenAI
-from gen_ai_hub.proxy.native.openai.clients import ChatCompletions, AsyncChatCompletions, Responses, AsyncResponses
+from sap_ai_sdk_proxy.native.openai import OpenAI, AsyncOpenAI
+from sap_ai_sdk_proxy.native.openai.clients import ChatCompletions, AsyncChatCompletions, Responses, AsyncResponses
 from integration_tests.constants import OPENAI_GPT_4O_MINI_TEST_MODEL, NVIDIA_EMBEDDING_TEST_MODEL
 
 from tests.mock import (
@@ -16,9 +16,9 @@ from tests.mock import (
     openai_chat_completion_mocker,
     openai_stream_completion_mocker,
     openai_embeddings_mocker, openai_structured_outputs_mocker,
-    openai_responses_mocker, openai_responses_structured_outputs_mocker
+    openai_responses_mocker, openai_responses_structured_outputs_mocker,
+    create_deployment, create_gen_ai_hub_deployments,
 )
-from tests.proxy.langchain_.test_init_models import TestInitModels
 
 
 class TestOpenAIModels(unittest.TestCase):
@@ -62,7 +62,7 @@ class TestOpenAIModels(unittest.TestCase):
 
     def test_completion_with_custom_model(self):
         model_name = 'test-custom-openai-model'
-        custom_deployment = TestInitModels.create_deployment(model_name)
+        custom_deployment = create_deployment(model_name)
         self.proxy_client._deployments.append(custom_deployment)
         with openai_chat_completion_mocker(f'{custom_deployment.url}/completions'):
             openai_client = OpenAI(proxy_client=self.proxy_client)
@@ -74,8 +74,8 @@ class TestOpenAIModels(unittest.TestCase):
 
     def test_update_deployments_called_for_custom_model(self):
         model_name = 'test-custom-openai-model-2'
-        custom_deployment = TestInitModels.create_deployment(model_name)
-        deployments = TestInitModels.create_gen_ai_hub_deployments()
+        custom_deployment = create_deployment(model_name)
+        deployments = create_gen_ai_hub_deployments()
         deployments.append(custom_deployment)
         deployments_dict = {}
         for i in range(len(deployments)):
@@ -113,7 +113,7 @@ class TestOpenAIModels(unittest.TestCase):
 
     def test_embeddings_with_custom_model(self):
         model_name = 'test-custom-openai-embedding-model'
-        custom_deployment = TestInitModels.create_deployment(model_name)
+        custom_deployment = create_deployment(model_name)
         self.proxy_client._deployments.append(custom_deployment)
         with openai_embeddings_mocker(custom_deployment.prediction_url):
             openai_client = OpenAI(proxy_client=self.proxy_client)

@@ -3,7 +3,7 @@ from typing import Any
 import openai
 from packaging import version
 
-from gen_ai_hub.proxy.core import get_proxy_version
+from sap_ai_sdk_proxy.core import get_proxy_version
 from .clients import AsyncOpenAI, OpenAI
 
 if version.parse(openai.__version__) < version.parse('1.0.0'):

@@ -28,9 +28,9 @@ from openai.types.chat.parsed_chat_completion import ParsedChatCompletion
 from openai.types.responses import Response, ResponseStreamEvent, ResponseInputParam, ParsedResponse
 
 
-from gen_ai_hub.proxy.core import get_proxy_client
-from gen_ai_hub.proxy.core.base import BaseProxyClient
-from gen_ai_hub.proxy.core.utils import NOT_GIVEN, NotGiven, if_set, kwargs_if_set
+from sap_ai_sdk_proxy.core import get_proxy_client
+from sap_ai_sdk_proxy.core.base import BaseProxyClient
+from sap_ai_sdk_proxy.core.utils import NOT_GIVEN, NotGiven, if_set, kwargs_if_set
 
 DEFAULT_API_VERSION = '2025-03-01-preview'  # https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key#api-evolution
 

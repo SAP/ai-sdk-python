@@ -8,8 +8,8 @@ from contextlib import contextmanager
 import respx
 from httpx import Response
 
-from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
-from gen_ai_hub.proxy.native.openai import AsyncOpenAI, OpenAI
+from sap_ai_sdk_proxy.gen_ai_hub_proxy import temporary_headers_addition
+from sap_ai_sdk_proxy.native.openai import AsyncOpenAI, OpenAI
 from tests.mock import (
     get_mocked_ai_core_client,
     OPENAI_EMBEDDINGS_RESPONSE

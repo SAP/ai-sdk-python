@@ -16,9 +16,9 @@ from ai_api_client_sdk.models.status import Status
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 from pydantic import BaseModel, PrivateAttr, model_validator, Field, ConfigDict, ValidationError
 
-from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
-from gen_ai_hub.proxy.core.proxy_clients import proxy_clients
-from gen_ai_hub.proxy.core.utils import warn_once
+from sap_ai_sdk_proxy.core.base import BaseDeployment, BaseProxyClient
+from sap_ai_sdk_proxy.core.proxy_clients import proxy_clients
+from sap_ai_sdk_proxy.core.utils import warn_once
 
 _temporary_headers_addition = ContextVar('temporary_headers_addition', default={})
 
