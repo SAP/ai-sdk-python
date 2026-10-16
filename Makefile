@@ -21,7 +21,7 @@ docs:
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
 lint:
-	uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google --errors-only --output-format=colorized
+	uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration --errors-only --output-format=colorized
 
 license-check:
 	uv run pip-licenses
@@ -37,6 +37,7 @@ test:
 	uv run pytest packages/langchain/tests
 	uv run pytest packages/amazon/tests
 	uv run pytest packages/google/tests
+	uv run pytest packages/orchestration/tests
 
 test-integration:
 	uv run pytest packages/base/integration_tests
@@ -46,6 +47,7 @@ test-integration:
 	uv run pytest packages/langchain/integration_tests
 	uv run pytest packages/amazon/integration_tests
 	uv run pytest packages/google/integration_tests
+	uv run pytest packages/orchestration/integration_tests
 
 test-pkg:
 	uv run pytest packages/$(pkg)/tests

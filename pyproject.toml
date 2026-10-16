@@ -15,6 +15,7 @@ sap-ai-sdk-proxy = { workspace = true }
 sap-ai-sdk-langchain = { workspace = true }
 sap-ai-sdk-amazon = { workspace = true }
 sap-ai-sdk-google = { workspace = true }
+sap-ai-sdk-orchestration = { workspace = true }
 
 [tool.uv.workspace]
 members = [
