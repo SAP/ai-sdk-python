@@ -181,6 +181,10 @@ class EvaluationClient:
         self._validate_provider_params()
         logger.info("Initialization of the client completed!")
 
+    @property
+    def _gen_ai_hub_proxy_client(self):
+        return self.__gen_ai_hub_proxy_client
+
     def __repr__(self):
         attrs = ", ".join(f"{k}={v!r}" for k, v in vars(self).items())
         return f"{self.__class__.__name__}({attrs})"
