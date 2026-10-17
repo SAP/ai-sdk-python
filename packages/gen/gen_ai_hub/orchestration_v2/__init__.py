@@ -11,6 +11,7 @@ __all__ = [
 
     # config
     "ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
     "CompletionRequestConfigurationReferenceByIdConfigRef",
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
 

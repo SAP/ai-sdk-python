@@ -18,7 +18,8 @@ from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionPostRequest
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, OrchestrationConfigReference
+from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
+                                                       PartialOrchestrationConfig)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
 from gen_ai_hub.orchestration_v2.models.response import (CompletionPostResponse, StreamCompletionPostResponse,
                                                          OrchestrationResponseWithRetries)
@@ -34,7 +35,6 @@ from gen_ai_hub.proxy import get_proxy_client
 
 V2_COMPLETION_SUFFIX = "/v2/completion"
 V2_EMBEDDINGS_SUFFIX = "/v2/embeddings"
-CONFIG_AND_CONFIG_REF_ERROR_TEXT = "Cannot provide both a configuration and a configuration reference."
 
 def cache_if_not_none(func):
     """Custom cache decorator that only caches non-None results"""
@@ -183,7 +183,7 @@ class OrchestrationService:
 
     def __init__(self,
                  api_url: Optional[str] = None,
-                 config: Optional[OrchestrationConfig] = None,
+                 config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
                  config_ref: Optional[OrchestrationConfigReference] = None,
                  proxy_client: Optional[GenAIHubProxyClient] = None,
                  deployment_id: Optional[str] = None,
@@ -217,8 +217,6 @@ class OrchestrationService:
             self.api_url = get_orchestration_api_url(self.proxy_client, deployment_id, config_name, config_id)
         self.config = config
         self.config_ref = config_ref
-        if self.config_ref and self.config:
-            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         self.timeout = timeout
         # create reusable httpx client to improve performance
         self.client = httpx.Client(timeout=self.timeout)
@@ -305,7 +303,7 @@ class OrchestrationService:
 
     def _execute_request(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -339,8 +337,6 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
-        if config and config_ref:
-            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
                 raise ValueError("Config stream setting must match used function. "
@@ -384,7 +380,7 @@ class OrchestrationService:
 
     async def _a_execute_request(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -415,8 +411,6 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
-        if config and config_ref:
-            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
                 raise ValueError("Config stream setting must match used function. "
@@ -459,7 +453,7 @@ class OrchestrationService:
 
     def run(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -492,7 +486,7 @@ class OrchestrationService:
 
     def stream(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -526,7 +520,7 @@ class OrchestrationService:
 
     async def arun(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -558,7 +552,7 @@ class OrchestrationService:
 
     async def astream(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -591,7 +585,7 @@ class OrchestrationService:
 
     def run_with_retries(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -674,7 +668,7 @@ class OrchestrationService:
 
     async def arun_with_retries(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,

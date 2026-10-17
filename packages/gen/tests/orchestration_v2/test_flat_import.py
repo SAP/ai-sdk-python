@@ -7,6 +7,7 @@ expected = {
 
     # config
     "ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
     "CompletionRequestConfigurationReferenceByIdConfigRef",
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
 

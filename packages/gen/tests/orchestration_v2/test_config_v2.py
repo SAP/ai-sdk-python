@@ -1,6 +1,11 @@
 import unittest
 
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
+from gen_ai_hub.orchestration_v2.models.config import (
+    OrchestrationConfig, ModuleConfig,
+    PartialOrchestrationConfig, PartialModuleConfigs, PartialPromptTemplatingModuleConfig,
+    CompletionRequestConfigurationReferenceByIdConfigRef,
+)
+from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionPostRequest
 from gen_ai_hub.orchestration_v2.models.azure_content_filter import AzureContentSafetyInput, AzureContentSafetyOutput
 from gen_ai_hub.orchestration_v2.models.content_filtering import FilteringModuleConfig, InputFiltering, OutputFiltering
 from gen_ai_hub.orchestration_v2.models.content_filter import AzureContentSafetyInputFilterConfig, AzureContentSafetyOutputFilterConfig
@@ -40,6 +45,36 @@ class TestOrchestrationConfigV2(unittest.TestCase):
         self.assertIsNone(prompt_template.prompt)
         dumped = prompt_template.model_dump()
         self.assertNotIn("prompt", dumped)
+
+    def test_config_ref_with_overrides(self):
+        request = CompletionPostRequest(
+            config_ref=CompletionRequestConfigurationReferenceByIdConfigRef(id="stored-config-id"),
+            config=PartialOrchestrationConfig(
+                modules=PartialModuleConfigs(
+                    prompt_templating=PartialPromptTemplatingModuleConfig(model=self.llm)
+                )
+            ),
+        )
+        dumped = request.model_dump()
+        self.assertEqual(dumped["config_ref"], {"id": "stored-config-id"})
+        self.assertEqual(
+            dumped["config"]["modules"]["prompt_templating"]["model"],
+            self.llm.model_dump(),
+        )
+        self.assertNotIn("prompt", dumped["config"]["modules"]["prompt_templating"])
+        self.assertNotIn("filtering", dumped["config"]["modules"])
+
+    def test_config_ref_without_overrides(self):
+        request = CompletionPostRequest(
+            config_ref=CompletionRequestConfigurationReferenceByIdConfigRef(id="stored-config-id"),
+        )
+        dumped = request.model_dump()
+        self.assertEqual(dumped["config_ref"], {"id": "stored-config-id"})
+        self.assertNotIn("config", dumped)
+
+    def test_request_requires_config_or_ref(self):
+        with self.assertRaises(ValueError):
+            CompletionPostRequest()
 
     def test_input_filtering(self):
         input_filtering = InputFiltering(filters=[

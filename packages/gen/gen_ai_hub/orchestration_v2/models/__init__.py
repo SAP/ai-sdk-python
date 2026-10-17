@@ -1,6 +1,7 @@
 from .azure_content_filter import AzureContentSafetyInput, AzureContentSafetyOutput, AzureContentFilter, AzureThreshold
 from .cache_control import CacheControl
 from .config import (ModuleConfig, OrchestrationConfig, OrchestrationConfigReference,
+                     PartialPromptTemplatingModuleConfig, PartialModuleConfigs, PartialOrchestrationConfig,
                      CompletionRequestConfigurationReferenceByIdConfigRef,
                      CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 from .content_filter import (ContentFilterProvider, ContentFilter, LlamaGuard38bFilterConfig,
@@ -47,6 +48,7 @@ __all__ = [
     
     # config
     "ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
     "CompletionRequestConfigurationReferenceByIdConfigRef",
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
     
