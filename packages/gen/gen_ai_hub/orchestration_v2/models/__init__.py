@@ -8,9 +8,9 @@ from .content_filter import (ContentFilterProvider, ContentFilter, LlamaGuard38b
                              AzureContentSafetyInputFilterConfig, AzureContentSafetyOutputFilterConfig,
                              FilteringStreamOptions)
 from .content_filtering import InputFiltering, OutputFiltering, FilteringModuleConfig
-from .data_masking import (DataMaskingProviderName, MaskingMethod, ProfileEntity, DPIMethodConstant, 
-                          DPIMethodFabricatedData, DPICustomEntity, DPIStandardEntity, MaskGroundingInput, 
-                          MaskingProviderConfig, MaskingModuleConfig)
+from .data_masking import (DataMaskingProviderName, MaskingMethod, MaskFileInputMethod, ProfileEntity,
+                          DPIMethodConstant, DPIMethodFabricatedData, DPICustomEntity, DPIStandardEntity,
+                          MaskGroundingInput, MaskingProviderConfig, MaskingModuleConfig)
 from .document_grounding import (GroundingType, DataRepositoryType, DocumentGroundingFilter, 
                                 DocumentGroundingPlaceholders, DocumentGroundingConfig, GroundingModuleConfig, 
                                 KeyValueListPair, DocumentMetadataKeyValueListPairs, GroundingSearchConfig)
@@ -60,8 +60,9 @@ __all__ = [
     "InputFiltering", "OutputFiltering", "FilteringModuleConfig",
     
     # data_masking
-    "DataMaskingProviderName", "MaskingMethod", "ProfileEntity", "DPIMethodConstant", "DPIMethodFabricatedData",
-    "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig", "MaskingModuleConfig",
+    "DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
+    "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig",
+    "MaskingModuleConfig",
     
     # document_grounding
     "GroundingType", "DataRepositoryType", "DocumentGroundingFilter", "DocumentGroundingPlaceholders",

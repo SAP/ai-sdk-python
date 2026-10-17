@@ -23,8 +23,9 @@ __all__ = [
     "InputFiltering", "OutputFiltering", "FilteringModuleConfig",
 
     # data_masking
-    "DataMaskingProviderName", "MaskingMethod", "ProfileEntity", "DPIMethodConstant", "DPIMethodFabricatedData",
-    "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig", "MaskingModuleConfig",
+    "DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
+    "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig",
+    "MaskingModuleConfig",
 
     # document_grounding
     "GroundingType", "DataRepositoryType", "DocumentGroundingFilter", "DocumentGroundingPlaceholders",
