@@ -36,6 +36,13 @@ from gen_ai_hub.proxy import get_proxy_client
 V2_COMPLETION_SUFFIX = "/v2/completion"
 V2_EMBEDDINGS_SUFFIX = "/v2/embeddings"
 
+#: Feedback service request header: name of the object store secret used by the feedback service.
+#: Pass it with :func:`gen_ai_hub.proxy.gen_ai_hub_proxy.temporary_headers_addition` (per request) or
+#: :meth:`GenAIHubProxyClient.set_headers_addition` (instance wide). The ``AI-Resource-Group`` header,
+#: also used by the feedback service, is already set by the proxy client.
+#: See https://api.sap.com/api/ORCHESTRATION_API_v2/overview
+AI_OBJECT_STORE_SECRET_NAME_HEADER = "AI-Object-Store-Secret-Name"
+
 def cache_if_not_none(func):
     """Custom cache decorator that only caches non-None results"""
     cache = {}
@@ -159,6 +166,20 @@ class OrchestrationService:
     special care is taken to not close the underlying HTTP stream prematurely.
 
     See https://api.sap.com/api/ORCHESTRATION_API_v2/overview
+
+    Feedback service headers:
+    To persist an inference via the feedback service, pass the ``AI-Object-Store-Secret-Name`` header
+    (see :data:`AI_OBJECT_STORE_SECRET_NAME_HEADER`). Headers are forwarded through the proxy client, so
+    use the ``temporary_headers_addition`` context manager for a single request, or
+    ``proxy_client.set_headers_addition`` for all requests of this service. For example::
+
+        from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
+        from gen_ai_hub.orchestration_v2.service import AI_OBJECT_STORE_SECRET_NAME_HEADER
+
+        with temporary_headers_addition({AI_OBJECT_STORE_SECRET_NAME_HEADER: "my-secret"}):
+            service.run(config=config)
+
+    The ``AI-Resource-Group`` header, also used by the feedback service, is already set by the proxy client.
 
     Args:
 
