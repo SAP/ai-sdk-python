@@ -38,6 +38,10 @@ from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
 
 V2_COMPLETION_SUFFIX = "/v2/completion"
 V2_EMBEDDINGS_SUFFIX = "/v2/embeddings"
+CONFIG_AND_CONFIG_REF_ERROR_TEXT = (
+    "A full 'config' (OrchestrationConfig) cannot be combined with 'config_ref'. "
+    "Use a PartialOrchestrationConfig to override a referenced config."
+)
 
 #: Feedback service request header: name of the object store secret used by the feedback service.
 #: Pass it with :func:`gen_ai_hub.proxy.gen_ai_hub_proxy.temporary_headers_addition` (per request) or
@@ -235,6 +239,8 @@ class OrchestrationService:
         :raises ValueError: if both config and config_ref are provided.
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
+            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if api_url:
             self.api_url = api_url
         else:
@@ -372,6 +378,8 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
+            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
                 raise ValueError("Config stream setting must match used function. "
@@ -446,6 +454,8 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
+            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
                 raise ValueError("Config stream setting must match used function. "
