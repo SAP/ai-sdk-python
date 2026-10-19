@@ -59,6 +59,9 @@ __all__ = [
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",
     "StreamCompletionPostResponse", "ErrorResponse", "ErrorResponseStreaming", "OrchestrationResponseWithRetries",
 
+    # request_headers
+    "OrchestrationRequestHeaders",
+
     # response_format
     "ResponseFormatText", "ResponseFormatJsonObject", "ResponseFormatJsonSchema", "JSONResponseSchema",
 

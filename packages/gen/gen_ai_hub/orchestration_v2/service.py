@@ -5,6 +5,7 @@ Module for orchestration service handling requests and responses.
 Provides synchronous and asynchronous methods to run orchestration pipelines.
 """
 
+import contextlib
 from copy import deepcopy
 import random
 import time
@@ -21,6 +22,7 @@ from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionP
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
                                                        PartialOrchestrationConfig)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
+from gen_ai_hub.orchestration_v2.models.request_headers import OrchestrationRequestHeaders
 from gen_ai_hub.orchestration_v2.models.response import (CompletionPostResponse, StreamCompletionPostResponse,
                                                          OrchestrationResponseWithRetries)
 from gen_ai_hub.orchestration_v2.models.embeddings import (
@@ -32,6 +34,7 @@ from gen_ai_hub.orchestration_v2.models.embeddings import (
 from gen_ai_hub.orchestration_v2.sse_client import SSEClient, AsyncSSEClient, _handle_http_error
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.proxy import get_proxy_client
+from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
 
 V2_COMPLETION_SUFFIX = "/v2/completion"
 V2_EMBEDDINGS_SUFFIX = "/v2/embeddings"
@@ -256,6 +259,17 @@ class OrchestrationService:
             request_timeout = httpx.USE_CLIENT_DEFAULT
         return request_timeout
 
+    def _header_context(self, request_headers: Optional[OrchestrationRequestHeaders]):
+        """Return a context manager that injects per-request headers via the proxy client.
+
+        Reuses the proxy client's existing ``temporary_headers_addition`` machinery so the
+        request sites keep reading ``self.proxy_client.request_header`` unchanged. When no
+        headers are supplied, a no-op context is returned.
+        """
+        if request_headers is None:
+            return contextlib.nullcontext()
+        return temporary_headers_addition(request_headers.to_headers())
+
     def _should_retry(self, error: Exception) -> bool:
         """
         Determines if a request should be retried based on the error type.
@@ -479,6 +493,7 @@ class OrchestrationService:
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
             timeout: Union[int, float, httpx.Timeout, None] = None,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -493,17 +508,21 @@ class OrchestrationService:
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
         :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :param request_headers: service-specific headers to add for this request only
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
-        """        
+        """
 
-        return self._execute_request(
-            config=config or self.config,
-            config_ref=config_ref or self.config_ref,
-            placeholder_values=placeholder_values,
-            history=history,
-            timeout=timeout,
-        )
+        with self._header_context(request_headers):
+            return self._execute_request(
+                config=config or self.config,
+                config_ref=config_ref or self.config_ref,
+                placeholder_values=placeholder_values,
+                history=history,
+                timeout=timeout,
+            )
 
     def stream(
             self,
@@ -512,6 +531,7 @@ class OrchestrationService:
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
             timeout: Union[int, float, httpx.Timeout, None] = None,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> Iterable[StreamCompletionPostResponse]:
         """Executes an orchestration streaming request synchronously.
 
@@ -526,18 +546,22 @@ class OrchestrationService:
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
         :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :param request_headers: service-specific headers to add for this request only
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: An Iterable[StreamCompletionPostResponse] object
         :rtype: Iterable[StreamCompletionPostResponse]
         """
 
-        return self._execute_request(
-            config=config or self.config,
-            config_ref=config_ref or self.config_ref,
-            placeholder_values=placeholder_values,
-            history=history,
-            timeout=timeout,
-            stream=True
-        )
+        with self._header_context(request_headers):
+            return self._execute_request(
+                config=config or self.config,
+                config_ref=config_ref or self.config_ref,
+                placeholder_values=placeholder_values,
+                history=history,
+                timeout=timeout,
+                stream=True
+            )
 
     async def arun(
             self,
@@ -546,6 +570,7 @@ class OrchestrationService:
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
             timeout: Union[int, float, httpx.Timeout, None] = None,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> CompletionPostResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -559,17 +584,21 @@ class OrchestrationService:
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
         :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :param request_headers: service-specific headers to add for this request only
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
         """
 
-        return await self._a_execute_request(
-            config=config or self.config,
-            config_ref=config_ref or self.config_ref,
-            placeholder_values=placeholder_values,
-            history=history,
-            timeout=timeout,
-        )
+        with self._header_context(request_headers):
+            return await self._a_execute_request(
+                config=config or self.config,
+                config_ref=config_ref or self.config_ref,
+                placeholder_values=placeholder_values,
+                history=history,
+                timeout=timeout,
+            )
 
     async def astream(
             self,
@@ -578,6 +607,7 @@ class OrchestrationService:
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
             timeout: Union[int, float, httpx.Timeout, None] = None,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration streaming request asynchronously.
 
@@ -591,18 +621,22 @@ class OrchestrationService:
         :type history: Optional[List[ChatMessage]], optional
         :param timeout: the timeout overwrite per request, defaults to None
         :type timeout: Union[int, float, httpx.Timeout, None], optional
+        :param request_headers: service-specific headers to add for this request only
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: the AsyncSSEClient object
         :rtype: AsyncSSEClient
-        """        
+        """
 
-        return await self._a_execute_request(
-            config=config or self.config,
-            config_ref=config_ref or self.config_ref,
-            placeholder_values=placeholder_values,
-            history=history,
-            timeout=timeout,
-            stream=True
-        )
+        with self._header_context(request_headers):
+            return await self._a_execute_request(
+                config=config or self.config,
+                config_ref=config_ref or self.config_ref,
+                placeholder_values=placeholder_values,
+                history=history,
+                timeout=timeout,
+                stream=True
+            )
 
     def run_with_retries(
             self,
@@ -613,6 +647,7 @@ class OrchestrationService:
             timeout: Union[int, float, httpx.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> OrchestrationResponseWithRetries | None:
         """Executes an orchestration request with automatic retry on rate limits (429) and server errors.
 
@@ -630,6 +665,9 @@ class OrchestrationService:
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
         :type base_delay: float, optional
+        :param request_headers: service-specific headers to add for each attempt
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: the OrchestrationResponseWithRetries with retry count information
         :rtype: OrchestrationResponseWithRetries | None
         :raises ValueError: if no configuration is provided.
@@ -645,6 +683,7 @@ class OrchestrationService:
                     placeholder_values=placeholder_values,
                     history=history,
                     timeout=timeout,
+                    request_headers=request_headers,
                 )
 
                 # Success, response with retry count
@@ -696,6 +735,7 @@ class OrchestrationService:
             timeout: Union[int, float, httpx.Timeout, None] = None,
             max_retries: int = 10,
             base_delay: float = 1.0,
+            request_headers: Optional[OrchestrationRequestHeaders] = None,
     ) -> OrchestrationResponseWithRetries | None:
         """Executes an orchestration request asynchronously with automatic retry on rate limits (429) and server errors.
         Uses exponential backoff with jitter to handle rate limiting gracefully.
@@ -714,11 +754,14 @@ class OrchestrationService:
         :type max_retries: int, optional
         :param base_delay: the initial delay between retries in seconds, defaults to 1.0
         :type base_delay: float, optional
+        :param request_headers: service-specific headers to add for each attempt
+            (e.g. the feedback service object store secret), defaults to None
+        :type request_headers: Optional[OrchestrationRequestHeaders], optional
         :return: the OrchestrationResponseWithRetries with retry count information
         :rtype: OrchestrationResponseWithRetries | None
         :raises ValueError: if no configuration is provided.
         :raises OrchestrationError: if request fails after all retries (includes retry count).
-        """        
+        """
 
         for retry_count in range(max_retries + 1):
             try:
@@ -729,6 +772,7 @@ class OrchestrationService:
                     placeholder_values=placeholder_values,
                     history=history,
                     timeout=timeout,
+                    request_headers=request_headers,
                 )
 
                 return OrchestrationResponseWithRetries(
