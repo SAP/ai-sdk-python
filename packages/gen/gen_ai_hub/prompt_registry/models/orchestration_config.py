@@ -4,6 +4,18 @@ from pydantic import BaseModel, Field
 
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig
 
+# Orchestration v2 spec fields that the Prompt Registry config schema does not yet accept.
+_PROMPT_REGISTRY_UNSUPPORTED_SPEC_KEYS = ("drop_unsupported_params",)
+
+
+def _strip_keys(value, keys):
+    """Recursively remove ``keys`` from nested dicts/lists."""
+    if isinstance(value, dict):
+        return {k: _strip_keys(v, keys) for k, v in value.items() if k not in keys}
+    if isinstance(value, list):
+        return [_strip_keys(item, keys) for item in value]
+    return value
+
 
 class OrchestrationConfigPostRequest(BaseModel):
     """
@@ -21,10 +33,12 @@ class OrchestrationConfigPostRequest(BaseModel):
     spec: OrchestrationConfig
 
     def model_dump(self, **kwargs):
-        """Dumps the model to a dictionary with default settings."""
+        """Dumps the model, stripping orchestration fields the Prompt Registry rejects."""
         kwargs.setdefault("by_alias", True)
         kwargs.setdefault("exclude_none", True)
-        return super().model_dump(**kwargs)
+        data = super().model_dump(**kwargs)
+        data["spec"] = _strip_keys(data.get("spec", {}), _PROMPT_REGISTRY_UNSUPPORTED_SPEC_KEYS)
+        return data
 
 
 class OrchestrationConfigPostResponse(BaseModel):

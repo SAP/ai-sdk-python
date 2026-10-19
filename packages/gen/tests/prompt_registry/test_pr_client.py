@@ -252,9 +252,12 @@ class TestOrchestrationConfigClient(unittest.TestCase):
 
         self.assertIsInstance(response, OrchestrationConfigPostResponse)
         self.assertEqual(response.model_dump(), ORCHESTRATION_CONFIG_POST_RESPONSE)
+        # drop_unsupported_params is stripped because the Prompt Registry config schema rejects it.
+        expected_spec = spec.model_dump()
+        del expected_spec['modules']['prompt_templating']['model']['drop_unsupported_params']
         mock_post.assert_called_once_with(path=PATH_REGISTRY_CONFIG,
                                           body={ 'name': ORCHESTRATION_CONFIG_NAME, 'version': VERSION, 'scenario': SCENARIO,
-                                                 'spec': spec.model_dump()},
+                                                 'spec': expected_spec},
                                           convert_body_to_camel_case=False
                                           )
 
