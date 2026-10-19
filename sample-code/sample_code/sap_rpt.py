@@ -65,7 +65,7 @@ def predict_by_rows():
         rows=CLASSIFICATION_ROWS,
         data_schema=CLASSIFICATION_SCHEMA,
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    return client.predict(body=body, model_name="sap-rpt-1.6")
 
 
 def predict_by_columns():
@@ -91,7 +91,7 @@ def predict_by_columns():
         columns=CLASSIFICATION_COLUMNS,
         data_schema=CLASSIFICATION_SCHEMA,
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    return client.predict(body=body, model_name="sap-rpt-1.6")
 
 
 def regression():
@@ -112,4 +112,4 @@ def regression():
         rows=REGRESSION_ROWS,
         data_schema=REGRESSION_SCHEMA,
     )
-    return client.predict(body=body, model_name="sap-rpt-1-small")
+    return client.predict(body=body, model_name="sap-rpt-1.6")
