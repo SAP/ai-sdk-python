@@ -43,13 +43,6 @@ CONFIG_AND_CONFIG_REF_ERROR_TEXT = (
     "Use a PartialOrchestrationConfig to override a referenced config."
 )
 
-#: Feedback service request header: name of the object store secret used by the feedback service.
-#: Pass it with :func:`gen_ai_hub.proxy.gen_ai_hub_proxy.temporary_headers_addition` (per request) or
-#: :meth:`GenAIHubProxyClient.set_headers_addition` (instance wide). The ``AI-Resource-Group`` header,
-#: also used by the feedback service, is already set by the proxy client.
-#: See https://api.sap.com/api/ORCHESTRATION_API_v2/overview
-AI_OBJECT_STORE_SECRET_NAME_HEADER = "AI-Object-Store-Secret-Name"
-
 def cache_if_not_none(func):
     """Custom cache decorator that only caches non-None results"""
     cache = {}
@@ -175,18 +168,10 @@ class OrchestrationService:
     See https://api.sap.com/api/ORCHESTRATION_API_v2/overview
 
     Feedback service headers:
-    To persist an inference via the feedback service, pass the ``AI-Object-Store-Secret-Name`` header
-    (see :data:`AI_OBJECT_STORE_SECRET_NAME_HEADER`). Headers are forwarded through the proxy client, so
-    use the ``temporary_headers_addition`` context manager for a single request, or
-    ``proxy_client.set_headers_addition`` for all requests of this service. For example::
-
-        from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
-        from gen_ai_hub.orchestration_v2.service import AI_OBJECT_STORE_SECRET_NAME_HEADER
-
-        with temporary_headers_addition({AI_OBJECT_STORE_SECRET_NAME_HEADER: "my-secret"}):
-            service.run(config=config)
-
-    The ``AI-Resource-Group`` header, also used by the feedback service, is already set by the proxy client.
+    To persist an inference via the feedback service, pass service-specific headers (e.g.
+    ``AI-Object-Store-Secret-Name``) through the ``request_headers`` parameter of ``run``/``stream``/
+    ``arun``/``astream`` using :class:`OrchestrationRequestHeaders`. The ``AI-Resource-Group`` header,
+    also used by the feedback service, is already set by the proxy client.
 
     Args:
 
