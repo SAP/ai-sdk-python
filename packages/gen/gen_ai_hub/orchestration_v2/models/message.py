@@ -67,8 +67,8 @@ class ReasoningBlock(BaseModel):
         content: The reasoning content.
         signature: Signature string for hidden reasoning content.
     """
-    content: str = ""
-    signature: str = ""
+    content: Optional[str] = None
+    signature: Optional[str] = None
 
 
 
