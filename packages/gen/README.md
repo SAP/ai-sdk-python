@@ -1,28 +1,72 @@
-# SAP Cloud SDK for AI (Python) - generative
+# sap-ai-sdk-gen (meta-package)
 
 The SDK formerly known as *generative AI Hub SDK* was rebranded.
 With this SDK you can leverage the power of Large Language Models available in SAP's Generative AI Hub.
 
+`sap-ai-sdk-gen` is a **meta-package**: it ships no code of its own and simply
+depends on every subsystem and provider distribution of the SDK. All of them
+contribute to the shared **`gen_ai_hub` namespace**
+([PEP 420](https://peps.python.org/pep-0420/) implicit namespace packages), so
+the `gen_ai_hub.*` import paths work the same regardless of which distributions
+are installed — none of them ship a `gen_ai_hub/__init__.py`.
+
 ## Installing and Using the SDK
 
-Use the new package name to install the SDK:
+Install everything (all providers **with** their LangChain wrappers):
 
 ```bash
-pip install sap-ai-sdk-gen[all]
+pip install "sap-ai-sdk-gen[all]"
 ```
 
-The class names have not changed i.e., you can continue to use existing code.
+Install everything without the provider LangChain wrappers:
+
+```bash
+pip install sap-ai-sdk-gen
+```
+
+If you only need part of the SDK, install just the distributions you want instead
+of the meta-package — this keeps the dependency footprint small (e.g. no
+boto3/google-genai/LangChain unless you ask for them):
+
+```bash
+# orchestration against OpenAI, no Amazon/Google/LangChain pulled in
+pip install sap-ai-sdk-orchestration sap-ai-sdk-openai
+```
+
+The import paths and class names are unchanged, **except** that the top-level
+proxy-client re-export moved to its submodule:
+
+```python
+# before:  from gen_ai_hub import GenAIHubProxyClient
+from gen_ai_hub.proxy.gen_ai_hub_proxy import GenAIHubProxyClient
+```
+
+### Distributions
+
+| Distribution | Namespace it ships | Install README |
+|---|---|---|
+| `sap-ai-sdk-proxy` | `gen_ai_hub.proxy.{core,gen_ai_hub_proxy,langchain}` | [proxy](../proxy/README.md) |
+| `sap-ai-sdk-openai` | `gen_ai_hub.proxy.native.openai` | [openai](../openai/README.md) |
+| `sap-ai-sdk-amazon` | `gen_ai_hub.proxy.native.amazon` | [amazon](../amazon/README.md) |
+| `sap-ai-sdk-google` | `gen_ai_hub.proxy.native.google_genai` | [google](../google/README.md) |
+| `sap-ai-sdk-rpt` | `gen_ai_hub.proxy.native.sap` | [rpt](../rpt/README.md) |
+| `sap-ai-sdk-orchestration` | `gen_ai_hub.orchestration_v2` | [orchestration](../orchestration/README.md) |
+| `sap-ai-sdk-prompt-registry` | `gen_ai_hub.prompt_registry` | [prompt-registry](../prompt-registry/README.md) |
+| `sap-ai-sdk-document-grounding` | `gen_ai_hub.document_grounding` | [document-grounding](../document-grounding/README.md) |
+| `sap-ai-sdk-batch` | `gen_ai_hub.batch_service` | [batch](../batch/README.md) |
+| `sap-ai-sdk-evaluations` | `gen_ai_hub.evaluations` | [evaluations](../evaluations/README.md) |
 
 > [!NOTE]  
 > Please refer to the [Generative AI Hub SDK Documentation](https://github.wdf.sap.corp/pages/AI/generative-ai-hub-sdk)
 
 ## Development
 
-The main modules are located in the subfolder [proxy](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy):
+Each distribution keeps its code under the real `gen_ai_hub/...` tree inside its
+own `packages/<name>/` directory. The proxy distribution holds the core modules:
 
-- [gen_ai_hub_proxy](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/gen_ai_hub_proxy)
-- [langchain](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/langchain)
-- [native](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/native)
+- `gen_ai_hub/proxy/gen_ai_hub_proxy` — the proxy client
+- `gen_ai_hub/proxy/langchain` — provider-agnostic LangChain factories (`init_llm`, `init_embedding_model`)
+- `gen_ai_hub/proxy/native` — provider clients, each shipped by its own distribution
 
 ### Docstring Convention
 In this project, we use the `reStructuredText` format for all Python docstrings, following the guidelines outlined in [PEP 257](https://peps.python.org/pep-0257/) and the [Sphinx documentation style guide](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html).
