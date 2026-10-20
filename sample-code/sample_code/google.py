@@ -1,5 +1,5 @@
 from fastapi.responses import StreamingResponse
-from gen_ai_hub.proxy import get_proxy_client
+from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client
 from gen_ai_hub.proxy.native.google_genai import Client
 from google.genai import types
 

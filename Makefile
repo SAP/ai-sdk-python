@@ -15,9 +15,18 @@ docs:
 		packages/core/ai_core_sdk/cli.py
 	uv run sphinx-apidoc -e -M -f -T \
 		-o docs/sphinx/_autogen/gen \
-		packages/gen/gen_ai_hub \
-		packages/gen/gen_ai_hub/evaluations/_internal \
-		packages/gen/gen_ai_hub/evaluations/helpers
+		packages/proxy/gen_ai_hub \
+		packages/openai/gen_ai_hub \
+		packages/amazon/gen_ai_hub \
+		packages/google/gen_ai_hub \
+		packages/rpt/gen_ai_hub \
+		packages/orchestration/gen_ai_hub \
+		packages/prompt-registry/gen_ai_hub \
+		packages/document-grounding/gen_ai_hub \
+		packages/batch/gen_ai_hub \
+		packages/evaluations/gen_ai_hub \
+		packages/evaluations/gen_ai_hub/evaluations/_internal \
+		packages/evaluations/gen_ai_hub/evaluations/helpers
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
 lint:
@@ -29,15 +38,19 @@ license-check:
 sample-code-server:
 	uv run uvicorn sample_code.server:app --env-file sample-code/.env --reload
 
+PACKAGES = base core proxy openai amazon google rpt orchestration prompt-registry document-grounding batch evaluations gen
+
 test:
-	uv run pytest packages/base/tests
-	uv run pytest packages/core/tests
-	uv run pytest packages/gen/tests
+	@for pkg in $(PACKAGES); do \
+		echo "=== pytest packages/$$pkg/tests ==="; \
+		uv run pytest packages/$$pkg/tests || exit $$?; \
+	done
 
 test-integration:
-	uv run pytest packages/base/integration_tests
-	uv run pytest packages/core/integration_tests
-	uv run pytest packages/gen/integration_tests
+	@for pkg in $(PACKAGES); do \
+		echo "=== pytest packages/$$pkg/integration_tests ==="; \
+		uv run pytest packages/$$pkg/integration_tests || exit $$?; \
+	done
 
 test-pkg:
 	uv run pytest packages/$(pkg)/tests

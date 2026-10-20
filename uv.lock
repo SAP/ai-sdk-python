@@ -21,9 +21,19 @@ resolution-markers = [
 members = [
     "ai-sdk-python",
     "sample-code",
+    "sap-ai-sdk-amazon",
     "sap-ai-sdk-base",
+    "sap-ai-sdk-batch",
     "sap-ai-sdk-core",
+    "sap-ai-sdk-document-grounding",
+    "sap-ai-sdk-evaluations",
     "sap-ai-sdk-gen",
+    "sap-ai-sdk-google",
+    "sap-ai-sdk-openai",
+    "sap-ai-sdk-orchestration",
+    "sap-ai-sdk-prompt-registry",
+    "sap-ai-sdk-proxy",
+    "sap-ai-sdk-rpt",
 ]
 
 [[package]]
@@ -833,15 +843,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/94/64/2923570ac1c0bd3a737aa366ac3abbbbde273042308b8cde95e2364a6e6a/cryptography-49.0.0-pp311-pypy311_pp73-manylinux_2_34_aarch64.whl", hash = "sha256:b47db11c2c3525083296069b98ac5221907455e989ae0c2e3008bde851921615", size = 4675885, upload-time = "2026-06-12T20:01:55.49Z" },
     { url = "https://files.pythonhosted.org/packages/ab/f8/614dc7e051418cfe53d55173c1e24c6b0085e89996fe90508c2fdf769aef/cryptography-49.0.0-pp311-pypy311_pp73-manylinux_2_34_x86_64.whl", hash = "sha256:084ef1af862eb07ec46d25f68689f2102a9fc0e05ce7b80f14f5fe51e4eef0f6", size = 4715449, upload-time = "2026-06-12T20:02:05.469Z" },
     { url = "https://files.pythonhosted.org/packages/aa/50/a9caea39ad19c431c1a3f8a31114df65b260cdfe67786b6c7e7c040c4c44/cryptography-49.0.0-pp311-pypy311_pp73-win_amd64.whl", hash = "sha256:be9fcb48a55f023493482827d4f459bd263cc20efde64f204b97c123201850c6", size = 3783731, upload-time = "2026-06-12T20:02:43.319Z" },
-]
-
-[[package]]
-name = "dacite"
-version = "1.9.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/55/a0/7ca79796e799a3e782045d29bf052b5cde7439a2bbb17f15ff44f7aacc63/dacite-1.9.2.tar.gz", hash = "sha256:6ccc3b299727c7aa17582f0021f6ae14d5de47c7227932c47fec4cdfefd26f09", size = 22420, upload-time = "2025-02-05T09:27:29.757Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/94/35/386550fd60316d1e37eccdda609b074113298f23cef5bddb2049823fe666/dacite-1.9.2-py3-none-any.whl", hash = "sha256:053f7c3f5128ca2e9aceb66892b1a3c8936d02c686e707bee96e19deef4bc4a0", size = 16600, upload-time = "2025-02-05T09:27:24.345Z" },
 ]
 
 [[package]]
@@ -4101,6 +4102,36 @@ requires-dist = [
 ]
 
 [[package]]
+name = "sap-ai-sdk-amazon"
+version = "1.0.0"
+source = { editable = "packages/amazon" }
+dependencies = [
+    { name = "aiobotocore" },
+    { name = "boto3" },
+    { name = "botocore" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+langchain = [
+    { name = "langchain" },
+    { name = "langchain-aws" },
+    { name = "langchain-classic" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "aiobotocore", specifier = ">=3.2.0" },
+    { name = "boto3", specifier = ">=1.40.61" },
+    { name = "botocore", specifier = ">=1.40.61" },
+    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
+    { name = "langchain-aws", marker = "extra == 'langchain'", specifier = "~=1.7.0" },
+    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["langchain"]
+
+[[package]]
 name = "sap-ai-sdk-base"
 version = "3.4.1"
 source = { editable = "packages/base" }
@@ -4131,6 +4162,23 @@ dev = [
     { name = "pytest", specifier = "==9.1.1" },
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "pytest-dotenv", specifier = ">=0.5.2" },
+]
+
+[[package]]
+name = "sap-ai-sdk-batch"
+version = "1.0.0"
+source = { editable = "packages/batch" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
 
 [[package]]
@@ -4167,43 +4215,80 @@ dev = [
 ]
 
 [[package]]
-name = "sap-ai-sdk-gen"
-version = "7.4.1"
-source = { editable = "packages/gen" }
+name = "sap-ai-sdk-document-grounding"
+version = "1.0.0"
+source = { editable = "packages/document-grounding" }
 dependencies = [
-    { name = "click" },
-    { name = "dacite" },
-    { name = "h11" },
-    { name = "httpx" },
-    { name = "langchain" },
-    { name = "langchain-classic" },
-    { name = "langchain-openai" },
+    { name = "pydantic" },
+    { name = "pyhumps" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "pyhumps", specifier = ">=3.8.0" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+
+[[package]]
+name = "sap-ai-sdk-evaluations"
+version = "1.0.0"
+source = { editable = "packages/evaluations" }
+dependencies = [
     { name = "langcodes" },
-    { name = "openai" },
-    { name = "overloading" },
-    { name = "packaging" },
     { name = "pandas", version = "2.3.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "pandas", version = "3.0.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "pydantic" },
     { name = "sap-ai-sdk-core" },
+    { name = "sap-ai-sdk-orchestration" },
+    { name = "sap-ai-sdk-prompt-registry" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+amazon = [
+    { name = "boto3" },
+    { name = "botocore" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "boto3", marker = "extra == 'amazon'", specifier = ">=1.40.61" },
+    { name = "botocore", marker = "extra == 'amazon'", specifier = ">=1.40.61" },
+    { name = "langcodes", specifier = "~=3.5.1" },
+    { name = "pandas", specifier = ">=2.2.0" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-core", editable = "packages/core" },
+    { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
+    { name = "sap-ai-sdk-prompt-registry", editable = "packages/prompt-registry" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["amazon"]
+
+[[package]]
+name = "sap-ai-sdk-gen"
+version = "7.4.1"
+source = { editable = "packages/gen" }
+dependencies = [
+    { name = "sap-ai-sdk-amazon" },
+    { name = "sap-ai-sdk-batch" },
+    { name = "sap-ai-sdk-document-grounding" },
+    { name = "sap-ai-sdk-evaluations" },
+    { name = "sap-ai-sdk-google" },
+    { name = "sap-ai-sdk-openai" },
+    { name = "sap-ai-sdk-orchestration" },
+    { name = "sap-ai-sdk-prompt-registry" },
+    { name = "sap-ai-sdk-proxy" },
+    { name = "sap-ai-sdk-rpt" },
 ]
 
 [package.optional-dependencies]
 all = [
-    { name = "aiobotocore" },
-    { name = "boto3" },
-    { name = "google-genai" },
-    { name = "langchain-aws" },
-    { name = "langchain-google-genai" },
-]
-amazon = [
-    { name = "aiobotocore" },
-    { name = "boto3" },
-    { name = "langchain-aws" },
-]
-google = [
-    { name = "google-genai" },
-    { name = "langchain-google-genai" },
+    { name = "sap-ai-sdk-amazon", extra = ["langchain"] },
+    { name = "sap-ai-sdk-evaluations", extra = ["amazon"] },
+    { name = "sap-ai-sdk-google", extra = ["langchain"] },
+    { name = "sap-ai-sdk-openai", extra = ["langchain"] },
 ]
 
 [package.dev-dependencies]
@@ -4225,28 +4310,22 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiobotocore", marker = "extra == 'amazon'", specifier = ">=3.2.0" },
-    { name = "boto3", marker = "extra == 'amazon'", specifier = ">=1.40.61" },
-    { name = "click", specifier = ">=8.1.7" },
-    { name = "dacite", specifier = ">=1.8.1" },
-    { name = "google-genai", marker = "extra == 'google'", specifier = "~=2.23.0" },
-    { name = "h11", specifier = ">=0.16.0" },
-    { name = "httpx", specifier = ">=0.27.0" },
-    { name = "langchain", specifier = "~=1.4.0" },
-    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
-    { name = "langchain-classic", specifier = "~=1.0.0" },
-    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0" },
-    { name = "langchain-openai", specifier = "~=1.6.0" },
-    { name = "langcodes", specifier = "~=3.5.1" },
-    { name = "openai", specifier = ">=1.66.0" },
-    { name = "overloading", specifier = "==0.5.0" },
-    { name = "packaging", specifier = ">=23.2" },
-    { name = "pandas", specifier = ">=2.2.0" },
-    { name = "pydantic", specifier = "~=2.12" },
-    { name = "sap-ai-sdk-core", editable = "packages/core" },
-    { name = "sap-ai-sdk-gen", extras = ["google", "amazon"], marker = "extra == 'all'", editable = "packages/gen" },
+    { name = "sap-ai-sdk-amazon", editable = "packages/amazon" },
+    { name = "sap-ai-sdk-amazon", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/amazon" },
+    { name = "sap-ai-sdk-batch", editable = "packages/batch" },
+    { name = "sap-ai-sdk-document-grounding", editable = "packages/document-grounding" },
+    { name = "sap-ai-sdk-evaluations", editable = "packages/evaluations" },
+    { name = "sap-ai-sdk-evaluations", extras = ["amazon"], marker = "extra == 'all'", editable = "packages/evaluations" },
+    { name = "sap-ai-sdk-google", editable = "packages/google" },
+    { name = "sap-ai-sdk-google", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/google" },
+    { name = "sap-ai-sdk-openai", editable = "packages/openai" },
+    { name = "sap-ai-sdk-openai", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/openai" },
+    { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
+    { name = "sap-ai-sdk-prompt-registry", editable = "packages/prompt-registry" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+    { name = "sap-ai-sdk-rpt", editable = "packages/rpt" },
 ]
-provides-extras = ["google", "amazon", "all"]
+provides-extras = ["all"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -4262,6 +4341,136 @@ dev = [
     { name = "respx", specifier = "==0.23.1" },
     { name = "sphinx", specifier = "<9.0.0" },
     { name = "sphinxawesome-theme" },
+]
+
+[[package]]
+name = "sap-ai-sdk-google"
+version = "1.0.0"
+source = { editable = "packages/google" }
+dependencies = [
+    { name = "google-genai" },
+    { name = "httpx" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+langchain = [
+    { name = "langchain" },
+    { name = "langchain-classic" },
+    { name = "langchain-google-genai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "google-genai", specifier = "~=2.23.0" },
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
+    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
+    { name = "langchain-google-genai", marker = "extra == 'langchain'", specifier = "~=4.4.0" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["langchain"]
+
+[[package]]
+name = "sap-ai-sdk-openai"
+version = "1.0.0"
+source = { editable = "packages/openai" }
+dependencies = [
+    { name = "openai" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+langchain = [
+    { name = "langchain" },
+    { name = "langchain-classic" },
+    { name = "langchain-openai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
+    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
+    { name = "langchain-openai", marker = "extra == 'langchain'", specifier = "~=1.6.0" },
+    { name = "openai", specifier = ">=1.66.0" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["langchain"]
+
+[[package]]
+name = "sap-ai-sdk-orchestration"
+version = "1.0.0"
+source = { editable = "packages/orchestration" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+
+[[package]]
+name = "sap-ai-sdk-prompt-registry"
+version = "1.0.0"
+source = { editable = "packages/prompt-registry" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-orchestration" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+
+[[package]]
+name = "sap-ai-sdk-proxy"
+version = "1.0.0"
+source = { editable = "packages/proxy" }
+dependencies = [
+    { name = "click" },
+    { name = "h11" },
+    { name = "httpx" },
+    { name = "overloading" },
+    { name = "packaging" },
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-core" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "click", specifier = ">=8.1.7" },
+    { name = "h11", specifier = ">=0.16.0" },
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "overloading", specifier = "==0.5.0" },
+    { name = "packaging", specifier = ">=23.2" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-core", editable = "packages/core" },
+]
+
+[[package]]
+name = "sap-ai-sdk-rpt"
+version = "1.0.0"
+source = { editable = "packages/rpt" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
 
 [[package]]

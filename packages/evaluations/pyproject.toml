@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sap-ai-sdk-evaluations"
+version = "1.0.0"
+description = "SAP Cloud SDK for AI (Python): generative AI hub evaluations client"
+readme = "PYPIDESCRIPTION.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "SAP SE" }]
+keywords = ["SAP AI Core", "SAP generative AI SDK", "SAP Generative AI Hub", "Evaluations"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "sap-ai-sdk-proxy>=1.0.0",
+    "sap-ai-sdk-orchestration>=1.0.0",
+    "sap-ai-sdk-prompt-registry>=1.0.0",
+    "sap-ai-sdk-core>=3.5.0",
+    "pydantic~=2.12",
+    "pandas>=2.2.0",
+    "langcodes~=3.5.1",
+]
+
+[project.optional-dependencies]
+amazon = [
+    "boto3>=1.40.61",
+    "botocore>=1.40.61",
+]
+
+[project.urls]
+Homepage = "https://www.sap.com/"
+Download = "https://pypi.python.org/pypi/sap-ai-sdk-evaluations"
+
+[tool.uv.sources]
+sap-ai-sdk-proxy = { workspace = true }
+sap-ai-sdk-orchestration = { workspace = true }
+sap-ai-sdk-prompt-registry = { workspace = true }
+sap-ai-sdk-core = { workspace = true }
+
+[tool.pytest.ini_options]
+env_files = [".env"]
+
+[tool.setuptools.packages.find]
+exclude = ["*test*"]
+namespaces = true
+
+[tool.commitizen]
+name = "cz_customize"
+tag_format = "evaluations-v${version}"
+ignored_tag_formats = ["*-v${version}"]
+version_provider = "pep621"
+changelog_file = "RELEASE_NOTES.md"
+
+[tool.commitizen.customize]
+bump_pattern = '^(feat|fix)\(evaluations\)'
+changelog_pattern = '^(feat|fix)\(evaluations\)'
