@@ -157,3 +157,57 @@ convenience only. To actually publish `sap-ai-sdk-gen`, the following is needed:
 - register the `sap-ai-sdk-gen` PyPI project + Trusted Publisher environment
   (`pypi:sap-ai-sdk-gen`); the `publish.yml` environment name is already derived
   dynamically from the parsed tag.
+
+## Addendum — native OpenAI and SAP/RPT clients split out of `sap-ai-sdk-proxy`
+
+Two native clients that previously shipped inside `sap-ai-sdk-proxy` were extracted
+into their own distributions, continuing the footprint-driven decomposition:
+
+- **`sap-ai-sdk-openai`** (import root `sap_ai_sdk_openai`) — the native OpenAI client
+  (`OpenAI`, `AsyncOpenAI`, and the module-level lazy `chat`/`embeddings`/`responses`/
+  `completions` globals), moved from `sap_ai_sdk_proxy/native/openai/`.
+- **`sap-ai-sdk-rpt`** (import root `sap_ai_sdk_rpt`) — the native SAP RPT client
+  (`RPTClient` + pydantic request/response models), moved from
+  `sap_ai_sdk_proxy/native/sap/`.
+
+Both depend only on stable public proxy symbols (`get_proxy_client`,
+`get_proxy_version`, `BaseProxyClient`, the `core.utils` helpers,
+`GenAIHubProxyClient`), so they sit above proxy in the dependency DAG as siblings of
+the amazon/google provider packages — no circular dependency. `langchain` gains an
+edge to `openai` (its OpenAI adapter imports `AsyncOpenAI`/`OpenAI` and
+`DEFAULT_API_VERSION` from `sap_ai_sdk_openai`).
+
+**Clean break (no proxy compat shim):** the old `sap_ai_sdk_proxy.native.openai` and
+`sap_ai_sdk_proxy.native.sap` paths were **removed outright**, not aliased — proxy no
+longer has a `native/` package. All first-party consumers were repointed to the new
+roots (langchain adapter, sample-code, the `gen_ai_hub.proxy.native.{openai,sap}`
+forwarders in the `sap-ai-sdk-gen` compat package, which now alias to
+`sap_ai_sdk_openai`/`sap_ai_sdk_rpt`). Any external code importing the old
+`sap_ai_sdk_proxy.native.*` paths must migrate to the new distributions.
+
+**Footprint win:** `openai` and `packaging` were dropped from `sap-ai-sdk-proxy`'s base
+dependencies. The guarded `openai._types` import in `core/utils.py` stays (it is already
+`try/except ImportError` with a local `NotGiven` fallback), so proxy functions fully
+without `openai` installed. A base `sap-ai-sdk-proxy` install no longer pulls `openai`,
+`packaging`, `sap_ai_sdk_openai`, or `sap_ai_sdk_rpt`. The proxy e2e header test
+(`tests/gen_ai_hub_proxy/test_additional_header_e2e.py`) imports the native OpenAI
+client, so `sap-ai-sdk-openai` is kept as a proxy **dev-only** dependency to preserve
+that coverage — it is not a runtime dep.
+
+**Not yet wired for release (intentional):** like `packages/gen`, the two new packages
+are registered in the uv workspace and build/install/lint/test locally, but their CI and
+release wiring is **deliberately left out**. To publish `sap-ai-sdk-openai` and
+`sap-ai-sdk-rpt`:
+- add `openai` and `rpt` to the `inputs.package.options` list in
+  `.github/workflows/bump.yml`;
+- add them to the publish matrix / tag triggers in `.github/workflows/publish.yml`,
+  `api-doc.yml`, `draft-release.yml`, and `snapshot-release.yml` (publishing before
+  `langchain`/`gen`, which now depend on `openai`);
+- add unit-test matrix entries in `.github/workflows/ci.yml` (both have real test
+  suites, moved over from proxy);
+- register the `sap-ai-sdk-openai` / `sap-ai-sdk-rpt` PyPI projects + Trusted Publisher
+  environments.
+
+Unlike `sap-ai-sdk-gen` (which reuses an existing PyPI name last published at 7.4.1),
+these are brand-new distribution names, so the 1.0.0 starting version has no
+version-history conflict.

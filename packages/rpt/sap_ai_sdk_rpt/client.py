@@ -3,7 +3,7 @@ import httpx
 
 from sap_ai_sdk_proxy import GenAIHubProxyClient
 from sap_ai_sdk_proxy import get_proxy_client
-from sap_ai_sdk_proxy.native.sap.models import RPTResponse, RPTException, RPTRequest
+from .models import RPTResponse, RPTException, RPTRequest
 
 PREDICTION_SUFFIX = "/predict"
 

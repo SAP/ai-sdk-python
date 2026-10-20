@@ -9,7 +9,9 @@ Install only the packages you need — heavy dependencies (`pandas`, `boto3`,
 
 | Install (`pip install …`) | Import root | What it provides |
 |---|---|---|
-| `sap-ai-sdk-proxy` | `sap_ai_sdk_proxy` | Proxy client + native OpenAI & SAP (RPT) clients. The mandatory base every other package builds on. |
+| `sap-ai-sdk-proxy` | `sap_ai_sdk_proxy` | Proxy client. The mandatory base every other package builds on. |
+| `sap-ai-sdk-openai` | `sap_ai_sdk_openai` | Native OpenAI client (`OpenAI`, `AsyncOpenAI`, `chat`/`embeddings`/`responses`). |
+| `sap-ai-sdk-rpt` | `sap_ai_sdk_rpt` | Native SAP RPT client (`RPTClient`) for tabular predictions. |
 | `sap-ai-sdk-langchain` | `sap_ai_sdk_langchain` | LangChain adapters for OpenAI + `init_llm` / `init_embedding_model`. |
 | `sap-ai-sdk-amazon` | `sap_ai_sdk_amazon` | Native Amazon Bedrock client. LangChain adapter via the `[langchain]` extra. |
 | `sap-ai-sdk-google` | `sap_ai_sdk_google` | Native Google GenAI client. LangChain adapter via the `[langchain]` extra. |
@@ -35,13 +37,33 @@ from sap_ai_sdk_proxy import (
     get_proxy_client, GenAIHubProxyClient,
     set_proxy_version, get_proxy_version,
 )
+```
 
-# native OpenAI client
-from sap_ai_sdk_proxy.native.openai import OpenAI, AsyncOpenAI, chat, embeddings, responses
+The native OpenAI and SAP (RPT) clients that previously lived under
+`sap_ai_sdk_proxy.native.*` are now separate packages — see `sap-ai-sdk-openai` and
+`sap-ai-sdk-rpt` below.
 
-# native SAP (RPT) client
-from sap_ai_sdk_proxy.native.sap.client import RPTClient
-from sap_ai_sdk_proxy.native.sap.models import RPTRequest, TargetColumn, PredictionConfig, DataType
+## `sap-ai-sdk-openai`
+
+```bash
+pip install sap-ai-sdk-openai
+```
+
+```python
+from sap_ai_sdk_openai import OpenAI, AsyncOpenAI, chat, embeddings, responses
+```
+
+## `sap-ai-sdk-rpt`
+
+```bash
+pip install sap-ai-sdk-rpt
+```
+
+```python
+from sap_ai_sdk_rpt import RPTClient, RPTRequest, TargetColumn, PredictionConfig, DataType
+# or from the submodules:
+from sap_ai_sdk_rpt.client import RPTClient
+from sap_ai_sdk_rpt.models import RPTRequest, TargetColumn, PredictionConfig, DataType
 ```
 
 ## `sap-ai-sdk-langchain`

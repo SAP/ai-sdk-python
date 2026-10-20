@@ -1,5 +1,5 @@
-from sap_ai_sdk_proxy.native.sap.client import RPTClient
-from sap_ai_sdk_proxy.native.sap.models import DataType, PredictionConfig, RPTRequest, TargetColumn
+from sap_ai_sdk_rpt.client import RPTClient
+from sap_ai_sdk_rpt.models import DataType, PredictionConfig, RPTRequest, TargetColumn
 
 CLASSIFICATION_SCHEMA = {
     "PRODUCT": DataType(dtype="string"),

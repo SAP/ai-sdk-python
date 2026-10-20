@@ -7,8 +7,8 @@ from openai.types import Completion, CreateEmbeddingResponse
 from openai.types.chat import ChatCompletion, ChatCompletionUserMessageParam
 from openai.types.responses import Response
 
-from sap_ai_sdk_proxy.native.openai import OpenAI, AsyncOpenAI
-from sap_ai_sdk_proxy.native.openai.clients import ChatCompletions, AsyncChatCompletions, Responses, AsyncResponses
+from sap_ai_sdk_openai import OpenAI, AsyncOpenAI
+from sap_ai_sdk_openai.clients import ChatCompletions, AsyncChatCompletions, Responses, AsyncResponses
 from integration_tests.constants import OPENAI_GPT_4O_MINI_TEST_MODEL, NVIDIA_EMBEDDING_TEST_MODEL
 
 from tests.mock import (

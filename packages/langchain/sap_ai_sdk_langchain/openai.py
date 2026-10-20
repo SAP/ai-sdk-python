@@ -10,9 +10,9 @@ from langchain_openai import OpenAIEmbeddings as OpenAIEmbeddings_  # pylint: di
 from pydantic import Field, model_validator, ConfigDict
 
 from sap_ai_sdk_proxy.core.base import BaseDeployment, BaseProxyClient
-from sap_ai_sdk_proxy.native.openai import AsyncOpenAI as AsyncOpenAIClient
-from sap_ai_sdk_proxy.native.openai import OpenAI as OpenAIClient
-from sap_ai_sdk_proxy.native.openai.clients import DEFAULT_API_VERSION
+from sap_ai_sdk_openai import AsyncOpenAI as AsyncOpenAIClient
+from sap_ai_sdk_openai import OpenAI as OpenAIClient
+from sap_ai_sdk_openai.clients import DEFAULT_API_VERSION
 from .base import BaseAuth
 
 

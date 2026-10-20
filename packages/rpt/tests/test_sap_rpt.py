@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
 
-from sap_ai_sdk_proxy.native.sap.models import (
+from sap_ai_sdk_rpt.models import (
     RPTRequest, PredictionConfig, TargetColumn, RPTResponse, RPTException,
     PredictionItem, ExplanationConfig, ExplanationResult
 )
-from sap_ai_sdk_proxy.native.sap.client import RPTClient
+from sap_ai_sdk_rpt.client import RPTClient
 from tests.mock import (
     get_mocked_ai_core_client,
     sap_rpt_mock_response_code_0,
@@ -320,6 +320,6 @@ class RPTClientAsyncTests(unittest.IsolatedAsyncioTestCase):
 
 def test_flat_import_sap_rpt_client():
     # here inline import is OK
-    from sap_ai_sdk_proxy.native.sap.client import RPTClient as client
-    from sap_ai_sdk_proxy.native.sap import RPTClient as client_flat
+    from sap_ai_sdk_rpt.client import RPTClient as client
+    from sap_ai_sdk_rpt import RPTClient as client_flat
     assert client == client_flat

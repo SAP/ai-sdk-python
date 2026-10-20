@@ -17,6 +17,12 @@ docs:
 		-o docs/sphinx/_autogen/proxy \
 		packages/proxy/sap_ai_sdk_proxy
 	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/openai \
+		packages/openai/sap_ai_sdk_openai
+	uv run sphinx-apidoc -e -M -f -T \
+		-o docs/sphinx/_autogen/rpt \
+		packages/rpt/sap_ai_sdk_rpt
+	uv run sphinx-apidoc -e -M -f -T \
 		-o docs/sphinx/_autogen/langchain \
 		packages/langchain/sap_ai_sdk_langchain
 	uv run sphinx-apidoc -e -M -f -T \
@@ -45,7 +51,7 @@ docs:
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
 lint:
-	uv run pylint ai_api_client_sdk ai_core_sdk sap_ai_sdk_proxy sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations --errors-only --output-format=colorized
+	uv run pylint ai_api_client_sdk ai_core_sdk sap_ai_sdk_proxy sap_ai_sdk_openai sap_ai_sdk_rpt sap_ai_sdk_langchain sap_ai_sdk_amazon sap_ai_sdk_google sap_ai_sdk_orchestration sap_ai_sdk_prompt_registry sap_ai_sdk_document_grounding sap_ai_sdk_batch sap_ai_sdk_evaluations --errors-only --output-format=colorized
 
 license-check:
 	uv run pip-licenses
@@ -57,6 +63,8 @@ test:
 	uv run pytest packages/base/tests
 	uv run pytest packages/core/tests
 	uv run pytest packages/proxy/tests
+	uv run pytest packages/openai/tests
+	uv run pytest packages/rpt/tests
 	uv run pytest packages/langchain/tests
 	uv run pytest packages/amazon/tests
 	uv run pytest packages/google/tests
@@ -70,6 +78,8 @@ test-integration:
 	uv run pytest packages/base/integration_tests
 	uv run pytest packages/core/integration_tests
 	uv run pytest packages/proxy/integration_tests
+	uv run pytest packages/openai/integration_tests
+	uv run pytest packages/rpt/integration_tests
 	uv run pytest packages/langchain/integration_tests
 	uv run pytest packages/amazon/integration_tests
 	uv run pytest packages/google/integration_tests

@@ -2,15 +2,15 @@ import unittest
 from parameterized import parameterized
 from pydantic import BaseModel
 
-from ..constants import (MISTRAL_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
+from .constants import (MISTRAL_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
     OPENAI_GPT_5_MINI_TEST_MODEL, OPENAI_GPT_O4_MINI_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL,
     OPENAI_GPT_O3_MINI_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL_NANO, NVIDIA_EMBEDDING_TEST_MODEL, PERPLEXITY_TEST_MODEL,
     COHERE_COMMAND_A_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL)
 
 try:
     import openai
-    from sap_ai_sdk_proxy.native.openai import AsyncOpenAI, OpenAI
-    from sap_ai_sdk_proxy.native.openai.clients import ChatCompletions
+    from sap_ai_sdk_openai import AsyncOpenAI, OpenAI
+    from sap_ai_sdk_openai.clients import ChatCompletions
     from openai.types import Completion, CreateEmbeddingResponse
     from openai.types.chat import ChatCompletion, ChatCompletionChunk, ChatCompletionUserMessageParam
     from openai.types.responses import Response
@@ -19,7 +19,7 @@ try:
 except ImportError:
     no_openai = True
 
-from ..setup_aicore import TestCaseAICoreSetupMixin
+from .setup_aicore import TestCaseAICoreSetupMixin
 
 class Person(BaseModel):
     """
@@ -44,7 +44,7 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     def test_embedding_global(self, model=OPENAI_EMBEDDING_TEST_MODEL):
         kwargs = {'input': 'Your text string goes here', 'model_name': model}
-        from sap_ai_sdk_proxy.native.openai import embeddings
+        from sap_ai_sdk_openai import embeddings
         response = embeddings.create(**kwargs)
         self.assertIsInstance(response, CreateEmbeddingResponse)
 
@@ -92,7 +92,7 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         self.assertIsInstance(response, openai._legacy_response.LegacyAPIResponse)
 
     def test_chat_completion_global(self, model=OPENAI_GPT_5_TEST_MODEL_NANO):
-        from sap_ai_sdk_proxy.native.openai import chat
+        from sap_ai_sdk_openai import chat
         messages = self._get_test_messages()
         kwargs = dict(model_name=model, messages=messages, temperature=0, seed=42)
         response = chat.completions.create(**kwargs)
@@ -107,7 +107,7 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         self.assertIsInstance(response, openai._legacy_response.LegacyAPIResponse)
 
     def test_completion_global(self, model=MISTRAL_TEST_MODEL):
-        from sap_ai_sdk_proxy.native.openai import completions
+        from sap_ai_sdk_openai import completions
         prompt = ["This is a test"]
         kwargs = dict(model_name=model, prompt=prompt, temperature=0, seed=42)
         response = completions.create(**kwargs)
@@ -190,7 +190,7 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
 
 
     def test_responses_global(self, model=OPENAI_GPT_5_TEST_MODEL):
-        from sap_ai_sdk_proxy.native.openai import responses
+        from sap_ai_sdk_openai import responses
         response = responses.create(
             model=model,
             instructions="You are a helpful assistant.",

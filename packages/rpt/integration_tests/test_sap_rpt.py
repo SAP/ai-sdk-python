@@ -2,8 +2,8 @@ import unittest
 
 from integration_tests.constants import SAP_RPT_1_0_TEST_MODEL, SAP_RPT_1_5_TEST_MODEL, SAP_RPT_1_6_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
-from sap_ai_sdk_proxy.native.sap.client import RPTClient
-from sap_ai_sdk_proxy.native.sap.models import RPTRequest, RPTResponse, PredictionConfig, TargetColumn
+from sap_ai_sdk_rpt.client import RPTClient
+from sap_ai_sdk_rpt.models import RPTRequest, RPTResponse, PredictionConfig, TargetColumn
 
 request_by_row_dict = {
             "prediction_config": {

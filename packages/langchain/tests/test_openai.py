@@ -140,7 +140,7 @@ class TestOpenAILangchain(unittest.TestCase):
 
     def test_chat_openai_preserves_root_client(self):
         """Test that ChatOpenAI preserves the root client when using native OpenAI client"""
-        from sap_ai_sdk_proxy.native.openai import OpenAI as NativeOpenAI
+        from sap_ai_sdk_openai import OpenAI as NativeOpenAI
 
         native_client = NativeOpenAI(proxy_client=self.proxy_client)
 
@@ -159,7 +159,7 @@ class TestOpenAILangchain(unittest.TestCase):
 
     def test_chat_openai_preserves_root_async_client(self):
         """Test that ChatOpenAI preserves the root async client when using native async OpenAI client"""
-        from sap_ai_sdk_proxy.native.openai import AsyncOpenAI as NativeAsyncOpenAI
+        from sap_ai_sdk_openai import AsyncOpenAI as NativeAsyncOpenAI
 
         native_async_client = NativeAsyncOpenAI(proxy_client=self.proxy_client)
 
@@ -178,7 +178,7 @@ class TestOpenAILangchain(unittest.TestCase):
 
     def test_openai_completion_preserves_root_client(self):
         """Test that OpenAI completion model preserves the root client"""
-        from sap_ai_sdk_proxy.native.openai import OpenAI as NativeOpenAI
+        from sap_ai_sdk_openai import OpenAI as NativeOpenAI
 
         native_client = NativeOpenAI(proxy_client=self.proxy_client)
 
@@ -200,7 +200,7 @@ class TestOpenAILangchain(unittest.TestCase):
 
     def test_openai_completion_preserves_root_async_client(self):
         """Test that OpenAI completion model preserves the root async client"""
-        from sap_ai_sdk_proxy.native.openai import AsyncOpenAI as NativeAsyncOpenAI
+        from sap_ai_sdk_openai import AsyncOpenAI as NativeAsyncOpenAI
 
         native_async_client = NativeAsyncOpenAI(proxy_client=self.proxy_client)
 

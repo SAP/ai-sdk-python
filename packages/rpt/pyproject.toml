@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sap-ai-sdk-rpt"
+version = "1.0.0"
+description = "SAP Cloud SDK for AI (Python): native SAP RPT client"
+readme = "PYPIDESCRIPTION.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "SAP SE" }]
+keywords = ["SAP AI Core", "SAP generative AI SDK", "SAP Generative AI Hub"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "httpx>=0.27.0",
+    "pydantic~=2.12",
+    "sap-ai-sdk-proxy>=1.0.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "pytest-asyncio==1.4.0",
+    "pylint==4.0.8",
+    "requests-mock==1.12.1",
+    "respx==0.23.1",
+    "parameterized==0.9.0",
+    "sphinx<9.0.0",
+    "myst_nb",
+    "sphinxawesome-theme",
+    "pytest-dotenv>=0.5.2",
+]
+
+[tool.pytest.ini_options]
+env_files = [".env"]
+testpaths = ["tests"]
+norecursedirs = ["integration_tests"]
+
+[project.urls]
+Homepage = "https://www.sap.com/"
+Download = "https://pypi.python.org/pypi/sap-ai-sdk-rpt"
+
+[tool.uv.sources]
+sap-ai-sdk-proxy = { workspace = true }
+
+[tool.setuptools.packages.find]
+exclude = ["*test*"]
+
+[tool.commitizen]
+name = "cz_customize"
+tag_format = "rpt-v${version}"
+ignored_tag_formats = ["*-v${version}"]
+version_provider = "pep621"
+changelog_file = "RELEASE_NOTES.md"
+
+[tool.commitizen.customize]
+bump_pattern = '^(feat|fix)\(rpt\)'
+changelog_pattern = '^(feat|fix)\(rpt\)'

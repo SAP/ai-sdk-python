@@ -9,6 +9,8 @@ requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
     "sap-ai-sdk-proxy",
+    "sap-ai-sdk-openai",
+    "sap-ai-sdk-rpt",
     "sap-ai-sdk-langchain",
     "sap-ai-sdk-amazon",
     "sap-ai-sdk-google",
@@ -27,6 +29,8 @@ module-root = ""
 
 [tool.uv.sources]
 sap-ai-sdk-proxy = { workspace = true, editable = true }
+sap-ai-sdk-openai = { workspace = true, editable = true }
+sap-ai-sdk-rpt = { workspace = true, editable = true }
 sap-ai-sdk-langchain = { workspace = true, editable = true }
 sap-ai-sdk-amazon = { workspace = true, editable = true }
 sap-ai-sdk-google = { workspace = true, editable = true }

@@ -29,6 +29,8 @@ classifiers = [
 requires-python = ">=3.9"
 dependencies = [
     "sap-ai-sdk-proxy>=1.0.0",
+    "sap-ai-sdk-openai>=1.0.0",
+    "sap-ai-sdk-rpt>=1.0.0",
     "sap-ai-sdk-orchestration>=1.0.0",
     "sap-ai-sdk-prompt-registry>=1.0.0",
     "sap-ai-sdk-document-grounding>=1.0.0",
@@ -60,6 +62,8 @@ Download = "https://pypi.python.org/pypi/sap-ai-sdk-gen"
 
 [tool.uv.sources]
 sap-ai-sdk-proxy = { workspace = true }
+sap-ai-sdk-openai = { workspace = true }
+sap-ai-sdk-rpt = { workspace = true }
 sap-ai-sdk-orchestration = { workspace = true }
 sap-ai-sdk-prompt-registry = { workspace = true }
 sap-ai-sdk-document-grounding = { workspace = true }
