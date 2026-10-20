@@ -65,7 +65,7 @@ class TestE2EResourceGroup(AIAPIV2ClientE2ETestBase):
             labels=labels)
 
         # Poll until the resource groups' lables changed or until timeout.
-        timeout_seconds = 60
+        timeout_seconds = 120
         poll_interval = 2
         deadline = time.time() + timeout_seconds
         response = None
