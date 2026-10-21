@@ -4,6 +4,8 @@ Granite Guardian 4.1 Content Filter Model
 
 from typing import Optional
 
+from pydantic import model_validator
+
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 
 
@@ -37,6 +39,15 @@ class GraniteGuardian41Categories(BaseModel):
     profanity: Optional[bool] = None
     sexual_content: Optional[bool] = None
     unethical_behavior: Optional[bool] = None
+
+    @model_validator(mode="after")
+    def enforce_min_categories(self):
+        """
+        Ensure at least one category is specified.
+        """
+        if all(getattr(self, name) is None for name in self.__class__.model_fields):
+            raise ValueError("GraniteGuardian41Categories must specify at least one category.")
+        return self
 
 
 class GraniteGuardian41Filter(BaseModel):
