@@ -113,6 +113,12 @@ class TestContentFilters(unittest.TestCase):
                 "enable_reasoning": False,
                 "categories": {
                     "harm": True,
+                    "social_bias": False,
+                    "jailbreak": False,
+                    "violence": False,
+                    "profanity": False,
+                    "sexual_content": False,
+                    "unethical_behavior": False,
                 },
             },
         }
@@ -177,6 +183,12 @@ class TestContentFiltersBackwardCompatibility(unittest.TestCase):
                 "enable_reasoning": False,
                 "categories": {
                     "harm": True,
+                    "social_bias": False,
+                    "jailbreak": False,
+                    "violence": False,
+                    "profanity": False,
+                    "sexual_content": False,
+                    "unethical_behavior": False,
                 },
             },
         }
