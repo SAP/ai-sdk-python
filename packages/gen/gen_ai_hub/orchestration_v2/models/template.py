@@ -36,6 +36,15 @@ class Template(BaseModel):
 
 
 class PromptTemplatingModuleConfig(BaseModel):
+    """
+    Configuration for the prompt templating module.
+
+    Args:
+        prompt: The prompt template or template reference. If not provided, ``messages_history``
+            must be supplied at inference time.
+
+        model: The LLM model and parameters to use for generation.
+    """
     prompt: Optional[Template | TemplateRef] = None
     model: LLMModelDetails
 

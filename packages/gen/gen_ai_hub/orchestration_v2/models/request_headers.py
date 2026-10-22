@@ -12,8 +12,7 @@ class OrchestrationRequestHeaders(BaseModel):
 
     - ``AI-Object-Store-Secret-Name`` is documented explicitly; it is used by the
       feedback service to persist an inference.
-    - Arbitrary additional headers are allowed (``extra="allow"``), mirroring the
-      JS index signature ``[key: string]: any``.
+    - Arbitrary additional headers are allowed (``extra="allow"``)
     - ``AI-Resource-Group`` must not be set here; it is managed by the proxy client
       / deployment configuration.
     """

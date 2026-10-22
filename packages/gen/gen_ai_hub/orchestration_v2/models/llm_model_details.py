@@ -4,7 +4,7 @@ Module defining the LLM (Large Language Model) configuration model.
 
 from typing import Optional, Dict
 
-from pydantic import Field, StrictBool
+from pydantic import Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 
@@ -37,6 +37,6 @@ class LLMModelDetails(BaseModel):
     timeout: Optional[int] = Field(default=600, ge=1, le=1200)
     max_retries: Optional[int] = Field(default=2, ge=0, le=5)
     # Server defaults this to True when omitted.
-    drop_unsupported_params: Optional[StrictBool] = None
+    drop_unsupported_params: Optional[bool] = None
 
 __all__ = ["LLMModelDetails"]
