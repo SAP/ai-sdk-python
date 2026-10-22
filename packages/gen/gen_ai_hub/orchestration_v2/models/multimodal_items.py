@@ -15,7 +15,7 @@ from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
-class ImageDetailLevel(Enum):
+class ImageDetailLevel(str, Enum):
     """
     Controls the resolution and detail level for image analysis.
 
