@@ -29,7 +29,6 @@ from .response import (CacheCreationTokenDetails, PromptTokensDetails, Completio
                       StreamDelta, StreamLLMChoice, Citation, LLMModuleResult, StreamLLMModuleResult, ModuleResults,
                       StreamModuleResults, SAPAPIError, SAPAPIErrorStreaming, CompletionPostResponse, 
                       StreamCompletionPostResponse, ErrorResponse, ErrorResponseStreaming, OrchestrationResponseWithRetries)
-from .request_headers import OrchestrationRequestHeaders
 from .response_format import ResponseFormatText, ResponseFormatJsonObject, ResponseFormatJsonSchema, JSONResponseSchema
 from .streaming import GlobalStreamOptions
 from .template import Template, PromptTemplatingModuleConfig
@@ -96,9 +95,6 @@ __all__ = [
     "StreamDelta", "StreamLLMChoice", "Citation", "LLMModuleResult", "StreamLLMModuleResult", "ModuleResults",
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",
     "StreamCompletionPostResponse", "ErrorResponse", "ErrorResponseStreaming", "OrchestrationResponseWithRetries",
-    
-    # request_headers
-    "OrchestrationRequestHeaders",
 
     # response_format
     "ResponseFormatText", "ResponseFormatJsonObject", "ResponseFormatJsonSchema", "JSONResponseSchema",

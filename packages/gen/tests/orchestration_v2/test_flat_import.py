@@ -64,9 +64,6 @@ expected = {
     # template
     "Template", "PromptTemplatingModuleConfig",
 
-    # request_headers
-    "OrchestrationRequestHeaders",
-
     # template_ref
     "TemplateRef", "TemplateRefByID", "TemplateRefByScenarioNameVersion",
 

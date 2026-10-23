@@ -365,11 +365,16 @@ class CompletionPostResponse(ResponseBaseModel):
         intermediate_results (ModuleResults): Results from various modules executed during the processing.
 
         final_result (LLMModuleResult): Output from LLM. Follows the OpenAI spec.
+
+        intermediate_failures (Optional[List[SAPAPIError]]): List of errors encountered during processing, if any.
+
+        headers (Optional[dict[str, str]]): Optional headers returned in the response.
     """
     request_id: str
     intermediate_results: ModuleResults
     final_result: LLMModuleResult
     intermediate_failures: Optional[List[SAPAPIError]] = None
+    headers: Optional[dict[str, str]] = None
 
 
 class StreamCompletionPostResponse(ResponseBaseModel):
