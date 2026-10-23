@@ -47,7 +47,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def create_scenario_configuration(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -67,8 +66,6 @@ class ScenarioConfigurationManagerApi:
 
         Create a scenario configuration asynchronously. Schema validation happens synchronously; background processing runs asynchronously. Poll GET /scenarioConfigurations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: Name of the scenario configuration (required)
         :type scenario_configuration_name: str
         :param create_scenario_configuration: (required)
@@ -96,7 +93,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._create_scenario_configuration_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             create_scenario_configuration=create_scenario_configuration,
             _request_auth=_request_auth,
@@ -126,7 +122,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def create_scenario_configuration_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -146,8 +141,6 @@ class ScenarioConfigurationManagerApi:
 
         Create a scenario configuration asynchronously. Schema validation happens synchronously; background processing runs asynchronously. Poll GET /scenarioConfigurations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: Name of the scenario configuration (required)
         :type scenario_configuration_name: str
         :param create_scenario_configuration: (required)
@@ -175,7 +168,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._create_scenario_configuration_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             create_scenario_configuration=create_scenario_configuration,
             _request_auth=_request_auth,
@@ -205,7 +197,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def create_scenario_configuration_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -225,8 +216,6 @@ class ScenarioConfigurationManagerApi:
 
         Create a scenario configuration asynchronously. Schema validation happens synchronously; background processing runs asynchronously. Poll GET /scenarioConfigurations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: Name of the scenario configuration (required)
         :type scenario_configuration_name: str
         :param create_scenario_configuration: (required)
@@ -254,7 +243,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._create_scenario_configuration_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             create_scenario_configuration=create_scenario_configuration,
             _request_auth=_request_auth,
@@ -280,7 +268,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def create_scenario_configuration_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -303,7 +290,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.create_scenario_configuration(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 create_scenario_configuration=create_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -318,7 +304,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def create_scenario_configuration_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -341,7 +326,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.create_scenario_configuration_with_http_info(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 create_scenario_configuration=create_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -356,7 +340,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def create_scenario_configuration_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Name of the scenario configuration")],
         create_scenario_configuration: CreateScenarioConfiguration,
         _request_timeout: Union[
@@ -379,7 +362,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.create_scenario_configuration_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 create_scenario_configuration=create_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -393,7 +375,6 @@ class ScenarioConfigurationManagerApi:
 
     def _create_scenario_configuration_serialize(
         self,
-        ai_resource_group,
         scenario_configuration_name,
         create_scenario_configuration,
         _request_auth,
@@ -421,8 +402,6 @@ class ScenarioConfigurationManagerApi:
             _path_params['scenarioConfigurationName'] = scenario_configuration_name
         # process the query parameters
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if create_scenario_configuration is not None:
@@ -477,7 +456,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def delete_scenario_configuration_by_name(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -496,8 +474,6 @@ class ScenarioConfigurationManagerApi:
 
         Delete a scenario configuration by name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to delete (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -523,7 +499,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._delete_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -551,7 +526,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def delete_scenario_configuration_by_name_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -570,8 +544,6 @@ class ScenarioConfigurationManagerApi:
 
         Delete a scenario configuration by name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to delete (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -597,7 +569,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._delete_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -625,7 +596,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def delete_scenario_configuration_by_name_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -644,8 +614,6 @@ class ScenarioConfigurationManagerApi:
 
         Delete a scenario configuration by name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to delete (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -671,7 +639,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._delete_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -695,7 +662,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def delete_scenario_configuration_by_name_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -717,7 +683,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.delete_scenario_configuration_by_name(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -731,7 +696,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def delete_scenario_configuration_by_name_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -753,7 +717,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.delete_scenario_configuration_by_name_with_http_info(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -767,7 +730,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def delete_scenario_configuration_by_name_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[StrictStr, Field(description="The name of the scenario configuration to delete")],
         _request_timeout: Union[
             None,
@@ -789,7 +751,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.delete_scenario_configuration_by_name_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -802,7 +763,6 @@ class ScenarioConfigurationManagerApi:
 
     def _delete_scenario_configuration_by_name_serialize(
         self,
-        ai_resource_group,
         scenario_configuration_name,
         _request_auth,
         _content_type,
@@ -829,8 +789,6 @@ class ScenarioConfigurationManagerApi:
             _path_params['scenarioConfigurationName'] = scenario_configuration_name
         # process the query parameters
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -870,7 +828,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_all_scenario_configurations(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -891,8 +848,6 @@ class ScenarioConfigurationManagerApi:
 
         Get all scenario configurations in the tenant (resource group)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -922,7 +877,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_all_scenario_configurations_serialize(
-            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -951,7 +905,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_all_scenario_configurations_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -972,8 +925,6 @@ class ScenarioConfigurationManagerApi:
 
         Get all scenario configurations in the tenant (resource group)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -1003,7 +954,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_all_scenario_configurations_serialize(
-            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -1032,7 +982,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_all_scenario_configurations_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1053,8 +1002,6 @@ class ScenarioConfigurationManagerApi:
 
         Get all scenario configurations in the tenant (resource group)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -1084,7 +1031,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_all_scenario_configurations_serialize(
-            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -1109,7 +1055,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_all_scenario_configurations_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1133,7 +1078,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_scenario_configurations(
-                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1149,7 +1093,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_all_scenario_configurations_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1173,7 +1116,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_scenario_configurations_with_http_info(
-                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1189,7 +1131,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_all_scenario_configurations_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1213,7 +1154,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_scenario_configurations_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1228,7 +1168,6 @@ class ScenarioConfigurationManagerApi:
 
     def _get_all_scenario_configurations_serialize(
         self,
-        ai_resource_group,
         top,
         skip,
         count,
@@ -1267,8 +1206,6 @@ class ScenarioConfigurationManagerApi:
             _query_params.append(('$count', count))
             
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1308,7 +1245,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_scenario_configuration_by_name(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1327,8 +1263,6 @@ class ScenarioConfigurationManagerApi:
 
         Get a scenario configuration by its name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to retrieve (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1354,7 +1288,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1382,7 +1315,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_scenario_configuration_by_name_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1401,8 +1333,6 @@ class ScenarioConfigurationManagerApi:
 
         Get a scenario configuration by its name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to retrieve (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1428,7 +1358,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1456,7 +1385,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def get_scenario_configuration_by_name_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1475,8 +1403,6 @@ class ScenarioConfigurationManagerApi:
 
         Get a scenario configuration by its name
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to retrieve (required)
         :type scenario_configuration_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1502,7 +1428,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._get_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1526,7 +1451,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_scenario_configuration_by_name_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1548,7 +1472,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_scenario_configuration_by_name(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1562,7 +1485,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_scenario_configuration_by_name_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1584,7 +1506,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_scenario_configuration_by_name_with_http_info(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1598,7 +1519,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def get_scenario_configuration_by_name_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to retrieve")],
         _request_timeout: Union[
             None,
@@ -1620,7 +1540,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.get_scenario_configuration_by_name_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1633,7 +1552,6 @@ class ScenarioConfigurationManagerApi:
 
     def _get_scenario_configuration_by_name_serialize(
         self,
-        ai_resource_group,
         scenario_configuration_name,
         _request_auth,
         _content_type,
@@ -1660,8 +1578,6 @@ class ScenarioConfigurationManagerApi:
             _path_params['scenarioConfigurationName'] = scenario_configuration_name
         # process the query parameters
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1701,7 +1617,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def patch_scenario_configuration_by_name(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -1721,8 +1636,6 @@ class ScenarioConfigurationManagerApi:
 
         Update a scenario configuration (excluding name)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to update (required)
         :type scenario_configuration_name: str
         :param patch_scenario_configuration: (required)
@@ -1750,7 +1663,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._patch_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             patch_scenario_configuration=patch_scenario_configuration,
             _request_auth=_request_auth,
@@ -1779,7 +1691,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def patch_scenario_configuration_by_name_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -1799,8 +1710,6 @@ class ScenarioConfigurationManagerApi:
 
         Update a scenario configuration (excluding name)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to update (required)
         :type scenario_configuration_name: str
         :param patch_scenario_configuration: (required)
@@ -1828,7 +1737,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._patch_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             patch_scenario_configuration=patch_scenario_configuration,
             _request_auth=_request_auth,
@@ -1857,7 +1765,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def patch_scenario_configuration_by_name_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -1877,8 +1784,6 @@ class ScenarioConfigurationManagerApi:
 
         Update a scenario configuration (excluding name)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param scenario_configuration_name: The name of the scenario configuration to update (required)
         :type scenario_configuration_name: str
         :param patch_scenario_configuration: (required)
@@ -1906,7 +1811,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._patch_scenario_configuration_by_name_serialize(
-            ai_resource_group=ai_resource_group,
             scenario_configuration_name=scenario_configuration_name,
             patch_scenario_configuration=patch_scenario_configuration,
             _request_auth=_request_auth,
@@ -1931,7 +1835,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def patch_scenario_configuration_by_name_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -1954,7 +1857,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.patch_scenario_configuration_by_name(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 patch_scenario_configuration=patch_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -1969,7 +1871,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def patch_scenario_configuration_by_name_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -1992,7 +1893,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.patch_scenario_configuration_by_name_with_http_info(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 patch_scenario_configuration=patch_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -2007,7 +1907,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def patch_scenario_configuration_by_name_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         scenario_configuration_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="The name of the scenario configuration to update")],
         patch_scenario_configuration: PatchScenarioConfiguration,
         _request_timeout: Union[
@@ -2030,7 +1929,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.patch_scenario_configuration_by_name_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 scenario_configuration_name=scenario_configuration_name,
                 patch_scenario_configuration=patch_scenario_configuration,
                 _request_timeout=_request_timeout,
@@ -2044,7 +1942,6 @@ class ScenarioConfigurationManagerApi:
 
     def _patch_scenario_configuration_by_name_serialize(
         self,
-        ai_resource_group,
         scenario_configuration_name,
         patch_scenario_configuration,
         _request_auth,
@@ -2072,8 +1969,6 @@ class ScenarioConfigurationManagerApi:
             _path_params['scenarioConfigurationName'] = scenario_configuration_name
         # process the query parameters
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if patch_scenario_configuration is not None:
@@ -2128,7 +2023,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def search_scenario_configurations_by_label(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2150,8 +2044,6 @@ class ScenarioConfigurationManagerApi:
 
         Search for scenario configurations that match ALL specified labels (AND logic)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param search_scenario_configuration: (required)
         :type search_scenario_configuration: SearchScenarioConfiguration
         :param top: Number of results to display
@@ -2183,7 +2075,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._search_scenario_configurations_by_label_serialize(
-            ai_resource_group=ai_resource_group,
             search_scenario_configuration=search_scenario_configuration,
             top=top,
             skip=skip,
@@ -2213,7 +2104,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def search_scenario_configurations_by_label_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2235,8 +2125,6 @@ class ScenarioConfigurationManagerApi:
 
         Search for scenario configurations that match ALL specified labels (AND logic)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param search_scenario_configuration: (required)
         :type search_scenario_configuration: SearchScenarioConfiguration
         :param top: Number of results to display
@@ -2268,7 +2156,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._search_scenario_configurations_by_label_serialize(
-            ai_resource_group=ai_resource_group,
             search_scenario_configuration=search_scenario_configuration,
             top=top,
             skip=skip,
@@ -2298,7 +2185,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     async def search_scenario_configurations_by_label_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2320,8 +2206,6 @@ class ScenarioConfigurationManagerApi:
 
         Search for scenario configurations that match ALL specified labels (AND logic)
 
-        :param ai_resource_group: Resource Group ID (required)
-        :type ai_resource_group: str
         :param search_scenario_configuration: (required)
         :type search_scenario_configuration: SearchScenarioConfiguration
         :param top: Number of results to display
@@ -2353,7 +2237,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
 
         _param = self._search_scenario_configurations_by_label_serialize(
-            ai_resource_group=ai_resource_group,
             search_scenario_configuration=search_scenario_configuration,
             top=top,
             skip=skip,
@@ -2379,7 +2262,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def search_scenario_configurations_by_label_sync(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2404,7 +2286,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.search_scenario_configurations_by_label(
-                ai_resource_group=ai_resource_group,
                 search_scenario_configuration=search_scenario_configuration,
                 top=top,
                 skip=skip,
@@ -2421,7 +2302,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def search_scenario_configurations_by_label_sync_with_http_info(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2446,7 +2326,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.search_scenario_configurations_by_label_with_http_info(
-                ai_resource_group=ai_resource_group,
                 search_scenario_configuration=search_scenario_configuration,
                 top=top,
                 skip=skip,
@@ -2463,7 +2342,6 @@ class ScenarioConfigurationManagerApi:
     @validate_call
     def search_scenario_configurations_by_label_sync_without_preload_content(
         self,
-        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_scenario_configuration: SearchScenarioConfiguration,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2488,7 +2366,6 @@ class ScenarioConfigurationManagerApi:
         """ # noqa: E501
         return run_sync(
             self.search_scenario_configurations_by_label_without_preload_content(
-                ai_resource_group=ai_resource_group,
                 search_scenario_configuration=search_scenario_configuration,
                 top=top,
                 skip=skip,
@@ -2504,7 +2381,6 @@ class ScenarioConfigurationManagerApi:
 
     def _search_scenario_configurations_by_label_serialize(
         self,
-        ai_resource_group,
         search_scenario_configuration,
         top,
         skip,
@@ -2544,8 +2420,6 @@ class ScenarioConfigurationManagerApi:
             _query_params.append(('$count', count))
             
         # process the header parameters
-        if ai_resource_group is not None:
-            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if search_scenario_configuration is not None:

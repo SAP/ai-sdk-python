@@ -11,6 +11,7 @@ from sap_openapi_generator.preprocess_spec import (
     apply_operation_name_extension,
     apply_options_per_service,
     strip_api_suffix,
+    strip_header_parameters,
     validate_unique_operation_ids,
     _snake_case,
 )
@@ -349,4 +350,97 @@ def test_options_per_service_no_base_path_does_not_set_servers(tmp_path):
     spec: dict = {}
     apply_options_per_service(spec, options_file, "src/spec/api.yaml")
     assert "servers" not in spec
+
+
+def test_options_per_service_strips_declared_header(tmp_path):
+    options = {"src/spec/api.yaml": {"stripHeaderParameters": ["AI-Resource-Group"]}}
+    options_file = tmp_path / "options-per-service.json"
+    options_file.write_text(json.dumps(options))
+
+    spec = {
+        "paths": {
+            "/foo": {
+                "get": {
+                    "parameters": [
+                        {"in": "header", "name": "AI-Resource-Group", "required": True},
+                        {"in": "query", "name": "top"},
+                    ]
+                }
+            }
+        }
+    }
+    apply_options_per_service(spec, options_file, "src/spec/api.yaml")
+    params = spec["paths"]["/foo"]["get"]["parameters"]
+    assert params == [{"in": "query", "name": "top"}]
+
+
+# ---------------------------------------------------------------------------
+# strip_header_parameters
+# ---------------------------------------------------------------------------
+
+
+def _spec_with_header(name):
+    return {
+        "paths": {
+            "/foo": {
+                "get": {
+                    "parameters": [
+                        {"in": "header", "name": name, "required": True},
+                        {"in": "path", "name": "id"},
+                    ]
+                },
+                "post": {
+                    "parameters": [
+                        {"in": "header", "name": name},
+                    ]
+                },
+            }
+        }
+    }
+
+
+def test_strip_header_removes_from_every_operation():
+    spec = _spec_with_header("AI-Resource-Group")
+    strip_header_parameters(spec, ["AI-Resource-Group"])
+    assert spec["paths"]["/foo"]["get"]["parameters"] == [{"in": "path", "name": "id"}]
+    assert spec["paths"]["/foo"]["post"]["parameters"] == []
+
+
+def test_strip_header_is_case_insensitive():
+    spec = _spec_with_header("ai-resource-group")
+    strip_header_parameters(spec, ["AI-Resource-Group"])
+    assert spec["paths"]["/foo"]["get"]["parameters"] == [{"in": "path", "name": "id"}]
+
+
+def test_strip_header_leaves_other_headers_and_params():
+    spec = {
+        "paths": {
+            "/foo": {
+                "get": {
+                    "parameters": [
+                        {"in": "header", "name": "AI-Resource-Group"},
+                        {"in": "header", "name": "X-Keep"},
+                        {"in": "query", "name": "top"},
+                    ]
+                }
+            }
+        }
+    }
+    strip_header_parameters(spec, ["AI-Resource-Group"])
+    assert spec["paths"]["/foo"]["get"]["parameters"] == [
+        {"in": "header", "name": "X-Keep"},
+        {"in": "query", "name": "top"},
+    ]
+
+
+def test_strip_header_empty_list_is_noop():
+    spec = _spec_with_header("AI-Resource-Group")
+    strip_header_parameters(spec, [])
+    assert len(spec["paths"]["/foo"]["get"]["parameters"]) == 2
+
+
+def test_strip_header_no_paths_does_not_crash():
+    spec: dict = {}
+    strip_header_parameters(spec, ["AI-Resource-Group"])
+    assert spec == {}
 
