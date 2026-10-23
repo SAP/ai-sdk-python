@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 
 from sample_code import (
     amazon,
+    context_registry,
     core,
     document_grounding_generation,
     document_grounding_kiota,
@@ -100,3 +101,26 @@ app.get("/kiota/tab-ai-orchestration/predict")(tab_ai_orchestration_kiota.predic
 app.get("/kiota/tab-ai-orchestration/predict-with-explanations")(
     tab_ai_orchestration_kiota.predict_with_explanations
 )
+
+# Context Registry — Data Destinations
+app.put("/context-registry/data-destinations/{data_destination_name}")(context_registry.create_hdl_data_destination)
+app.get("/context-registry/data-destinations")(context_registry.list_data_destinations)
+app.post("/context-registry/data-destinations/search")(context_registry.search_data_destinations)
+app.get("/context-registry/data-destinations/{data_destination_name}")(context_registry.get_data_destination)
+app.patch("/context-registry/data-destinations/{data_destination_name}")(context_registry.patch_data_destination)
+app.delete("/context-registry/data-destinations/{data_destination_name}")(context_registry.delete_data_destination)
+
+# Context Registry — Tabular Artifacts
+app.put("/context-registry/tabular-artifacts/{tabular_artifact_name}")(context_registry.create_tabular_artifact)
+app.get("/context-registry/tabular-artifacts")(context_registry.list_tabular_artifacts)
+app.get("/context-registry/tabular-artifacts/{tabular_artifact_name}")(context_registry.get_tabular_artifact)
+app.get("/context-registry/tabular-artifacts/{tabular_artifact_name}/data")(context_registry.get_tabular_artifact_data_preview)
+app.delete("/context-registry/tabular-artifacts/{tabular_artifact_name}")(context_registry.delete_tabular_artifact)
+
+# Context Registry — Scenario Configurations
+app.put("/context-registry/scenario-configurations/{scenario_configuration_name}")(context_registry.create_scenario_configuration)
+app.get("/context-registry/scenario-configurations")(context_registry.list_scenario_configurations)
+app.post("/context-registry/scenario-configurations/search")(context_registry.search_scenario_configurations)
+app.get("/context-registry/scenario-configurations/{scenario_configuration_name}")(context_registry.get_scenario_configuration)
+app.patch("/context-registry/scenario-configurations/{scenario_configuration_name}")(context_registry.patch_scenario_configuration)
+app.delete("/context-registry/scenario-configurations/{scenario_configuration_name}")(context_registry.delete_scenario_configuration)
