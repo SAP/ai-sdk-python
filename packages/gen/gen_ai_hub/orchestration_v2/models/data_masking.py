@@ -166,6 +166,21 @@ class MaskGroundingInput(BaseModel):
     """
     enabled: bool = False
 
+class MaskFileInputMethod(str, Enum):
+    """
+    Enumerates the supported masking methods for file inputs.
+
+    This enum defines how file inputs are handled by the data masking module. It is required if file inputs
+    are provided.
+
+    Values:
+        ANONYMIZATION: Irreversibly replaces sensitive data in file inputs with placeholders.
+
+        SKIP: Skips masking of file inputs, leaving them unchanged.
+    """
+    ANONYMIZATION = "anonymization"
+    SKIP = "skip"
+
 
 class MaskingProviderConfig(BaseModel):
     """
@@ -183,12 +198,15 @@ class MaskingProviderConfig(BaseModel):
         allowlist: A list of strings that should not be masked.
 
         mask_grounding_input: A flag indicating whether to mask input to the grounding module.
+
+        mask_file_input_method: The method of masking to apply to file inputs. Required if file inputs are provided.
     """
     type_: DataMaskingProviderName = Field(default=DataMaskingProviderName.SAP_DATA_PRIVACY_INTEGRATION, alias="type")
     method: MaskingMethod
     entities: List[Union[DPIStandardEntity, DPICustomEntity]]
     allowlist: Optional[List[str]] = None
     mask_grounding_input: Optional[MaskGroundingInput] = None
+    mask_file_input_method: Optional[MaskFileInputMethod] = None
 
 class MaskingModuleConfig(BaseModel):
     """
@@ -217,5 +235,6 @@ class MaskingModuleConfig(BaseModel):
 
         return self
 
-__all__ = ["DataMaskingProviderName", "MaskingMethod", "ProfileEntity", "DPIMethodConstant", "DPIMethodFabricatedData",
-           "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig", "MaskingModuleConfig"]
+__all__ = ["DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
+           "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput",
+           "MaskingProviderConfig", "MaskingModuleConfig"]
