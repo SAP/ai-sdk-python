@@ -15,7 +15,7 @@ __all__ = [
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
 
     # content_filter
-    "ContentFilterProvider", "ContentFilter", "LlamaGuard38bFilterConfig",
+    "ContentFilterProvider", "ContentFilter", "LlamaGuard38bFilterConfig", "GraniteGuardian41FilterConfig",
     "AzureContentSafetyInputFilterConfig", "AzureContentSafetyOutputFilterConfig", "FilteringStreamOptions",
 
     # content_filtering
@@ -37,6 +37,9 @@ __all__ = [
 
     # llama_guard_3_filter
     "LlamaGuard38bFilter",
+
+    # granite_guardian_filter
+    "GraniteGuardian41Categories", "GraniteGuardian41Filter",
 
     # llm_model_details
     "LLMModelDetails",

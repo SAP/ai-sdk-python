@@ -4,8 +4,11 @@ from gen_ai_hub.orchestration_v2.models.azure_content_filter import (AzureConten
                                                                      AzureThreshold, AzureContentFilter)
 from gen_ai_hub.orchestration_v2.models.content_filtering import InputFiltering
 from gen_ai_hub.orchestration_v2.models.content_filter import (AzureContentSafetyInputFilterConfig,
-AzureContentSafetyOutputFilterConfig, LlamaGuard38bFilterConfig, ContentFilter, ContentFilterProvider)
+AzureContentSafetyOutputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig, ContentFilter,
+ContentFilterProvider)
 from gen_ai_hub.orchestration_v2.models.llama_guard_3_filter import LlamaGuard38bFilter
+from gen_ai_hub.orchestration_v2.models.granite_guardian_filter import (GraniteGuardian41Filter,
+                                                                        GraniteGuardian41Categories)
 
 
 class TestContentFilters(unittest.TestCase):
@@ -99,6 +102,29 @@ class TestContentFilters(unittest.TestCase):
 
         self.assertEqual(content_filter.model_dump(), expected_dict)
 
+    def test_granite_guardian_content_filter_to_dict(self):
+        content_filter = GraniteGuardian41FilterConfig(
+            config=GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        )
+
+        expected_dict = {
+            "type": 'granite_guardian_4_1',
+            "config": {
+                "enable_reasoning": False,
+                "categories": {
+                    "harm": True,
+                    "social_bias": False,
+                    "jailbreak": False,
+                    "violence": False,
+                    "profanity": False,
+                    "sexual_content": False,
+                    "unethical_behavior": False,
+                },
+            },
+        }
+
+        self.assertEqual(content_filter.model_dump(), expected_dict)
+
 class TestContentFiltersBackwardCompatibility(unittest.TestCase):
     def test_azure_content_filter_to_dict_bc(self):
         content_filter_config = AzureContentFilter(hate=AzureThreshold.ALLOW_SAFE,
@@ -141,6 +167,30 @@ class TestContentFiltersBackwardCompatibility(unittest.TestCase):
                 "elections": False,
                 "code_interpreter_abuse": False,
             }
+        }
+
+        self.assertEqual(content_filter.model_dump(), expected_dict)
+
+    def test_granite_guardian_content_filter_to_dict_backward_compatibility(self):
+        content_filter = ContentFilter(
+            type=ContentFilterProvider.GRANITE_GUARDIAN_4_1,
+            config=GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True)),
+        )
+
+        expected_dict = {
+            "type": 'granite_guardian_4_1',
+            "config": {
+                "enable_reasoning": False,
+                "categories": {
+                    "harm": True,
+                    "social_bias": False,
+                    "jailbreak": False,
+                    "violence": False,
+                    "profanity": False,
+                    "sexual_content": False,
+                    "unethical_behavior": False,
+                },
+            },
         }
 
         self.assertEqual(content_filter.model_dump(), expected_dict)
