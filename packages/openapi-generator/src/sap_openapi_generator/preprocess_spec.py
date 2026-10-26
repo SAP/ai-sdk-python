@@ -22,12 +22,6 @@ supplied to embed service-level config such as basePath into the spec servers li
   Effect: spec["servers"] is replaced with [{"url": basePath}] so the generator
   bakes it into Configuration._base_path.
 
-  An optional "stripHeaderParameters" list removes the named header parameters
-  from every operation (case-insensitive). Use it for headers the hand-written
-  wrapper client injects on every request, so they don't appear as a redundant
-  argument on each generated method:
-    { "<spec-key>": { "stripHeaderParameters": ["AI-Resource-Group"] } }
-
 Usage:
     sap-preprocess-spec --input path/to/spec.yaml --output path/to/processed.yaml
     sap-preprocess-spec --input api.yaml --output out.yaml \\
@@ -123,36 +117,6 @@ def apply_operation_name_extension(spec: dict) -> dict:
 
     return mappings
 
-def strip_header_parameters(spec: dict, header_names: list[str]) -> None:
-    """Remove the named header parameters from every operation in the spec.
-
-    Used for headers the hand-written wrapper client injects on every request
-    (e.g. AI-Resource-Group), so they don't surface as a redundant argument on
-    every generated method. Matching is case-insensitive, per the HTTP spec.
-    Both inline parameter objects and operation-level overrides are removed; a
-    shared $ref parameter is dropped at the reference site, so the referenced
-    component definition can stay in place.
-    """
-    wanted = {name.lower() for name in header_names}
-    if not wanted:
-        return
-
-    def _is_stripped(param: dict) -> bool:
-        return (
-            isinstance(param, dict)
-            and param.get("in") == "header"
-            and str(param.get("name", "")).lower() in wanted
-        )
-
-    for path_item in spec.get("paths", {}).values():
-        if not isinstance(path_item, dict):
-            continue
-        for method in HTTP_METHODS:
-            op = path_item.get(method)
-            if not isinstance(op, dict) or "parameters" not in op:
-                continue
-            op["parameters"] = [p for p in op["parameters"] if not _is_stripped(p)]
-
 
 def apply_options_per_service(spec: dict, options_path: Path, spec_key: str) -> None:
     """Inject service options from an options-per-service.json file into the spec.
@@ -160,9 +124,6 @@ def apply_options_per_service(spec: dict, options_path: Path, spec_key: str) -> 
     Replaces spec["servers"] with a single entry whose URL is the basePath from
     the options file. This causes the generator to bake basePath into
     Configuration._base_path rather than leaving it as "http://localhost".
-
-    If the options declare "stripHeaderParameters", those header parameters are
-    removed from every operation (the wrapper client injects them instead).
     """
     with options_path.open() as f:
         options: dict = json.load(f)
@@ -179,10 +140,6 @@ def apply_options_per_service(spec: dict, options_path: Path, spec_key: str) -> 
     base_path = service_opts.get("basePath")
     if base_path:
         spec["servers"] = [{"url": base_path}]
-
-    strip_headers = service_opts.get("stripHeaderParameters")
-    if strip_headers:
-        strip_header_parameters(spec, strip_headers)
 
 
 def validate_unique_operation_ids(spec: dict) -> None:
