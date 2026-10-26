@@ -45,7 +45,8 @@ class ScenarioConfigurationObject(BaseModel):
     __properties: ClassVar[List[str]] = ["name", "description", "contextSelectionStrategy", "tabularArtifacts", "labels", "status", "errorMessage", "createdAt", "updatedAt"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

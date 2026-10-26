@@ -35,7 +35,8 @@ class S3ConnectionConfigBase(BaseModel):
     __properties: ClassVar[List[str]] = ["bucket", "region", "access_key_id", "secret_access_key"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

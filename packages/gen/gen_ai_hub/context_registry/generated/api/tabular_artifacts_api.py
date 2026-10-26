@@ -15,7 +15,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictBool, field_validator
+from pydantic import Field, StrictBool, StrictStr, field_validator
 from typing import Optional
 from typing_extensions import Annotated
 from gen_ai_hub.context_registry.generated.models.create_ta_request import CreateTARequest
@@ -46,6 +46,7 @@ class TabularArtifactsApi:
     @validate_call
     async def create_tabular_artifact(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -65,6 +66,8 @@ class TabularArtifactsApi:
 
         Create a Tabular Artifact asynchronously. Schema validation happens synchronously; resource creation runs in a background task. Poll GET /tabularArtifacts/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact (required)
         :type tabular_artifact_name: str
         :param create_ta_request: (required)
@@ -92,6 +95,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._create_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             create_ta_request=create_ta_request,
             _request_auth=_request_auth,
@@ -121,6 +125,7 @@ class TabularArtifactsApi:
     @validate_call
     async def create_tabular_artifact_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -140,6 +145,8 @@ class TabularArtifactsApi:
 
         Create a Tabular Artifact asynchronously. Schema validation happens synchronously; resource creation runs in a background task. Poll GET /tabularArtifacts/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact (required)
         :type tabular_artifact_name: str
         :param create_ta_request: (required)
@@ -167,6 +174,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._create_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             create_ta_request=create_ta_request,
             _request_auth=_request_auth,
@@ -196,6 +204,7 @@ class TabularArtifactsApi:
     @validate_call
     async def create_tabular_artifact_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -215,6 +224,8 @@ class TabularArtifactsApi:
 
         Create a Tabular Artifact asynchronously. Schema validation happens synchronously; resource creation runs in a background task. Poll GET /tabularArtifacts/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact (required)
         :type tabular_artifact_name: str
         :param create_ta_request: (required)
@@ -242,6 +253,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._create_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             create_ta_request=create_ta_request,
             _request_auth=_request_auth,
@@ -267,6 +279,7 @@ class TabularArtifactsApi:
     @validate_call
     def create_tabular_artifact_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -289,6 +302,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.create_tabular_artifact(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 create_ta_request=create_ta_request,
                 _request_timeout=_request_timeout,
@@ -303,6 +317,7 @@ class TabularArtifactsApi:
     @validate_call
     def create_tabular_artifact_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -325,6 +340,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.create_tabular_artifact_with_http_info(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 create_ta_request=create_ta_request,
                 _request_timeout=_request_timeout,
@@ -339,6 +355,7 @@ class TabularArtifactsApi:
     @validate_call
     def create_tabular_artifact_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact")],
         create_ta_request: CreateTARequest,
         _request_timeout: Union[
@@ -361,6 +378,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.create_tabular_artifact_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 create_ta_request=create_ta_request,
                 _request_timeout=_request_timeout,
@@ -374,6 +392,7 @@ class TabularArtifactsApi:
 
     def _create_tabular_artifact_serialize(
         self,
+        ai_resource_group,
         tabular_artifact_name,
         create_ta_request,
         _request_auth,
@@ -401,6 +420,8 @@ class TabularArtifactsApi:
             _path_params['tabularArtifactName'] = tabular_artifact_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if create_ta_request is not None:
@@ -455,6 +476,7 @@ class TabularArtifactsApi:
     @validate_call
     async def delete_tabular_artifact(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -473,6 +495,8 @@ class TabularArtifactsApi:
 
         Delete a specific Tabular Artifact by name
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -498,6 +522,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._delete_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -525,6 +550,7 @@ class TabularArtifactsApi:
     @validate_call
     async def delete_tabular_artifact_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -543,6 +569,8 @@ class TabularArtifactsApi:
 
         Delete a specific Tabular Artifact by name
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -568,6 +596,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._delete_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -595,6 +624,7 @@ class TabularArtifactsApi:
     @validate_call
     async def delete_tabular_artifact_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -613,6 +643,8 @@ class TabularArtifactsApi:
 
         Delete a specific Tabular Artifact by name
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -638,6 +670,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._delete_tabular_artifact_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -661,6 +694,7 @@ class TabularArtifactsApi:
     @validate_call
     def delete_tabular_artifact_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -682,6 +716,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_tabular_artifact(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -695,6 +730,7 @@ class TabularArtifactsApi:
     @validate_call
     def delete_tabular_artifact_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -716,6 +752,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_tabular_artifact_with_http_info(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -729,6 +766,7 @@ class TabularArtifactsApi:
     @validate_call
     def delete_tabular_artifact_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -750,6 +788,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_tabular_artifact_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -762,6 +801,7 @@ class TabularArtifactsApi:
 
     def _delete_tabular_artifact_serialize(
         self,
+        ai_resource_group,
         tabular_artifact_name,
         _request_auth,
         _content_type,
@@ -788,6 +828,8 @@ class TabularArtifactsApi:
             _path_params['tabularArtifactName'] = tabular_artifact_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -827,6 +869,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_all_tabular_artifacts(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -847,6 +890,8 @@ class TabularArtifactsApi:
 
         Retrieve list of Tabular Artifacts with pagination
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -876,6 +921,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_all_tabular_artifacts_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -904,6 +950,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_all_tabular_artifacts_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -924,6 +971,8 @@ class TabularArtifactsApi:
 
         Retrieve list of Tabular Artifacts with pagination
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -953,6 +1002,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_all_tabular_artifacts_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -981,6 +1031,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_all_tabular_artifacts_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1001,6 +1052,8 @@ class TabularArtifactsApi:
 
         Retrieve list of Tabular Artifacts with pagination
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -1030,6 +1083,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_all_tabular_artifacts_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -1054,6 +1108,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_all_tabular_artifacts_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1077,6 +1132,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_tabular_artifacts(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1092,6 +1148,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_all_tabular_artifacts_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1115,6 +1172,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_tabular_artifacts_with_http_info(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1130,6 +1188,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_all_tabular_artifacts_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1153,6 +1212,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_tabular_artifacts_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1167,6 +1227,7 @@ class TabularArtifactsApi:
 
     def _get_all_tabular_artifacts_serialize(
         self,
+        ai_resource_group,
         top,
         skip,
         count,
@@ -1205,6 +1266,8 @@ class TabularArtifactsApi:
             _query_params.append(('$count', count))
             
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1244,6 +1307,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_by_name(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1262,6 +1326,8 @@ class TabularArtifactsApi:
 
         Retrieve details of a specific Tabular Artifact by name including schema metadata. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1287,6 +1353,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1313,6 +1380,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_by_name_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1331,6 +1399,8 @@ class TabularArtifactsApi:
 
         Retrieve details of a specific Tabular Artifact by name including schema metadata. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1356,6 +1426,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1382,6 +1453,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_by_name_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1400,6 +1472,8 @@ class TabularArtifactsApi:
 
         Retrieve details of a specific Tabular Artifact by name including schema metadata. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1425,6 +1499,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1447,6 +1522,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_by_name_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1468,6 +1544,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_by_name(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1481,6 +1558,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_by_name_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1502,6 +1580,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_by_name_with_http_info(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1515,6 +1594,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_by_name_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1536,6 +1616,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_by_name_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1548,6 +1629,7 @@ class TabularArtifactsApi:
 
     def _get_tabular_artifact_by_name_serialize(
         self,
+        ai_resource_group,
         tabular_artifact_name,
         _request_auth,
         _content_type,
@@ -1574,6 +1656,8 @@ class TabularArtifactsApi:
             _path_params['tabularArtifactName'] = tabular_artifact_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1613,6 +1697,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_data(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1631,6 +1716,8 @@ class TabularArtifactsApi:
 
         Retrieve a preview of data rows from the Virtual Table (first 10 records)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1656,6 +1743,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_data_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1682,6 +1770,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_data_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1700,6 +1789,8 @@ class TabularArtifactsApi:
 
         Retrieve a preview of data rows from the Virtual Table (first 10 records)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1725,6 +1816,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_data_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1751,6 +1843,7 @@ class TabularArtifactsApi:
     @validate_call
     async def get_tabular_artifact_data_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1769,6 +1862,8 @@ class TabularArtifactsApi:
 
         Retrieve a preview of data rows from the Virtual Table (first 10 records)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param tabular_artifact_name: Unique name of the Tabular Artifact. Must match allowed pattern and length constraints.  (required)
         :type tabular_artifact_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1794,6 +1889,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
 
         _param = self._get_tabular_artifact_data_serialize(
+            ai_resource_group=ai_resource_group,
             tabular_artifact_name=tabular_artifact_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1816,6 +1912,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_data_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1837,6 +1934,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_data(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1850,6 +1948,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_data_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1871,6 +1970,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_data_with_http_info(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1884,6 +1984,7 @@ class TabularArtifactsApi:
     @validate_call
     def get_tabular_artifact_data_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         tabular_artifact_name: Annotated[str, Field(min_length=1, strict=True, max_length=80, description="Unique name of the Tabular Artifact. Must match allowed pattern and length constraints. ")],
         _request_timeout: Union[
             None,
@@ -1905,6 +2006,7 @@ class TabularArtifactsApi:
         """ # noqa: E501
         return run_sync(
             self.get_tabular_artifact_data_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 tabular_artifact_name=tabular_artifact_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1917,6 +2019,7 @@ class TabularArtifactsApi:
 
     def _get_tabular_artifact_data_serialize(
         self,
+        ai_resource_group,
         tabular_artifact_name,
         _request_auth,
         _content_type,
@@ -1943,6 +2046,8 @@ class TabularArtifactsApi:
             _path_params['tabularArtifactName'] = tabular_artifact_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 

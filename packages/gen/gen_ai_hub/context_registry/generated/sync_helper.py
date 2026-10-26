@@ -35,7 +35,7 @@ def _get_sync_loop() -> asyncio.AbstractEventLoop:
                 loop = asyncio.new_event_loop()
                 thread = threading.Thread(
                     target=loop.run_forever,
-                    name="generated-sync-runner",
+                    name="gen_ai_hub.context_registry.generated-sync-runner",
                     daemon=True,
                 )
                 thread.start()

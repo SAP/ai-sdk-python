@@ -49,6 +49,7 @@ class DataDestinationsApi:
     @validate_call
     async def create_update_data_destination(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -68,6 +69,8 @@ class DataDestinationsApi:
 
         Create a data destination asynchronously. Schema validation happens synchronously; credential validation and secret storage run in a background task. Poll GET /dataDestinations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: Unique identifier for the data destination (required)
         :type data_destination_name: str
         :param create_data_destination: (required)
@@ -95,6 +98,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._create_update_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             create_data_destination=create_data_destination,
             _request_auth=_request_auth,
@@ -124,6 +128,7 @@ class DataDestinationsApi:
     @validate_call
     async def create_update_data_destination_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -143,6 +148,8 @@ class DataDestinationsApi:
 
         Create a data destination asynchronously. Schema validation happens synchronously; credential validation and secret storage run in a background task. Poll GET /dataDestinations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: Unique identifier for the data destination (required)
         :type data_destination_name: str
         :param create_data_destination: (required)
@@ -170,6 +177,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._create_update_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             create_data_destination=create_data_destination,
             _request_auth=_request_auth,
@@ -199,6 +207,7 @@ class DataDestinationsApi:
     @validate_call
     async def create_update_data_destination_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -218,6 +227,8 @@ class DataDestinationsApi:
 
         Create a data destination asynchronously. Schema validation happens synchronously; credential validation and secret storage run in a background task. Poll GET /dataDestinations/{name} to track progress via status and errorMessage. Returns 202 (not exists or ERROR retry), 409 (ACTIVE or DELETING), 422 (retry exhausted). 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: Unique identifier for the data destination (required)
         :type data_destination_name: str
         :param create_data_destination: (required)
@@ -245,6 +256,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._create_update_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             create_data_destination=create_data_destination,
             _request_auth=_request_auth,
@@ -270,6 +282,7 @@ class DataDestinationsApi:
     @validate_call
     def create_update_data_destination_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -292,6 +305,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.create_update_data_destination(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 create_data_destination=create_data_destination,
                 _request_timeout=_request_timeout,
@@ -306,6 +320,7 @@ class DataDestinationsApi:
     @validate_call
     def create_update_data_destination_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -328,6 +343,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.create_update_data_destination_with_http_info(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 create_data_destination=create_data_destination,
                 _request_timeout=_request_timeout,
@@ -342,6 +358,7 @@ class DataDestinationsApi:
     @validate_call
     def create_update_data_destination_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[str, Field(min_length=1, strict=True, max_length=127, description="Unique identifier for the data destination")],
         create_data_destination: CreateDataDestination,
         _request_timeout: Union[
@@ -364,6 +381,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.create_update_data_destination_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 create_data_destination=create_data_destination,
                 _request_timeout=_request_timeout,
@@ -377,6 +395,7 @@ class DataDestinationsApi:
 
     def _create_update_data_destination_serialize(
         self,
+        ai_resource_group,
         data_destination_name,
         create_data_destination,
         _request_auth,
@@ -404,6 +423,8 @@ class DataDestinationsApi:
             _path_params['dataDestinationName'] = data_destination_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if create_data_destination is not None:
@@ -458,6 +479,7 @@ class DataDestinationsApi:
     @validate_call
     async def delete_data_destination_by_name(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -476,6 +498,8 @@ class DataDestinationsApi:
 
         Mark the data destination for deletion. Synchronously checks for dependent TabularArtifacts; returns 202 immediately after marking DELETING. The cron reaper handles secret deletion and hard delete. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to delete (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -501,6 +525,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._delete_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -529,6 +554,7 @@ class DataDestinationsApi:
     @validate_call
     async def delete_data_destination_by_name_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -547,6 +573,8 @@ class DataDestinationsApi:
 
         Mark the data destination for deletion. Synchronously checks for dependent TabularArtifacts; returns 202 immediately after marking DELETING. The cron reaper handles secret deletion and hard delete. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to delete (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -572,6 +600,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._delete_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -600,6 +629,7 @@ class DataDestinationsApi:
     @validate_call
     async def delete_data_destination_by_name_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -618,6 +648,8 @@ class DataDestinationsApi:
 
         Mark the data destination for deletion. Synchronously checks for dependent TabularArtifacts; returns 202 immediately after marking DELETING. The cron reaper handles secret deletion and hard delete. 
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to delete (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -643,6 +675,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._delete_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -667,6 +700,7 @@ class DataDestinationsApi:
     @validate_call
     def delete_data_destination_by_name_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -688,6 +722,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_data_destination_by_name(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -701,6 +736,7 @@ class DataDestinationsApi:
     @validate_call
     def delete_data_destination_by_name_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -722,6 +758,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_data_destination_by_name_with_http_info(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -735,6 +772,7 @@ class DataDestinationsApi:
     @validate_call
     def delete_data_destination_by_name_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to delete")],
         _request_timeout: Union[
             None,
@@ -756,6 +794,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.delete_data_destination_by_name_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -768,6 +807,7 @@ class DataDestinationsApi:
 
     def _delete_data_destination_by_name_serialize(
         self,
+        ai_resource_group,
         data_destination_name,
         _request_auth,
         _content_type,
@@ -794,6 +834,8 @@ class DataDestinationsApi:
             _path_params['dataDestinationName'] = data_destination_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -833,6 +875,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_all_data_destinations(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -853,6 +896,8 @@ class DataDestinationsApi:
 
         Get all data destinations in the tenant (resource group)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -882,6 +927,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_all_data_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -910,6 +956,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_all_data_destinations_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -930,6 +977,8 @@ class DataDestinationsApi:
 
         Get all data destinations in the tenant (resource group)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -959,6 +1008,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_all_data_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -987,6 +1037,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_all_data_destinations_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1007,6 +1058,8 @@ class DataDestinationsApi:
 
         Get all data destinations in the tenant (resource group)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param top: Number of results to display
         :type top: int
         :param skip: Number of results to be skipped from the ordered list of results
@@ -1036,6 +1089,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_all_data_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             top=top,
             skip=skip,
             count=count,
@@ -1060,6 +1114,7 @@ class DataDestinationsApi:
     @validate_call
     def get_all_data_destinations_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1083,6 +1138,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_data_destinations(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1098,6 +1154,7 @@ class DataDestinationsApi:
     @validate_call
     def get_all_data_destinations_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1121,6 +1178,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_data_destinations_with_http_info(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1136,6 +1194,7 @@ class DataDestinationsApi:
     @validate_call
     def get_all_data_destinations_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
         count: Annotated[Optional[StrictBool], Field(description="When the $count field is set to false, the response contains a count of the items present in the response. When the $count field is set to true, the response contains a count of all the items present on the server, and not just the ones in the response. When the $count field is not passed, it is false by default.")] = None,
@@ -1159,6 +1218,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_all_data_destinations_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 top=top,
                 skip=skip,
                 count=count,
@@ -1173,6 +1233,7 @@ class DataDestinationsApi:
 
     def _get_all_data_destinations_serialize(
         self,
+        ai_resource_group,
         top,
         skip,
         count,
@@ -1211,6 +1272,8 @@ class DataDestinationsApi:
             _query_params.append(('$count', count))
             
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1250,6 +1313,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_data_destination_by_name(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1268,6 +1332,8 @@ class DataDestinationsApi:
 
         Get metadata of a specific data destination (excluding credentials)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to get (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1293,6 +1359,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1320,6 +1387,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_data_destination_by_name_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1338,6 +1406,8 @@ class DataDestinationsApi:
 
         Get metadata of a specific data destination (excluding credentials)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to get (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1363,6 +1433,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1390,6 +1461,7 @@ class DataDestinationsApi:
     @validate_call
     async def get_data_destination_by_name_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1408,6 +1480,8 @@ class DataDestinationsApi:
 
         Get metadata of a specific data destination (excluding credentials)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to get (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -1433,6 +1507,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._get_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1456,6 +1531,7 @@ class DataDestinationsApi:
     @validate_call
     def get_data_destination_by_name_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1477,6 +1553,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_data_destination_by_name(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1490,6 +1567,7 @@ class DataDestinationsApi:
     @validate_call
     def get_data_destination_by_name_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1511,6 +1589,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_data_destination_by_name_with_http_info(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1524,6 +1603,7 @@ class DataDestinationsApi:
     @validate_call
     def get_data_destination_by_name_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to get")],
         _request_timeout: Union[
             None,
@@ -1545,6 +1625,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.get_data_destination_by_name_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -1557,6 +1638,7 @@ class DataDestinationsApi:
 
     def _get_data_destination_by_name_serialize(
         self,
+        ai_resource_group,
         data_destination_name,
         _request_auth,
         _content_type,
@@ -1583,6 +1665,8 @@ class DataDestinationsApi:
             _path_params['dataDestinationName'] = data_destination_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 
@@ -1622,6 +1706,7 @@ class DataDestinationsApi:
     @validate_call
     async def patch_data_destination_by_name(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1641,6 +1726,8 @@ class DataDestinationsApi:
 
         Update a data destination (excluding name and type)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to update (required)
         :type data_destination_name: str
         :param patch_data_destination: (required)
@@ -1668,6 +1755,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._patch_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             patch_data_destination=patch_data_destination,
             _request_auth=_request_auth,
@@ -1697,6 +1785,7 @@ class DataDestinationsApi:
     @validate_call
     async def patch_data_destination_by_name_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1716,6 +1805,8 @@ class DataDestinationsApi:
 
         Update a data destination (excluding name and type)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to update (required)
         :type data_destination_name: str
         :param patch_data_destination: (required)
@@ -1743,6 +1834,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._patch_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             patch_data_destination=patch_data_destination,
             _request_auth=_request_auth,
@@ -1772,6 +1864,7 @@ class DataDestinationsApi:
     @validate_call
     async def patch_data_destination_by_name_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1791,6 +1884,8 @@ class DataDestinationsApi:
 
         Update a data destination (excluding name and type)
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The ID of the data destination to update (required)
         :type data_destination_name: str
         :param patch_data_destination: (required)
@@ -1818,6 +1913,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._patch_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             patch_data_destination=patch_data_destination,
             _request_auth=_request_auth,
@@ -1843,6 +1939,7 @@ class DataDestinationsApi:
     @validate_call
     def patch_data_destination_by_name_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1865,6 +1962,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.patch_data_destination_by_name(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 patch_data_destination=patch_data_destination,
                 _request_timeout=_request_timeout,
@@ -1879,6 +1977,7 @@ class DataDestinationsApi:
     @validate_call
     def patch_data_destination_by_name_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1901,6 +2000,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.patch_data_destination_by_name_with_http_info(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 patch_data_destination=patch_data_destination,
                 _request_timeout=_request_timeout,
@@ -1915,6 +2015,7 @@ class DataDestinationsApi:
     @validate_call
     def patch_data_destination_by_name_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The ID of the data destination to update")],
         patch_data_destination: PatchDataDestination,
         _request_timeout: Union[
@@ -1937,6 +2038,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.patch_data_destination_by_name_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 patch_data_destination=patch_data_destination,
                 _request_timeout=_request_timeout,
@@ -1950,6 +2052,7 @@ class DataDestinationsApi:
 
     def _patch_data_destination_by_name_serialize(
         self,
+        ai_resource_group,
         data_destination_name,
         patch_data_destination,
         _request_auth,
@@ -1977,6 +2080,8 @@ class DataDestinationsApi:
             _path_params['dataDestinationName'] = data_destination_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if patch_data_destination is not None:
@@ -2031,6 +2136,7 @@ class DataDestinationsApi:
     @validate_call
     async def search_destinations(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2052,6 +2158,8 @@ class DataDestinationsApi:
 
         Search data destinations by label key-value pairs
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param search_destinations_request: (required)
         :type search_destinations_request: SearchDestinationsRequest
         :param top: Number of results to display
@@ -2083,6 +2191,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._search_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             search_destinations_request=search_destinations_request,
             top=top,
             skip=skip,
@@ -2112,6 +2221,7 @@ class DataDestinationsApi:
     @validate_call
     async def search_destinations_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2133,6 +2243,8 @@ class DataDestinationsApi:
 
         Search data destinations by label key-value pairs
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param search_destinations_request: (required)
         :type search_destinations_request: SearchDestinationsRequest
         :param top: Number of results to display
@@ -2164,6 +2276,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._search_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             search_destinations_request=search_destinations_request,
             top=top,
             skip=skip,
@@ -2193,6 +2306,7 @@ class DataDestinationsApi:
     @validate_call
     async def search_destinations_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2214,6 +2328,8 @@ class DataDestinationsApi:
 
         Search data destinations by label key-value pairs
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param search_destinations_request: (required)
         :type search_destinations_request: SearchDestinationsRequest
         :param top: Number of results to display
@@ -2245,6 +2361,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._search_destinations_serialize(
+            ai_resource_group=ai_resource_group,
             search_destinations_request=search_destinations_request,
             top=top,
             skip=skip,
@@ -2270,6 +2387,7 @@ class DataDestinationsApi:
     @validate_call
     def search_destinations_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2294,6 +2412,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.search_destinations(
+                ai_resource_group=ai_resource_group,
                 search_destinations_request=search_destinations_request,
                 top=top,
                 skip=skip,
@@ -2310,6 +2429,7 @@ class DataDestinationsApi:
     @validate_call
     def search_destinations_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2334,6 +2454,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.search_destinations_with_http_info(
+                ai_resource_group=ai_resource_group,
                 search_destinations_request=search_destinations_request,
                 top=top,
                 skip=skip,
@@ -2350,6 +2471,7 @@ class DataDestinationsApi:
     @validate_call
     def search_destinations_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         search_destinations_request: SearchDestinationsRequest,
         top: Annotated[Optional[Annotated[int, Field(le=1000, strict=True, ge=0)]], Field(description="Number of results to display")] = None,
         skip: Annotated[Optional[Annotated[int, Field(strict=True, ge=0)]], Field(description="Number of results to be skipped from the ordered list of results")] = None,
@@ -2374,6 +2496,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.search_destinations_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 search_destinations_request=search_destinations_request,
                 top=top,
                 skip=skip,
@@ -2389,6 +2512,7 @@ class DataDestinationsApi:
 
     def _search_destinations_serialize(
         self,
+        ai_resource_group,
         search_destinations_request,
         top,
         skip,
@@ -2428,6 +2552,8 @@ class DataDestinationsApi:
             _query_params.append(('$count', count))
             
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if search_destinations_request is not None:
@@ -2482,6 +2608,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2500,6 +2627,8 @@ class DataDestinationsApi:
 
         Test provider connectivity before saving. Nothing is persisted.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param validate_data_destination_request: (required)
         :type validate_data_destination_request: ValidateDataDestinationRequest
         :param _request_timeout: timeout setting for this request. If one
@@ -2525,6 +2654,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             validate_data_destination_request=validate_data_destination_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2551,6 +2681,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2569,6 +2700,8 @@ class DataDestinationsApi:
 
         Test provider connectivity before saving. Nothing is persisted.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param validate_data_destination_request: (required)
         :type validate_data_destination_request: ValidateDataDestinationRequest
         :param _request_timeout: timeout setting for this request. If one
@@ -2594,6 +2727,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             validate_data_destination_request=validate_data_destination_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2620,6 +2754,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2638,6 +2773,8 @@ class DataDestinationsApi:
 
         Test provider connectivity before saving. Nothing is persisted.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param validate_data_destination_request: (required)
         :type validate_data_destination_request: ValidateDataDestinationRequest
         :param _request_timeout: timeout setting for this request. If one
@@ -2663,6 +2800,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_serialize(
+            ai_resource_group=ai_resource_group,
             validate_data_destination_request=validate_data_destination_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2685,6 +2823,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2706,6 +2845,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination(
+                ai_resource_group=ai_resource_group,
                 validate_data_destination_request=validate_data_destination_request,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -2719,6 +2859,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2740,6 +2881,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination_with_http_info(
+                ai_resource_group=ai_resource_group,
                 validate_data_destination_request=validate_data_destination_request,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -2753,6 +2895,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         validate_data_destination_request: ValidateDataDestinationRequest,
         _request_timeout: Union[
             None,
@@ -2774,6 +2917,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 validate_data_destination_request=validate_data_destination_request,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -2786,6 +2930,7 @@ class DataDestinationsApi:
 
     def _validate_data_destination_serialize(
         self,
+        ai_resource_group,
         validate_data_destination_request,
         _request_auth,
         _content_type,
@@ -2810,6 +2955,8 @@ class DataDestinationsApi:
         # process the path parameters
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
         if validate_data_destination_request is not None:
@@ -2864,6 +3011,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination_by_name(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -2882,6 +3030,8 @@ class DataDestinationsApi:
 
         Re-verify an already-saved destination using stored credentials.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The name of the data destination to validate (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -2907,6 +3057,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2934,6 +3085,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination_by_name_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -2952,6 +3104,8 @@ class DataDestinationsApi:
 
         Re-verify an already-saved destination using stored credentials.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The name of the data destination to validate (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -2977,6 +3131,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -3004,6 +3159,7 @@ class DataDestinationsApi:
     @validate_call
     async def validate_data_destination_by_name_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -3022,6 +3178,8 @@ class DataDestinationsApi:
 
         Re-verify an already-saved destination using stored credentials.
 
+        :param ai_resource_group: Resource Group ID (required)
+        :type ai_resource_group: str
         :param data_destination_name: The name of the data destination to validate (required)
         :type data_destination_name: str
         :param _request_timeout: timeout setting for this request. If one
@@ -3047,6 +3205,7 @@ class DataDestinationsApi:
         """ # noqa: E501
 
         _param = self._validate_data_destination_by_name_serialize(
+            ai_resource_group=ai_resource_group,
             data_destination_name=data_destination_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -3070,6 +3229,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_by_name_sync(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -3091,6 +3251,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination_by_name(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -3104,6 +3265,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_by_name_sync_with_http_info(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -3125,6 +3287,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination_by_name_with_http_info(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -3138,6 +3301,7 @@ class DataDestinationsApi:
     @validate_call
     def validate_data_destination_by_name_sync_without_preload_content(
         self,
+        ai_resource_group: Annotated[StrictStr, Field(description="Resource Group ID")],
         data_destination_name: Annotated[StrictStr, Field(description="The name of the data destination to validate")],
         _request_timeout: Union[
             None,
@@ -3159,6 +3323,7 @@ class DataDestinationsApi:
         """ # noqa: E501
         return run_sync(
             self.validate_data_destination_by_name_without_preload_content(
+                ai_resource_group=ai_resource_group,
                 data_destination_name=data_destination_name,
                 _request_timeout=_request_timeout,
                 _request_auth=_request_auth,
@@ -3171,6 +3336,7 @@ class DataDestinationsApi:
 
     def _validate_data_destination_by_name_serialize(
         self,
+        ai_resource_group,
         data_destination_name,
         _request_auth,
         _content_type,
@@ -3197,6 +3363,8 @@ class DataDestinationsApi:
             _path_params['dataDestinationName'] = data_destination_name
         # process the query parameters
         # process the header parameters
+        if ai_resource_group is not None:
+            _header_params['AI-Resource-Group'] = ai_resource_group
         # process the form parameters
         # process the body parameter
 

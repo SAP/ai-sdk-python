@@ -2,7 +2,6 @@
   "api.yaml": {
     "directoryName": "gen_ai_hub/context_registry/generated",
     "basePath": "/v2/tcr",
-    "stripHeaderParameters": ["AI-Resource-Group"],
     "kiota": {
       "className": "ContextRegistryClient",
       "namespaceName": "gen_ai_hub.context_registry_kiota.generated",

@@ -113,26 +113,6 @@ def _fix_field_aliases(output_dir: Path) -> None:
             py_file.write_text(updated)
 
 
-def _rewrite_imports(output_dir: Path, package_name: str) -> None:
-    import re
-    # Matches bare 'generated.' not preceded by a dot or word char (i.e. not already
-    # part of a fully-qualified path like 'gen_ai_hub.tab_ai_orchestration.generated.').
-    _bare_generated_re = re.compile(r'(?<![.\w])generated\.')
-    for py_file in output_dir.rglob("*.py"):
-        src = py_file.read_text()
-        updated = (
-            src
-            .replace("from generated.", f"from {package_name}.")
-            .replace("import generated.", f"import {package_name}.")
-            .replace("from generated import ", f"from {package_name} import ")
-        )
-        # Catch expression-level uses of the bare 'generated' name (e.g. getattr(generated.models, ...))
-        # that the string replacements above don't cover.
-        updated = _bare_generated_re.sub(f"{package_name}.", updated)
-        if updated != src:
-            py_file.write_text(updated)
-
-
 def generate_one(
     spec_path: Path,
     output_dir: Path,
@@ -142,7 +122,6 @@ def generate_one(
     config_path: Path | None = None,
 ) -> None:
     config_path = config_path or _DEFAULT_CONFIG
-    leaf = "generated"
 
     with tempfile.TemporaryDirectory(prefix="sap-openapi-") as tmp:
         tmp_path = Path(tmp)
@@ -166,7 +145,7 @@ def generate_one(
             "-i", str(processed),
             "-o", str(gen_tmp),
             "-c", str(config_path),
-            "--additional-properties", f"packageName={leaf}",
+            "--additional-properties", f"packageName={package_name}",
         ]
         if template_dir.is_dir():
             cmd += ["--template-dir", str(template_dir)]
@@ -176,7 +155,10 @@ def generate_one(
         if result.returncode != 0:
             sys.exit(result.returncode)
 
-        generated_src = gen_tmp / leaf
+        # With a dotted packageName the generator nests the source under the
+        # matching path (e.g. gen_ai_hub/context_registry/generated). Follow it
+        # down; the surrounding scaffold (pyproject, tests, docs) stays in temp.
+        generated_src = gen_tmp / Path(*package_name.split("."))
         if not generated_src.exists():
             print(f"ERROR: expected generated output at {generated_src}", file=sys.stderr)
             sys.exit(1)
@@ -187,7 +169,6 @@ def generate_one(
 
     _fix_numbered_duplicates(output_dir)
     _fix_field_aliases(output_dir)
-    _rewrite_imports(output_dir, package_name)
     (output_dir / "py.typed").touch()
 
 

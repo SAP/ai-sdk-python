@@ -35,7 +35,8 @@ class AzureConnectionConfig(BaseModel):
     __properties: ClassVar[List[str]] = ["account_name", "container_uri", "sas_token"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
