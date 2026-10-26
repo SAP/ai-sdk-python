@@ -636,7 +636,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.file_llm)
+                                                       model=self.llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
@@ -656,7 +656,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.file_llm)
+                                                       model=self.llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
@@ -675,7 +675,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.file_llm)
+                                                       model=self.llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
