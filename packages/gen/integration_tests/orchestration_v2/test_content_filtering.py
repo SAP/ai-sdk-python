@@ -319,7 +319,7 @@ class TestContentFilter(OrchestrationServiceTestBase):
         self.assertIsNotNone(input_data)
         self.assertIn("harm", input_data)
         self.assertIn("reasoning", input_data["harm"])
-        output_data = response.intermediate_results.output_filtering.data["granite_guardian_4_1"]
+        output_data = response.intermediate_results.output_filtering.data["choices"][0]["granite_guardian_4_1"]
         self.assertIsNotNone(output_data)
         self.assertIn("harm", output_data)
         self.assertIn("reasoning", output_data["harm"])
