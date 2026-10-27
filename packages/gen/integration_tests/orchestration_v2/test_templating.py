@@ -536,6 +536,14 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
                 "temperature": 0.0,
             },
         )
+        self.file_llm = LLMModelDetails(
+            name="gemini-2.0-flash",
+            version="latest",
+            params={
+                "max_tokens": 50,
+                "temperature": 0.0,
+            },
+        )
 
     def test_image_from_url(self):
         data_url = (
@@ -636,7 +644,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.llm)
+                                                       model=self.file_llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
@@ -656,7 +664,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.llm)
+                                                       model=self.file_llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
@@ -675,7 +683,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         template = Template(template=[UserMessage(content=multimodal_content)])
         prompt_template = PromptTemplatingModuleConfig(prompt=template,
-                                                       model=self.llm)
+                                                       model=self.file_llm)
 
         module_config = ModuleConfig(prompt_templating=prompt_template)
 
