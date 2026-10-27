@@ -364,6 +364,8 @@ class TestOrchestrationService(unittest.TestCase):
 
     def test_timeout_client_request(self):
         class FakeResponse:
+            headers = httpx.Headers({})
+
             def raise_for_status(self):
                 pass  # No-op for mock tests
 
@@ -425,6 +427,8 @@ class TestOrchestrationServiceAsync(unittest.IsolatedAsyncioTestCase):
 
     async def test_async_timeout_client_request(self):
         class FakeResponse:
+            headers = httpx.Headers({})
+
             def raise_for_status(self):
                 pass  # No-op for mock tests
 
