@@ -300,6 +300,66 @@ class TestContentFilter(OrchestrationServiceTestBase):
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
 
+    def test_valid_input_and_output_filtering_with_granite_guardian_with_reasoning(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True), enable_reasoning=True
+        )
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)]),
+            output=OutputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+        input_data = response.intermediate_results.input_filtering.data
+        self.assertIsNotNone(input_data)
+        self.assertIn("harm", input_data)
+        self.assertIn("reasoning", input_data["harm"])
+        output_data = response.intermediate_results.output_filtering.data
+        self.assertIsNotNone(output_data)
+        self.assertIn("harm", output_data)
+        self.assertIn("reasoning", output_data["harm"])
+
+    def test_blocked_input_filtering_with_granite_guardian_multiple_categories(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True, social_bias=True, violence=True)
+        )
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_valid_input_and_output_filtering_with_granite_guardian_multiple_categories_with_reasoning(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True, social_bias=True, violence=True),
+            enable_reasoning=True
+        )
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)]),
+            output=OutputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+        input_data = response.intermediate_results.input_filtering.data
+        self.assertIsNotNone(input_data)
+        for category in ("harm", "social_bias", "violence"):
+            self.assertIn(category, input_data)
+            self.assertIn("reasoning", input_data[category])
+
 class TestContentFilterBackwardCompatibility(OrchestrationServiceTestBase):
 
     def setUp(self):
