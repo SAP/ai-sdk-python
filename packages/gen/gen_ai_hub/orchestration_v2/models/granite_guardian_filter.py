@@ -9,9 +9,9 @@ from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 
 class GraniteGuardian41Categories(BaseModel):
     """
-    Content criteria to evaluate.
+    Granite Guardian 4.1 content criteria to evaluate.
 
-    Note: Granite Guardian requires separate calls for each configured content category.
+    Note: Granite Guardian performs separate calls for each configured content category.
     Recommendation: Use only the ``harm`` catch-all content category.
 
     Args:
