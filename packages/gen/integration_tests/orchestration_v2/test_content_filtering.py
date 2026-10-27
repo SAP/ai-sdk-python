@@ -315,11 +315,11 @@ class TestContentFilter(OrchestrationServiceTestBase):
         self.assertIsNotNone(response.intermediate_results.input_filtering)
         self.assertIsNotNone(response.intermediate_results.output_filtering)
         self.assertIsNotNone(response.final_result.model)
-        input_data = response.intermediate_results.input_filtering.data
+        input_data = response.intermediate_results.input_filtering.data["granite_guardian_4_1"]
         self.assertIsNotNone(input_data)
         self.assertIn("harm", input_data)
         self.assertIn("reasoning", input_data["harm"])
-        output_data = response.intermediate_results.output_filtering.data
+        output_data = response.intermediate_results.output_filtering.data["granite_guardian_4_1"]
         self.assertIsNotNone(output_data)
         self.assertIn("harm", output_data)
         self.assertIn("reasoning", output_data["harm"])
@@ -354,7 +354,7 @@ class TestContentFilter(OrchestrationServiceTestBase):
         self.assertIsNotNone(response.intermediate_results.input_filtering)
         self.assertIsNotNone(response.intermediate_results.output_filtering)
         self.assertIsNotNone(response.final_result.model)
-        input_data = response.intermediate_results.input_filtering.data
+        input_data = response.intermediate_results.input_filtering.data["granite_guardian_4_1"]
         self.assertIsNotNone(input_data)
         for category in ("harm", "social_bias", "violence"):
             self.assertIn(category, input_data)
