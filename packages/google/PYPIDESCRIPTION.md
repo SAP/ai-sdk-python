@@ -4,14 +4,13 @@ Google GenAI integration for the SAP generative AI SDK. Provides the native
 `google-genai` client (`Client`) wired to route calls through the generative AI
 Hub of SAP AI Core.
 
-The optional `[langchain]` extra adds the langchain adapters
-(`ChatGoogleGenerativeAI`, `GoogleGenerativeAIEmbeddings`) built on
-`langchain-google-genai`.
+Looking for the langchain adapters (`ChatGoogleGenerativeAI`,
+`GoogleGenerativeAIEmbeddings`)? They now ship with the langchain package —
+install `sap-ai-sdk-langchain[google]`.
 
 ## Installation
 
-    pip install sap-ai-sdk-google            # native google-genai client only
-    pip install "sap-ai-sdk-google[langchain]"  # + langchain adapters
+    pip install sap-ai-sdk-google
 
 ## Usage
 

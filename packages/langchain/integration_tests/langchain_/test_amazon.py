@@ -12,10 +12,10 @@ from langchain_core.messages import AIMessage, HumanMessage, AIMessageChunk
 from parameterized import parameterized
 from pydantic import BaseModel
 
-from sap_ai_sdk_amazon.langchain import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse
-from integration_tests.constants import (AMAZON_TITAN_EMBEDDING_TEST_MODEL, CLAUDE_4_5_SONNET_TEST_MODEL,
-                                         AMAZON_NOVA_MICRO_TEST_MODEL, CLAUDE_4_5_HAIKU_TEST_MODEL)
-from integration_tests.setup_aicore import TestCaseBedrockSetupMixin
+from sap_ai_sdk_langchain.amazon import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse
+from ..constants import (AMAZON_TITAN_EMBEDDING_TEST_MODEL, CLAUDE_4_5_SONNET_TEST_MODEL,
+                         AMAZON_NOVA_MICRO_TEST_MODEL, CLAUDE_4_5_HAIKU_TEST_MODEL)
+from ..setup_aicore import TestCaseBedrockSetupMixin
 
 @pytest.mark.bedrock
 class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):

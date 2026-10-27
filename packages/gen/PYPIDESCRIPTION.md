@@ -37,5 +37,5 @@ extras) — but the merged **top-level** re-export forwards only the OpenAI subs
 the Bedrock/Google adapters from the submodule or their new home:
 
     from gen_ai_hub.proxy.langchain.amazon import ChatBedrock          # legacy submodule path
-    from sap_ai_sdk_amazon.langchain import ChatBedrock, ChatBedrockConverse, BedrockEmbeddings
-    from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+    from sap_ai_sdk_langchain.amazon import ChatBedrock, ChatBedrockConverse, BedrockEmbeddings
+    from sap_ai_sdk_langchain.google import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings

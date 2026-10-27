@@ -1,5 +1,4 @@
 from .init_models import init_embedding_model, init_llm
-from .openai import OpenAI, OpenAIEmbeddings, OpenAIClient, AsyncOpenAIClient, ChatOpenAI
 
 # Make sure that the user has a recent version of langchain installed
 _langchain_is_below_0_1_0 = None
@@ -17,9 +16,19 @@ else:
 __all__ = [
     'init_llm',
     'init_embedding_model',
-    'OpenAIClient',
-    'OpenAIEmbeddings',
-    'AsyncOpenAIClient',
-    'ChatOpenAI',
-    'OpenAI',
 ]
+
+# The OpenAI langchain wrappers require the ``[openai]`` extra (langchain-openai +
+# sap-ai-sdk-openai). Re-export them when present so a base install still works.
+try:
+    from .openai import OpenAI, OpenAIEmbeddings, OpenAIClient, AsyncOpenAIClient, ChatOpenAI
+except ImportError:
+    pass
+else:
+    __all__ += [
+        'OpenAIClient',
+        'OpenAIEmbeddings',
+        'AsyncOpenAIClient',
+        'ChatOpenAI',
+        'OpenAI',
+    ]

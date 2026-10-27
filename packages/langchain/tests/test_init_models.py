@@ -159,31 +159,33 @@ class TestInitModels(unittest.TestCase):
 
 
 class TestLazyProviderDispatch(unittest.TestCase):
-    """The provider adapters (amazon/google) live in separate packages and are
-    imported lazily. When the provider package is not installed, dispatching to
-    it must raise an actionable ImportError naming the pip install command."""
+    """The provider adapters (amazon/google) live in this package as optional
+    modules (``sap_ai_sdk_langchain.amazon`` / ``.google``) gated behind the
+    matching extra. When the extra is not installed, dispatching to the adapter
+    must raise an actionable ImportError naming the pip install command."""
 
-    def _assert_actionable_import_error(self, model_name: str, provider_module: str, distribution: str):
+    def _assert_actionable_import_error(self, model_name: str, adapter_module: str, extra: str):
         proxy_client = MagicMock()
         proxy_client.deployment_class.get_main_model_identification_kwargs.return_value = 'model_name'
         proxy_client.deployment_class.get_model_identification_kwargs.return_value = ['model_name']
 
-        # Simulate the provider package being absent.
-        with unittest.mock.patch.dict(sys.modules, {f'{provider_module}.langchain': None}):
+        qualified = f'sap_ai_sdk_langchain.{adapter_module}'
+        # Simulate the adapter's extra being absent.
+        with unittest.mock.patch.dict(sys.modules, {qualified: None}):
             # Drop any cached import so the patched (missing) module is seen.
-            sys.modules.pop(f'{provider_module}.langchain', None)
+            sys.modules.pop(qualified, None)
             with self.assertRaises(ImportError) as cm:
                 init_llm(model_name, proxy_client=proxy_client)
         message = str(cm.exception)
-        self.assertIn(distribution, message)
-        self.assertIn('[langchain]', message)
+        self.assertIn('sap-ai-sdk-langchain', message)
+        self.assertIn(f'[{extra}]', message)
 
     def test_amazon_dispatch_raises_actionable_error_when_absent(self):
-        if importlib.util.find_spec('sap_ai_sdk_amazon') is not None:
-            self.skipTest('sap-ai-sdk-amazon is installed; lazy-error path not exercised')
-        self._assert_actionable_import_error('amazon--nova-micro', 'sap_ai_sdk_amazon', 'sap-ai-sdk-amazon')
+        if importlib.util.find_spec('sap_ai_sdk_langchain.amazon') is not None:
+            self.skipTest('sap-ai-sdk-langchain[amazon] is installed; lazy-error path not exercised')
+        self._assert_actionable_import_error('amazon--nova-micro', 'amazon', 'amazon')
 
     def test_google_dispatch_raises_actionable_error_when_absent(self):
-        if importlib.util.find_spec('sap_ai_sdk_google') is not None:
-            self.skipTest('sap-ai-sdk-google is installed; lazy-error path not exercised')
-        self._assert_actionable_import_error('gemini-2.5-flash-lite', 'sap_ai_sdk_google', 'sap-ai-sdk-google')
+        if importlib.util.find_spec('sap_ai_sdk_langchain.google') is not None:
+            self.skipTest('sap-ai-sdk-langchain[google] is installed; lazy-error path not exercised')
+        self._assert_actionable_import_error('gemini-2.5-flash-lite', 'google', 'google')

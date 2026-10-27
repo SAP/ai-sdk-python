@@ -13,10 +13,10 @@ from langchain_core.messages import AIMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
 from sap_ai_sdk_langchain import init_llm
-from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI
-from sap_ai_sdk_google.langchain import GoogleGenerativeAIEmbeddings
-from integration_tests.constants import GOOGLE_EMBEDDING_TEST_MODEL, GEMINI_2_5_FLASH_LITE_TEST_MODEL
-from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
+from sap_ai_sdk_langchain.google import ChatGoogleGenerativeAI
+from sap_ai_sdk_langchain.google import GoogleGenerativeAIEmbeddings
+from ..constants import GOOGLE_EMBEDDING_TEST_MODEL, GEMINI_2_5_FLASH_LITE_TEST_MODEL
+from ..setup_aicore import TestCaseAICoreSetupMixin
 
 
 class TestGoogleGenerativeAI(TestCaseAICoreSetupMixin, unittest.TestCase):

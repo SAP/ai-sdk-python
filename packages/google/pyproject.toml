@@ -33,9 +33,6 @@ dependencies = [
     "sap-ai-sdk-proxy>=1.0.0",
 ]
 
-[project.optional-dependencies]
-langchain = ["langchain-google-genai~=4.4.0", "sap-ai-sdk-langchain>=1.0.0"]
-
 [dependency-groups]
 dev = [
     "pytest==9.1.1",
@@ -50,8 +47,6 @@ dev = [
     "myst_nb",
     "sphinxawesome-theme",
     "pytest-dotenv>=0.5.2",
-    "langchain-google-genai~=4.4.0",
-    "sap-ai-sdk-langchain",
 ]
 
 [tool.pytest.ini_options]
@@ -65,7 +60,6 @@ Download = "https://pypi.python.org/pypi/sap-ai-sdk-google"
 
 [tool.uv.sources]
 sap-ai-sdk-proxy = { workspace = true }
-sap-ai-sdk-langchain = { workspace = true }
 
 [tool.setuptools.packages.find]
 exclude = ["*test*"]

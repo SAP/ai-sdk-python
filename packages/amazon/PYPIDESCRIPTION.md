@@ -4,13 +4,13 @@ Amazon Bedrock integration for the SAP generative AI SDK. Provides the native
 Bedrock client wrappers (`Session`, `AsyncSession`, `ClientWrapper`) that route
 `boto3`/`aiobotocore` calls through the generative AI Hub of SAP AI Core.
 
-The optional `[langchain]` extra adds the langchain adapters (`ChatBedrock`,
-`ChatBedrockConverse`, `BedrockEmbeddings`) built on `langchain-aws`.
+Looking for the langchain adapters (`ChatBedrock`, `ChatBedrockConverse`,
+`BedrockEmbeddings`)? They now ship with the langchain package — install
+`sap-ai-sdk-langchain[amazon]`.
 
 ## Installation
 
-    pip install sap-ai-sdk-amazon            # native boto3 client only
-    pip install "sap-ai-sdk-amazon[langchain]"  # + langchain adapters
+    pip install sap-ai-sdk-amazon
 
 ## Usage
 

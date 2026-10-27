@@ -11,7 +11,7 @@ from langchain_classic.prompts.chat import (
     SystemMessagePromptTemplate,
 )
 
-from sap_ai_sdk_google.langchain import ChatGoogleGenerativeAI
+from sap_ai_sdk_langchain.google import ChatGoogleGenerativeAI
 from tests.mock import GOOGLE_GEMINI_INVOKE_RESPONSE, get_mocked_ai_core_client
 
 

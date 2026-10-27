@@ -39,9 +39,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-langchain = ["sap-ai-sdk-langchain>=1.0.0"]
-amazon = ["sap-ai-sdk-amazon>=1.0.0"]
-google = ["sap-ai-sdk-google>=1.0.0"]
+langchain = ["sap-ai-sdk-langchain[openai]>=1.0.0"]
+amazon = ["sap-ai-sdk-amazon>=1.0.0", "sap-ai-sdk-langchain[amazon]>=1.0.0"]
+google = ["sap-ai-sdk-google>=1.0.0", "sap-ai-sdk-langchain[google]>=1.0.0"]
 all = ["sap-ai-sdk-gen[langchain,amazon,google]"]
 
 [dependency-groups]

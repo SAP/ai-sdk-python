@@ -10,7 +10,7 @@ from langchain_classic.prompts import (
     SystemMessagePromptTemplate,
 )
 
-from sap_ai_sdk_amazon.langchain import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse, init_chat_model
+from sap_ai_sdk_langchain.amazon import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse, init_chat_model
 from tests.mock import (
     AMAZON_TITAN_EMBED_QUERY_RESPONSE,
     AMAZON_BEDROCK_INVOKE_RESPONSE,
@@ -125,6 +125,3 @@ class TestAmazonLangchain(unittest.TestCase):
 
         self.assertTrue(chat_model.client.meta.config.connect_timeout == 59,
                         "Connect Timeout not applied")
-
-
-
