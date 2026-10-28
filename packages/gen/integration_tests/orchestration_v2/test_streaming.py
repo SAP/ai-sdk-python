@@ -84,7 +84,7 @@ class TestStreaming(OrchestrationServiceTestBase):
         number_of_chunks = 0
         for chunk in service.stream():
             self.assertIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
-            self.assertIn("dummy", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
+            self.assertIn("frequency_penalty", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
             number_of_chunks += 1
         self.assertGreater(number_of_chunks, 0, "No streaming chunks were received.")
 

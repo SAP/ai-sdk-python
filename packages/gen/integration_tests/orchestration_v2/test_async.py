@@ -107,7 +107,7 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         response = await self.service.arun(config=config)
 
         self.assertIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
-        self.assertIn("dummy", response.headers[DROPPED_MODEL_PARAMS_HEADER])
+        self.assertIn("frequency_penalty", response.headers[DROPPED_MODEL_PARAMS_HEADER])
 
     async def test_async_run_without_dropped_params_has_no_dropped_header(self):
         """A normal arun response does not carry the dropped-model-params header."""
@@ -130,7 +130,7 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         chunks = []
         async for chunk in await service.astream():
             self.assertIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
-            self.assertIn("dummy", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
+            self.assertIn("frequency_penalty", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
             chunks.append(chunk)
         self.assertGreater(len(chunks), 0, "No streaming chunks were received.")
 

@@ -125,7 +125,7 @@ class TestService(OrchestrationServiceTestBase):
         response = self.service.run(config=config)
 
         self.assertIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
-        self.assertIn("dummy", response.headers[DROPPED_MODEL_PARAMS_HEADER])
+        self.assertIn("frequency_penalty", response.headers[DROPPED_MODEL_PARAMS_HEADER])
 
     def test_service_request_with_list_of_config(self):
         service = OrchestrationService(api_url=self.api_url,

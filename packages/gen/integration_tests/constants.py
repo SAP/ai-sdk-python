@@ -33,4 +33,4 @@ SAP_RPT_1_6_TEST_MODEL = "sap-rpt-1.6"
 DROPPED_MODEL_PARAMS_HEADER = "x-orchestration-dropped-model-params"
 # A Responses-API model plus a Chat Completions param it does not support, so that
 # drop_unsupported_params=True triggers the header above.
-DROP_TRIGGER_PARAMS = {"dummy": 0.5}
+DROP_TRIGGER_PARAMS = {"frequency_penalty": 0.5}
