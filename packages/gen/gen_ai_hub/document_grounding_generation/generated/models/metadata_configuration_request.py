@@ -29,7 +29,7 @@ class MetadataConfigurationRequest(BaseModel):
     """
     MetadataConfigurationRequest
     """ # noqa: E501
-    id: Optional[StrictStr] = Field(default=None, description="If provided, must be a valid UUID. If not provided, a new UUID will be gen_ai_hub.document_grounding_generation.generated.")
+    id: Optional[StrictStr] = Field(default=None, description="If provided, must be a valid UUID. If not provided, a new UUID will be generated.")
     name: Optional[StrictStr] = Field(default=None, description="If provided, must be a valid string. If not provided, will be same as id.")
     destination_name: StrictStr = Field(description="Contains destination name containing credentials to access the data repository.", serialization_alias="destinationName")
     data_repository_type: StrictStr = Field(description="The data repository type for which this configuration is being created.", serialization_alias="dataRepositoryType", json_schema_extra={"examples": ["MSSharePoint"]})
@@ -46,7 +46,8 @@ class MetadataConfigurationRequest(BaseModel):
         return value
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

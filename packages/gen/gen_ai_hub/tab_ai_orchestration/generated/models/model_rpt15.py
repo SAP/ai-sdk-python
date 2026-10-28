@@ -36,7 +36,8 @@ class ModelRpt15(BaseModel):
     __properties: ClassVar[List[str]] = ["index_column", "data_schema", "parse_data_types", "prediction_config"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

@@ -39,7 +39,8 @@ class RetrievalChunk(BaseModel):
     __properties: ClassVar[List[str]] = ["id", "content", "metadata", "searchScores", "postProcessingScore"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

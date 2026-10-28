@@ -35,7 +35,8 @@ class PredictMetadata(BaseModel):
     __properties: ClassVar[List[str]] = ["num_columns", "num_rows", "num_predictions", "num_query_rows"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

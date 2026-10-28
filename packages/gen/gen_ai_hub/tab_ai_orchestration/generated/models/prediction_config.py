@@ -33,7 +33,8 @@ class PredictionConfig(BaseModel):
     __properties: ClassVar[List[str]] = ["targetColumns"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
@@ -88,7 +89,7 @@ class PredictionConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "targetColumns": [TargetColumn.from_dict(_item) for _item in obj["targetColumns"]] if obj.get("targetColumns") is not None else None
+            "target_columns": [TargetColumn.from_dict(_item) for _item in obj["targetColumns"]] if obj.get("targetColumns") is not None else None
         })
         return _obj
 

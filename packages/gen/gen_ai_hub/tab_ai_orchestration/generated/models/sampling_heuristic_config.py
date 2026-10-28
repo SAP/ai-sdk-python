@@ -38,7 +38,8 @@ class SamplingHeuristicConfig(BaseModel):
     __properties: ClassVar[List[str]] = ["methodRatio", "fuzzyNumPct", "chunkSize", "chunkThreshold", "poolSize", "fuzzyDateDays", "allowTimeoutFallback"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
@@ -99,13 +100,13 @@ class SamplingHeuristicConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "methodRatio": obj.get("methodRatio") if obj.get("methodRatio") is not None else 0.67,
-            "fuzzyNumPct": obj.get("fuzzyNumPct") if obj.get("fuzzyNumPct") is not None else 0.1,
-            "chunkSize": obj.get("chunkSize") if obj.get("chunkSize") is not None else 100,
-            "chunkThreshold": obj.get("chunkThreshold") if obj.get("chunkThreshold") is not None else 150,
-            "poolSize": obj.get("poolSize"),
-            "fuzzyDateDays": obj.get("fuzzyDateDays") if obj.get("fuzzyDateDays") is not None else 30,
-            "allowTimeoutFallback": obj.get("allowTimeoutFallback") if obj.get("allowTimeoutFallback") is not None else False
+            "method_ratio": obj.get("methodRatio") if obj.get("methodRatio") is not None else 0.67,
+            "fuzzy_num_pct": obj.get("fuzzyNumPct") if obj.get("fuzzyNumPct") is not None else 0.1,
+            "chunk_size": obj.get("chunkSize") if obj.get("chunkSize") is not None else 100,
+            "chunk_threshold": obj.get("chunkThreshold") if obj.get("chunkThreshold") is not None else 150,
+            "pool_size": obj.get("poolSize"),
+            "fuzzy_date_days": obj.get("fuzzyDateDays") if obj.get("fuzzyDateDays") is not None else 30,
+            "allow_timeout_fallback": obj.get("allowTimeoutFallback") if obj.get("allowTimeoutFallback") is not None else False
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

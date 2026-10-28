@@ -46,7 +46,8 @@ class ConfigurationDocumentFullDetails(BaseModel):
     __properties: ClassVar[List[str]] = ["id", "title", "absoluteFilePath", "createdTimestamp", "resourceUri", "webUrl", "documentEtag", "fileSuffix", "viewLocation", "downloadLocation", "mimeType", "fileSizeMb", "metadata"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

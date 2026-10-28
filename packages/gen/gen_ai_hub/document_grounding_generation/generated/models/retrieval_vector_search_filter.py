@@ -47,7 +47,8 @@ class RetrievalVectorSearchFilter(BaseModel):
     __properties: ClassVar[List[str]] = ["id", "searchConfiguration", "dataRepositories", "dataRepositoryType", "remoteName", "dataRepositoryMetadata", "documentMetadata", "chunkMetadata", "filter", "scoringConfiguration"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )

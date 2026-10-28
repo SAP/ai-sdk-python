@@ -44,7 +44,8 @@ class PredictRequest(BaseModel):
     __properties: ClassVar[List[str]] = ["modelName", "scenarioConfigName", "contextSelectionConfig", "predictionConfig", "modelConfig", "columns", "contextColumns", "rows", "contextRows"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
@@ -134,15 +135,15 @@ class PredictRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "modelName": obj.get("modelName"),
-            "scenarioConfigName": obj.get("scenarioConfigName"),
-            "contextSelectionConfig": ContextSelectionConfig.from_dict(obj["contextSelectionConfig"]) if obj.get("contextSelectionConfig") is not None else None,
-            "predictionConfig": PredictionConfig.from_dict(obj["predictionConfig"]) if obj.get("predictionConfig") is not None else None,
-            "modelConfig": Modelconfig.from_dict(obj["modelConfig"]) if obj.get("modelConfig") is not None else None,
+            "model_name": obj.get("modelName"),
+            "scenario_config_name": obj.get("scenarioConfigName"),
+            "context_selection_config": ContextSelectionConfig.from_dict(obj["contextSelectionConfig"]) if obj.get("contextSelectionConfig") is not None else None,
+            "prediction_config": PredictionConfig.from_dict(obj["predictionConfig"]) if obj.get("predictionConfig") is not None else None,
+            "var_model_config": Modelconfig.from_dict(obj["modelConfig"]) if obj.get("modelConfig") is not None else None,
             "columns": obj.get("columns"),
-            "contextColumns": obj.get("contextColumns"),
+            "context_columns": obj.get("contextColumns"),
             "rows": obj.get("rows"),
-            "contextRows": obj.get("contextRows")
+            "context_rows": obj.get("contextRows")
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

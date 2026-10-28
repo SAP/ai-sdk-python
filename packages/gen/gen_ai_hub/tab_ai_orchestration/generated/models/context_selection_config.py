@@ -40,7 +40,8 @@ class ContextSelectionConfig(BaseModel):
     __properties: ClassVar[List[str]] = ["indexColumn", "numRows", "strategy", "strategyConfig", "filterConditions"]
 
     model_config = ConfigDict(
-        populate_by_name=True,
+        validate_by_name=True,
+        validate_by_alias=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
@@ -122,11 +123,11 @@ class ContextSelectionConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "indexColumn": obj.get("indexColumn"),
-            "numRows": obj.get("numRows"),
+            "index_column": obj.get("indexColumn"),
+            "num_rows": obj.get("numRows"),
             "strategy": obj.get("strategy"),
-            "strategyConfig": Strategyconfig.from_dict(obj["strategyConfig"]) if obj.get("strategyConfig") is not None else None,
-            "filterConditions": Filterconditions.from_dict(obj["filterConditions"]) if obj.get("filterConditions") is not None else None
+            "strategy_config": Strategyconfig.from_dict(obj["strategyConfig"]) if obj.get("strategyConfig") is not None else None,
+            "filter_conditions": Filterconditions.from_dict(obj["filterConditions"]) if obj.get("filterConditions") is not None else None
         })
         # store additional fields in additional_properties
         for _key in obj.keys():

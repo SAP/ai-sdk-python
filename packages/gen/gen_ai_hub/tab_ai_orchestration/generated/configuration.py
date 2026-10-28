@@ -255,7 +255,7 @@ class Configuration:
         self.logger = {}
         """Logging Settings
         """
-        self.logger["package_logger"] = logging.getLogger("generated")
+        self.logger["package_logger"] = logging.getLogger("gen_ai_hub.tab_ai_orchestration.generated")
         self.logger_format = '%(asctime)s %(levelname)s %(message)s'
         """Log format
         """
