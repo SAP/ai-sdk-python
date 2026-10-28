@@ -24,8 +24,9 @@ from gen_ai_hub.context_registry import (
 )
 
 
-# NOTE 1: Currently the header parameter `ai_resource_group` needs to be passed to every API call. It is possible to change this.
-# NOTE 2: `.to_dict` has to be called manually, this can also be changed (with some effort).
+# NOTE 1: Currently the header parameter `ai_resource_group` needs to be passed to every API call.
+# NOTE 2: `.to_dict` has to be called manually, this can be changed (with some effort).
+# NOTE 3: The wrapper client initialization ContextRegistryApiClient() can be injected in the generated clients. Currently, it is called from the user side and passed in.
 
 # Data Destinations
 
