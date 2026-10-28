@@ -29,14 +29,13 @@ class LLMModelDetails(BaseModel):
             Responses API are present in the request. Only applies to models that use the Responses API.
             When True: unsupported params are silently dropped and reported in the
             X-Orchestration-Dropped-Model-Params response header. When False: any unsupported parameter
-            causes a 400 error with an actionable message. Defaults to True on the server when omitted.
+            causes a 400 error with an actionable message. Defaults to True.
     """
     name: str
     version: Optional[str] = "latest"
     params: Optional[Dict] = None
     timeout: Optional[int] = Field(default=600, ge=1, le=1200)
     max_retries: Optional[int] = Field(default=2, ge=0, le=5)
-    # Server defaults this to True when omitted.
     drop_unsupported_params: Optional[bool] = True
 
 __all__ = ["LLMModelDetails"]

@@ -19,6 +19,7 @@ OPENAI_GPT_O4_MINI_TEST_MODEL = "o4-mini"
 OPENAI_GPT_5_TEST_MODEL_NANO = "gpt-5-nano"
 OPENAI_GPT_5_TEST_MODEL = "gpt-5"
 OPENAI_GPT_5_MINI_TEST_MODEL = "gpt-5-mini"
+OPENAI_GPT_5_3_CODEX_TEST_MODEL = "gpt-5.3-codex"
 MISTRAL_TEST_MODEL = "mistralai--mistral-small-instruct"
 PERPLEXITY_TEST_MODEL = "sonar"
 PERPLEXITY_SONAR_DEEP_RESEARCH_TEST_MODEL = "sonar-deep-research"
@@ -26,3 +27,10 @@ COHERE_COMMAND_A_TEST_MODEL = "cohere--command-a-reasoning"
 SAP_RPT_1_0_TEST_MODEL = "sap-rpt-1-small"
 SAP_RPT_1_5_TEST_MODEL = "sap-rpt-1.5"
 SAP_RPT_1_6_TEST_MODEL = "sap-rpt-1.6"
+
+# Response header orchestration sets (lower-cased by httpx) listing the model
+# params it dropped because the target Responses API model does not support them.
+DROPPED_MODEL_PARAMS_HEADER = "x-orchestration-dropped-model-params"
+# A Responses-API model plus a Chat Completions param it does not support, so that
+# drop_unsupported_params=True triggers the header above.
+DROP_TRIGGER_PARAMS = {"dummy": 0.5}

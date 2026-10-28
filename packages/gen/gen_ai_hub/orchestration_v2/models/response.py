@@ -382,6 +382,7 @@ class StreamCompletionPostResponse(ResponseBaseModel):
     intermediate_results: Optional[StreamModuleResults]
     final_result: Optional[StreamLLMModuleResult]
     intermediate_failures: Optional[List[SAPAPIError]] = None
+    headers: Optional[dict[str, str]] = None
 
 class ErrorResponse(ResponseBaseModel):
     error: Union[SAPAPIError, list[SAPAPIError]]

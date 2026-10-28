@@ -16,13 +16,15 @@ from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError, Orchestra
 from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResponse
 
 
-def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionPostResponse":
+def _parse_event_data(event_data: str, final_message: str,
+                      headers: dict = None) -> "StreamCompletionPostResponse":
     """
     Parses the event data JSON string into a StreamCompletionPostResponse object.
 
     Args:
         event_data: The JSON string containing event data.
         final_message: A message indicating the end of the stream.
+        headers: The HTTP response headers to attach to the parsed event, defaults to None.
 
     Returns:
         An OStreamCompletionPostResponse object parsed from the event data.
@@ -59,7 +61,7 @@ def _parse_event_data(event_data: str, final_message: str) -> "StreamCompletionP
                 if isinstance(e, dict)
             ]
             raise OrchestrationErrorList(errors=errors)
-    return StreamCompletionPostResponse(**event)
+    return StreamCompletionPostResponse(**event, headers=headers)
 
 
 class SSEClient:
@@ -167,7 +169,8 @@ class SSEClient:
                 continue
 
             event_data = line[len(self.event_prefix):]
-            result = _parse_event_data(event_data, self.final_message)
+            result = _parse_event_data(event_data, self.final_message,
+                                       headers=self._response.headers)
             if result is None:
                 # Final message encountered; close the stream.
                 self.__exit__(None, None, None)
@@ -244,7 +247,8 @@ class AsyncSSEClient:
         if not line or not line.startswith(self.event_prefix):
             return None
         event_data = line[len(self.event_prefix):]
-        return _parse_event_data(event_data, self.final_message)
+        return _parse_event_data(event_data, self.final_message,
+                                 headers=self._response.headers)
 
     async def _internal_iterator(self) -> AsyncIterator:
         """

@@ -12,6 +12,8 @@ from gen_ai_hub.orchestration_v2.models.response import CompletionPostResponse
 from gen_ai_hub.orchestration_v2.models.streaming import GlobalStreamOptions
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
+from integration_tests.constants import (DROPPED_MODEL_PARAMS_HEADER, DROP_TRIGGER_PARAMS,
+                                          OPENAI_GPT_5_3_CODEX_TEST_MODEL)
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
@@ -89,6 +91,46 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         chunks = []
         # astream() returns an asynchronous iterator.
         async for chunk in await service.astream():
+            self.assertIsNotNone(chunk.headers)
+            self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
+            chunks.append(chunk)
+        self.assertGreater(len(chunks), 0, "No streaming chunks were received.")
+
+    async def test_async_run_reports_dropped_model_params_header(self):
+        """arun carries the dropped-model-params header when params are dropped."""
+        prompt_template = PromptTemplatingModuleConfig(
+            model=LLMModelDetails(name=OPENAI_GPT_5_3_CODEX_TEST_MODEL, params=DROP_TRIGGER_PARAMS,
+                                  drop_unsupported_params=True),
+            prompt=Template(template=[UserMessage(content="Say hi in one word.")]),
+        )
+        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template))
+        response = await self.service.arun(config=config)
+
+        self.assertIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
+        self.assertIn("dummy", response.headers[DROPPED_MODEL_PARAMS_HEADER])
+
+    async def test_async_run_without_dropped_params_has_no_dropped_header(self):
+        """A normal arun response does not carry the dropped-model-params header."""
+        response = await self.service.arun(config=self.config)
+
+        self.assertIsNotNone(response.headers)
+        self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
+
+    async def test_async_streaming_reports_dropped_model_params_header(self):
+        """astream chunks carry the dropped-model-params header when params are dropped."""
+        prompt_template = PromptTemplatingModuleConfig(
+            model=LLMModelDetails(name=OPENAI_GPT_5_3_CODEX_TEST_MODEL, params=DROP_TRIGGER_PARAMS,
+                                  drop_unsupported_params=True),
+            prompt=Template(template=[UserMessage(content="Say hi in one word.")]),
+        )
+        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template),
+                                     stream=GlobalStreamOptions(enabled=True))
+        service = OrchestrationService(api_url=self.api_url, config=config)
+
+        chunks = []
+        async for chunk in await service.astream():
+            self.assertIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
+            self.assertIn("dummy", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
             chunks.append(chunk)
         self.assertGreater(len(chunks), 0, "No streaming chunks were received.")
 

@@ -9,6 +9,8 @@ from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessag
 from gen_ai_hub.orchestration_v2.models.response import CompletionPostResponse
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
+from integration_tests.constants import (DROPPED_MODEL_PARAMS_HEADER, DROP_TRIGGER_PARAMS,
+                                          OPENAI_GPT_5_3_CODEX_TEST_MODEL)
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
@@ -108,10 +110,22 @@ class TestService(OrchestrationServiceTestBase):
     def test_service_request_with_default_config(self):
         service = OrchestrationService(api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config))
         response = service.run()
-
+        self.assertIsInstance(response, CompletionPostResponse)
+        self.assertIsNotNone(response.headers)
+        self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
         self.assertEqual(
             response.intermediate_results.templating[1].content, "Hello, Integration Test!"
         )
+
+    def test_run_reports_dropped_model_params_header(self):
+        llm = LLMModelDetails(name=OPENAI_GPT_5_3_CODEX_TEST_MODEL, params=DROP_TRIGGER_PARAMS,
+                              drop_unsupported_params=True)
+        prompt_template = PromptTemplatingModuleConfig(prompt=self.template, model=llm)
+        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template))
+        response = self.service.run(config=config)
+
+        self.assertIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
+        self.assertIn("dummy", response.headers[DROPPED_MODEL_PARAMS_HEADER])
 
     def test_service_request_with_list_of_config(self):
         service = OrchestrationService(api_url=self.api_url,

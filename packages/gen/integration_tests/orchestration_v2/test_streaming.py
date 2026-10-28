@@ -11,7 +11,8 @@ from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResp
 from gen_ai_hub.orchestration_v2.models.streaming import GlobalStreamOptions
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
-from integration_tests.constants import CLAUDE_4_5_SONNET_TEST_MODEL
+from integration_tests.constants import (CLAUDE_4_5_SONNET_TEST_MODEL, DROPPED_MODEL_PARAMS_HEADER,
+                                          DROP_TRIGGER_PARAMS, OPENAI_GPT_5_3_CODEX_TEST_MODEL)
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
@@ -60,6 +61,32 @@ class TestStreaming(OrchestrationServiceTestBase):
                 self.assertIsNotNone(chunk.intermediate_results.llm)
             number_of_chunks += 1
         self.assertGreater(number_of_chunks, 1, "Only one chunk received - stream seems to be buffered.")
+
+    def test_streaming_includes_response_headers(self):
+        service = self.create_service()
+
+        number_of_chunks = 0
+        for chunk in service.stream():
+            self.assertIsInstance(chunk, StreamCompletionPostResponse)
+            self.assertIsNotNone(chunk.headers)
+            self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
+            number_of_chunks += 1
+        self.assertGreater(number_of_chunks, 0, "No streaming chunks were received.")
+
+    def test_streaming_reports_dropped_model_params_header(self):
+        llm = LLMModelDetails(name=OPENAI_GPT_5_3_CODEX_TEST_MODEL, params=DROP_TRIGGER_PARAMS,
+                              drop_unsupported_params=True)
+        prompt_template = PromptTemplatingModuleConfig(prompt=self.template, model=llm)
+        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template),
+                                     stream=GlobalStreamOptions(enabled=True))
+        service = OrchestrationService(api_url=self.api_url, config=config)
+
+        number_of_chunks = 0
+        for chunk in service.stream():
+            self.assertIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
+            self.assertIn("dummy", chunk.headers[DROPPED_MODEL_PARAMS_HEADER])
+            number_of_chunks += 1
+        self.assertGreater(number_of_chunks, 0, "No streaming chunks were received.")
 
     def test_streaming_returns_token_usage(self):
         self.llm = LLMModelDetails(name=CLAUDE_4_5_SONNET_TEST_MODEL)

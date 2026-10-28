@@ -23,7 +23,8 @@ class TestLLModelDetails(unittest.TestCase):
             "version": "v1",
             "params": {"temperature": 0.7},
             "max_retries": 2,
-            "timeout": 600
+            "timeout": 600,
+            "drop_unsupported_params": True
         }
         json_data = llm.model_dump()
         self.assertEqual(json_data, expected_dict)
@@ -37,9 +38,9 @@ class TestLLModelDetails(unittest.TestCase):
 
     def test_llm_drop_unsupported_params(self):
         llm = LLMModelDetails(name="gpt-4o-mini")
-        # No client-side default; the server applies the default when omitted.
-        self.assertIsNone(llm.drop_unsupported_params)
-        self.assertNotIn("drop_unsupported_params", llm.model_dump())
+        # Client defaults to True; it is sent explicitly in the request.
+        self.assertEqual(llm.drop_unsupported_params, True)
+        self.assertEqual(llm.model_dump()["drop_unsupported_params"], True)
 
         llm = LLMModelDetails(name="gpt-4o-mini", drop_unsupported_params=False)
         self.assertEqual(llm.drop_unsupported_params, False)
