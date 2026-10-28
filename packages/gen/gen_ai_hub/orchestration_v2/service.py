@@ -384,7 +384,7 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return CompletionPostResponse(**data, headers=response.headers)
+        return CompletionPostResponse(**data, headers=dict(response.headers))
 
     async def _a_execute_request(
             self,
@@ -459,7 +459,7 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return CompletionPostResponse(**data, headers=response.headers)
+        return CompletionPostResponse(**data, headers=dict(response.headers))
 
     def run(
             self,
