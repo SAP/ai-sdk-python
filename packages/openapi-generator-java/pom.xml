@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sap.ai.sdk.codegen</groupId>
+    <artifactId>sap-python-openapi-generator</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
+    <name>SAP Python OpenAPI Generator</name>
+    <description>Custom openapi-generator codegen (extends PythonClientCodegen) for the SAP Cloud SDK for AI (Python).</description>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Keep in sync with the repo's openapitools.json (root pins 7.26.0). -->
+        <openapi-generator.version>7.26.0</openapi-generator.version>
+    </properties>
+
+    <dependencies>
+        <!-- Core library: provides PythonClientCodegen and the codegen framework. -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>${openapi-generator.version}</version>
+        </dependency>
+        <!-- Runnable CLI: org.openapitools.codegen.OpenAPIGenerator. Fetched via Maven
+             so this module does not depend on npx. The Python driver puts both this jar
+             and the custom jar on the classpath. -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator-cli</artifactId>
+            <version>${openapi-generator.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>sap-python-openapi-generator</finalName>
+        <plugins>
+            <!-- Copy the full runtime classpath into target/dependency so the Python
+                 driver can build a stable -cp without re-resolving via Maven each run. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependency</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

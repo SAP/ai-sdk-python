@@ -1,0 +1,35 @@
+# openapi-generator config for the custom `sap-python` generator.
+#
+# Mirrors packages/openapi-generator/config/python-config.yaml, but targets the
+# custom generator (generatorName: sap-python) whose Java overrides replace the
+# former Python pre/post-processing. Version is pinned in pom.xml (7.26.0).
+
+generatorName: sap-python
+
+packageVersion: "1.0.0"
+
+# HTTP backend: httpx (sync+async)
+library: httpx
+
+additionalProperties:
+  # Suppress timestamp comment in generated files for clean VCS diffs
+  hideGenerationTimestamp: true
+  # SAP APIs often include additional properties — allow them in models
+  disallowAdditionalPropertiesIfNotPresent: false
+  # Resolve discriminator lookups for oneOf/anyOf
+  useOneOfDiscriminatorLookup: true
+  # Emit only Python source files; the parent package owns pyproject.toml/setup.py
+  generateSourceCodeOnly: true
+  # Emit _sync variants of each async method (httpx library only)
+  supportHttpxSync: true
+
+globalProperties:
+  apiDocs: "false"
+  modelDocs: "false"
+  apiTests: "false"
+  modelTests: "false"
+
+# Ensure only the first tag drives API class assignment. The Java preprocessOpenAPI
+# sets exactly one tag per operation (later phase), so this is a safety net.
+openapiNormalizer:
+  KEEP_ONLY_FIRST_TAG_IN_OPERATION: "true"
