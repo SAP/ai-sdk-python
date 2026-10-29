@@ -31,7 +31,7 @@ expected = {
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingMultiFormat", "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
     "EmbeddingsPostResponse", "EmbeddingsRequest",
 
     # llama_guard_3_filter

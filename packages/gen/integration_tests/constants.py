@@ -27,10 +27,5 @@ COHERE_COMMAND_A_TEST_MODEL = "cohere--command-a-reasoning"
 SAP_RPT_1_0_TEST_MODEL = "sap-rpt-1-small"
 SAP_RPT_1_5_TEST_MODEL = "sap-rpt-1.5"
 SAP_RPT_1_6_TEST_MODEL = "sap-rpt-1.6"
-
-# Response header orchestration sets (lower-cased by httpx) listing the model
-# params it dropped because the target Responses API model does not support them.
 DROPPED_MODEL_PARAMS_HEADER = "x-orchestration-dropped-model-params"
-# A Responses-API model plus a Chat Completions param it does not support, so that
-# drop_unsupported_params=True triggers the header above.
 DROP_TRIGGER_PARAMS = {"frequency_penalty": 0.5}

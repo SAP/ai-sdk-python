@@ -9,7 +9,6 @@ from gen_ai_hub.orchestration_v2.models.embeddings import (
     EmbeddingsModuleConfigs,
     EmbeddingsOrchestrationConfig,
     EmbeddingsInput,
-    EmbeddingMultiFormat,
     EmbeddingsUsage,
     EmbeddingResult,
     EmbeddingsResponse,
@@ -66,16 +65,6 @@ class TestEmbeddingsModelParams(unittest.TestCase):
         params = EmbeddingsModelParams(encoding_format=EmbeddingsEncodingFormat.BASE64)
         self.assertEqual(params.encoding_format, EmbeddingsEncodingFormat.BASE64)
         self.assertEqual(params.model_dump(), {"encoding_format": "base64"})
-
-    def test_params_with_encoding_format_list(self):
-        params = EmbeddingsModelParams(
-            encoding_format=[EmbeddingsEncodingFormat.FLOAT, EmbeddingsEncodingFormat.INT8]
-        )
-        self.assertEqual(
-            params.encoding_format,
-            [EmbeddingsEncodingFormat.FLOAT, EmbeddingsEncodingFormat.INT8],
-        )
-        self.assertEqual(params.model_dump(), {"encoding_format": ["float", "int8"]})
 
     def test_params_with_normalize(self):
         params = EmbeddingsModelParams(normalize=True)
@@ -314,17 +303,6 @@ class TestEmbeddingResult(unittest.TestCase):
         self.assertEqual(dumped["object"], "embedding")
         self.assertEqual(dumped["embedding"], [0.1, 0.2, 0.3])
         self.assertEqual(dumped["index"], 0)
-
-    def test_embedding_result_with_multi_format(self):
-        result = EmbeddingResult.model_validate({
-            "object": "embedding",
-            "embedding": {"float": [0.1, 0.2], "int8": [1, 2], "base64": "AAEC"},
-            "index": 0,
-        })
-        self.assertIsInstance(result.embedding, EmbeddingMultiFormat)
-        self.assertEqual(result.embedding.float_, [0.1, 0.2])
-        self.assertEqual(result.embedding.int8, [1, 2])
-        self.assertEqual(result.embedding.base64_, "AAEC")
 
 class TestEmbeddingsResponse(unittest.TestCase):
     """Tests for EmbeddingsResponse model."""

@@ -16,7 +16,7 @@ from .document_grounding import (GroundingType, DataRepositoryType, DocumentGrou
                                 KeyValueListPair, DocumentMetadataKeyValueListPairs, GroundingSearchConfig)
 from .embeddings import (EmbeddingsEncodingFormat, EmbeddingsInputType, EmbeddingsModelParams, EmbeddingsModelDetails,
                         EmbeddingsModelConfig, EmbeddingsModuleConfigs, EmbeddingsOrchestrationConfig, EmbeddingsInput,
-                        EmbeddingMultiFormat, EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse,
+                        EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse,
                         EmbeddingsPostResponse, EmbeddingsRequest)
 from .llama_guard_3_filter import LlamaGuard38bFilter
 from .llm_model_details import LLMModelDetails
@@ -72,7 +72,7 @@ __all__ = [
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingMultiFormat", "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
     "EmbeddingsPostResponse", "EmbeddingsRequest",
     
     # llama_guard_3_filter

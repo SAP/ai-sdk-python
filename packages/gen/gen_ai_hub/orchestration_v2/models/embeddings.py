@@ -5,7 +5,7 @@ Embeddings Module Configuration Models
 from enum import Enum
 from typing import Optional, Dict, List, Union
 
-from pydantic import ConfigDict, Field
+from pydantic import Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
@@ -63,13 +63,11 @@ class EmbeddingsModelParams(BaseModel):
 
     Args:
         dimensions: The number of dimensions for the output embeddings.
-        encoding_format: The format to return the embeddings in. Can be a single
-            format or a list of formats (e.g. for Cohere models that support
-            returning multiple encodings at once).
+        encoding_format: The format to return the embeddings in.
         normalize: Whether to normalize the embeddings.
     """
     dimensions: Optional[int] = None
-    encoding_format: Optional[Union[EmbeddingsEncodingFormat, List[EmbeddingsEncodingFormat]]] = None
+    encoding_format: Optional[EmbeddingsEncodingFormat] = None
     normalize: Optional[bool] = None
 
 
@@ -135,42 +133,6 @@ class EmbeddingsInput(BaseModel):
     type_: Optional[EmbeddingsInputType] = Field(default=None, alias="type")
 
 
-class EmbeddingMultiFormat(ResponseBaseModel):
-    """
-    A dictionary mapping encoding format names to their embeddings.
-
-    Used when multiple encoding formats are requested at once (Cohere-specific).
-    Each field holds the embedding in the corresponding encoding format and is
-    only populated when that format was requested.
-
-    Args:
-        float_: Float encoding format - array of floating point numbers.
-        int8: Int8 encoding format - array of 8-bit integers.
-        uint8: Uint8 encoding format - array of unsigned 8-bit integers.
-        base64_: Base64 encoding format - base64 encoded string.
-        binary: Binary encoding format - array of integers.
-        ubinary: Ubinary encoding format - array of unsigned integers.
-    """
-    float_: Optional[List[float]] = Field(default=None, alias="float")
-    int8: Optional[List[int]] = None
-    uint8: Optional[List[int]] = None
-    base64_: Optional[str] = Field(default=None, alias="base64")
-    binary: Optional[List[int]] = None
-    ubinary: Optional[List[int]] = None
-
-    model_config = ConfigDict(
-        extra="allow",
-        populate_by_name=True,
-        frozen=False,
-    )
-
-    def model_dump(self, **kwargs):
-        """Dumps the model using aliases and omitting unset formats."""
-        kwargs.setdefault("by_alias", True)
-        kwargs.setdefault("exclude_none", True)
-        return super().model_dump(**kwargs)
-
-
 class EmbeddingsUsage(ResponseBaseModel):
     """
     Token usage information for the embeddings request.
@@ -189,13 +151,11 @@ class EmbeddingResult(ResponseBaseModel):
 
     Args:
         object: The object type, always "embedding".
-        embedding: The embedding vector (array of floats), a base64 string, or a
-            mapping of encoding format names to embeddings when multiple formats
-            were requested (Cohere-specific).
+        embedding: The embedding vector (array of floats) or a base64 string.
         index: The index of this embedding in the list.
     """
     object: str = "embedding"
-    embedding: Union[List[float], str, EmbeddingMultiFormat]
+    embedding: Union[List[float], str]
     index: int
 
 
@@ -242,5 +202,5 @@ class EmbeddingsRequest(BaseModel):
 
 __all__ = ["EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
            "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-           "EmbeddingMultiFormat", "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+           "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
            "EmbeddingsPostResponse", "EmbeddingsRequest"]
