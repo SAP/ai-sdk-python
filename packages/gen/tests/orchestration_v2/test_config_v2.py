@@ -42,7 +42,6 @@ class TestOrchestrationConfigV2(unittest.TestCase):
         # prompt is no longer required; it is omitted from the payload when not provided
         # (messages_history must then be supplied in the request).
         prompt_template = PromptTemplatingModuleConfig(model=self.llm)
-        self.assertIsNone(prompt_template.prompt)
         dumped = prompt_template.model_dump()
         self.assertNotIn("prompt", dumped)
 

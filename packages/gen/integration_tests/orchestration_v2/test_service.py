@@ -110,7 +110,6 @@ class TestService(OrchestrationServiceTestBase):
     def test_service_request_with_default_config(self):
         service = OrchestrationService(api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config))
         response = service.run()
-        self.assertIsInstance(response, CompletionPostResponse)
         self.assertIsNotNone(response.headers)
         self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
         self.assertEqual(

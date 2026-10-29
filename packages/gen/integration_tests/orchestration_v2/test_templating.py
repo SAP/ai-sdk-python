@@ -635,7 +635,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
 
         self.assertIn("red", message.lower())
 
-    def test_file_from_file(self):
+    def test_file_from_file_path(self):
         file_item = FileItem.from_file(self.pdf_path, filename="test_doc.pdf")
         multimodal_content = [
             file_item,

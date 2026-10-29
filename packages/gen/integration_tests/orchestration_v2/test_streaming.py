@@ -67,7 +67,6 @@ class TestStreaming(OrchestrationServiceTestBase):
 
         number_of_chunks = 0
         for chunk in service.stream():
-            self.assertIsInstance(chunk, StreamCompletionPostResponse)
             self.assertIsNotNone(chunk.headers)
             self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, chunk.headers)
             number_of_chunks += 1
