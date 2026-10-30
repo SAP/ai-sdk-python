@@ -78,6 +78,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -106,6 +107,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -128,6 +130,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -151,6 +154,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -175,6 +179,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -197,6 +202,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -218,6 +224,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -239,6 +246,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -265,6 +273,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -301,6 +310,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
+        mock_response.headers = {'content-type': 'application/json'}
         client._response = mock_response
 
         with self.assertRaises(OrchestrationErrorList) as ctx:

@@ -16,13 +16,19 @@ class EmbeddingsEncodingFormat(str, Enum):
     Encoding format for the embeddings output.
 
     Values:
-        FLOAT: Returns embeddings as an array of floats.
+        FLOAT: Returns embeddings as an array of floating point numbers.
         BASE64: Returns embeddings as a base64 encoded string.
         BINARY: Returns embeddings in binary format.
+        INT8: Returns embeddings as an array of 8-bit integers.
+        UINT8: Returns embeddings as an array of unsigned 8-bit integers.
+        UBINARY: Returns embeddings in unsigned binary format.
     """
     FLOAT = "float"
     BASE64 = "base64"
     BINARY = "binary"
+    INT8 = "int8"
+    UINT8 = "uint8"
+    UBINARY = "ubinary"
 
 
 class EmbeddingsInputType(str, Enum):
@@ -35,10 +41,20 @@ class EmbeddingsInputType(str, Enum):
         TEXT: General purpose text (default).
         DOCUMENT: Content to be searched/retrieved.
         QUERY: Short search queries.
+        SEARCH_DOCUMENT: Content stored in a search index to be retrieved.
+        SEARCH_QUERY: Query run against a search index.
+        CLASSIFICATION: Text used in a classification task.
+        CLUSTERING: Text used in a clustering task.
+        IMAGE: Image input.
     """
     TEXT = "text"
     DOCUMENT = "document"
     QUERY = "query"
+    SEARCH_DOCUMENT = "search_document"
+    SEARCH_QUERY = "search_query"
+    CLASSIFICATION = "classification"
+    CLUSTERING = "clustering"
+    IMAGE = "image"
 
 
 class EmbeddingsModelParams(BaseModel):
@@ -47,7 +63,7 @@ class EmbeddingsModelParams(BaseModel):
 
     Args:
         dimensions: The number of dimensions for the output embeddings.
-        encoding_format: The format for the embeddings output (float, base64, or binary).
+        encoding_format: The format to return the embeddings in.
         normalize: Whether to normalize the embeddings.
     """
     dimensions: Optional[int] = None
@@ -69,7 +85,7 @@ class EmbeddingsModelDetails(BaseModel):
     name: str
     version: Optional[str] = "latest"
     params: Optional[EmbeddingsModelParams] = None
-    timeout: Optional[int] = Field(default=600, ge=1, le=600)
+    timeout: Optional[int] = Field(default=600, ge=1, le=1200)
     max_retries: Optional[int] = Field(default=2, ge=0, le=5)
 
 
@@ -135,7 +151,7 @@ class EmbeddingResult(ResponseBaseModel):
 
     Args:
         object: The object type, always "embedding".
-        embedding: The embedding vector (array of floats) or base64 string.
+        embedding: The embedding vector (array of floats) or a base64 string.
         index: The index of this embedding in the list.
     """
     object: str = "embedding"
@@ -186,4 +202,5 @@ class EmbeddingsRequest(BaseModel):
 
 __all__ = ["EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
            "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-           "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse", "EmbeddingsPostResponse", "EmbeddingsRequest"]
+           "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+           "EmbeddingsPostResponse", "EmbeddingsRequest"]

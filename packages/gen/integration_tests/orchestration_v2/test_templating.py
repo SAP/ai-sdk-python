@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 import tempfile
@@ -9,7 +10,7 @@ from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem
+from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem, FileItem
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, ChatMessage
 from gen_ai_hub.orchestration_v2.models.response_format import ResponseFormatJsonObject, ResponseFormatText, ResponseFormatJsonSchema, JSONResponseSchema
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
@@ -488,6 +489,38 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         img = Image.new("RGB", (10, 10), color="red")
         img.save(cls.image_path)
 
+        cls.pdf_path = os.path.join(cls.temp_dir.name, "test_doc.pdf")
+        cls.pdf_secret_word = "BANANA"
+        cls._write_minimal_pdf(cls.pdf_path, cls.pdf_secret_word)
+        with open(cls.pdf_path, "rb") as pdf_file:
+            cls.pdf_data_url = "data:application/pdf;base64," + base64.b64encode(pdf_file.read()).decode("utf-8")
+
+    @classmethod
+    def _write_minimal_pdf(cls, path: str, text: str) -> None:
+        stream_content = f"BT /F1 12 Tf 72 720 Td ({text}) Tj ET".encode()
+        parts = [
+            b"%PDF-1.4",
+            b"1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj",
+            b"2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj",
+            b"3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 612 792]"
+            b"/Contents 4 0 R/Resources<</Font<</F1 5 0 R>>>>>>\nendobj",
+            b"4 0 obj<</Length " + str(len(stream_content)).encode() + b">>\nstream\n"
+            + stream_content + b"\nendstream\nendobj",
+            b"5 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj",
+        ]
+        buf = b""
+        offsets = []
+        for part in parts:
+            offsets.append(len(buf))
+            buf += part + b"\n"
+        xref_pos = len(buf)
+        buf += b"xref\n0 6\n" + b"0000000000 65535 f \n"
+        for off in offsets:
+            buf += f"{off:010d} 00000 n \n".encode()
+        buf += b"trailer<</Size 6/Root 1 0 R>>\nstartxref\n" + str(xref_pos).encode() + b"\n%%EOF"
+        with open(path, "wb") as f:
+            f.write(buf)
+
     @classmethod
     def tearDownClass(cls):
         cls.temp_dir.cleanup()
@@ -497,6 +530,14 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         self.service = OrchestrationService(api_url=self.api_url)
         self.llm = LLMModelDetails(
             name="gpt-4o",
+            version="latest",
+            params={
+                "max_tokens": 50,
+                "temperature": 0.0,
+            },
+        )
+        self.file_llm = LLMModelDetails(
+            name="gemini-2.5-flash",
             version="latest",
             params={
                 "max_tokens": 50,
@@ -593,3 +634,66 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
                 message += chunk.final_result.choices[0].delta.content
 
         self.assertIn("red", message.lower())
+
+    def test_file_from_file_path(self):
+        file_item = FileItem.from_file(self.pdf_path, filename="test_doc.pdf")
+        multimodal_content = [
+            file_item,
+            "What word does this PDF contain? Reply with only the word.",
+        ]
+
+        template = Template(template=[UserMessage(content=multimodal_content)])
+        prompt_template = PromptTemplatingModuleConfig(prompt=template,
+                                                       model=self.file_llm)
+
+        module_config = ModuleConfig(prompt_templating=prompt_template)
+
+        config = OrchestrationConfig(modules=module_config)
+
+        response = self.service.run(config=config)
+
+        self.assertIn(self.pdf_secret_word,
+                      response.final_result.choices[0].message.content.upper())
+
+    def test_file_from_data_url(self):
+        file_item = FileItem(file_data=self.pdf_data_url, filename="test_doc.pdf")
+        multimodal_content = [
+            file_item,
+            "What word does this PDF contain? Reply with only the word.",
+        ]
+
+        template = Template(template=[UserMessage(content=multimodal_content)])
+        prompt_template = PromptTemplatingModuleConfig(prompt=template,
+                                                       model=self.file_llm)
+
+        module_config = ModuleConfig(prompt_templating=prompt_template)
+
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIn(self.pdf_secret_word,
+                      response.final_result.choices[0].message.content.upper())
+
+    def test_file_input_streaming(self):
+        file_item = FileItem.from_file(self.pdf_path, filename="test_doc.pdf")
+        multimodal_content = [
+            file_item,
+            "What word does this PDF contain? Reply with only the word.",
+        ]
+
+        template = Template(template=[UserMessage(content=multimodal_content)])
+        prompt_template = PromptTemplatingModuleConfig(prompt=template,
+                                                       model=self.file_llm)
+
+        module_config = ModuleConfig(prompt_templating=prompt_template)
+
+        config = OrchestrationConfig(modules=module_config, stream={"enabled": True})
+        response = self.service.stream(config=config)
+
+        message = ''
+
+        for chunk in response:
+            if chunk.final_result.choices:
+                message += chunk.final_result.choices[0].delta.content
+
+        self.assertIn(self.pdf_secret_word, message.upper())

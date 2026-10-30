@@ -252,9 +252,10 @@ class TestOrchestrationConfigClient(unittest.TestCase):
 
         self.assertIsInstance(response, OrchestrationConfigPostResponse)
         self.assertEqual(response.model_dump(), ORCHESTRATION_CONFIG_POST_RESPONSE)
+        expected_spec = spec.model_dump()
         mock_post.assert_called_once_with(path=PATH_REGISTRY_CONFIG,
                                           body={ 'name': ORCHESTRATION_CONFIG_NAME, 'version': VERSION, 'scenario': SCENARIO,
-                                                 'spec': spec.model_dump()},
+                                                 'spec': expected_spec},
                                           convert_body_to_camel_case=False
                                           )
 

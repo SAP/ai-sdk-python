@@ -102,6 +102,23 @@ class TestExtraFieldsAllowed(unittest.TestCase):
         })
         self.assertEqual(choice.extra_field, "extra")
 
+    def test_llm_choice_provider_specific_fields(self):
+        choice = LLMChoice.model_validate({
+            "index": 0,
+            "message": {"role": "assistant", "content": "ok"},
+            "finish_reason": "stop",
+            "provider_specific_fields": {"finish_reason": "end_turn"},
+        })
+        self.assertEqual(choice.provider_specific_fields, {"finish_reason": "end_turn"})
+
+    def test_llm_choice_provider_specific_fields_optional(self):
+        choice = LLMChoice.model_validate({
+            "index": 0,
+            "message": {"role": "assistant", "content": "ok"},
+            "finish_reason": "stop",
+        })
+        self.assertIsNone(choice.provider_specific_fields)
+
     def test_llm_module_result_stores_extra_field(self):
         result = LLMModuleResult.model_validate({
             "id": "chatcmpl-abc",
@@ -188,6 +205,22 @@ class TestExtraFieldsAllowed(unittest.TestCase):
             "index": 0, "delta": {"content": "hi"}, "extra_field": "extra",
         })
         self.assertEqual(choice.extra_field, "extra")
+
+    def test_stream_llm_choice_provider_specific_fields(self):
+        choice = StreamLLMChoice.model_validate({
+            "index": 0,
+            "delta": {"content": "hi"},
+            "finish_reason": "stop",
+            "provider_specific_fields": {"finish_reason": "end_turn"},
+        })
+        self.assertEqual(choice.provider_specific_fields, {"finish_reason": "end_turn"})
+
+    def test_stream_llm_choice_provider_specific_fields_optional(self):
+        choice = StreamLLMChoice.model_validate({
+            "index": 0,
+            "delta": {"content": "hi"},
+        })
+        self.assertIsNone(choice.provider_specific_fields)
 
     def test_citation_stores_extra_field(self):
         citation = Citation.model_validate({
