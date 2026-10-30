@@ -18,7 +18,7 @@ from integration_tests.test_helpers import retry_on_429_or_503_class
 class TestDataMasking(OrchestrationServiceTestBase):
 
     # Person name embedded in the PDF fixture used by the file-input masking tests.
-    pdf_person_name = "example_name"
+    pdf_person_name = "example"
 
     @classmethod
     def setUpClass(cls):
@@ -26,7 +26,7 @@ class TestDataMasking(OrchestrationServiceTestBase):
         cls.pdf_path = os.path.join(cls.temp_dir.name, "test_doc.pdf")
         cls._write_minimal_pdf(
             cls.pdf_path,
-            f"Please contact {cls.pdf_person_name} at example_name@example.com.",
+            f"Please contact {cls.pdf_person_name} at example@example.com.",
         )
 
     @classmethod
