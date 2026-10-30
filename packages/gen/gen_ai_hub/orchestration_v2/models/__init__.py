@@ -4,6 +4,7 @@ from .config import (ModuleConfig, OrchestrationConfig, OrchestrationConfigRefer
                      CompletionRequestConfigurationReferenceByIdConfigRef,
                      CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 from .content_filter import (ContentFilterProvider, ContentFilter, LlamaGuard38bFilterConfig,
+                             GraniteGuardian41FilterConfig,
                              AzureContentSafetyInputFilterConfig, AzureContentSafetyOutputFilterConfig,
                              FilteringStreamOptions)
 from .content_filtering import InputFiltering, OutputFiltering, FilteringModuleConfig
@@ -17,6 +18,7 @@ from .embeddings import (EmbeddingsEncodingFormat, EmbeddingsInputType, Embeddin
                         EmbeddingsModelConfig, EmbeddingsModuleConfigs, EmbeddingsOrchestrationConfig, EmbeddingsInput,
                         EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse, EmbeddingsPostResponse, EmbeddingsRequest)
 from .llama_guard_3_filter import LlamaGuard38bFilter
+from .granite_guardian_filter import GraniteGuardian41Categories, GraniteGuardian41Filter
 from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
                      ResponseChatMessage, FunctionCall, MessageToolCall, ReasoningBlock)
@@ -49,7 +51,7 @@ __all__ = [
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
     
     # content_filter
-    "ContentFilterProvider", "ContentFilter", "LlamaGuard38bFilterConfig",
+    "ContentFilterProvider", "ContentFilter", "LlamaGuard38bFilterConfig", "GraniteGuardian41FilterConfig",
     "AzureContentSafetyInputFilterConfig", "AzureContentSafetyOutputFilterConfig", "FilteringStreamOptions",
     
     # content_filtering
@@ -71,6 +73,9 @@ __all__ = [
     
     # llama_guard_3_filter
     "LlamaGuard38bFilter",
+
+    # granite_guardian_filter
+    "GraniteGuardian41Categories", "GraniteGuardian41Filter",
     
     # llm_model_details
     "LLMModelDetails",
