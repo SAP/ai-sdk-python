@@ -18,7 +18,7 @@ TBD
 
 ## Appendix
 
-### Option A (Handwritten Client)
+### Option A (Manually-written Client)
 
 Pros:
 
