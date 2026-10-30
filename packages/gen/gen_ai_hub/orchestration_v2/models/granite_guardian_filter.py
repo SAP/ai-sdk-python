@@ -51,7 +51,7 @@ class GraniteGuardian41Filter(BaseModel):
         categories: Content criteria to evaluate.
     """
 
-    enable_reasoning: Optional[bool] = False
+    enable_reasoning: Optional[bool] = None
     categories: GraniteGuardian41Categories
 
 

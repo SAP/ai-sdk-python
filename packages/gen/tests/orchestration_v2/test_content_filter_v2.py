@@ -110,7 +110,6 @@ class TestContentFilters(unittest.TestCase):
         expected_dict = {
             "type": 'granite_guardian_4_1',
             "config": {
-                "enable_reasoning": False,
                 "categories": {
                     "harm": True,
                     "social_bias": False,
@@ -180,7 +179,6 @@ class TestContentFiltersBackwardCompatibility(unittest.TestCase):
         expected_dict = {
             "type": 'granite_guardian_4_1',
             "config": {
-                "enable_reasoning": False,
                 "categories": {
                     "harm": True,
                     "social_bias": False,
