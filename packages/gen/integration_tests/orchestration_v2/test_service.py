@@ -2,6 +2,7 @@ import requests
 import time
 from httpx import TimeoutException
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, ModuleConfig,
+PartialOrchestrationConfig,
 CompletionRequestConfigurationReferenceByIdConfigRef,
 CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
@@ -229,6 +230,14 @@ class TestService(OrchestrationServiceTestBase):
 
     def test_config_ref_by_snv(self):
         service = OrchestrationService(api_url=self.api_url, config_ref=self.config_ref_name)
+        response = service.run()
+        self.assertIsInstance(response, CompletionPostResponse)
+        self.assertEqual(response.intermediate_results.templating[0].content, "Hello World")
+
+    def test_config_ref_with_empty_partial_override(self):
+        # An empty PartialOrchestrationConfig carries no overrides; the server should resolve
+        # the referenced config unchanged, exactly as if no override had been sent.
+        service = OrchestrationService(api_url=self.api_url, config_ref=self.config_ref_id, config=PartialOrchestrationConfig())
         response = service.run()
         self.assertIsInstance(response, CompletionPostResponse)
         self.assertEqual(response.intermediate_results.templating[0].content, "Hello World")

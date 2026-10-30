@@ -368,13 +368,15 @@ class CompletionPostResponse(ResponseBaseModel):
 
         intermediate_failures (Optional[List[SAPAPIError]]): List of errors encountered during processing, if any.
 
-        headers (Optional[dict[str, str]]): Optional headers returned in the response.
+        headers (Optional[dict[str, str]]): HTTP response headers of this orchestration call,
+            exposed for convenience (e.g. X-Orchestration-Dropped-Model-Params). Access it via
+            ``response.headers``.
     """
     request_id: str
     intermediate_results: ModuleResults
     final_result: LLMModuleResult
     intermediate_failures: Optional[List[SAPAPIError]] = None
-    headers: Optional[dict[str, str]] = None
+    headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
 
 
 class StreamCompletionPostResponse(ResponseBaseModel):
@@ -382,7 +384,7 @@ class StreamCompletionPostResponse(ResponseBaseModel):
     intermediate_results: Optional[StreamModuleResults]
     final_result: Optional[StreamLLMModuleResult]
     intermediate_failures: Optional[List[SAPAPIError]] = None
-    headers: Optional[dict[str, str]] = None
+    headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
 
 class ErrorResponse(ResponseBaseModel):
     error: Union[SAPAPIError, list[SAPAPIError]]
