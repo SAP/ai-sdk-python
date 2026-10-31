@@ -16,7 +16,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: SAP/ai-sdk-python/.github/actions/setup@main
+      - uses: SAP/ai-sdk-python/.github/actions/setup@2342cf3092145d0c5aebbcd1a4e7f3eed8033a66 # main
         with:
           fetch-depth: 0
 

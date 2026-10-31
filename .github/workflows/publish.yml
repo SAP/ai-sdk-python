@@ -81,7 +81,7 @@ jobs:
           echo "package=${PACKAGE}" >> "$GITHUB_OUTPUT"
 
       - name: Setup
-        uses: SAP/ai-sdk-python/.github/actions/setup@main
+        uses: SAP/ai-sdk-python/.github/actions/setup@2342cf3092145d0c5aebbcd1a4e7f3eed8033a66 # main
         with:
           ref: ${{ github.event.release.tag_name }}
 
