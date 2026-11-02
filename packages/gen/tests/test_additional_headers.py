@@ -6,11 +6,6 @@ from gen_ai_hub.prompt_registry.client import PromptTemplateClient
 from gen_ai_hub.document_grounding.clients.pipeline_api_client import PipelineAPIClient
 from gen_ai_hub.document_grounding.clients.retrieval_api_client import RetrievalAPIClient
 from gen_ai_hub.document_grounding.clients.vector_api_client import VectorAPIClient
-from gen_ai_hub.orchestration.service import OrchestrationService
-from gen_ai_hub.orchestration.models.llm import LLM
-from gen_ai_hub.orchestration.models.template import Template
-from gen_ai_hub.orchestration.models.message import Message
-from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration_v2.service import OrchestrationService as OrchestrationServiceV2
 from gen_ai_hub.orchestration_v2.models.template import Template as TemplateV2, PromptTemplatingModuleConfig
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig as OrchestrationConfigV2, ModuleConfig
@@ -166,44 +161,6 @@ class TestClientHeaderInjection(unittest.TestCase):
             client.get_collections()
 
         call_kwargs = mock_get.call_args[1]
-        self.assertIn('headers', call_kwargs)
-        self.assertEqual(call_kwargs['headers']['X-Instance'], 'value1')
-        self.assertEqual(call_kwargs['headers']['X-Temp'], 'value2')
-
-    @patch('httpx.Client.post')
-    def test_orchestration_service_injects_headers(self, mock_post):
-        """Test OrchestrationService passes headers via request_header."""
-        mock_response = MagicMock()
-        mock_response.json.return_value = {
-            'request_id': 'test-id',
-            'module_results': {},
-            'orchestration_result': {
-                'id': 'test',
-                'object': 'chat.completion',
-                'created': 1234567890,
-                'model': 'gpt-4',
-                'choices': [{'index': 0, 'message': {'role': 'assistant', 'content': 'Hello'}, 'finish_reason': 'stop'}],
-                'usage': {'prompt_tokens': 10, 'completion_tokens': 5, 'total_tokens': 15}
-            }
-        }
-        mock_response.raise_for_status = MagicMock()
-        mock_post.return_value = mock_response
-
-        config = OrchestrationConfig(
-            llm=LLM(name='gpt-4'),
-            template=Template(messages=[Message(role='user', content='Hello')])
-        )
-        service = OrchestrationService(
-            api_url='https://test.example.com',
-            proxy_client=self.proxy_client,
-            config=config
-        )
-
-        self.proxy_client.set_headers_addition({'X-Instance': 'value1'})
-        with temporary_headers_addition({'X-Temp': 'value2'}):
-            service.run()
-
-        call_kwargs = mock_post.call_args[1]
         self.assertIn('headers', call_kwargs)
         self.assertEqual(call_kwargs['headers']['X-Instance'], 'value1')
         self.assertEqual(call_kwargs['headers']['X-Temp'], 'value2')
