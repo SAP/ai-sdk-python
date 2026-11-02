@@ -11,7 +11,9 @@ from typing import Union, Optional, List
 from pydantic import field_validator, ValidationError
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ContentPart, ImageItem, TextPart, ImageUrl, ImagePart
+from gen_ai_hub.orchestration_v2.models.multimodal_items import (
+    ContentPart, ImageItem, TextPart, ImageUrl, ImagePart, FileItem, FilePart, FileContent
+)
 
 
 class FunctionCall(ResponseBaseModel):
@@ -122,10 +124,10 @@ class UserMessage(BaseModel):
     Args:
         role: The role of the entity sending the message.
 
-        content: The message content, which may be plain text or a sequence of text and images.
+        content: The message content, which may be plain text or a sequence of text, images, or files.
     """
     role: Role = Role.USER
-    content: Union[str, ContentPart, List[Union[str, ContentPart, ImageItem, ImagePart]]]
+    content: Union[str, ContentPart, List[Union[str, ContentPart, ImageItem, ImagePart, FileItem, FilePart]]]
 
     @field_validator("content", mode="before")
     def content_validation(cls, content):  # pylint: disable=no-self-argument
@@ -145,8 +147,10 @@ class UserMessage(BaseModel):
                     mapped_content.append(TextPart(text=item))
                 elif isinstance(item, ImageItem):
                     mapped_content.append(ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail)))
+                elif isinstance(item, FileItem):
+                    mapped_content.append(FilePart(file=FileContent(file_data=item.file_data, filename=item.filename)))
                 else:
-                    raise ValidationError("User message content list must contain only str or ImageItem")
+                    raise ValidationError("User message content list must contain only str, ImageItem or FileItem")
         return mapped_content
 
 

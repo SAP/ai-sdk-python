@@ -187,6 +187,7 @@ class TestClientHeaderInjection(unittest.TestCase):
             }
         }
         mock_response.raise_for_status = MagicMock()
+        mock_response.headers = {'content-type': 'application/json'}
         mock_post.return_value = mock_response
 
         config = OrchestrationConfig(
@@ -225,6 +226,7 @@ class TestClientHeaderInjection(unittest.TestCase):
             }
         }
         mock_response.raise_for_status = MagicMock()
+        mock_response.headers = {'content-type': 'application/json'}
         mock_post.return_value = mock_response
 
         config = OrchestrationConfigV2(

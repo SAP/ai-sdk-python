@@ -18,7 +18,8 @@ from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionPostRequest
-from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, OrchestrationConfigReference
+from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
+                                                       PartialOrchestrationConfig)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
 from gen_ai_hub.orchestration_v2.models.response import (CompletionPostResponse, StreamCompletionPostResponse,
                                                          OrchestrationResponseWithRetries)
@@ -34,7 +35,10 @@ from gen_ai_hub.proxy import get_proxy_client
 
 V2_COMPLETION_SUFFIX = "/v2/completion"
 V2_EMBEDDINGS_SUFFIX = "/v2/embeddings"
-CONFIG_AND_CONFIG_REF_ERROR_TEXT = "Cannot provide both a configuration and a configuration reference."
+CONFIG_AND_CONFIG_REF_ERROR_TEXT = (
+    "A full 'config' (OrchestrationConfig) cannot be combined with 'config_ref'. "
+    "Use a PartialOrchestrationConfig to override a referenced config."
+)
 
 def cache_if_not_none(func):
     """Custom cache decorator that only caches non-None results"""
@@ -183,7 +187,7 @@ class OrchestrationService:
 
     def __init__(self,
                  api_url: Optional[str] = None,
-                 config: Optional[OrchestrationConfig] = None,
+                 config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
                  config_ref: Optional[OrchestrationConfigReference] = None,
                  proxy_client: Optional[GenAIHubProxyClient] = None,
                  deployment_id: Optional[str] = None,
@@ -211,14 +215,14 @@ class OrchestrationService:
         :raises ValueError: if both config and config_ref are provided.
         """
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
+            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if api_url:
             self.api_url = api_url
         else:
             self.api_url = get_orchestration_api_url(self.proxy_client, deployment_id, config_name, config_id)
         self.config = config
         self.config_ref = config_ref
-        if self.config_ref and self.config:
-            raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         self.timeout = timeout
         # create reusable httpx client to improve performance
         self.client = httpx.Client(timeout=self.timeout)
@@ -305,7 +309,7 @@ class OrchestrationService:
 
     def _execute_request(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -339,7 +343,7 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
-        if config and config_ref:
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
             raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
@@ -380,11 +384,11 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return CompletionPostResponse(**data)
+        return CompletionPostResponse(**data, headers=dict(response.headers))
 
     async def _a_execute_request(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -415,7 +419,7 @@ class OrchestrationService:
         """
         if config is None and config_ref is None:
             raise ValueError("A configuration is required to invoke the orchestration service.")
-        if config and config_ref:
+        if isinstance(config, OrchestrationConfig) and config_ref is not None:
             raise ValueError(CONFIG_AND_CONFIG_REF_ERROR_TEXT)
         if config and config.stream:
             if config.stream.enabled != stream:
@@ -455,11 +459,11 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return CompletionPostResponse(**data)
+        return CompletionPostResponse(**data, headers=dict(response.headers))
 
     def run(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -480,7 +484,7 @@ class OrchestrationService:
         :type timeout: Union[int, float, httpx.Timeout, None], optional
         :return: the CompletionPostResponse object
         :rtype: CompletionPostResponse
-        """        
+        """
 
         return self._execute_request(
             config=config or self.config,
@@ -492,7 +496,7 @@ class OrchestrationService:
 
     def stream(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -526,7 +530,7 @@ class OrchestrationService:
 
     async def arun(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -558,7 +562,7 @@ class OrchestrationService:
 
     async def astream(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -578,7 +582,7 @@ class OrchestrationService:
         :type timeout: Union[int, float, httpx.Timeout, None], optional
         :return: the AsyncSSEClient object
         :rtype: AsyncSSEClient
-        """        
+        """
 
         return await self._a_execute_request(
             config=config or self.config,
@@ -591,7 +595,7 @@ class OrchestrationService:
 
     def run_with_retries(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -638,6 +642,7 @@ class OrchestrationService:
                     intermediate_results=response.intermediate_results,  # pylint: disable=no-member
                     final_result=response.final_result,  # pylint: disable=no-member
                     intermediate_failures=response.intermediate_failures,
+                    headers=response.headers,
                     retries=retry_count,
                 )
 
@@ -674,7 +679,7 @@ class OrchestrationService:
 
     async def arun_with_retries(
             self,
-            config: Optional[OrchestrationConfig] = None,
+            config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None,
             config_ref: Optional[OrchestrationConfigReference] = None,
             placeholder_values: Optional[dict] = None,
             history: Optional[List[ChatMessage]] = None,
@@ -703,7 +708,7 @@ class OrchestrationService:
         :rtype: OrchestrationResponseWithRetries | None
         :raises ValueError: if no configuration is provided.
         :raises OrchestrationError: if request fails after all retries (includes retry count).
-        """        
+        """
 
         for retry_count in range(max_retries + 1):
             try:
@@ -721,6 +726,7 @@ class OrchestrationService:
                     intermediate_results=response.intermediate_results,
                     final_result=response.final_result,
                     intermediate_failures=response.intermediate_failures,
+                    headers=response.headers,
                     retries=retry_count,
                 )
 

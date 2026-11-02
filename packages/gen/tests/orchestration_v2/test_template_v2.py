@@ -11,7 +11,7 @@ from gen_ai_hub.orchestration_v2.models.message import (
     UserMessage,
     AssistantMessage,
 )
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem, ImageDetailLevel
+from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem, ImageDetailLevel, FileItem
 from gen_ai_hub.orchestration_v2.models.response_format import (
     ResponseFormatType,
     ResponseFormatText,
@@ -242,6 +242,61 @@ class TestUserMessageMultimodal(unittest.TestCase):
             self.assertTrue(item.url.startswith("data:image/png;base64,"))
             # Check that the base64 part decodes to the original file content
             encoded = item.url.split(",", 1)[1]
+            with open(tmp_path, "rb") as f:
+                original = f.read()
+            decoded = base64.b64decode(encoded)
+
+            self.assertEqual(decoded, original)
+        finally:
+            os.unlink(tmp_path)
+
+    def test_user_message_with_string_and_file(self):
+        file = FileItem(file_data="https://example.com/1.pdf", filename="doc.pdf")
+        msg = UserMessage(content=["Summarize this file:", file])
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "text", "text": "Summarize this file:"},
+                {"type": "file", "file": {
+                    "file_data": "https://example.com/1.pdf",
+                    "filename": "doc.pdf"
+                }}
+            ]
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_user_message_with_file_dict(self):
+        msg = UserMessage(content=[{"type": "file", "file": {"file_data": "data:x", "filename": "a.pdf"}}])
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "file", "file": {"file_data": "data:x", "filename": "a.pdf"}}
+            ]
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_user_message_with_file_without_filename(self):
+        file = FileItem(file_data="https://example.com/1.pdf")
+        msg = UserMessage(content=[file])
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "file", "file": {"file_data": "https://example.com/1.pdf"}}
+            ]
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_file_item_from_file(self):
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            tmp.write(b"not a real pdf")
+            tmp_path = tmp.name
+
+        try:
+            item = FileItem.from_file(tmp_path)
+            self.assertTrue(item.file_data.startswith("data:application/pdf;base64,"))
+            self.assertIsNone(item.filename)
+            # Check that the base64 part decodes to the original file content
+            encoded = item.file_data.split(",", 1)[1]
             with open(tmp_path, "rb") as f:
                 original = f.read()
             decoded = base64.b64decode(encoded)

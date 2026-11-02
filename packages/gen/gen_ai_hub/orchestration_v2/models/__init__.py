@@ -1,26 +1,29 @@
 from .azure_content_filter import AzureContentSafetyInput, AzureContentSafetyOutput, AzureContentFilter, AzureThreshold
 from .cache_control import CacheControl
 from .config import (ModuleConfig, OrchestrationConfig, OrchestrationConfigReference,
+                     PartialPromptTemplatingModuleConfig, PartialModuleConfigs, PartialOrchestrationConfig,
                      CompletionRequestConfigurationReferenceByIdConfigRef,
                      CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 from .content_filter import (ContentFilterProvider, ContentFilter, LlamaGuard38bFilterConfig,
                              AzureContentSafetyInputFilterConfig, AzureContentSafetyOutputFilterConfig,
                              FilteringStreamOptions)
 from .content_filtering import InputFiltering, OutputFiltering, FilteringModuleConfig
-from .data_masking import (DataMaskingProviderName, MaskingMethod, ProfileEntity, DPIMethodConstant, 
-                          DPIMethodFabricatedData, DPICustomEntity, DPIStandardEntity, MaskGroundingInput, 
-                          MaskingProviderConfig, MaskingModuleConfig)
+from .data_masking import (DataMaskingProviderName, MaskingMethod, MaskFileInputMethod, ProfileEntity,
+                          DPIMethodConstant, DPIMethodFabricatedData, DPICustomEntity, DPIStandardEntity,
+                          MaskGroundingInput, MaskingProviderConfig, MaskingModuleConfig)
 from .document_grounding import (GroundingType, DataRepositoryType, DocumentGroundingFilter, 
                                 DocumentGroundingPlaceholders, DocumentGroundingConfig, GroundingModuleConfig, 
                                 KeyValueListPair, DocumentMetadataKeyValueListPairs, GroundingSearchConfig)
 from .embeddings import (EmbeddingsEncodingFormat, EmbeddingsInputType, EmbeddingsModelParams, EmbeddingsModelDetails,
                         EmbeddingsModelConfig, EmbeddingsModuleConfigs, EmbeddingsOrchestrationConfig, EmbeddingsInput,
-                        EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse, EmbeddingsPostResponse, EmbeddingsRequest)
+                        EmbeddingsUsage, EmbeddingResult, EmbeddingsResponse,
+                        EmbeddingsPostResponse, EmbeddingsRequest)
 from .llama_guard_3_filter import LlamaGuard38bFilter
 from .llm_model_details import LLMModelDetails
 from .message import (SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage, ChatMessage,
                      ResponseChatMessage, FunctionCall, MessageToolCall, ReasoningBlock)
-from .multimodal_items import ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem
+from .multimodal_items import (ImageDetailLevel, TextPart, ImageUrl, ImagePart, ContentPart, ImageItem,
+                               FileContent, FilePart, FileItem)
 from .response import (CacheCreationTokenDetails, PromptTokensDetails, CompletionTokensDetails, TokenUsage, GenericModuleResult, TopLogprob,
                       ChatCompletionTokenLogprob, ChoiceLogprobs, LLMChoice, StreamFunctionObject, StreamToolCall,
                       StreamDelta, StreamLLMChoice, Citation, LLMModuleResult, StreamLLMModuleResult, ModuleResults,
@@ -45,6 +48,7 @@ __all__ = [
     
     # config
     "ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
     "CompletionRequestConfigurationReferenceByIdConfigRef",
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
     
@@ -56,8 +60,9 @@ __all__ = [
     "InputFiltering", "OutputFiltering", "FilteringModuleConfig",
     
     # data_masking
-    "DataMaskingProviderName", "MaskingMethod", "ProfileEntity", "DPIMethodConstant", "DPIMethodFabricatedData",
-    "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig", "MaskingModuleConfig",
+    "DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
+    "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig",
+    "MaskingModuleConfig",
     
     # document_grounding
     "GroundingType", "DataRepositoryType", "DocumentGroundingFilter", "DocumentGroundingPlaceholders",
@@ -67,7 +72,8 @@ __all__ = [
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse", "EmbeddingsPostResponse", "EmbeddingsRequest",
+    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsPostResponse", "EmbeddingsRequest",
     
     # llama_guard_3_filter
     "LlamaGuard38bFilter",
@@ -81,6 +87,7 @@ __all__ = [
     
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
+    "FileContent", "FilePart", "FileItem",
     
     # response
     "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
@@ -88,7 +95,7 @@ __all__ = [
     "StreamDelta", "StreamLLMChoice", "Citation", "LLMModuleResult", "StreamLLMModuleResult", "ModuleResults",
     "StreamModuleResults", "SAPAPIError", "SAPAPIErrorStreaming", "CompletionPostResponse",
     "StreamCompletionPostResponse", "ErrorResponse", "ErrorResponseStreaming", "OrchestrationResponseWithRetries",
-    
+
     # response_format
     "ResponseFormatText", "ResponseFormatJsonObject", "ResponseFormatJsonSchema", "JSONResponseSchema",
     

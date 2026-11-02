@@ -10,8 +10,10 @@ from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 from gen_ai_hub.orchestration_v2.models.content_filtering import FilteringModuleConfig
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 from gen_ai_hub.orchestration_v2.models.document_grounding import GroundingModuleConfig
+from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.streaming import GlobalStreamOptions
-from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig
+from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig, Template
+from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration_v2.models.translation import TranslationModuleConfig
 
 
@@ -59,6 +61,62 @@ class OrchestrationConfig(BaseModel):
     stream: Optional[GlobalStreamOptions] = None
 
 
+class PartialPromptTemplatingModuleConfig(BaseModel):
+    """
+    Partial prompt templating configuration for use with config_ref overrides.
+
+    Every field is optional so that only the parts to override need to be provided;
+    the referenced configuration supplies the rest.
+
+    Args:
+        prompt: Optional prompt template override (inline Template or TemplateRef).
+
+        model: Optional model override. Unlike the non-partial config, model is optional
+            here so that only the prompt can be overridden without repeating the model config.
+    """
+    prompt: Optional[Template | TemplateRef] = None
+    model: Optional[LLMModelDetails] = None
+
+
+class PartialModuleConfigs(BaseModel):
+    """
+    Partial module configuration for use with config_ref overrides.
+
+    Every module is optional; only the modules provided here override the referenced config.
+
+    Args:
+        prompt_templating: Optional partial prompt templating override.
+
+        filtering: Optional filtering module override.
+
+        masking: Optional masking module override.
+
+        grounding: Optional grounding module override.
+
+        translation: Optional translation module override.
+    """
+    prompt_templating: Optional[PartialPromptTemplatingModuleConfig] = None
+    filtering: Optional[FilteringModuleConfig] = None
+    masking: Optional[MaskingModuleConfig] = None
+    grounding: Optional[GroundingModuleConfig] = None
+    translation: Optional[TranslationModuleConfig] = None
+
+
+class PartialOrchestrationConfig(BaseModel):
+    """
+    Partial orchestration configuration used to override a referenced config (config_ref).
+
+    The referenced configuration is the base; the fields provided here are merged on top.
+
+    Args:
+        modules: Optional partial module configurations to override.
+
+        stream: Optional streaming configuration to override.
+    """
+    modules: Optional[PartialModuleConfigs] = None
+    stream: Optional[GlobalStreamOptions] = None
+
+
 class CompletionRequestConfigurationReferenceByIdConfigRef(BaseModel):
     """Represents a reference to an orchestration config identified by a unique ID.
 
@@ -86,5 +144,6 @@ OrchestrationConfigReference = (CompletionRequestConfigurationReferenceByIdConfi
                                 CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 
 __all__ = ["ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+           "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
            "CompletionRequestConfigurationReferenceByIdConfigRef",
            "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef"]

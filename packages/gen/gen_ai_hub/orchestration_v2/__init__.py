@@ -11,6 +11,7 @@ __all__ = [
 
     # config
     "ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
     "CompletionRequestConfigurationReferenceByIdConfigRef",
     "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
 
@@ -22,8 +23,9 @@ __all__ = [
     "InputFiltering", "OutputFiltering", "FilteringModuleConfig",
 
     # data_masking
-    "DataMaskingProviderName", "MaskingMethod", "ProfileEntity", "DPIMethodConstant", "DPIMethodFabricatedData",
-    "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig", "MaskingModuleConfig",
+    "DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
+    "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput", "MaskingProviderConfig",
+    "MaskingModuleConfig",
 
     # document_grounding
     "GroundingType", "DataRepositoryType", "DocumentGroundingFilter", "DocumentGroundingPlaceholders",
@@ -33,7 +35,8 @@ __all__ = [
     # embeddings
     "EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
     "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse", "EmbeddingsPostResponse", "EmbeddingsRequest",
+    "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
+    "EmbeddingsPostResponse", "EmbeddingsRequest",
 
     # llama_guard_3_filter
     "LlamaGuard38bFilter",
@@ -47,6 +50,7 @@ __all__ = [
 
     # multimodal_items
     "ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
+    "FileContent", "FilePart", "FileItem",
 
     # response
     "CacheCreationTokenDetails", "PromptTokensDetails", "CompletionTokensDetails", "TokenUsage", "GenericModuleResult", "TopLogprob",
