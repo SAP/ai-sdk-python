@@ -73,7 +73,7 @@ class TestDataMasking(OrchestrationServiceTestBase):
             name="gemini-2.5-flash",
             version="latest",
             params={
-                "max_tokens": 50,
+                "max_tokens": 100,
                 "temperature": 0.0,
             },
         )
