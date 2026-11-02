@@ -128,7 +128,7 @@ class ImageItem(BaseModel):
         img2 = ImageItem(url="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...")
     """
 
-    url: Optional[str] = None
+    url: str
     detail: Optional[ImageDetailLevel] = None
 
     @staticmethod
@@ -206,7 +206,7 @@ class FileItem(BaseModel):
         filename: The name of the file.
     """
 
-    file_data: Optional[str] = None
+    file_data: str
     filename: Optional[str] = None
 
     @staticmethod
