@@ -1,4 +1,5 @@
 import copy
+import unittest.mock
 from unittest.mock import MagicMock
 
 import humps
@@ -86,3 +87,23 @@ class TestModelClient(ResourceClientTestBase):
             path="/scenarios/foundation-models/models",
             resource_group=self.resource_group,
         )
+
+    def test_list_available_models_delegates_to_query(self):
+        """list_available_models is a convenience wrapper; verify it delegates
+        to query() and unwraps .resources."""
+        rest_client_mock = MagicMock()
+        ec = ModelClient(rest_client_mock)
+
+        sentinel_resources = [MagicMock(spec=Model) for _ in range(3)]
+        mock_response = MagicMock()
+        mock_response.resources = sentinel_resources
+
+        with unittest.mock.patch.object(ec, "query", return_value=mock_response) as patched_query:
+            result = ec.list_available_models()
+            patched_query.assert_called_once_with(resource_group=None)
+            self.assertIs(result, sentinel_resources)
+
+        with unittest.mock.patch.object(ec, "query", return_value=mock_response) as patched_query:
+            result = ec.list_available_models(resource_group=self.resource_group)
+            patched_query.assert_called_once_with(resource_group=self.resource_group)
+            self.assertIs(result, sentinel_resources)
