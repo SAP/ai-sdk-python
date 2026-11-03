@@ -8,6 +8,7 @@ from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
+from gen_ai_hub.orchestration_v2.models.response import SAPAPIError
 from gen_ai_hub.orchestration_v2.models.streaming import GlobalStreamOptions
 from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
 from gen_ai_hub.orchestration_v2.service import OrchestrationService, cache_if_not_none
@@ -130,6 +131,21 @@ class TestOrchestrationService(unittest.TestCase):
         self.assertIn("completion_tokens_details", usage_dict)
         self.assertIsNotNone(usage_dict["prompt_tokens_details"])
         self.assertIsNotNone(usage_dict["completion_tokens_details"])
+
+    def test_response_headers_accessible_but_excluded_from_dump(self):
+        """The convenience `headers` on response models is reachable via the attribute
+        (transport metadata, e.g. X-Orchestration-Dropped-Model-Params) but must not leak
+        into model_dump(), since it is not part of the spec response body."""
+        with ai_core_ai_api_mocker(auth_url=self.proxy_client.auth_url, base_url=self.proxy_client.base_url):
+            client = OrchestrationService(api_url=self.api_url, proxy_client=self.proxy_client)
+            with orchestration_completion_v2_mocker(client.api_url + '/v2/completion'):
+                response = client.run(config=self.config)
+
+        # attribute access works (headers were injected from the HTTP response)
+        self.assertIsNotNone(response.headers)
+        # ... but the field is excluded from serialization
+        self.assertNotIn("headers", response.model_dump())
+        self.assertNotIn("headers", response.model_dump_json())
 
     def test_stream_with_config(self):
         with ai_core_ai_api_mocker(auth_url=self.proxy_client.auth_url, base_url=self.proxy_client.base_url):
@@ -364,6 +380,8 @@ class TestOrchestrationService(unittest.TestCase):
 
     def test_timeout_client_request(self):
         class FakeResponse:
+            headers = httpx.Headers({})
+
             def raise_for_status(self):
                 pass  # No-op for mock tests
 
@@ -425,6 +443,8 @@ class TestOrchestrationServiceAsync(unittest.IsolatedAsyncioTestCase):
 
     async def test_async_timeout_client_request(self):
         class FakeResponse:
+            headers = httpx.Headers({})
+
             def raise_for_status(self):
                 pass  # No-op for mock tests
 

@@ -1,7 +1,7 @@
 import unittest
 
 from gen_ai_hub.orchestration_v2.models.data_masking import (MaskingModuleConfig, MaskingProviderConfig, MaskingMethod,
-                                                             DPIStandardEntity, ProfileEntity)
+                                                             MaskFileInputMethod, DPIStandardEntity, ProfileEntity)
 
 
 
@@ -64,6 +64,50 @@ class TestDataMasking(unittest.TestCase):
         }
 
         self.assertEqual(data_masking.model_dump(), expected_dict)
+
+    def test_mask_file_input_method(self):
+        data_masking = MaskingModuleConfig(
+            providers=[MaskingProviderConfig(
+                method=MaskingMethod.ANONYMIZATION,
+                entities=[DPIStandardEntity(type=ProfileEntity.PERSON)],
+                mask_file_input_method=MaskFileInputMethod.ANONYMIZATION,
+            )]
+        )
+
+        expected_dict = {
+            'providers':
+                [
+                    {
+                        'type': 'sap_data_privacy_integration',
+                        'method': 'anonymization',
+                        'entities': [
+                            {'type': 'profile-person'}
+                        ],
+                        'mask_file_input_method': 'anonymization'
+                    }
+                ]
+        }
+
+        self.assertEqual(data_masking.model_dump(), expected_dict)
+
+    def test_mask_file_input_method_skip(self):
+        provider = MaskingProviderConfig(
+            method=MaskingMethod.PSEUDONYMIZATION,
+            entities=[DPIStandardEntity(type=ProfileEntity.EMAIL)],
+            mask_file_input_method=MaskFileInputMethod.SKIP,
+        )
+
+        self.assertEqual(provider.mask_file_input_method, MaskFileInputMethod.SKIP)
+        self.assertEqual(provider.model_dump()['mask_file_input_method'], 'skip')
+
+    def test_mask_file_input_method_omitted_when_not_set(self):
+        provider = MaskingProviderConfig(
+            method=MaskingMethod.ANONYMIZATION,
+            entities=[DPIStandardEntity(type=ProfileEntity.PERSON)],
+        )
+
+        self.assertIsNone(provider.mask_file_input_method)
+        self.assertNotIn('mask_file_input_method', provider.model_dump())
 
     def test_maskin_module_config_error(self):
         with self.assertRaises(ValueError):

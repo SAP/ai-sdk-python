@@ -31,11 +31,19 @@ class TestEmbeddingsEnums(unittest.TestCase):
         self.assertEqual(EmbeddingsEncodingFormat.FLOAT.value, "float")
         self.assertEqual(EmbeddingsEncodingFormat.BASE64.value, "base64")
         self.assertEqual(EmbeddingsEncodingFormat.BINARY.value, "binary")
+        self.assertEqual(EmbeddingsEncodingFormat.INT8.value, "int8")
+        self.assertEqual(EmbeddingsEncodingFormat.UINT8.value, "uint8")
+        self.assertEqual(EmbeddingsEncodingFormat.UBINARY.value, "ubinary")
 
     def test_input_type_values(self):
         self.assertEqual(EmbeddingsInputType.TEXT.value, "text")
         self.assertEqual(EmbeddingsInputType.DOCUMENT.value, "document")
         self.assertEqual(EmbeddingsInputType.QUERY.value, "query")
+        self.assertEqual(EmbeddingsInputType.SEARCH_DOCUMENT.value, "search_document")
+        self.assertEqual(EmbeddingsInputType.SEARCH_QUERY.value, "search_query")
+        self.assertEqual(EmbeddingsInputType.CLASSIFICATION.value, "classification")
+        self.assertEqual(EmbeddingsInputType.CLUSTERING.value, "clustering")
+        self.assertEqual(EmbeddingsInputType.IMAGE.value, "image")
 
 
 class TestEmbeddingsModelParams(unittest.TestCase):
@@ -295,7 +303,6 @@ class TestEmbeddingResult(unittest.TestCase):
         self.assertEqual(dumped["object"], "embedding")
         self.assertEqual(dumped["embedding"], [0.1, 0.2, 0.3])
         self.assertEqual(dumped["index"], 0)
-
 
 class TestEmbeddingsResponse(unittest.TestCase):
     """Tests for EmbeddingsResponse model."""
