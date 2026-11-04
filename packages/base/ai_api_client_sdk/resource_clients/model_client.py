@@ -36,21 +36,3 @@ class ModelClient(BaseClient):
             resource_group=resource_group,
         )
         return ModelQueryResponse.from_dict(response_dict)
-
-    def list_available_models(self, resource_group: str = None) -> List[Model]:
-        """Lists the available models.
-
-        :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
-            resource group in the :class:`ai_api_client_sdk.ai_api_v2_client.AIAPIV2Client` should be specified,
-            defaults to None
-        :type resource_group: str
-        :raises: class:`ai_api_client_sdk.exception.AIAPIInvalidRequestException` if a 400 response is received from the
-            server
-        :raises: class:`ai_api_client_sdk.exception.AIAPIAuthorizationException` if a 401 response is received from the
-            server
-        :raises: class:`ai_api_client_sdk.exception.AIAPIServerException` if a non-2XX response is received from the
-            server
-        :return: List of available models
-        :rtype: List[class:`ai_api_client_sdk.models.model.Model`]
-        """
-        return self.query(resource_group=resource_group).resources

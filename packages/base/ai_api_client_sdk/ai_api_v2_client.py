@@ -1,5 +1,5 @@
 import os
-from typing import Callable
+from typing import Callable, List
 
 from ai_api_client_sdk.exception import AIAPIAuthenticatorException
 from ai_api_client_sdk.helpers import _is_all_none
@@ -122,3 +122,104 @@ class AIAPIV2Client:
         self.meta: MetaClient = MetaClient(rest_client=self.rest_client)
         admin_rest_client = RestClient(base_url=base_url[:-3], get_token=token_creator, resource_group=resource_group)
         self.resource_groups: ResourceGroupsClient = ResourceGroupsClient(rest_client=admin_rest_client)
+
+    def get_models(self, resource_group: str = None):
+        """Lists the available foundation models.
+
+        :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
+            resource group in the :class:`ai_api_client_sdk.ai_api_v2_client.AIAPIV2Client` should be specified,
+            defaults to None
+        :type resource_group: str
+        :return: List of available models
+        :rtype: List[class:`ai_api_client_sdk.models.model.Model`]
+        """
+        return self.model.query(resource_group=resource_group).resources
+
+    def get_foundation_model_deployment_id(self, model_name: str, executable_id: str,
+                                           resource_group: str = None) -> str:
+        """Resolves the deployment ID for a running foundation model.
+
+        :param model_name: Model name (e.g. ``'gpt-4o'``)
+        :type model_name: str
+        :param executable_id: Executable / provider ID (e.g. ``'azure-openai'``)
+        :type executable_id: str
+        :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
+            resource group in the :class:`ai_api_client_sdk.ai_api_v2_client.AIAPIV2Client` should be specified,
+            defaults to None
+        :type resource_group: str
+        :raises ValueError: if no matching running deployment is found
+        :return: The deployment ID
+        :rtype: str
+        """
+        from ai_api_client_sdk.models.status import Status
+
+        deployments = self.deployment.query(
+            scenario_id='foundation-models',
+            executable_ids=[executable_id],
+            status=Status.RUNNING,
+            resource_group=resource_group,
+        ).resources
+        for d in deployments:
+            details = getattr(d, 'details', None) or {}
+            backend_model = (
+                details
+                .get('resources', {})
+                .get('backend_details', {})
+                .get('model', {})
+            )
+            if backend_model.get('name') == model_name:
+                return d.id
+        raise ValueError(
+            f"No running deployment found for model '{model_name}' "
+            f"with executable '{executable_id}'."
+        )
+
+    def get_orchestration_deployment_id(self, resource_group: str = None) -> str:
+        """Resolves the deployment ID for the orchestration scenario.
+
+        :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
+            resource group in the :class:`ai_api_client_sdk.ai_api_v2_client.AIAPIV2Client` should be specified,
+            defaults to None
+        :type resource_group: str
+        :raises ValueError: if no running orchestration deployment is found
+        :return: The deployment ID
+        :rtype: str
+        """
+        from ai_api_client_sdk.models.status import Status
+
+        deployments = self.deployment.query(
+            scenario_id='orchestration',
+            status=Status.RUNNING,
+            resource_group=resource_group,
+        ).resources
+        if not deployments:
+            raise ValueError('No running orchestration deployment found.')
+        return deployments[0].id
+
+    def get_orchestration_deployment_url(self, resource_group: str = None) -> str:
+        """Resolves the deployment URL for the orchestration scenario.
+
+        :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
+            resource group in the :class:`ai_api_client_sdk.ai_api_v2_client.AIAPIV2Client` should be specified,
+            defaults to None
+        :type resource_group: str
+        :raises ValueError: if no running orchestration deployment is found or it has no URL
+        :return: The deployment URL
+        :rtype: str
+        """
+        from ai_api_client_sdk.models.status import Status
+
+        deployments = self.deployment.query(
+            scenario_id='orchestration',
+            status=Status.RUNNING,
+            resource_group=resource_group,
+        ).resources
+        if not deployments:
+            raise ValueError('No running orchestration deployment found.')
+        url = getattr(deployments[0], 'deployment_url', None)
+        if not url:
+            raise ValueError(
+                'Orchestration deployment has no deployment URL. '
+                'Ensure the deployment is running.'
+            )
+        return url
