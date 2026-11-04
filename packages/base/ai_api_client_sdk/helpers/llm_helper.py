@@ -4,7 +4,6 @@ from functools import partial
 
 from ai_api_client_sdk.helpers.constants import SCENARIO_LABEL_NAME_PATTERN
 from ai_api_client_sdk.models.model import Model
-from ai_api_client_sdk.models.model_version import ModelVersion
 
 
 def get_attr(obj, attr):

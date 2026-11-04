@@ -2,6 +2,8 @@ import os
 from typing import Callable, List
 
 from ai_api_client_sdk.exception import AIAPIAuthenticatorException
+from ai_api_client_sdk.models.model import Model
+from ai_api_client_sdk.models.status import Status
 from ai_api_client_sdk.helpers import _is_all_none
 from ai_api_client_sdk.helpers.authenticator import Authenticator
 from ai_api_client_sdk.helpers.constants import SKIP_AUTH_ENV_VAR, Timeouts
@@ -123,7 +125,7 @@ class AIAPIV2Client:
         admin_rest_client = RestClient(base_url=base_url[:-3], get_token=token_creator, resource_group=resource_group)
         self.resource_groups: ResourceGroupsClient = ResourceGroupsClient(rest_client=admin_rest_client)
 
-    def get_models(self, resource_group: str = None):
+    def get_models(self, resource_group: str = None) -> List[Model]:
         """Lists the available foundation models.
 
         :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
@@ -151,8 +153,6 @@ class AIAPIV2Client:
         :return: The deployment ID
         :rtype: str
         """
-        from ai_api_client_sdk.models.status import Status
-
         deployments = self.deployment.query(
             scenario_id='foundation-models',
             executable_ids=[executable_id],
@@ -185,8 +185,6 @@ class AIAPIV2Client:
         :return: The deployment ID
         :rtype: str
         """
-        from ai_api_client_sdk.models.status import Status
-
         deployments = self.deployment.query(
             scenario_id='orchestration',
             status=Status.RUNNING,
@@ -207,8 +205,6 @@ class AIAPIV2Client:
         :return: The deployment URL
         :rtype: str
         """
-        from ai_api_client_sdk.models.status import Status
-
         deployments = self.deployment.query(
             scenario_id='orchestration',
             status=Status.RUNNING,
