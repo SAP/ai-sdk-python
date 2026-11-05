@@ -26,9 +26,16 @@ dependencies = [
     "langchain-classic~=1.0.0",
     "packaging>=23.2",
     "pydantic~=2.12",
+    # openai wrappers ship in the base install, matching the pre-split single
+    # package (langchain-openai was an untagged/base requirement there). The
+    # amazon/google wrappers remain opt-in extras, as they were before.
+    "sap-ai-sdk-openai>=1.0.0",
+    "langchain-openai~=1.6.0",
 ]
 
 [project.optional-dependencies]
+# Kept so `sap-ai-sdk-langchain[openai]` still resolves (now a no-op superset of
+# the base), for callers that pin the extra explicitly.
 openai = [
     "sap-ai-sdk-openai>=1.0.0",
     "langchain-openai~=1.6.0",
@@ -42,7 +49,7 @@ google = [
     "langchain-google-genai~=4.4.0",
 ]
 all = [
-    "sap-ai-sdk-langchain[openai,amazon,google]",
+    "sap-ai-sdk-langchain[amazon,google]",
 ]
 
 [project.urls]

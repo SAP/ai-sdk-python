@@ -45,12 +45,31 @@ dependencies = [
     "sap-ai-sdk-document-grounding>=1.0.0",
     "sap-ai-sdk-batch>=1.0.0",
     "sap-ai-sdk-evaluations>=1.0.0",
+    # The pre-split base install carried the langchain + openai wrappers, so a
+    # plain `pip install sap-ai-sdk-gen` keeps giving them. Provider langchain
+    # wrappers (amazon/google) remain opt-in via the extras below.
+    "sap-ai-sdk-langchain>=1.0.0",
 ]
 
 [project.optional-dependencies]
-all = [
-    "sap-ai-sdk-langchain[openai,amazon,google]>=1.0.0",
+# Provider toggles preserved from the pre-split single package, where
+# `sap-ai-sdk-gen[google]` / `[amazon]` pulled the provider extras. The native
+# provider distributions (sap-ai-sdk-google / sap-ai-sdk-amazon) are already base
+# dependencies; these extras add the langchain wrappers (and evaluations' amazon
+# deps) on top, expressed as passthroughs so they can't drift from the owning
+# packages' own extras.
+google = [
+    "sap-ai-sdk-langchain[google]>=1.0.0",
+]
+amazon = [
+    "sap-ai-sdk-langchain[amazon]>=1.0.0",
     "sap-ai-sdk-evaluations[amazon]>=1.0.0",
+]
+# `all` is the union of every provider toggle, mirroring the original
+# auto-synthesized `all` extra. The openai langchain wrappers are already in the
+# base install (via sap-ai-sdk-langchain), so they need no mention here.
+all = [
+    "sap-ai-sdk-gen[google,amazon]",
 ]
 
 [dependency-groups]
