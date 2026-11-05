@@ -1,3 +1,6 @@
+from typing import List
+
+from ai_api_client_sdk.models.model import Model
 from ai_api_client_sdk.models.model_query_response import ModelQueryResponse
 from ai_api_client_sdk.resource_clients.base_client import BaseClient
 
