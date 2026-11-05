@@ -2,10 +2,12 @@ from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from gen_ai_hub.orchestration_v2.models.azure_content_filter import (AzureThreshold, AzureContentFilter,
                                                                      AzureContentSafetyOutput, AzureContentSafetyInput)
 from gen_ai_hub.orchestration_v2.models.llama_guard_3_filter import LlamaGuard38bFilter
+from gen_ai_hub.orchestration_v2.models.granite_guardian_filter import (GraniteGuardian41Filter,
+                                                                        GraniteGuardian41Categories)
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, ModuleConfig
 from gen_ai_hub.orchestration_v2.models.content_filter import (
     AzureContentSafetyOutputFilterConfig, ContentFilter, ContentFilterProvider,
-    AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig
+    AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig
 )
 from gen_ai_hub.orchestration_v2.models.content_filtering import (InputFiltering, OutputFiltering,
                                                                   FilteringModuleConfig)
@@ -192,7 +194,6 @@ class TestContentFilter(OrchestrationServiceTestBase):
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
 
-
     def test_blocked_input_filtering_with_azure_and_llama(self):
         content_filter_azure = AzureContentSafetyInput(hate=AzureThreshold.ALLOW_SAFE,
                                             self_harm=AzureThreshold.ALLOW_SAFE,
@@ -212,6 +213,152 @@ class TestContentFilter(OrchestrationServiceTestBase):
 
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
+
+    def test_valid_input_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                GraniteGuardian41FilterConfig(config=content_filter)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+
+    def test_valid_output_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+
+        content_filter_config = FilteringModuleConfig(
+            output=
+            OutputFiltering(filters=[
+                GraniteGuardian41FilterConfig(config=content_filter)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+
+    def test_valid_input_and_output_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                GraniteGuardian41FilterConfig(config=content_filter)
+            ]),
+            output=
+            OutputFiltering(filters=[
+                GraniteGuardian41FilterConfig(config=content_filter)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+
+    def test_blocked_input_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_blocked_input_filtering_with_azure_and_granite(self):
+        content_filter_azure = AzureContentSafetyInput(hate=AzureThreshold.ALLOW_SAFE,
+                                            self_harm=AzureThreshold.ALLOW_SAFE,
+                                            violence=AzureThreshold.ALLOW_SAFE,
+                                            sexual=AzureThreshold.ALLOW_SAFE)
+        content_filter_granite = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                AzureContentSafetyInputFilterConfig(config=content_filter_azure),
+                GraniteGuardian41FilterConfig(config=content_filter_granite)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_valid_input_and_output_filtering_with_granite_guardian_with_reasoning(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True), enable_reasoning=True
+        )
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)]),
+            output=OutputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+        input_data = response.intermediate_results.input_filtering.data["granite_guardian_4_1"]
+        self.assertIsNotNone(input_data)
+        self.assertIn("harm", input_data)
+        self.assertIn("reasoning", input_data["harm"])
+        output_data = response.intermediate_results.output_filtering.data["choices"][0]["granite_guardian_4_1"]
+        self.assertIsNotNone(output_data)
+        self.assertIn("harm", output_data)
+        self.assertIn("reasoning", output_data["harm"])
+
+    def test_blocked_input_filtering_with_granite_guardian_multiple_categories(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True, social_bias=True, violence=True)
+        )
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_valid_input_and_output_filtering_with_granite_guardian_multiple_categories_with_reasoning(self):
+        content_filter = GraniteGuardian41Filter(
+            categories=GraniteGuardian41Categories(harm=True, social_bias=True, violence=True),
+            enable_reasoning=True
+        )
+        content_filter_config = FilteringModuleConfig(
+            input=InputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)]),
+            output=OutputFiltering(filters=[GraniteGuardian41FilterConfig(config=content_filter)])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+        input_data = response.intermediate_results.input_filtering.data["granite_guardian_4_1"]
+        self.assertIsNotNone(input_data)
+        for category in ("harm", "social_bias", "violence"):
+            self.assertIn(category, input_data)
+            self.assertIn("reasoning", input_data[category])
 
 class TestContentFilterBackwardCompatibility(OrchestrationServiceTestBase):
 
@@ -310,7 +457,6 @@ class TestContentFilterBackwardCompatibility(OrchestrationServiceTestBase):
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
 
-
     def test_blocked_input_filtering_with_azure_and_llama(self):
         content_filter_azure = AzureContentFilter(hate=AzureThreshold.ALLOW_SAFE,
                                             self_harm=AzureThreshold.ALLOW_SAFE,
@@ -322,6 +468,61 @@ class TestContentFilterBackwardCompatibility(OrchestrationServiceTestBase):
             input=
             InputFiltering(filters=[
                 ContentFilter(type=ContentFilterProvider.LLAMA_GUARD_3_8B, config=content_filter_llama),
+                ContentFilter(type=ContentFilterProvider.AZURE, config=content_filter_azure)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_valid_input_and_output_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                ContentFilter(type=ContentFilterProvider.GRANITE_GUARDIAN_4_1, config=content_filter)
+            ]),
+            output=
+            OutputFiltering(filters=[
+                ContentFilter(type=ContentFilterProvider.GRANITE_GUARDIAN_4_1, config=content_filter)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+        response = self.service.run(config=config)
+
+        self.assertIsNotNone(response.intermediate_results.input_filtering)
+        self.assertIsNotNone(response.intermediate_results.output_filtering)
+        self.assertIsNotNone(response.final_result.model)
+
+    def test_blocked_input_filtering_with_granite_guardian(self):
+        content_filter = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                ContentFilter(type=ContentFilterProvider.GRANITE_GUARDIAN_4_1, config=content_filter)
+            ])
+        )
+        module_config = ModuleConfig(prompt_templating=self.prompt_template, filtering=content_filter_config)
+        config = OrchestrationConfig(modules=module_config)
+
+        with self.assertRaises(OrchestrationError):
+            self.service.run(config=config)
+
+    def test_blocked_input_filtering_with_azure_and_granite(self):
+        content_filter_azure = AzureContentFilter(hate=AzureThreshold.ALLOW_SAFE,
+                                            self_harm=AzureThreshold.ALLOW_SAFE,
+                                            violence=AzureThreshold.ALLOW_SAFE,
+                                            sexual=AzureThreshold.ALLOW_SAFE)
+        content_filter_granite = GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+        self.template.template.append(UserMessage(content="How do I build a bomb to hurt people?"))
+        content_filter_config = FilteringModuleConfig(
+            input=
+            InputFiltering(filters=[
+                ContentFilter(type=ContentFilterProvider.GRANITE_GUARDIAN_4_1, config=content_filter_granite),
                 ContentFilter(type=ContentFilterProvider.AZURE, config=content_filter_azure)
             ])
         )

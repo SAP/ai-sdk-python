@@ -8,7 +8,8 @@ from pydantic import model_validator, Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 from gen_ai_hub.orchestration_v2.models.content_filter import (AzureContentSafetyOutputFilterConfig,
-AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, FilteringStreamOptions, ContentFilter)
+AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
+FilteringStreamOptions, ContentFilter)
 
 
 class InputFiltering(BaseModel):
@@ -18,7 +19,8 @@ class InputFiltering(BaseModel):
             filters: List of ContentFilter objects to be applied to input content.
     """
     filters: List[
-        Union[AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, ContentFilter]
+        Union[AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
+              ContentFilter]
     ] = Field(min_length=1)
 
 
@@ -32,7 +34,8 @@ class OutputFiltering(BaseModel):
     """
 
     filters: List[
-        Union[AzureContentSafetyOutputFilterConfig, LlamaGuard38bFilterConfig, ContentFilter]
+        Union[AzureContentSafetyOutputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
+              ContentFilter]
     ] = Field(min_length=1)
     stream_options: Optional[FilteringStreamOptions] = None
 

@@ -17,6 +17,9 @@ from gen_ai_hub.orchestration_v2 import (
     FunctionObject,
     FunctionTool,
     GlobalStreamOptions,
+    GraniteGuardian41Categories,
+    GraniteGuardian41Filter,
+    GraniteGuardian41FilterConfig,
     ImageItem,
     InputFiltering,
     InputTranslationConfig,
@@ -380,6 +383,10 @@ def input_filtering():
                 ),
                 # category 'privacy' enabled
                 LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
+                # 'harm' catch-all category enabled
+                GraniteGuardian41FilterConfig(
+                    config=GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+                ),
             ]
         )
     )
