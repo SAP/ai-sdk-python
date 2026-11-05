@@ -10,16 +10,14 @@ This package contributes to the **`gen_ai_hub` namespace** (PEP 420). It ships n
 ## Installation
 
 ```bash
-# Native google-genai client only
+# Native google-genai client
 pip install sap-ai-sdk-google
-
-# Including the LangChain wrappers (ChatGoogleGenerativeAI, …)
-pip install "sap-ai-sdk-google[langchain]"
 ```
 
 Installing this package automatically pulls `sap-ai-sdk-proxy` and `google-genai`.
-The `[langchain]` extra additionally pulls `langchain`, `langchain-classic`, and
-`langchain-google-genai`.
+This package ships only the native Google GenAI client. For the LangChain
+wrappers (`ChatGoogleGenerativeAI`, `GoogleGenerativeAIEmbeddings`), install
+`pip install "sap-ai-sdk-langchain[google]"` (see ../langchain/README.md).
 
 ## Imports
 
@@ -27,16 +25,12 @@ The `[langchain]` extra additionally pulls `langchain`, `langchain-classic`, and
 # Native client (always available with sap-ai-sdk-google)
 from gen_ai_hub.proxy.native.google_genai import Client
 
-# LangChain wrappers (require the [langchain] extra)
-from gen_ai_hub.proxy.native.google_genai.langchain import (
-    ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings,
-)
-# Back-compat shim path (still works with the [langchain] extra installed):
-from gen_ai_hub.proxy.langchain.google_genai import ChatGoogleGenerativeAI
+# LangChain wrappers are importable from gen_ai_hub.proxy.langchain.google_genai
+# once sap-ai-sdk-langchain[google] is installed.
 ```
 
-`init_llm("gemini-2.5-flash-lite")` from `sap-ai-sdk-proxy` resolves to this
-package's wrappers once `sap-ai-sdk-google[langchain]` is installed.
+`init_llm("gemini-2.5-flash-lite")` from `sap-ai-sdk-proxy` resolves to the
+LangChain wrappers once `sap-ai-sdk-langchain[google]` is installed.
 
 ## Configuration, Usage
 

@@ -29,6 +29,7 @@ members = [
     "sap-ai-sdk-evaluations",
     "sap-ai-sdk-gen",
     "sap-ai-sdk-google",
+    "sap-ai-sdk-langchain",
     "sap-ai-sdk-openai",
     "sap-ai-sdk-orchestration",
     "sap-ai-sdk-prompt-registry",
@@ -4112,24 +4113,13 @@ dependencies = [
     { name = "sap-ai-sdk-proxy" },
 ]
 
-[package.optional-dependencies]
-langchain = [
-    { name = "langchain" },
-    { name = "langchain-aws" },
-    { name = "langchain-classic" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "aiobotocore", specifier = ">=3.2.0" },
     { name = "boto3", specifier = ">=1.40.61" },
     { name = "botocore", specifier = ">=1.40.61" },
-    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
-    { name = "langchain-aws", marker = "extra == 'langchain'", specifier = "~=1.7.0" },
-    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
-provides-extras = ["langchain"]
 
 [[package]]
 name = "sap-ai-sdk-base"
@@ -4285,10 +4275,8 @@ dependencies = [
 
 [package.optional-dependencies]
 all = [
-    { name = "sap-ai-sdk-amazon", extra = ["langchain"] },
     { name = "sap-ai-sdk-evaluations", extra = ["amazon"] },
-    { name = "sap-ai-sdk-google", extra = ["langchain"] },
-    { name = "sap-ai-sdk-openai", extra = ["langchain"] },
+    { name = "sap-ai-sdk-langchain", extra = ["amazon", "google", "openai"] },
 ]
 
 [package.dev-dependencies]
@@ -4311,15 +4299,13 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "sap-ai-sdk-amazon", editable = "packages/amazon" },
-    { name = "sap-ai-sdk-amazon", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/amazon" },
     { name = "sap-ai-sdk-batch", editable = "packages/batch" },
     { name = "sap-ai-sdk-document-grounding", editable = "packages/document-grounding" },
     { name = "sap-ai-sdk-evaluations", editable = "packages/evaluations" },
     { name = "sap-ai-sdk-evaluations", extras = ["amazon"], marker = "extra == 'all'", editable = "packages/evaluations" },
     { name = "sap-ai-sdk-google", editable = "packages/google" },
-    { name = "sap-ai-sdk-google", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/google" },
+    { name = "sap-ai-sdk-langchain", extras = ["openai", "amazon", "google"], marker = "extra == 'all'", editable = "packages/langchain" },
     { name = "sap-ai-sdk-openai", editable = "packages/openai" },
-    { name = "sap-ai-sdk-openai", extras = ["langchain"], marker = "extra == 'all'", editable = "packages/openai" },
     { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
     { name = "sap-ai-sdk-prompt-registry", editable = "packages/prompt-registry" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
@@ -4353,23 +4339,63 @@ dependencies = [
     { name = "sap-ai-sdk-proxy" },
 ]
 
-[package.optional-dependencies]
-langchain = [
-    { name = "langchain" },
-    { name = "langchain-classic" },
-    { name = "langchain-google-genai" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "google-genai", specifier = "~=2.23.0" },
     { name = "httpx", specifier = ">=0.27.0" },
-    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
-    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
-    { name = "langchain-google-genai", marker = "extra == 'langchain'", specifier = "~=4.4.0" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
-provides-extras = ["langchain"]
+
+[[package]]
+name = "sap-ai-sdk-langchain"
+version = "1.0.0"
+source = { editable = "packages/langchain" }
+dependencies = [
+    { name = "langchain" },
+    { name = "langchain-classic" },
+    { name = "packaging" },
+    { name = "pydantic" },
+    { name = "sap-ai-sdk-proxy" },
+]
+
+[package.optional-dependencies]
+all = [
+    { name = "langchain-aws" },
+    { name = "langchain-google-genai" },
+    { name = "langchain-openai" },
+    { name = "sap-ai-sdk-amazon" },
+    { name = "sap-ai-sdk-google" },
+    { name = "sap-ai-sdk-openai" },
+]
+amazon = [
+    { name = "langchain-aws" },
+    { name = "sap-ai-sdk-amazon" },
+]
+google = [
+    { name = "langchain-google-genai" },
+    { name = "sap-ai-sdk-google" },
+]
+openai = [
+    { name = "langchain-openai" },
+    { name = "sap-ai-sdk-openai" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "langchain", specifier = "~=1.4.0" },
+    { name = "langchain-aws", marker = "extra == 'amazon'", specifier = "~=1.7.0" },
+    { name = "langchain-classic", specifier = "~=1.0.0" },
+    { name = "langchain-google-genai", marker = "extra == 'google'", specifier = "~=4.4.0" },
+    { name = "langchain-openai", marker = "extra == 'openai'", specifier = "~=1.6.0" },
+    { name = "packaging", specifier = ">=23.2" },
+    { name = "pydantic", specifier = "~=2.12" },
+    { name = "sap-ai-sdk-amazon", marker = "extra == 'amazon'", editable = "packages/amazon" },
+    { name = "sap-ai-sdk-google", marker = "extra == 'google'", editable = "packages/google" },
+    { name = "sap-ai-sdk-langchain", extras = ["openai", "amazon", "google"], marker = "extra == 'all'", editable = "packages/langchain" },
+    { name = "sap-ai-sdk-openai", marker = "extra == 'openai'", editable = "packages/openai" },
+    { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
+]
+provides-extras = ["openai", "amazon", "google", "all"]
 
 [[package]]
 name = "sap-ai-sdk-openai"
@@ -4380,22 +4406,11 @@ dependencies = [
     { name = "sap-ai-sdk-proxy" },
 ]
 
-[package.optional-dependencies]
-langchain = [
-    { name = "langchain" },
-    { name = "langchain-classic" },
-    { name = "langchain-openai" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "langchain", marker = "extra == 'langchain'", specifier = "~=1.4.0" },
-    { name = "langchain-classic", marker = "extra == 'langchain'", specifier = "~=1.0.0" },
-    { name = "langchain-openai", marker = "extra == 'langchain'", specifier = "~=1.6.0" },
     { name = "openai", specifier = ">=1.66.0" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
 ]
-provides-extras = ["langchain"]
 
 [[package]]
 name = "sap-ai-sdk-orchestration"

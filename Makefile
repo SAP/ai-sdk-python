@@ -38,7 +38,7 @@ license-check:
 sample-code-server:
 	uv run uvicorn sample_code.server:app --env-file sample-code/.env --reload
 
-PACKAGES = base core proxy openai amazon google rpt orchestration prompt-registry document-grounding batch evaluations gen
+PACKAGES = base core proxy openai amazon google langchain rpt orchestration prompt-registry document-grounding batch evaluations gen
 
 test:
 	@for pkg in $(PACKAGES); do \

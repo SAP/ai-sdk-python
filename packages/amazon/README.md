@@ -11,31 +11,29 @@ This package contributes to the **`gen_ai_hub` namespace** (PEP 420). It ships n
 ```bash
 # Native Bedrock session/clients only
 pip install sap-ai-sdk-amazon
-
-# Including the LangChain wrappers (ChatBedrock, BedrockEmbeddings, …)
-pip install "sap-ai-sdk-amazon[langchain]"
 ```
 
 Installing this package automatically pulls `sap-ai-sdk-proxy`, `boto3`,
-`aiobotocore`, and `botocore`. The `[langchain]` extra additionally pulls
-`langchain`, `langchain-classic`, and `langchain-aws`.
+`aiobotocore`, and `botocore`. This package ships only the native
+Amazon/Bedrock client.
+
+If you want the LangChain Amazon Bedrock wrappers (`ChatBedrock`,
+`ChatBedrockConverse`, `BedrockEmbeddings`), install
+`pip install "sap-ai-sdk-langchain[amazon]"` instead (see
+../langchain/README.md).
 
 ## Imports
 
 ```python
 # Native clients (always available with sap-ai-sdk-amazon)
 from gen_ai_hub.proxy.native.amazon import Session, AsyncSession, ClientWrapper
-
-# LangChain wrappers (require the [langchain] extra)
-from gen_ai_hub.proxy.native.amazon.langchain import (
-    ChatBedrock, ChatBedrockConverse, BedrockEmbeddings,
-)
-# Back-compat shim path (still works with the [langchain] extra installed):
-from gen_ai_hub.proxy.langchain.amazon import ChatBedrock, BedrockEmbeddings
 ```
 
-`init_llm("amazon--nova-micro")` from `sap-ai-sdk-proxy` resolves to this
-package's wrappers once `sap-ai-sdk-amazon[langchain]` is installed; if it is
+The LangChain wrappers are importable from `gen_ai_hub.proxy.langchain.amazon`
+once `sap-ai-sdk-langchain[amazon]` is installed.
+
+`init_llm("amazon--nova-micro")` from `sap-ai-sdk-proxy` resolves to the
+LangChain wrappers once `sap-ai-sdk-langchain[amazon]` is installed; if it is
 not, that call raises an `ImportError` telling you to install it.
 
 ## Configuration, Usage

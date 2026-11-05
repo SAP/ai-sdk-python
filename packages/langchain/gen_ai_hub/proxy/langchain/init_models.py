@@ -71,10 +71,10 @@ def _init_custom_model(proxy_client: BaseProxyClient, init_func: Callable, args:
 def _import_provider(model_name: str, module: str, distribution: str):
     """Lazily import a provider's langchain wrapper module.
 
-    Providers ship in separate distributions (``sap-ai-sdk-openai``,
-    ``sap-ai-sdk-amazon``, ``sap-ai-sdk-google``), each with an optional
-    ``[langchain]`` extra. Import the wrapper only when a matching model is
-    actually requested, and raise an actionable error if it is missing.
+    The wrappers live in this distribution (``sap-ai-sdk-langchain``), each behind an
+    optional extra (``[openai]``, ``[amazon]``, ``[google]``) that pulls the matching
+    provider package and LangChain integration. Import the wrapper only when a matching
+    model is actually requested, and raise an actionable error if it is missing.
 
     :param model_name: the requested model name (for the error message)
     :param module: the dotted path of the provider's langchain wrapper module
@@ -94,13 +94,13 @@ def _import_provider(model_name: str, module: str, distribution: str):
 def _get_init_func(model_name: str, model_type: ModelType):
     if any(model_name.startswith(prefix) for prefix in ['amazon', 'anthropic']):
         provider = _import_provider(
-            model_name, 'gen_ai_hub.proxy.native.amazon.langchain', 'sap-ai-sdk-amazon[langchain]')
+            model_name, 'gen_ai_hub.proxy.langchain.amazon', 'sap-ai-sdk-langchain[amazon]')
     elif any(model_name.startswith(prefix) for prefix in ['google', 'gemini']):
         provider = _import_provider(
-            model_name, 'gen_ai_hub.proxy.native.google_genai.langchain', 'sap-ai-sdk-google[langchain]')
+            model_name, 'gen_ai_hub.proxy.langchain.google_genai', 'sap-ai-sdk-langchain[google]')
     else:
         provider = _import_provider(
-            model_name, 'gen_ai_hub.proxy.native.openai.langchain', 'sap-ai-sdk-openai[langchain]')
+            model_name, 'gen_ai_hub.proxy.langchain.openai', 'sap-ai-sdk-langchain[openai]')
     if model_type == ModelType.EMBEDDINGS:
         return provider.init_embedding_model
     return provider.init_chat_model

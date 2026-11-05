@@ -27,13 +27,6 @@ dependencies = [
     "botocore>=1.40.61",
 ]
 
-[project.optional-dependencies]
-langchain = [
-    "langchain~=1.4.0",
-    "langchain-classic~=1.0.0",
-    "langchain-aws~=1.7.0",
-]
-
 [project.urls]
 Homepage = "https://www.sap.com/"
 Download = "https://pypi.python.org/pypi/sap-ai-sdk-amazon"

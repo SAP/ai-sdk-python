@@ -49,9 +49,7 @@ dependencies = [
 
 [project.optional-dependencies]
 all = [
-    "sap-ai-sdk-openai[langchain]>=1.0.0",
-    "sap-ai-sdk-amazon[langchain]>=1.0.0",
-    "sap-ai-sdk-google[langchain]>=1.0.0",
+    "sap-ai-sdk-langchain[openai,amazon,google]>=1.0.0",
     "sap-ai-sdk-evaluations[amazon]>=1.0.0",
 ]
 
@@ -83,6 +81,7 @@ sap-ai-sdk-proxy = { workspace = true }
 sap-ai-sdk-openai = { workspace = true }
 sap-ai-sdk-amazon = { workspace = true }
 sap-ai-sdk-google = { workspace = true }
+sap-ai-sdk-langchain = { workspace = true }
 sap-ai-sdk-rpt = { workspace = true }
 sap-ai-sdk-orchestration = { workspace = true }
 sap-ai-sdk-prompt-registry = { workspace = true }

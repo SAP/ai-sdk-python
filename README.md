@@ -15,13 +15,13 @@ contribute to the shared **`gen_ai_hub` namespace**
 `gen_ai_hub.*` import paths are the same no matter which subset you install.
 
 Install everything via the `sap-ai-sdk-gen` meta-package (all providers **with**
-their LangChain wrappers):
+the LangChain integration):
 
 ```bash
 pip install "sap-ai-sdk-gen[all]"
 ```
 
-Install everything without the provider LangChain wrappers:
+Install everything without the LangChain integration:
 
 ```bash
 pip install sap-ai-sdk-gen
@@ -39,10 +39,11 @@ pip install sap-ai-sdk-orchestration sap-ai-sdk-openai
 
 | Distribution | Namespace it ships | Install guide |
 |---|---|---|
-| `sap-ai-sdk-proxy` | `gen_ai_hub.proxy.{core,gen_ai_hub_proxy,langchain}` | [packages/proxy](packages/proxy/README.md) |
+| `sap-ai-sdk-proxy` | `gen_ai_hub.proxy.{core,gen_ai_hub_proxy}` | [packages/proxy](packages/proxy/README.md) |
 | `sap-ai-sdk-openai` | `gen_ai_hub.proxy.native.openai` | [packages/openai](packages/openai/README.md) |
 | `sap-ai-sdk-amazon` | `gen_ai_hub.proxy.native.amazon` | [packages/amazon](packages/amazon/README.md) |
 | `sap-ai-sdk-google` | `gen_ai_hub.proxy.native.google_genai` | [packages/google](packages/google/README.md) |
+| `sap-ai-sdk-langchain` | `gen_ai_hub.proxy.langchain` | [packages/langchain](packages/langchain/README.md) |
 | `sap-ai-sdk-rpt` | `gen_ai_hub.proxy.native.sap` | [packages/rpt](packages/rpt/README.md) |
 | `sap-ai-sdk-orchestration` | `gen_ai_hub.orchestration_v2` | [packages/orchestration](packages/orchestration/README.md) |
 | `sap-ai-sdk-prompt-registry` | `gen_ai_hub.prompt_registry` | [packages/prompt-registry](packages/prompt-registry/README.md) |
@@ -51,12 +52,14 @@ pip install sap-ai-sdk-orchestration sap-ai-sdk-openai
 | `sap-ai-sdk-evaluations` | `gen_ai_hub.evaluations` | [packages/evaluations](packages/evaluations/README.md) |
 | `sap-ai-sdk-gen` | — (meta-package, no code) | [packages/gen](packages/gen/README.md) |
 
-The three provider distributions (`openai`, `amazon`, `google`) expose their
-LangChain wrappers under an optional `[langchain]` extra; `evaluations` exposes
-Amazon Bedrock support under an `[amazon]` extra. The provider-agnostic
-`init_llm` / `init_embedding_model` factories ship with `sap-ai-sdk-proxy` and
-resolve each provider's wrapper lazily, so a model whose provider is not installed
-raises an actionable error telling you which distribution to install.
+The `sap-ai-sdk-langchain` distribution provides the LangChain integration — the
+provider-agnostic `init_llm` / `init_embedding_model` factories plus drop-in
+LangChain wrapper classes — and owns the whole `gen_ai_hub.proxy.langchain`
+subtree. The per-provider LangChain libraries are optional extras of this one
+package (`sap-ai-sdk-langchain[openai|amazon|google]`); `evaluations` exposes
+Amazon Bedrock support under an `[amazon]` extra. The factories resolve each
+provider's wrapper lazily, so requesting a model whose provider extra is not
+installed raises an actionable error telling you which extra to install.
 
 > **Import note.** The namespace root has no `__init__.py`, so the old top-level
 > re-export `from gen_ai_hub import GenAIHubProxyClient` no longer exists — import
@@ -70,8 +73,9 @@ For detailed configuration and usage examples, see [README_sphynx.md](README_sph
 This repository is a [uv](https://docs.astral.sh/uv/) workspace. Each distribution
 lives under `packages/<name>/` and keeps its code under the real `gen_ai_hub/...`
 tree (none of them ship a `gen_ai_hub/__init__.py`). The core modules — the proxy
-client, the proxy registry, and the LangChain factories — are in
-[packages/proxy](packages/proxy).
+client and the proxy registry — are in [packages/proxy](packages/proxy); the
+LangChain integration (factories and wrappers) is in
+[packages/langchain](packages/langchain).
 
 Install the whole workspace into a single environment:
 

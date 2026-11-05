@@ -1,18 +1,19 @@
 """LangChain integration for the Generative AI Hub.
 
-The provider-agnostic model factories (:func:`init_llm`, :func:`init_embedding_model`)
-live here and ship with ``sap-ai-sdk-proxy``. The provider-specific wrapper classes
-(``ChatOpenAI``, ``ChatBedrock``, ``ChatGoogleGenerativeAI``, ...) are shipped by the
-provider distributions (``sap-ai-sdk-openai``/``-amazon``/``-google``) and are imported
-lazily on first access, so importing this package never pulls in an uninstalled
-provider's dependencies.
+This package (``sap-ai-sdk-langchain``) owns the entire ``gen_ai_hub.proxy.langchain``
+subtree. The provider-agnostic model factories (:func:`init_llm`,
+:func:`init_embedding_model`) are always importable. The provider-specific wrapper
+classes (``ChatOpenAI``, ``ChatBedrock``, ``ChatGoogleGenerativeAI``, ...) live in the
+sibling submodules (:mod:`.openai`, :mod:`.amazon`, :mod:`.google_genai`) and require the
+matching optional extra (``sap-ai-sdk-langchain[openai|amazon|google]``). They are
+imported lazily on first access, so importing this package with only a subset of the
+extras installed never pulls in an uninstalled provider's dependencies.
 """
 from typing import Any
 
 from .init_models import init_embedding_model, init_llm
 
-# Make sure the user has a recent version of langchain installed - but only if it is
-# installed at all. The base proxy distribution does not depend on langchain.
+# Make sure the user has a recent version of langchain installed.
 try:
     import langchain
 except ImportError:
@@ -32,6 +33,7 @@ __all__ = [
     'OpenAIEmbeddings',
     'AsyncOpenAIClient',
     'ChatOpenAI',
+    'ProxyOpenAI',
     'BedrockEmbeddings',
     'AICoreBedrockBaseModel',
     'ChatBedrock',
@@ -40,25 +42,26 @@ __all__ = [
     'GoogleGenerativeAIEmbeddings',
 ]
 
-# Back-compat: map names that previously lived in this package to their new
-# provider-local module and the distribution (with extra) that supplies them.
-_OPENAI_LC = ('gen_ai_hub.proxy.native.openai.langchain', 'sap-ai-sdk-openai[langchain]')
-_AMAZON_LC = ('gen_ai_hub.proxy.native.amazon.langchain', 'sap-ai-sdk-amazon[langchain]')
-_GOOGLE_LC = ('gen_ai_hub.proxy.native.google_genai.langchain', 'sap-ai-sdk-google[langchain]')
+# Map provider wrapper names to their in-package submodule and the extra that supplies
+# the underlying LangChain + provider dependencies.
+_OPENAI_LC = ('gen_ai_hub.proxy.langchain.openai', 'sap-ai-sdk-langchain[openai]')
+_AMAZON_LC = ('gen_ai_hub.proxy.langchain.amazon', 'sap-ai-sdk-langchain[amazon]')
+_GOOGLE_LC = ('gen_ai_hub.proxy.langchain.google_genai', 'sap-ai-sdk-langchain[google]')
 
 _LAZY_EXPORTS = {
     'OpenAI': _OPENAI_LC,
     'OpenAIEmbeddings': _OPENAI_LC,
     'ChatOpenAI': _OPENAI_LC,
+    'ProxyOpenAI': _OPENAI_LC,
     'BedrockEmbeddings': _AMAZON_LC,
     'AICoreBedrockBaseModel': _AMAZON_LC,
     'ChatBedrock': _AMAZON_LC,
     'ChatBedrockConverse': _AMAZON_LC,
     'ChatGoogleGenerativeAI': _GOOGLE_LC,
     'GoogleGenerativeAIEmbeddings': _GOOGLE_LC,
-    # The native OpenAI clients were historically re-exported here under these aliases.
-    'OpenAIClient': ('gen_ai_hub.proxy.native.openai', 'sap-ai-sdk-openai'),
-    'AsyncOpenAIClient': ('gen_ai_hub.proxy.native.openai', 'sap-ai-sdk-openai'),
+    # The native OpenAI clients are re-exported here under these aliases.
+    'OpenAIClient': ('gen_ai_hub.proxy.native.openai', 'sap-ai-sdk-langchain[openai]'),
+    'AsyncOpenAIClient': ('gen_ai_hub.proxy.native.openai', 'sap-ai-sdk-langchain[openai]'),
 }
 
 # Names that resolve to a differently-named attribute in the target module.
@@ -69,7 +72,7 @@ _LAZY_ATTR = {
 
 
 def __getattr__(name: str) -> Any:
-    """Lazily resolve provider wrapper classes from their provider distribution."""
+    """Lazily resolve provider wrapper classes from their in-package submodule."""
     if name not in _LAZY_EXPORTS:
         raise AttributeError(f'module {__name__!r} has no attribute {name!r}')
     import importlib

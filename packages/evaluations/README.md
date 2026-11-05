@@ -19,7 +19,7 @@ Installing this package automatically pulls `sap-ai-sdk-proxy`,
 `sap-ai-sdk-orchestration`, `sap-ai-sdk-prompt-registry`, `pandas`, and
 `langcodes`. The `[amazon]` extra additionally pulls `boto3`/`botocore`. Note
 that the `[amazon]` extra brings in boto3 only — to also use the Bedrock
-LangChain wrappers, install `sap-ai-sdk-amazon[langchain]` alongside it.
+LangChain wrappers, install `sap-ai-sdk-langchain[amazon]` alongside it.
 
 ## Imports
 

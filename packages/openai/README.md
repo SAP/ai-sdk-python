@@ -9,17 +9,16 @@ This package contributes to the **`gen_ai_hub` namespace** (PEP 420). It ships n
 ## Installation
 
 ```bash
-# Native OpenAI client only
 pip install sap-ai-sdk-openai
-
-# Including the LangChain wrappers (ChatOpenAI, OpenAIEmbeddings, …)
-pip install "sap-ai-sdk-openai[langchain]"
 ```
 
-Installing this package automatically pulls `sap-ai-sdk-proxy` and `openai`. The
-`[langchain]` extra additionally pulls `langchain`, `langchain-classic`, and
-`langchain-openai`. No other provider's dependencies (boto3, google-genai) are
-installed.
+Installing this package automatically pulls `sap-ai-sdk-proxy` and `openai`. No
+other provider's dependencies (boto3, google-genai) are installed. This package
+ships only the native OpenAI client.
+
+Looking for the LangChain wrappers (`ChatOpenAI`, `OpenAI`, `OpenAIEmbeddings`)?
+They now live in the separate `sap-ai-sdk-langchain` package — install them with
+`pip install "sap-ai-sdk-langchain[openai]"` (see ../langchain/README.md).
 
 ## Imports
 
@@ -28,14 +27,12 @@ installed.
 from gen_ai_hub.proxy.native.openai import OpenAI, AsyncOpenAI
 from gen_ai_hub.proxy.native.openai.clients import ChatCompletions, Responses
 
-# LangChain wrappers (require the [langchain] extra)
-from gen_ai_hub.proxy.native.openai.langchain import ChatOpenAI, OpenAIEmbeddings
-# Back-compat shim path (still works with the [langchain] extra installed):
-from gen_ai_hub.proxy.langchain.openai import ChatOpenAI, OpenAIEmbeddings
+# LangChain wrappers are importable from gen_ai_hub.proxy.langchain.openai
+# once sap-ai-sdk-langchain[openai] is installed.
 ```
 
 `init_llm("gpt-4o")` / `init_embedding_model(...)` from `sap-ai-sdk-proxy` resolve
-to this package's wrappers once `sap-ai-sdk-openai[langchain]` is installed.
+to the LangChain wrappers once `sap-ai-sdk-langchain[openai]` is installed.
 
 ## Configuration, Usage
 
