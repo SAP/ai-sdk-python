@@ -12,19 +12,18 @@ instead of this meta package.
 
 ## Installation
 
-Base install (restores `gen_ai_hub.proxy`, `gen_ai_hub.orchestration_v2`,
-`gen_ai_hub.prompt_registry`, `gen_ai_hub.document_grounding`,
-`gen_ai_hub.batch_service`, `gen_ai_hub.evaluations`):
+Base install (restores `gen_ai_hub.proxy`, `gen_ai_hub.proxy.langchain`,
+`gen_ai_hub.orchestration_v2`, `gen_ai_hub.prompt_registry`,
+`gen_ai_hub.document_grounding`, `gen_ai_hub.batch_service`, `gen_ai_hub.evaluations`):
 
     pip install sap-ai-sdk-gen
 
-With everything (langchain adapter + Amazon + Google native clients):
+With everything (+ Amazon + Google native clients and langchain adapters):
 
     pip install "sap-ai-sdk-gen[all]"
 
 Selective extras:
 
-    pip install "sap-ai-sdk-gen[langchain]"
     pip install "sap-ai-sdk-gen[amazon,google]"
 
 ## Known migration gap

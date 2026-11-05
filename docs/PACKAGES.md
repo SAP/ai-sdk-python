@@ -177,11 +177,11 @@ as a thin **compatibility meta package**: it depends on the packages above and
 re-exposes the old `gen_ai_hub.*` paths as forwarders (no logic of its own).
 
 ```bash
-pip install sap-ai-sdk-gen                  # proxy + orchestration + prompt-registry
-                                            # + document-grounding + batch + evaluations
-pip install "sap-ai-sdk-gen[all]"           # + langchain + amazon + google
-pip install "sap-ai-sdk-gen[langchain]"     # selective extras also work
-pip install "sap-ai-sdk-gen[amazon,google]"
+pip install sap-ai-sdk-gen                  # proxy + openai + rpt + orchestration
+                                            # + prompt-registry + document-grounding
+                                            # + batch + evaluations + langchain
+pip install "sap-ai-sdk-gen[all]"           # + amazon + google
+pip install "sap-ai-sdk-gen[amazon,google]" # selective extras also work
 ```
 
 ```python

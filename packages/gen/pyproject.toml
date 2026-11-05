@@ -36,13 +36,13 @@ dependencies = [
     "sap-ai-sdk-document-grounding>=1.0.0",
     "sap-ai-sdk-batch>=1.0.0",
     "sap-ai-sdk-evaluations>=1.0.0",
+    "sap-ai-sdk-langchain[openai]>=1.0.0",
 ]
 
 [project.optional-dependencies]
-langchain = ["sap-ai-sdk-langchain[openai]>=1.0.0"]
 amazon = ["sap-ai-sdk-amazon>=1.0.0", "sap-ai-sdk-langchain[amazon]>=1.0.0"]
 google = ["sap-ai-sdk-google>=1.0.0", "sap-ai-sdk-langchain[google]>=1.0.0"]
-all = ["sap-ai-sdk-gen[langchain,amazon,google]"]
+all = ["sap-ai-sdk-gen[amazon,google]"]
 
 [dependency-groups]
 dev = [

@@ -4532,6 +4532,7 @@ dependencies = [
     { name = "sap-ai-sdk-batch" },
     { name = "sap-ai-sdk-document-grounding" },
     { name = "sap-ai-sdk-evaluations" },
+    { name = "sap-ai-sdk-langchain", extra = ["openai"] },
     { name = "sap-ai-sdk-openai" },
     { name = "sap-ai-sdk-orchestration" },
     { name = "sap-ai-sdk-prompt-registry" },
@@ -4543,7 +4544,7 @@ dependencies = [
 all = [
     { name = "sap-ai-sdk-amazon" },
     { name = "sap-ai-sdk-google" },
-    { name = "sap-ai-sdk-langchain", extra = ["amazon", "google", "openai"] },
+    { name = "sap-ai-sdk-langchain", extra = ["amazon", "google"] },
 ]
 amazon = [
     { name = "sap-ai-sdk-amazon" },
@@ -4552,9 +4553,6 @@ amazon = [
 google = [
     { name = "sap-ai-sdk-google" },
     { name = "sap-ai-sdk-langchain", extra = ["google"] },
-]
-langchain = [
-    { name = "sap-ai-sdk-langchain", extra = ["openai"] },
 ]
 
 [package.dev-dependencies]
@@ -4571,18 +4569,18 @@ requires-dist = [
     { name = "sap-ai-sdk-batch", editable = "packages/batch" },
     { name = "sap-ai-sdk-document-grounding", editable = "packages/document-grounding" },
     { name = "sap-ai-sdk-evaluations", editable = "packages/evaluations" },
-    { name = "sap-ai-sdk-gen", extras = ["langchain", "amazon", "google"], marker = "extra == 'all'", editable = "packages/gen" },
+    { name = "sap-ai-sdk-gen", extras = ["amazon", "google"], marker = "extra == 'all'", editable = "packages/gen" },
     { name = "sap-ai-sdk-google", marker = "extra == 'google'", editable = "packages/google" },
     { name = "sap-ai-sdk-langchain", extras = ["amazon"], marker = "extra == 'amazon'", editable = "packages/langchain" },
     { name = "sap-ai-sdk-langchain", extras = ["google"], marker = "extra == 'google'", editable = "packages/langchain" },
-    { name = "sap-ai-sdk-langchain", extras = ["openai"], marker = "extra == 'langchain'", editable = "packages/langchain" },
+    { name = "sap-ai-sdk-langchain", extras = ["openai"], editable = "packages/langchain" },
     { name = "sap-ai-sdk-openai", editable = "packages/openai" },
     { name = "sap-ai-sdk-orchestration", editable = "packages/orchestration" },
     { name = "sap-ai-sdk-prompt-registry", editable = "packages/prompt-registry" },
     { name = "sap-ai-sdk-proxy", editable = "packages/proxy" },
     { name = "sap-ai-sdk-rpt", editable = "packages/rpt" },
 ]
-provides-extras = ["langchain", "amazon", "google", "all"]
+provides-extras = ["amazon", "google", "all"]
 
 [package.metadata.requires-dev]
 dev = [

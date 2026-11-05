@@ -3,7 +3,8 @@
 The ``openai`` / ``init_models`` / ``amazon`` / ``google_genai`` submodules of this
 package are available as separate forwarders (the latter two require the ``[amazon]`` /
 ``[google]`` extras). This ``__init__`` re-exports the OpenAI subset of the old merged
-namespace; it requires the ``[langchain]`` extra.
+namespace; langchain (via ``sap-ai-sdk-langchain[openai]``) is a base dependency of
+``sap-ai-sdk-gen``, so it is always available — matching the pre-split behaviour.
 
 TODO(compat): the pre-split ``gen_ai_hub.proxy.langchain`` root *also* re-exported the
 Bedrock + Google symbols (``ChatBedrock``, ``ChatGoogleGenerativeAI``, …) at this top
