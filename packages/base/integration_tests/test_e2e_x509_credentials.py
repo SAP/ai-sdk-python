@@ -1,3 +1,4 @@
+import pytest
 from typing import List
 
 from ai_api_client_sdk.ai_api_v2_client import AIAPIV2Client
@@ -6,7 +7,7 @@ from . import (BASE_URL, CLIENT_ID, RESOURCE_GROUP_ID, X509_CERT_URL, X509_CERT_
                X509_CERT_STR, X509_KEY_STR)
 from .ai_api_v2_client_e2e_test_base import AIAPIV2ClientE2ETestBase
 
-
+@pytest.mark.skip("Skip until valid x509 credentials are available")
 class TestE2EX509Credentials(AIAPIV2ClientE2ETestBase):
 
     @classmethod

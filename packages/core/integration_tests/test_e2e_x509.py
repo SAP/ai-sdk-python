@@ -1,6 +1,7 @@
 import json
 import os
 import tempfile
+import pytest
 from typing import List
 from unittest.mock import patch
 
@@ -32,7 +33,7 @@ VCAP_SERVICE_X509_DICT = {
 }
 VCAP_SERVICE_X509_ENV_VALUE = json.dumps(VCAP_SERVICE_X509_DICT, indent=4)
 
-
+@pytest.mark.skip("Skip until valid x509 credentials are available")
 class TestE2EX509(AICoreV2ClientE2ETestBase):
 
     @classmethod
