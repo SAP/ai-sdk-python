@@ -15,8 +15,9 @@ Option C. Split the `gen` package into separate PyPI packages for the individual
 ## Consequences
 
 - The dependency footprint of the new packages will be minimal.
+- There is an effort in creating the new packages and updating CI and release pipelines.
 - There will be no breaking changes for current users because they can continue to use the `gen` package.
-- There is a migration effort in creating the new packages and updating CI and release pipelines.
+- Users will need to update import statements when they migrate to the new packages.
 
 ## Appendix
 
@@ -42,18 +43,18 @@ Distribute individual packages (`sap-ai-sdk-rpt`, `sap-ai-sdk-orchestration`, ..
 
 Pros:
 
-- Import paths in new packages stay as before
+- Import paths in new packages stay as before (export for some re-exports, see below)
 - Meta-package contains no code, just gathers all individual packages
 - Independent releases and version numbers per package
 
 Cons:
 
 - Individual release pipeline per package (higher CI and release effort)
-- To enable re-exports on the `gen` and `proxy` level, a [small hack](https://github.com/SAP/ai-sdk-python/blob/dfcf453a236a46dffb9ccc2f1763c97d37b3678e/packages/proxy/gen_ai_hub/__init__.py#L7) is needed. In a clean namespace package, these re-exports are not possible because `gen` and `proxy` are namespace without an `init.py`
+- To enable re-exports on the `gen` and `proxy` level, a [hack](https://github.com/SAP/ai-sdk-python/blob/namespace-packages-poc/packages/gen/gen_ai_hub/__init__.py) is needed. In a clean namespace package, these re-exports are not possible because `gen` and `proxy` are namespaces without an `init.py`. NOTE: There is no guarantee that this hack is working properly.
 
 ### Option C: Separate Packages
 
-Distribute separate packages for the different services, each in it's own namespace. The `gen` meta package alias the packages under the `gen_ai_hub` namespace for full backwards compatibility. See [this PoC](https://github.com/SAP/ai-sdk-python/tree/separate-packages-poc) for more details.
+Distribute separate packages for the different services, each in it's own namespace. The `gen` meta package aliases the packages under the `gen_ai_hub` namespace for full backwards compatibility. See [this PoC](https://github.com/SAP/ai-sdk-python/tree/separate-packages-poc) for more details.
 
 Pros:
 
@@ -64,3 +65,4 @@ Pros:
 Cons:
 
 - Individual release pipeline per package (higher CI and release effort)
+- More migration effort for users compared to option B (switch to new packages needs change of import statements)
