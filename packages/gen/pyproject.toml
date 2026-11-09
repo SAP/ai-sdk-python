@@ -108,11 +108,18 @@ sap-ai-sdk-document-grounding = { workspace = true }
 sap-ai-sdk-batch = { workspace = true }
 sap-ai-sdk-evaluations = { workspace = true }
 
-# Meta-package: ship no Python modules. Exclude the test trees from discovery so the
-# build produces a dependency-only wheel with an empty package set.
+# Meta-package. It ships no subsystem code of its own, but it DOES own the
+# `gen_ai_hub` / `gen_ai_hub.proxy` namespace __init__ files that keep the
+# historic top-level re-exports (`from gen_ai_hub import GenAIHubProxyClient`,
+# `from gen_ai_hub.proxy import ...`) alive for the legacy all-in-one install.
+# Every other distribution ships these as plain PEP 420 namespaces with no
+# __init__; `gen` is the only one with the backwards-compat shim, so retiring
+# `gen` drops the shim. namespaces=true is required so setuptools discovers the
+# gen_ai_hub package tree despite the absence of deeper __init__ files.
 [tool.setuptools.packages.find]
+include = ["gen_ai_hub*"]
 exclude = ["*test*", "tests*", "integration_tests*"]
-namespaces = false
+namespaces = true
 
 [tool.commitizen]
 name = "cz_customize"
