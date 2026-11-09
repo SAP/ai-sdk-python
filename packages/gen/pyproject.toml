@@ -55,7 +55,7 @@ all = ["sap-ai-sdk-gen[google,amazon]"]
 
 [dependency-groups]
 dev = [
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "pytest-cov==7.1.0",
     "pytest-asyncio==1.4.0",
     "pylint==4.1.3",
