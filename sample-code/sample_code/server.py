@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, grounding, langchain_openai, openai, orchestration, prompt_registry, sap_rpt
+from sample_code import amazon, core, google, grounding, langchain_amazon, langchain_google, langchain_openai, openai, orchestration, prompt_registry, sap_rpt
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -41,9 +41,12 @@ app.get("/openai/embedding")(openai.embedding)
 app.get("/google/generate")(google.generate)
 app.get("/google/generate-stream")(google.generate_stream)
 app.get("/google/tool-call")(google.tool_call)
+app.get("/google/embedding")(google.embedding)
 
 # Amazon/Anthropic
 app.get("/amazon/converse")(amazon.converse)
+app.get("/amazon/converse-stream")(amazon.converse_stream)
+app.get("/amazon/embedding")(amazon.embedding)
 
 # LangChain
 app.get("/langchain/invoke")(langchain_openai.invoke)
@@ -52,6 +55,8 @@ app.get("/langchain/structured-output-json-schema")(langchain_openai.invoke_with
 app.get("/langchain/tool-chain")(langchain_openai.invoke_tool_chain)
 app.get("/langchain/rag-chain")(langchain_openai.invoke_rag_chain)
 app.get("/langchain/stream-chain")(langchain_openai.stream_chain)
+app.get("/langchain/amazon-invoke")(langchain_amazon.invoke)
+app.get("/langchain/google-invoke")(langchain_google.invoke)
 
 # SAP RPT
 app.get("/sap-rpt/predict-by-rows")(sap_rpt.predict_by_rows)
