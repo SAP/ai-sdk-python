@@ -67,3 +67,18 @@ def tool_call():
         config=types.GenerateContentConfig(tools=[add]),
     )
     return {"result": response.text}
+
+
+def embedding():
+    """
+    Run embedding example with Gemini Embedding.
+
+    Returns:
+        JSON object containing the embedding.
+    """
+    proxy_client = get_proxy_client("gen-ai-hub")
+    client = Client(proxy_client=proxy_client)
+    response = client.models.embed_content(
+        model="gemini-embedding", contents="How many paws are there for a dog?"
+    )
+    return response.embeddings
