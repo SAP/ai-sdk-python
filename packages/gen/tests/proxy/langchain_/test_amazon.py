@@ -10,7 +10,12 @@ from langchain_classic.prompts import (
     SystemMessagePromptTemplate,
 )
 
-from gen_ai_hub.proxy.langchain.amazon import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse, init_chat_model
+from gen_ai_hub.proxy.langchain.amazon import (
+    BedrockEmbeddings,
+    ChatBedrock,
+    ChatBedrockConverse,
+    init_chat_model,
+)
 from tests.mock import (
     AMAZON_TITAN_EMBED_QUERY_RESPONSE,
     AMAZON_BEDROCK_INVOKE_RESPONSE,
@@ -25,10 +30,13 @@ class TestAmazonLangchain(unittest.TestCase):
 
     def test_model_kwargs(self):
         model_kwargs = {"top_k": 3, "stop_sequences": ["abc"]}
-        chat_model = init_chat_model(self.proxy_client,
-                                     deployment=self.proxy_client.select_deployment(
-                                         model_name='amazon--nova-premier'),
-                                     **model_kwargs)
+        chat_model = init_chat_model(
+            self.proxy_client,
+            deployment=self.proxy_client.select_deployment(
+                model_name="amazon--nova-premier"
+            ),
+            **model_kwargs,
+        )
         self.assertIsInstance(chat_model, ChatBedrock)
 
     @patch("langchain_classic.chains.base.Chain.invoke")
@@ -89,8 +97,9 @@ class TestAmazonLangchain(unittest.TestCase):
     def test_chat_converse(self, mock_chain_invoke):
         mock_chain_invoke.return_value = AMAZON_BEDROCK_INVOKE_RESPONSE
         chat_model = ChatBedrockConverse(
-            model_name="amazon--nova-premier", proxy_client=self.proxy_client,
-            model="amazon--nova-premier"
+            model_name="amazon--nova-premier",
+            proxy_client=self.proxy_client,
+            model="amazon--nova-premier",
         )
         template = "You are a helpful assistant that translates english to pirate."
 
@@ -110,21 +119,20 @@ class TestAmazonLangchain(unittest.TestCase):
         self.assertIsInstance(response["text"], str)
 
     def test_chat_model_config(self):
-        boto_config = Config(
-            connect_timeout=59,
-            read_timeout=299,
-        )
+        boto_config = Config(connect_timeout=59, read_timeout=299)
 
         chat_model = ChatBedrockConverse(
-            model_name="amazon--nova-premier", proxy_client=self.proxy_client,
+            model_name="amazon--nova-premier",
+            proxy_client=self.proxy_client,
             model="amazon--nova-premier",
-            config=boto_config
+            config=boto_config,
         )
-        self.assertTrue(chat_model.client.meta.config.read_timeout == 299,
-                        "Read Timeout not applied")
+        self.assertTrue(
+            chat_model.client.meta.config.read_timeout == 299,
+            "Read Timeout not applied",
+        )
 
-        self.assertTrue(chat_model.client.meta.config.connect_timeout == 59,
-                        "Connect Timeout not applied")
-
-
-
+        self.assertTrue(
+            chat_model.client.meta.config.connect_timeout == 59,
+            "Connect Timeout not applied",
+        )

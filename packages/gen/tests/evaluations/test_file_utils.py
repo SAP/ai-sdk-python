@@ -13,7 +13,6 @@ from gen_ai_hub.evaluations.helpers.collector import ValidationCollector
 
 
 class TestFileUtils(unittest.TestCase):
-
     def write_file(self, tmp_path: Path, name: str, content: str):
         file = tmp_path / name
         file.write_text(content, encoding="utf-8")
@@ -96,11 +95,7 @@ class TestFileUtils(unittest.TestCase):
             result = load_config_file(file, collector)
 
             self.assertEqual(
-                result,
-                [
-                    {"col1": "1", "col2": "2"},
-                    {"col1": "3", "col2": "4"},
-                ],
+                result, [{"col1": "1", "col2": "2"}, {"col1": "3", "col2": "4"}]
             )
 
     def test_generate_random_id_format(self):
@@ -124,7 +119,9 @@ class TestFileUtils(unittest.TestCase):
                 result = load_config_file(file, collector)
 
             self.assertEqual(result, [])
-            with self.assertRaisesRegex(RuntimeError, "Value error reading config file"):
+            with self.assertRaisesRegex(
+                RuntimeError, "Value error reading config file"
+            ):
                 collector.raise_if_errors()
 
     def test_load_config_file_generic_exception(self):
@@ -137,7 +134,9 @@ class TestFileUtils(unittest.TestCase):
                 result = load_config_file(file, collector)
 
             self.assertEqual(result, [])
-            with self.assertRaisesRegex(RuntimeError, "Reading config file .* failed with"):
+            with self.assertRaisesRegex(
+                RuntimeError, "Reading config file .* failed with"
+            ):
                 collector.raise_if_errors()
 
     def test_read_local_csv_file_generic_exception(self):
@@ -150,5 +149,7 @@ class TestFileUtils(unittest.TestCase):
                 result = read_local_csv_file(file, collector)
 
             self.assertEqual(result, [])
-            with self.assertRaisesRegex(RuntimeError, "Reading config file .* failed with"):
+            with self.assertRaisesRegex(
+                RuntimeError, "Reading config file .* failed with"
+            ):
                 collector.raise_if_errors()

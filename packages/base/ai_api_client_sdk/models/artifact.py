@@ -38,14 +38,27 @@ class Artifact:
     """
 
     class Kind(Enum):
-        MODEL = 'model'
-        DATASET = 'dataset'
-        RESULTSET = 'resultset'
-        OTHER = 'other'
+        MODEL = "model"
+        DATASET = "dataset"
+        RESULTSET = "resultset"
+        OTHER = "other"
 
-    def __init__(self, name: str, id: str, url: str, kind: Kind, scenario_id: str, created_at: datetime,
-                 modified_at: datetime, execution_id: str = None, configuration_id: str = None, description: str = None,
-                 labels: List[Label] = None, scenario:Scenario = None, **kwargs):
+    def __init__(
+        self,
+        name: str,
+        id: str,
+        url: str,
+        kind: Kind,
+        scenario_id: str,
+        created_at: datetime,
+        modified_at: datetime,
+        execution_id: str = None,
+        configuration_id: str = None,
+        description: str = None,
+        labels: List[Label] = None,
+        scenario: Scenario = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.name: str = name
         self.url: str = url
@@ -68,7 +81,12 @@ class Artifact:
         return True
 
     def __str__(self):
-        return "Artifact id: " + str(self.id) + ", Artifact description: " + str(self.description)
+        return (
+            "Artifact id: "
+            + str(self.id)
+            + ", Artifact description: "
+            + str(self.description)
+        )
 
     @staticmethod
     def from_dict(artifact_dict: Dict[str, Any]):
@@ -80,11 +98,13 @@ class Artifact:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.artifact.Artifact`
         """
-        artifact_dict['kind'] = Artifact.Kind(artifact_dict['kind'])
-        artifact_dict['created_at'] = parse_datetime(artifact_dict['created_at'])
-        artifact_dict['modified_at'] = parse_datetime(artifact_dict['modified_at'])
-        if artifact_dict.get('labels'):
-            artifact_dict['labels'] = [Label.from_dict(l) for l in artifact_dict['labels']]
-        if artifact_dict.get('scenario'):
-            artifact_dict['scenario'] = Scenario.from_dict(artifact_dict['scenario'])
+        artifact_dict["kind"] = Artifact.Kind(artifact_dict["kind"])
+        artifact_dict["created_at"] = parse_datetime(artifact_dict["created_at"])
+        artifact_dict["modified_at"] = parse_datetime(artifact_dict["modified_at"])
+        if artifact_dict.get("labels"):
+            artifact_dict["labels"] = [
+                Label.from_dict(l) for l in artifact_dict["labels"]
+            ]
+        if artifact_dict.get("scenario"):
+            artifact_dict["scenario"] = Scenario.from_dict(artifact_dict["scenario"])
         return Artifact(**artifact_dict)

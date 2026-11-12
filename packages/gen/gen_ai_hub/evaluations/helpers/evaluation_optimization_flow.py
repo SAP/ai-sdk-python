@@ -36,16 +36,15 @@ def upload_dataset_data_and_register_aicore_artifact(
         if input_object_store_secret_name
         else DEFAULT_KEY
     )
-    (
-        artifact_folder_path,
-        aicore_configuration_dataset_path,
-    ) = upload_evaluation_dataset_data(
-        accumulated_config_data,
-        object_store_credentials,
-        current_object_store_secret_name,
-        ai_core_client,
-        resource_group,
-        error_collector,
+    (artifact_folder_path, aicore_configuration_dataset_path) = (
+        upload_evaluation_dataset_data(
+            accumulated_config_data,
+            object_store_credentials,
+            current_object_store_secret_name,
+            ai_core_client,
+            resource_group,
+            error_collector,
+        )
     )
     if artifact_folder_path == "":
         error_collector.add_error(
@@ -220,10 +219,7 @@ def single_evaluation_job_flow(
     # STEP5: execution creation
 
     aicore_execution_id = register_aicore_execution(
-        ai_core_client,
-        aicore_configuration_id,
-        resource_group,
-        error_collector,
+        ai_core_client, aicore_configuration_id, resource_group, error_collector
     )
 
     logger.info("AI Core execution ID: %s", aicore_execution_id)
@@ -312,7 +308,7 @@ def multiple_evaluation_jobs_flow(
             uuid.uuid4().hex
             for _ in range(len(current_accumulated_config.orch_config_data))
         ]
-        
+
         llm_model_config, template_config, orchestration_registry_config = (
             configure_orchestration_config_for_simplified_executable(
                 [
@@ -343,10 +339,7 @@ def multiple_evaluation_jobs_flow(
 
         # STEP5: execution creation
         aicore_execution_id = register_aicore_execution(
-            ai_core_client,
-            aicore_configuration_id,
-            resource_group,
-            error_collector,
+            ai_core_client, aicore_configuration_id, resource_group, error_collector
         )
 
         if aicore_execution_id == "":

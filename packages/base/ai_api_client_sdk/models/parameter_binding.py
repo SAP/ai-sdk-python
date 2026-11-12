@@ -9,7 +9,12 @@ class ParameterBinding(KeyValue):
     """
 
     def __str__(self):
-        return "Parameter binding key: " + str(self.key) + "Parameter binding value: " + str(self.value)
+        return (
+            "Parameter binding key: "
+            + str(self.key)
+            + "Parameter binding value: "
+            + str(self.value)
+        )
 
     @staticmethod
     def from_dict(parameter_binding_dict: Dict[str, str]):

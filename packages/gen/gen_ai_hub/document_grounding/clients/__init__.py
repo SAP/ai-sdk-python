@@ -9,21 +9,26 @@ Available clients:
     - VectorAPIClient: Manages vector collections and performs semantic searches
 """
 
-from .pipeline_api_client import ( # pylint: disable=unused-import
+from .pipeline_api_client import (  # pylint: disable=unused-import
     PATH_DOCUMENT_GROUNDING_PIPELINES,
     PATH_DOCUMENT_GROUNDING,
-    PipelineAPIClient
+    PipelineAPIClient,
 )
-from .retrieval_api_client import ( # pylint: disable=unused-import
+from .retrieval_api_client import (  # pylint: disable=unused-import
     PATH_DOCUMENT_GROUNDING_RETRIEVAL,
-    RetrievalAPIClient
+    RetrievalAPIClient,
 )
-from .vector_api_client import ( # pylint: disable=unused-import
+from .vector_api_client import (  # pylint: disable=unused-import
     PATH_DOCUMENT_GROUNDING_VECTOR,
-    VectorAPIClient
+    VectorAPIClient,
 )
 
 __all__ = [
-    "PipelineAPIClient", "RetrievalAPIClient", "VectorAPIClient", "PATH_DOCUMENT_GROUNDING",
-    "PATH_DOCUMENT_GROUNDING_VECTOR", "PATH_DOCUMENT_GROUNDING_PIPELINES", "PATH_DOCUMENT_GROUNDING_RETRIEVAL"
+    "PipelineAPIClient",
+    "RetrievalAPIClient",
+    "VectorAPIClient",
+    "PATH_DOCUMENT_GROUNDING",
+    "PATH_DOCUMENT_GROUNDING_VECTOR",
+    "PATH_DOCUMENT_GROUNDING_PIPELINES",
+    "PATH_DOCUMENT_GROUNDING_RETRIEVAL",
 ]

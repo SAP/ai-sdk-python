@@ -10,7 +10,13 @@ class DatasetLimits:
     :type max_files_per_dataset: int, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, max_upload_file_size: int = 104857600, max_files_per_dataset: int = -1, **kwargs):
+
+    def __init__(
+        self,
+        max_upload_file_size: int = 104857600,
+        max_files_per_dataset: int = -1,
+        **kwargs,
+    ):
         self.max_upload_file_size: int = max_upload_file_size
         self.max_files_per_dataset: int = max_files_per_dataset
 

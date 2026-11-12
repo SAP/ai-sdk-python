@@ -12,6 +12,7 @@ class SecretQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Secret], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -26,5 +27,7 @@ class SecretQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.secret_query_response.SecretQueryResponse`
         """
-        response_dict['resources'] = [Secret.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Secret.from_dict(r) for r in response_dict["resources"]
+        ]
         return SecretQueryResponse(**response_dict)

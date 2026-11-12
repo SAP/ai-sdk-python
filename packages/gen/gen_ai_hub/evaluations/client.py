@@ -75,7 +75,10 @@ def _has_mixed_config_types(evaluation_configs: List[EvaluationConfig]) -> bool:
         return False
 
     has_llm = any(config.llm is not None for config in evaluation_configs)
-    has_registry = any(config.orchestration_registry_reference is not None for config in evaluation_configs)
+    has_registry = any(
+        config.orchestration_registry_reference is not None
+        for config in evaluation_configs
+    )
 
     return has_llm and has_registry
 
@@ -236,13 +239,11 @@ class EvaluationClient:
         kwargs.update(env_credentials)
         return EvaluationClient(**kwargs)
 
-
     def validate_secret_type(self, secret_type: str, creator_mapping: dict):
         if secret_type not in creator_mapping:
             raise ValueError(
                 f"Invalid object store secret type, please use one among the supported types: {SUPPORTED_OSS_TYPES}"
             )
-
 
     def create_or_update_object_store_secret(
         self,
@@ -280,9 +281,7 @@ class EvaluationClient:
 
                 # delete and recreate
                 delete_object_store_secret(
-                    context.ai_core_client,
-                    secret_name,
-                    context.resource_group,
+                    context.ai_core_client, secret_name, context.resource_group
                 )
 
                 return self.create_or_update_object_store_secret(
@@ -305,7 +304,6 @@ class EvaluationClient:
         setattr(context, attr_name, secret_name)
         result[result_key] = secret_name
 
-
     def resolve_orchestration_deployment_url(self) -> str:
         """
         Resolves the orchestration deployment URL.
@@ -321,26 +319,27 @@ class EvaluationClient:
         # For non-default resource groups, create deployment directly
         if self.resource_group != DEFAULT_KEY:
             return create_llm_orchestration_deployment_url(
-                self.ai_core_client,
-                self.resource_group,
+                self.ai_core_client, self.resource_group
             )
 
         # For default resource group, try to discover existing deployment
         # using the orchestration service's get_orchestration_api_url function
         try:
             orchestration_url = get_orchestration_api_url(
-                self.__gen_ai_hub_proxy_client,
+                self.__gen_ai_hub_proxy_client
             )
-            logger.info("Found existing orchestration deployment: %s", orchestration_url)
+            logger.info(
+                "Found existing orchestration deployment: %s", orchestration_url
+            )
             return orchestration_url
         except ValueError:
             # No deployment found, create a new one
-            logger.info("No existing orchestration deployment found, creating new deployment")
-            return create_llm_orchestration_deployment_url(
-                self.ai_core_client,
-                self.resource_group,
+            logger.info(
+                "No existing orchestration deployment found, creating new deployment"
             )
-
+            return create_llm_orchestration_deployment_url(
+                self.ai_core_client, self.resource_group
+            )
 
     def setup(
         self,
@@ -353,9 +352,7 @@ class EvaluationClient:
         and orchestration deployment url creation if not provided.
         """
 
-        secret_creator_mapping = {
-            AWS_S3_OSS_TYPE_KEY: create_aws_object_store_secret,
-        }
+        secret_creator_mapping = {AWS_S3_OSS_TYPE_KEY: create_aws_object_store_secret}
 
         result: dict = {}
 
@@ -398,7 +395,7 @@ class EvaluationClient:
 
         logger.info("One time Setup complete with the created details %s!", result)
         return result
-        
+
     def evaluate(
         self, evaluation_configs: List[EvaluationConfig]
     ) -> List[EvaluationRun]:
@@ -472,8 +469,7 @@ class EvaluationClient:
 
             accumulated_config_data, single_execution_flow, reusable_artifact = (
                 build_accumulated_config(
-                    evaluation_configs_data,
-                    _has_mixed_config_types(evaluation_configs)
+                    evaluation_configs_data, _has_mixed_config_types(evaluation_configs)
                 )
             )
 
@@ -493,10 +489,7 @@ class EvaluationClient:
                 )
                 error_collector.raise_if_errors()
 
-            validate_config_data_collection(
-                accumulated_config_data,
-                error_collector,
-            )
+            validate_config_data_collection(accumulated_config_data, error_collector)
             # raise any current errors and stop evaluate if any issues found in validation of the config provided
             error_collector.raise_if_errors()
 
@@ -564,5 +557,6 @@ class EvaluationClient:
             self.ai_core_client, self.resource_group, error_collector
         )
         return predefined_metric_templates
+
 
 __all__ = ["EvaluationClient", "_has_mixed_config_types"]

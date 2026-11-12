@@ -12,6 +12,7 @@ class ConfigurationQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Configuration], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class ConfigurationQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.configuration_query_response.ConfigurationQueryResponse`
         """
-        response_dict['resources'] = [Configuration.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Configuration.from_dict(r) for r in response_dict["resources"]
+        ]
         return ConfigurationQueryResponse(**response_dict)

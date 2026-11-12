@@ -28,8 +28,20 @@ class ExecutionSchedule:
     :type end: datetime, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, id: str, name: str, cron: str, configuration_id: str, status: ScheduleStatus,
-                 created_at: datetime, modified_at: datetime, start: datetime = None, end: datetime = None, **kwargs):
+
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        cron: str,
+        configuration_id: str,
+        status: ScheduleStatus,
+        created_at: datetime,
+        modified_at: datetime,
+        start: datetime = None,
+        end: datetime = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.name = name
         self.cron: str = cron
@@ -53,11 +65,21 @@ class ExecutionSchedule:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.execution_schedule.Schedule`
         """
-        execution_schedule_dict['status'] = ScheduleStatus(execution_schedule_dict['status'])
-        execution_schedule_dict['created_at'] = parse_datetime(execution_schedule_dict['created_at'])
-        execution_schedule_dict['modified_at'] = parse_datetime(execution_schedule_dict['modified_at'])
-        if execution_schedule_dict.get('start'):
-            execution_schedule_dict['start'] = parse_datetime(execution_schedule_dict['start'])
-        if execution_schedule_dict.get('end'):
-            execution_schedule_dict['end'] = parse_datetime(execution_schedule_dict['end'])
+        execution_schedule_dict["status"] = ScheduleStatus(
+            execution_schedule_dict["status"]
+        )
+        execution_schedule_dict["created_at"] = parse_datetime(
+            execution_schedule_dict["created_at"]
+        )
+        execution_schedule_dict["modified_at"] = parse_datetime(
+            execution_schedule_dict["modified_at"]
+        )
+        if execution_schedule_dict.get("start"):
+            execution_schedule_dict["start"] = parse_datetime(
+                execution_schedule_dict["start"]
+            )
+        if execution_schedule_dict.get("end"):
+            execution_schedule_dict["end"] = parse_datetime(
+                execution_schedule_dict["end"]
+            )
         return ExecutionSchedule(**execution_schedule_dict)

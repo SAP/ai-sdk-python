@@ -1,6 +1,11 @@
-from ai_api_client_sdk.exception import AIAPIAuthenticatorException, AIAPIAuthorizationException, \
-    AIAPIInvalidRequestException, AIAPINotFoundException, AIAPIPreconditionFailedException, \
-    AIAPIServerException
+from ai_api_client_sdk.exception import (
+    AIAPIAuthenticatorException,
+    AIAPIAuthorizationException,
+    AIAPIInvalidRequestException,
+    AIAPINotFoundException,
+    AIAPIPreconditionFailedException,
+    AIAPIServerException,
+)
 
 
 class AICoreSDKException(Exception):

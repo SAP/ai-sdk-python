@@ -11,8 +11,9 @@ from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
 from gen_ai_hub.proxy.langchain import amazon, google_genai, openai
 
 
-def default_f_select_deployment(proxy_client: BaseProxyClient,
-                                **model_identification_kwargs: Dict[str, str]) -> BaseDeployment:
+def default_f_select_deployment(
+    proxy_client: BaseProxyClient, **model_identification_kwargs: Dict[str, str]
+) -> BaseDeployment:
     """Default function to select a deployment based on model identification kwargs.
 
     :param proxy_client: The proxy client to use for selecting the deployment
@@ -44,7 +45,7 @@ def handle_model_args_kwargs(proxy_client, args: List[Any], kwargs: Dict[str, An
     elif main_kwarg in kwargs:
         model_name = kwargs[main_kwarg]
     else:
-        raise ValueError('No model identification argument provided')
+        raise ValueError("No model identification argument provided")
     model_identification_kwargs = {n: kwargs[n] for n in kwarg_names if n in kwargs}
     return model_name, model_identification_kwargs, kwargs
 
@@ -54,27 +55,37 @@ class ModelType(Enum):
     EMBEDDINGS = auto()
 
 
-def _init_custom_model(proxy_client: BaseProxyClient, init_func: Callable, args: List[Any], kwargs: Dict[str, Any],
-                       model_kwargs: Dict[str, Any]):
+def _init_custom_model(
+    proxy_client: BaseProxyClient,
+    init_func: Callable,
+    args: List[Any],
+    kwargs: Dict[str, Any],
+    model_kwargs: Dict[str, Any],
+):
     proxy_client = proxy_client or get_proxy_client()
-    model_name, model_identification_kwargs, kwargs = handle_model_args_kwargs(proxy_client=proxy_client, args=args,
-                                                                               kwargs=kwargs)
+    model_name, model_identification_kwargs, kwargs = handle_model_args_kwargs(
+        proxy_client=proxy_client, args=args, kwargs=kwargs
+    )
 
     try:
-        deployment = default_f_select_deployment(proxy_client, **model_identification_kwargs)
+        deployment = default_f_select_deployment(
+            proxy_client, **model_identification_kwargs
+        )
     except ValueError:
         proxy_client.update_deployments()
-        deployment = default_f_select_deployment(proxy_client, **model_identification_kwargs)
+        deployment = default_f_select_deployment(
+            proxy_client, **model_identification_kwargs
+        )
     return init_func(proxy_client=proxy_client, deployment=deployment, **model_kwargs)
 
 
 def _get_init_func(model_name: str, model_type: ModelType):
-    if any(model_name.startswith(prefix) for prefix in ['amazon', 'anthropic']):
+    if any(model_name.startswith(prefix) for prefix in ["amazon", "anthropic"]):
         if model_type == ModelType.EMBEDDINGS:
             return amazon.init_embedding_model
         else:
             return amazon.init_chat_model
-    elif any(model_name.startswith(prefix) for prefix in ['google', 'gemini']):
+    elif any(model_name.startswith(prefix) for prefix in ["google", "gemini"]):
         if model_type == ModelType.EMBEDDINGS:
             return google_genai.init_embedding_model
         else:
@@ -86,34 +97,45 @@ def _get_init_func(model_name: str, model_type: ModelType):
             return openai.init_chat_model
 
 
-
-def _init_model(proxy_client: Optional[BaseProxyClient],
-                model_type: ModelType,
-                args: List[Any],
-                kwargs: Dict[str, Any],
-                init_func: Optional[Callable] = None,
-                model_kwargs: Optional[Dict[str, Any]] = None):
+def _init_model(
+    proxy_client: Optional[BaseProxyClient],
+    model_type: ModelType,
+    args: List[Any],
+    kwargs: Dict[str, Any],
+    init_func: Optional[Callable] = None,
+    model_kwargs: Optional[Dict[str, Any]] = None,
+):
     proxy_client = proxy_client or get_proxy_client()
     model_kwargs = model_kwargs or {}
     if init_func:
-        return _init_custom_model(proxy_client=proxy_client, init_func=init_func, args=args, kwargs=kwargs,
-                                  model_kwargs=model_kwargs)
-    model_name, model_identification_kwargs, kwargs = handle_model_args_kwargs(proxy_client=proxy_client, args=args,
-                                                                               kwargs=kwargs)
+        return _init_custom_model(
+            proxy_client=proxy_client,
+            init_func=init_func,
+            args=args,
+            kwargs=kwargs,
+            model_kwargs=model_kwargs,
+        )
+    model_name, model_identification_kwargs, kwargs = handle_model_args_kwargs(
+        proxy_client=proxy_client, args=args, kwargs=kwargs
+    )
     init_func = _get_init_func(model_name, model_type)
-    deployment = default_f_select_deployment(proxy_client, **model_identification_kwargs)
+    deployment = default_f_select_deployment(
+        proxy_client, **model_identification_kwargs
+    )
     return init_func(proxy_client=proxy_client, deployment=deployment, **model_kwargs)
 
 
-def init_llm(*args,
-             proxy_client: Optional[BaseProxyClient] = None,
-             temperature: float = 0.0,
-             max_tokens: int = 256,
-             top_k: Optional[int] = None,
-             top_p: float = 1.,
-             init_func: Optional[Callable] = None,
-             model_id: Optional[str] = '',
-             **kwargs) -> BaseLanguageModel:
+def init_llm(
+    *args,
+    proxy_client: Optional[BaseProxyClient] = None,
+    temperature: float = 0.0,
+    max_tokens: int = 256,
+    top_k: Optional[int] = None,
+    top_p: float = 1.0,
+    init_func: Optional[Callable] = None,
+    model_id: Optional[str] = "",
+    **kwargs,
+) -> BaseLanguageModel:
     """
     Initializes a language model using the specified parameters.
 
@@ -136,28 +158,32 @@ def init_llm(*args,
     :rtype: BaseLanguageModel
     """
     model_kwargs = {
-        'temperature': temperature,
-        'max_tokens': max_tokens,
-        'top_k': top_k,
-        'top_p': top_p,
+        "temperature": temperature,
+        "max_tokens": max_tokens,
+        "top_k": top_k,
+        "top_p": top_p,
     }
     if model_id:
-        model_kwargs['model_id'] = model_id
-    if 'config' in kwargs:
-        model_kwargs['config'] = kwargs["config"]
-    return _init_model(args=args,
-                       proxy_client=proxy_client,
-                       model_type=ModelType.LLM,
-                       model_kwargs=model_kwargs,
-                       init_func=init_func,
-                       kwargs=kwargs)
+        model_kwargs["model_id"] = model_id
+    if "config" in kwargs:
+        model_kwargs["config"] = kwargs["config"]
+    return _init_model(
+        args=args,
+        proxy_client=proxy_client,
+        model_type=ModelType.LLM,
+        model_kwargs=model_kwargs,
+        init_func=init_func,
+        kwargs=kwargs,
+    )
 
 
-def init_embedding_model(*args,
-                         proxy_client: Optional[BaseProxyClient] = None,
-                         init_func: Optional[Callable] = None,
-                         model_id: Optional[str] = '',
-                         **kwargs) -> Embeddings:
+def init_embedding_model(
+    *args,
+    proxy_client: Optional[BaseProxyClient] = None,
+    init_func: Optional[Callable] = None,
+    model_id: Optional[str] = "",
+    **kwargs,
+) -> Embeddings:
     """
     Initializes an embedding model using the specified parameters.
 
@@ -173,10 +199,12 @@ def init_embedding_model(*args,
     """
     model_kwargs = {}
     if model_id:
-        model_kwargs['model_id'] = model_id
-    return _init_model(args=args,
-                       proxy_client=proxy_client,
-                       model_type=ModelType.EMBEDDINGS,
-                       model_kwargs=model_kwargs,
-                       init_func=init_func,
-                       kwargs=kwargs)
+        model_kwargs["model_id"] = model_id
+    return _init_model(
+        args=args,
+        proxy_client=proxy_client,
+        model_type=ModelType.EMBEDDINGS,
+        model_kwargs=model_kwargs,
+        init_func=init_func,
+        kwargs=kwargs,
+    )

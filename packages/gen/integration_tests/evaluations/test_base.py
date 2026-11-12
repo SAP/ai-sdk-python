@@ -2,6 +2,7 @@
 Base test class for evaluation integration tests.
 Provides common setup and utilities for evaluation client tests.
 """
+
 import unittest
 from gen_ai_hub.evaluations.client import EvaluationClient
 import os
@@ -23,7 +24,9 @@ class EvaluationClientTestBase(unittest.TestCase):
         cls.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         cls.input_object_store_secret_name = "sdk-data"
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.dataset_path = os.path.abspath(os.path.join(current_dir, 'eval-data', 'testdata', 'medicalqna_dataset.csv'))
+        cls.dataset_path = os.path.abspath(
+            os.path.join(current_dir, "eval-data", "testdata", "medicalqna_dataset.csv")
+        )
 
     def setUp(self):
         """Set up each test with a fresh evaluation client instance and object store secrets."""
@@ -71,6 +74,6 @@ class EvaluationClientTestBase(unittest.TestCase):
         response = self.client.setup(
             default_secret_body=default_secret_creds,
             input_secret_body=input_secret_creds,
-            replace_existing=True
+            replace_existing=True,
         )
         self.client.orchestration_url = response.get("orchestration_url")

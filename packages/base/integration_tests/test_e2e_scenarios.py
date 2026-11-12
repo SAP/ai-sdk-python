@@ -5,7 +5,6 @@ from .ai_api_v2_client_e2e_test_base import AIAPIV2ClientE2ETestBase
 
 
 class TestE2EScenarios(AIAPIV2ClientE2ETestBase):
-
     @staticmethod
     def _get_scenario_from_scenarios(scenarios: List[Scenario], scenario_id: str):
         for s in scenarios:
@@ -17,7 +16,9 @@ class TestE2EScenarios(AIAPIV2ClientE2ETestBase):
         response = self.ai_api_v2_client.scenario.query()
         scenarios = response.resources
         self.assertEqual(response.count, len(scenarios))
-        queried_scenario = self._get_scenario_from_scenarios(scenarios, self.test_scenario_id)
+        queried_scenario = self._get_scenario_from_scenarios(
+            scenarios, self.test_scenario_id
+        )
         scenario = self.ai_api_v2_client.scenario.get(scenario_id=self.test_scenario_id)
         self.assertEqual(queried_scenario, scenario)
         self.assertIsNotNone(scenario.id)
@@ -29,7 +30,7 @@ class TestE2EScenarios(AIAPIV2ClientE2ETestBase):
         response = self.ai_api_v2_client.scenario.query(only_llm_scenarios=True)
         scenarios = response.resources
         self.assertEqual(response.count, len(scenarios))
-        llm_scenario_id = 'foundation-models'
+        llm_scenario_id = "foundation-models"
         queried_scenario = self._get_scenario_from_scenarios(scenarios, llm_scenario_id)
         scenario = self.ai_api_v2_client.scenario.get(scenario_id=llm_scenario_id)
         self.assertEqual(queried_scenario, scenario)
@@ -51,7 +52,9 @@ class TestE2EScenarios(AIAPIV2ClientE2ETestBase):
         self.assertIsNotNone(scenario.labels)
 
     def test_query_versions(self):
-        version_response = self.ai_api_v2_client.scenario.query_versions(scenario_id=self.test_scenario_id)
+        version_response = self.ai_api_v2_client.scenario.query_versions(
+            scenario_id=self.test_scenario_id
+        )
         self.assertTrue(version_response.count > 0)
         self.assertEqual(version_response.count, len(version_response.resources))
         version = version_response.resources[0]
@@ -61,7 +64,7 @@ class TestE2EScenarios(AIAPIV2ClientE2ETestBase):
         self.assert_datetime(version.modified_at)
 
     def test_is_llm_scenario(self):
-        llm_scenario_id = 'foundation-models'
+        llm_scenario_id = "foundation-models"
         scenario = self.ai_api_v2_client.scenario.get(scenario_id=llm_scenario_id)
         self.assertTrue(scenario.is_llm_scenario())
         scenario = self.ai_api_v2_client.scenario.get(scenario_id=self.test_scenario_id)

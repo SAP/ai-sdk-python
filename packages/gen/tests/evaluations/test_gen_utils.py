@@ -135,7 +135,7 @@ class TestPopulateTemplateVarsDataIfSingleSchemaProvided(unittest.TestCase):
         #  needs to replicate the schema value using existing value
         self.assertEqual(
             template_vars_data[1]["json_schema"],
-            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}'
+            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}',
         )
 
     def test_json_schema_key_present_in_first_row(self):
@@ -156,11 +156,11 @@ class TestPopulateTemplateVarsDataIfSingleSchemaProvided(unittest.TestCase):
 
         self.assertEqual(
             template_vars_data[1]["json_schema_key"],
-            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}'
+            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}',
         )
         self.assertEqual(
             template_vars_data[2]["json_schema_key"],
-            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}'
+            '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"source_langauge":{"type":"string"},"is_supported":{"type":"boolean"},"translated_text":{"type":"string"}},"required":["source_language","is_supported","translated_text"]}',
         )
 
 
@@ -305,11 +305,7 @@ class TestGetPromptVariablesFromOrchConfig(unittest.TestCase):
                         ]
                     }
                 },
-                "grounding": {
-                    "placeholders": {
-                        "output": "groundingOutput"
-                    }
-                }
+                "grounding": {"placeholders": {"output": "groundingOutput"}},
             }
         }
         result = get_prompt_variables_from_orch_config(orch_config)
@@ -371,7 +367,9 @@ class TestGetMetrics(unittest.TestCase):
             {"metricId": "custom_metric_1"},
             {"metricId": "custom_metric_2"},
         ]
-        custom_metric_ids = get_custom_metric_ids_from_input(custom_metric_config_data, collector)
+        custom_metric_ids = get_custom_metric_ids_from_input(
+            custom_metric_config_data, collector
+        )
         self.assertEqual(len(custom_metric_ids), 2)
         self.assertIn("custom_metric_1", custom_metric_ids)
         self.assertIn("custom_metric_2", custom_metric_ids)
@@ -379,7 +377,9 @@ class TestGetMetrics(unittest.TestCase):
     def test_get_custom_metric_ids_from_input_if_empty(self):
         collector = ValidationCollector()
         custom_metric_config_data = []
-        custom_metric_ids = get_custom_metric_ids_from_input(custom_metric_config_data, collector)
+        custom_metric_ids = get_custom_metric_ids_from_input(
+            custom_metric_config_data, collector
+        )
         self.assertEqual(len(custom_metric_ids), 0)
 
 
@@ -388,32 +388,53 @@ class TestValidateMetrics(unittest.TestCase):
         collector = ValidationCollector()
         metrics = []
         metrics_templates = []
-        orchestration_config_data = [{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}]
+        orchestration_config_data = [
+            {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+        ]
         with self.assertRaises(RuntimeError) as cm:
-            validate_metrics(metrics, metrics_templates, orchestration_config_data, collector)
+            validate_metrics(
+                metrics, metrics_templates, orchestration_config_data, collector
+            )
             collector.raise_if_errors()
-        self.assertIn("Metrics list cannot be empty. Atleast one metric needs to be provided", str(cm.exception))
+        self.assertIn(
+            "Metrics list cannot be empty. Atleast one metric needs to be provided",
+            str(cm.exception),
+        )
 
     def test_metrics_not_empty_but_one_metric_is_empty_string(self):
         # can occur in case of missed syntax --> metrics = blue,,bertscore
         collector = ValidationCollector()
         metrics = ["bleu", "", "bert_score"]
         metric_templates = []
-        orchestration_config_data = [{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}]
+        orchestration_config_data = [
+            {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+        ]
         with self.assertRaises(RuntimeError) as cm:
-            validate_metrics(metrics, metric_templates, orchestration_config_data, collector)
+            validate_metrics(
+                metrics, metric_templates, orchestration_config_data, collector
+            )
             collector.raise_if_errors()
-        self.assertIn("Metric name cannot be empty. Please provide a valid metric name", str(cm.exception))
+        self.assertIn(
+            "Metric name cannot be empty. Please provide a valid metric name",
+            str(cm.exception),
+        )
 
     def test_metrics_list_with_empty_metric_name(self):
         collector = ValidationCollector()
         metrics = [""]
         metric_templates = []
-        orchestration_config_data = [{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}]
+        orchestration_config_data = [
+            {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+        ]
         with self.assertRaises(RuntimeError) as cm:
-            validate_metrics(metrics, metric_templates, orchestration_config_data, collector)
+            validate_metrics(
+                metrics, metric_templates, orchestration_config_data, collector
+            )
             collector.raise_if_errors()
-        self.assertIn("Metric name cannot be empty. Please provide a valid metric name", str(cm.exception))
+        self.assertIn(
+            "Metric name cannot be empty. Please provide a valid metric name",
+            str(cm.exception),
+        )
 
     def test_metrics_valid_system_supported_metrics(self):
         collector = ValidationCollector()
@@ -458,8 +479,12 @@ class TestValidateMetrics(unittest.TestCase):
                 },
             },
         ]
-        orchestration_config_data = [{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}]
-        validate_metrics(metrics, metrics_templates, orchestration_config_data, collector)
+        orchestration_config_data = [
+            {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+        ]
+        validate_metrics(
+            metrics, metrics_templates, orchestration_config_data, collector
+        )
         collector.raise_if_errors()
 
     def test_metrics_llm_based_metric_more_than_one_user_prompts(self):
@@ -512,9 +537,13 @@ class TestValidateMetrics(unittest.TestCase):
 
         orchestration_config_data = [orch_config]
         with self.assertRaises(RuntimeError) as cm:
-            validate_metrics(metrics, metrics_templates, orchestration_config_data, collector)
+            validate_metrics(
+                metrics, metrics_templates, orchestration_config_data, collector
+            )
             collector.raise_if_errors()
-        self.assertIn("More than one user prompts provided in template list", str(cm.exception))
+        self.assertIn(
+            "More than one user prompts provided in template list", str(cm.exception)
+        )
 
     def test_metrics_llm_based_metric_missing_user_prompts(self):
         collector = ValidationCollector()
@@ -558,7 +587,9 @@ class TestValidateMetrics(unittest.TestCase):
 
         orchestration_config_data = [orch_config]
         with self.assertRaises(RuntimeError) as cm:
-            validate_metrics(metrics, metrics_templates, orchestration_config_data, collector)
+            validate_metrics(
+                metrics, metrics_templates, orchestration_config_data, collector
+            )
             collector.raise_if_errors()
         self.assertIn("Missing user prompt in template list", str(cm.exception))
 
@@ -600,9 +631,13 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     }
     run_data = [run1, run2]
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.gen_utils.select_model_details_randomly")
     @patch("gen_ai_hub.evaluations.utils.gen_utils.update_test_orch_config")
     def test_valid_orch_url(
@@ -615,7 +650,7 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-        
+
         collector = ValidationCollector()
         mock_ai_core_client = MagicMock(spec=AICoreV2Client)
         mock_deployment_config = MagicMock()
@@ -637,17 +672,23 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         )
         try:
             validate_orchestration_url(
-                config_data, test_orch_url, mock_ai_core_client, "resource-group", collector
+                config_data,
+                test_orch_url,
+                mock_ai_core_client,
+                "resource-group",
+                collector,
             )
             collector.raise_if_errors()
         except RuntimeError:
-            self.fail(
-                "validate_orchestration_url raised RuntimeError unexpectedly!"
-            )
+            self.fail("validate_orchestration_url raised RuntimeError unexpectedly!")
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.gen_utils.select_model_details_randomly")
     @patch("gen_ai_hub.evaluations.utils.gen_utils.update_test_orch_config")
     def test_invalid_orch_url_raises_validation_error(
@@ -660,7 +701,7 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-        
+
         collector = ValidationCollector()
         mock_ai_core_client = MagicMock(spec=AICoreV2Client)
         mock_deployment_config = MagicMock()
@@ -670,14 +711,18 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         mock_fetch_and_validate.return_value = None
         mock_select_model.return_value = ("gpt-4", "4.0")
         mock_update_test_orch_config.return_value = {"test": "config"}
+
         # Mock the function to add error to collector instead of raising
         def mock_call_with_error(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get('error_collector')
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             if error_collector:
                 error_collector.add_error(
                     ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
-                    "Error occurred: Invalid URL while trying to run the test orchestration config endpoint call with this user provided deployment url"
+                    "Error occurred: Invalid URL while trying to run the test orchestration config endpoint call with this user provided deployment url",
                 )
+
         mock_call_orchestration_service.side_effect = mock_call_with_error
 
         test_orch_url = "https://api.ai.staging.eu-west-1.mlf-aws-dev.com/v2/inference/deployments/invalid/"
@@ -694,11 +739,18 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         # Exception is caught and added to collector
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertRegex(str(cm.exception), "Error occurred.*while trying to run the test orchestration config")
+        self.assertRegex(
+            str(cm.exception),
+            "Error occurred.*while trying to run the test orchestration config",
+        )
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.gen_utils.select_model_details_randomly")
     @patch("gen_ai_hub.evaluations.utils.gen_utils.update_test_orch_config")
     def test_json_decode_error_handled_as_success(
@@ -711,7 +763,7 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-        
+
         collector = ValidationCollector()
         mock_ai_core_client = MagicMock(spec=AICoreV2Client)
         mock_deployment_config = MagicMock()
@@ -721,14 +773,18 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         mock_fetch_and_validate.return_value = None
         mock_select_model.return_value = ("gpt-4", "4.0")
         mock_update_test_orch_config.return_value = {"test": "config"}
+
         # JSONDecodeError is caught internally and added to collector
         def mock_call_with_json_error(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get('error_collector')
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             if error_collector:
                 error_collector.add_error(
                     ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
-                    "Error occurred: Expecting value while trying to run the test orchestration config endpoint call"
+                    "Error occurred: Expecting value while trying to run the test orchestration config endpoint call",
                 )
+
         mock_call_orchestration_service.side_effect = mock_call_with_json_error
 
         test_orch_url = "https://api.ai.staging.eu-west-1.mlf-aws-dev.com/v2/inference/deployments/json-decode/"
@@ -746,9 +802,13 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             collector.raise_if_errors()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.gen_utils.select_model_details_randomly")
     @patch("gen_ai_hub.evaluations.utils.gen_utils.update_test_orch_config")
     def test_retry_exception_handled_as_success(
@@ -761,7 +821,7 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-        
+
         collector = ValidationCollector()
         mock_ai_core_client = MagicMock(spec=AICoreV2Client)
         mock_deployment_config = MagicMock()
@@ -771,14 +831,18 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         mock_fetch_and_validate.return_value = None
         mock_select_model.return_value = ("gpt-4", "4.0")
         mock_update_test_orch_config.return_value = {"test": "config"}
+
         # Exception is caught internally and added to collector
         def mock_call_with_retry_error(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get('error_collector')
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             if error_collector:
                 error_collector.add_error(
                     ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
-                    "Error occurred: Retry error while trying to run the test orchestration config endpoint call"
+                    "Error occurred: Retry error while trying to run the test orchestration config endpoint call",
                 )
+
         mock_call_orchestration_service.side_effect = mock_call_with_retry_error
 
         test_orch_url = "https://api.ai.staging.eu-west-1.mlf-aws-dev.com/v2/inference/deployments/retry/"
@@ -796,9 +860,13 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             collector.raise_if_errors()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.gen_utils.select_model_details_randomly")
     @patch("gen_ai_hub.evaluations.utils.gen_utils.update_test_orch_config")
     def test_unexpected_exception_raises_validation_error(
@@ -811,7 +879,7 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-        
+
         collector = ValidationCollector()
         mock_ai_core_client = MagicMock(spec=AICoreV2Client)
         mock_deployment_config = MagicMock()
@@ -821,14 +889,18 @@ class TestValidateOrchesrationUrl(unittest.TestCase):
         mock_fetch_and_validate.return_value = None
         mock_select_model.return_value = ("gpt-4", "4.0")
         mock_update_test_orch_config.return_value = {"test": "config"}
+
         # ClientConnectionError is caught internally and added to collector
         def mock_call_with_connection_error(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get('error_collector')
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             if error_collector:
                 error_collector.add_error(
                     ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
-                    "Error occurred: Unexpected while trying to run the test orchestration config endpoint call"
+                    "Error occurred: Unexpected while trying to run the test orchestration config endpoint call",
                 )
+
         mock_call_orchestration_service.side_effect = mock_call_with_connection_error
 
         test_orch_url = "https://api.ai.staging.eu-west-1.mlf-aws-dev.com/v2/inference/deployments/unexpected/"
@@ -855,7 +927,9 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
-        self.assertIn("modules is mandatory in the orchestration config", str(cm.exception))
+        self.assertIn(
+            "modules is mandatory in the orchestration config", str(cm.exception)
+        )
 
     def test_missing_model_or_prompt_templating(self):
         collector = ValidationCollector()
@@ -863,18 +937,24 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
-        self.assertIn("prompt_templating is mandatory in the modules field", str(cm.exception))
+        self.assertIn(
+            "prompt_templating is mandatory in the modules field", str(cm.exception)
+        )
 
     def test_missing_name_in_model(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {"template": [{"content": "some content", "role": "user"}]},
-                    "model": {},
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [{"content": "some content", "role": "user"}]
+                        },
+                        "model": {},
+                    }
+                }
             }
-        }]
+        ]
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
@@ -882,19 +962,18 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_template_ref_in_prompt_templating(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template_ref": "b2eb90fa-bf26-4d5e-87c4-d37f49zshuhf3c"
-                    },
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template_ref": "b2eb90fa-bf26-4d5e-87c4-d37f49zshuhf3c"
+                        },
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
@@ -902,17 +981,16 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_empty_template_list(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {"template": []},
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {"template": []},
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
@@ -920,17 +998,16 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_missing_content_in_template_list(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {"template": [{}]},
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {"template": [{}]},
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
@@ -938,31 +1015,30 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_image_url_in_content_type(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "role": "user",
-                                "content": [
-                                    {
-                                        "type": "image_url",
-                                        "image_url": {
-                                            "url": "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x2.jpg"
-                                        },
-                                    }
-                                ],
-                            }
-                        ]
-                    },
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "role": "user",
+                                    "content": [
+                                        {
+                                            "type": "image_url",
+                                            "image_url": {
+                                                "url": "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_3x2.jpg"
+                                            },
+                                        }
+                                    ],
+                                }
+                            ]
+                        },
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         with self.assertRaises(RuntimeError) as cm:
             validate_orchestration_configuration(run_data, collector)
             collector.raise_if_errors()
@@ -971,24 +1047,23 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
     # write one positive test case where everything is right and no exception is raised
     def test_positive_case(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "content": "This is a prompt with {{?var1}} and {{?var2}}.",
-                                "role": "user",
-                            }
-                        ]
-                    },
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        },
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         validate_orchestration_configuration(run_data, collector)
         collector.raise_if_errors()  # Should not raise
         self.assertTrue(True)
@@ -997,51 +1072,42 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 class TestValidateInputParameters(unittest.TestCase):
     def test_empty_metrics(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "role": "user",
-                                "content": "Sample text",
-                            }
-                        ]
-                    },
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [{"role": "user", "content": "Sample text"}]
+                        },
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         metrics = []
         metric_templates = []
         with self.assertRaises(RuntimeError) as cm:
             validate_input_config(run_data, metrics, metric_templates, collector)
             collector.raise_if_errors()
-        self.assertIn("Metrics list cannot be empty. Atleast one metric needs to be provided", str(cm.exception))
+        self.assertIn(
+            "Metrics list cannot be empty. Atleast one metric needs to be provided",
+            str(cm.exception),
+        )
 
     def test_valid_input_parameters(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "role": "user",
-                                "content": "Sample text",
-                            }
-                        ]
-                    },
-                    "model": {
-                        "name": "gpt-4",
-                        "version": "latest",
-                    },
-                },
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [{"role": "user", "content": "Sample text"}]
+                        },
+                        "model": {"name": "gpt-4", "version": "latest"},
+                    }
+                }
             }
-        }]
+        ]
         metrics = ["bert_score"]
         metric_templates = [
             {
@@ -1067,6 +1133,7 @@ class TestValidateInputParameters(unittest.TestCase):
         # This should not raise any exception
         validate_input_config(run_data, metrics, metric_templates, collector)
         collector.raise_if_errors()  # Should not raise
+
 
 class TestValidateVariableMappingOfMetrics(unittest.TestCase):
     def test_valid_all_metrics_reference_mapping(self):
@@ -1117,11 +1184,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
             },
         ]
         validate_variable_mapping_of_metrics(
-            metrics,
-            metric_templates,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, metric_templates, template_vars_data, variable_mapping, collector
         )
         collector.raise_if_errors()  # Should not raise
         self.assertTrue(True)
@@ -1232,11 +1295,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
             },
         ]
         validate_variable_mapping_of_metrics(
-            metrics,
-            metric_templates,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, metric_templates, template_vars_data, variable_mapping, collector
         )
         collector.raise_if_errors()  # Should not raise
         self.assertTrue(True)
@@ -1491,11 +1550,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
             "metric2/json_schema": "data/json_schema",
         }
         validate_variable_mapping_of_metrics(
-            metrics,
-            metric_templates,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, metric_templates, template_vars_data, variable_mapping, collector
         )
         collector.raise_if_errors()  # Should not raise
         self.assertTrue(True)
@@ -1562,20 +1617,22 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
 class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_valid_variable_mapping(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "content": "This is a prompt with {{?var1}} and {{?var2}}.",
-                                "role": "user"
-                            }
-                        ]
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }]
+        ]
         template_vars_data = [{"var1": "value1", "var2": "value2"}]
         variable_mapping = {"prompt/var1": "data/var1", "prompt/var2": "data/var2"}
 
@@ -1587,20 +1644,22 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
 
     def test_missing_variable_in_mapping_and_dataset(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "content": "This is a prompt with {{?var1}} and {{?var2}}.",
-                                "role": "user"
-                            }
-                        ]
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }]
+        ]
         template_vars_data = [{"var1": "value1"}]
         variable_mapping = {"prompt/var1": "data/var1"}
 
@@ -1609,20 +1668,23 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
                 run_data, template_vars_data, variable_mapping, collector
             )
             collector.raise_if_errors()
-        self.assertIn("The provided prompt variable :var2 in Orch config does not match", str(cm.exception))
+        self.assertIn(
+            "The provided prompt variable :var2 in Orch config does not match",
+            str(cm.exception),
+        )
 
     def test_system_defined_variable_in_prompt(self):
         collector = ValidationCollector()
         content = "This is a prompt with {{?prompt}}"
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [{"content": content, "role": "user"}]
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {"template": [{"content": content, "role": "user"}]}
                     }
                 }
             }
-        }]
+        ]
         template_vars_data = [{"var1": "value1"}]
         variable_mapping = {}
 
@@ -1635,20 +1697,22 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
 
     def test_variable_in_dataset_but_not_in_mapping(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "content": "This is a prompt with {{?var1}} and {{?var2}}.",
-                                "role": "user"
-                            }
-                        ]
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }]
+        ]
         template_vars_data = [{"var1": "value1", "var2": "value2"}]
         variable_mapping = {"prompt/var1": "data/var1"}
 
@@ -1660,20 +1724,22 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
 
     def test_variable_in_mapping_but_not_in_dataset(self):
         collector = ValidationCollector()
-        run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [
-                            {
-                                "content": "This is a prompt with {{?var1}} and {{?var2}}.",
-                                "role": "user"
-                            }
-                        ]
+        run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
                     }
                 }
             }
-        }]
+        ]
         template_vars_data = [{"var1": "value1"}]
         variable_mapping = {"prompt/var1": "data/var1", "prompt/var2": "data/var2"}
 
@@ -1766,10 +1832,7 @@ class TestPopulateTemplateVarsDataIfSingleReferenceProvided(unittest.TestCase):
 
     def test_no_reference_key_in_dataset(self):
         collector = ValidationCollector()
-        template_vars_data = [
-            {"topic": "banana"},
-            {"topic": "apple"},
-        ]
+        template_vars_data = [{"topic": "banana"}, {"topic": "apple"}]
         variable_mapping = {"all_metrics/reference": "data/reference"}
 
         with self.assertRaises(RuntimeError):
@@ -1779,7 +1842,9 @@ class TestPopulateTemplateVarsDataIfSingleReferenceProvided(unittest.TestCase):
             collector.raise_if_errors()
 
 
-class TestPopulateTemplateVarsDataIfIndividualMetricReferenceProvided(unittest.TestCase):
+class TestPopulateTemplateVarsDataIfIndividualMetricReferenceProvided(
+    unittest.TestCase
+):
     def test_reference_key_directly_present_in_dataset_single_value(self):
         collector = ValidationCollector()
         template_vars_data = [
@@ -1905,7 +1970,6 @@ class TestExtractDatasetColumns(unittest.TestCase):
         result = extract_dataset_columns(template_variables)
         self.assertEqual(result, [])
 
-
     def test_get_user_prompts_from_template_list(self):
         """Test with valid prompt templates"""
         template_list = [
@@ -1927,16 +1991,29 @@ class TestExtractDatasetColumns(unittest.TestCase):
 
 class TestCreateCustomMetricName(unittest.TestCase):
     def setUp(self):
-        self.mock_custom_metric = {"metricName": "custom_metric_1", "scenario": "scenario_1", "version": "v1"}
-        self.mock_custom_metric_missing_version = {"metricName": "custom_metric_1", "scenario": "scenario_1"}
+        self.mock_custom_metric = {
+            "metricName": "custom_metric_1",
+            "scenario": "scenario_1",
+            "version": "v1",
+        }
+        self.mock_custom_metric_missing_version = {
+            "metricName": "custom_metric_1",
+            "scenario": "scenario_1",
+        }
         self.mock_custom_metric_metricId = {"metricId": "custom_metric_id"}
         self.mock_custom_metric_invalid_metricId = {
             "metricId": "custom_metric_id",
             "metricName": "custom_metric",
             "scenario": "genai-evaluations",
         }
-        self.mock_custom_metric_missing_metric_name = {"scenario": "genai-evaluations", "version": "0.0.1"}
-        self.mock_custom_metric_missing_scenario = {"metricName": "custom_metric", "version": "0.0.1"}
+        self.mock_custom_metric_missing_metric_name = {
+            "scenario": "genai-evaluations",
+            "version": "0.0.1",
+        }
+        self.mock_custom_metric_missing_scenario = {
+            "metricName": "custom_metric",
+            "version": "0.0.1",
+        }
         self.mock_custom_metric_missing_scenario_and_metric_name = {"version": "0.0.1"}
 
     def test_valid_only_custom_metric_id(self):
@@ -1949,12 +2026,17 @@ class TestCreateCustomMetricName(unittest.TestCase):
     def test_invalid_custom_metric_id(self):
         """Test with a valid custom metric name."""
         collector = ValidationCollector()
-        result = create_custom_metric_name(self.mock_custom_metric_invalid_metricId, collector)
+        result = create_custom_metric_name(
+            self.mock_custom_metric_invalid_metricId, collector
+        )
         # Function returns the metric_id but adds error to collector
         self.assertEqual(result, "custom_metric_id")  # Still returns the metric_id
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Both 'metricId' and 'scenario/metricName' cannot be provided at the same time", str(cm.exception))
+        self.assertIn(
+            "Both 'metricId' and 'scenario/metricName' cannot be provided at the same time",
+            str(cm.exception),
+        )
 
     def test_valid_full_custom_metric_name(self):
         """Test with a valid custom metric name."""
@@ -1966,7 +2048,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
     def test_valid_no_version_custom_metric_name(self):
         """Test with a valid custom metric name."""
         collector = ValidationCollector()
-        result = create_custom_metric_name(self.mock_custom_metric_missing_version, collector)
+        result = create_custom_metric_name(
+            self.mock_custom_metric_missing_version, collector
+        )
         self.assertEqual(result, "scenario_1/custom_metric_1")
         collector.raise_if_errors()  # Should not raise
 
@@ -1978,7 +2062,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         # Function still returns a value but adds error
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_empty_metric_name(self):
         """Test with an empty metricName."""
@@ -1987,7 +2073,10 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'metricName' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'metricName' field in custom metric configuration",
+            str(cm.exception),
+        )
 
     def test_empty_scenario(self):
         """Test with an empty scenario."""
@@ -1996,7 +2085,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_none_metric_name(self):
         """Test with a None metricName."""
@@ -2005,7 +2096,10 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'metricName' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'metricName' field in custom metric configuration",
+            str(cm.exception),
+        )
 
     def test_none_scenario(self):
         """Test with a None scenario."""
@@ -2014,7 +2108,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_both_metric_id_and_scenario_empty(self):
         """Test with both metric ID and scenario empty."""
@@ -2024,7 +2120,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_both_metric_id_and_scenario_none(self):
         """Test with both metric ID, metricName, and scenario None."""
@@ -2034,7 +2132,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name(self.mock_custom_metric, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_no_required_variables_present_scenario(self):
         """Test with a None scenario."""
@@ -2042,7 +2142,9 @@ class TestCreateCustomMetricName(unittest.TestCase):
         result = create_custom_metric_name({}, collector)
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_missing_scenario_and_metric_name(self):
         """Test with both scenario and metricName missing."""
@@ -2052,46 +2154,51 @@ class TestCreateCustomMetricName(unittest.TestCase):
         )
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
     def test_missing_metric_name(self):
         """Test with a missing metricName."""
         collector = ValidationCollector()
-        result = create_custom_metric_name(self.mock_custom_metric_missing_metric_name, collector)
+        result = create_custom_metric_name(
+            self.mock_custom_metric_missing_metric_name, collector
+        )
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'metricName' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'metricName' field in custom metric configuration",
+            str(cm.exception),
+        )
 
     def test_missing_scenario(self):
         """Test with a missing scenario."""
         collector = ValidationCollector()
-        result = create_custom_metric_name(self.mock_custom_metric_missing_scenario, collector)
+        result = create_custom_metric_name(
+            self.mock_custom_metric_missing_scenario, collector
+        )
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("Missing 'scenario' field in custom metric configuration", str(cm.exception))
+        self.assertIn(
+            "Missing 'scenario' field in custom metric configuration", str(cm.exception)
+        )
 
 
 class TestSelectModelDetailsRandomly(unittest.TestCase):
     def test_valid_selection(self):
         run1 = {
             "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "4.0"},
-                }
+                "prompt_templating": {"model": {"name": "gpt-4", "version": "4.0"}}
             }
         }
         run2 = {
             "modules": {
-                "prompt_templating": {
-                    "model": {"name": "llama2", "version": "7b"},
-                }
+                "prompt_templating": {"model": {"name": "llama2", "version": "7b"}}
             }
         }
         run3 = {
             "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "4.1"},
-                }
+                "prompt_templating": {"model": {"name": "gpt-4", "version": "4.1"}}
             }
         }
 
@@ -2115,18 +2222,10 @@ class TestSelectModelDetailsRandomly(unittest.TestCase):
 
     def test_empty_names(self):
         run1 = {
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "", "version": "4.0"},
-                }
-            }
+            "modules": {"prompt_templating": {"model": {"name": "", "version": "4.0"}}}
         }
         run2 = {
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "", "version": "4.1"},
-                }
-            }
+            "modules": {"prompt_templating": {"model": {"name": "", "version": "4.1"}}}
         }
 
         run_data = [run1, run2]
@@ -2180,8 +2279,10 @@ class TestCreateModelVersionsMapFromConfigurationParamBindings(unittest.TestCase
         param_bindings = [param1, param2]
 
         collector = ValidationCollector()
-        result_map, filter_type = create_model_versions_map_from_configuration_param_bindings(
-            param_bindings, collector
+        result_map, filter_type = (
+            create_model_versions_map_from_configuration_param_bindings(
+                param_bindings, collector
+            )
         )
         self.assertEqual(result_map, {"gpt-4": ["4.0", "4.1"], "llama2": ["7b"]})
         self.assertEqual(filter_type, "allow")
@@ -2196,8 +2297,10 @@ class TestCreateModelVersionsMapFromConfigurationParamBindings(unittest.TestCase
         param_bindings = [param1, param2]
 
         collector = ValidationCollector()
-        result_map, filter_type = create_model_versions_map_from_configuration_param_bindings(
-            param_bindings, collector
+        result_map, filter_type = (
+            create_model_versions_map_from_configuration_param_bindings(
+                param_bindings, collector
+            )
         )
         self.assertEqual(result_map, {})
         self.assertEqual(filter_type, "deny")
@@ -2212,8 +2315,10 @@ class TestCreateModelVersionsMapFromConfigurationParamBindings(unittest.TestCase
         param_bindings = [param1, param2]
 
         collector = ValidationCollector()
-        result_map, filter_type = create_model_versions_map_from_configuration_param_bindings(
-            param_bindings, collector
+        result_map, filter_type = (
+            create_model_versions_map_from_configuration_param_bindings(
+                param_bindings, collector
+            )
         )
         # Function adds error to collector instead of raising
         self.assertEqual(result_map, {})
@@ -2222,14 +2327,14 @@ class TestCreateModelVersionsMapFromConfigurationParamBindings(unittest.TestCase
     def test_missing_model_filter_list_type(self):
         param1 = MagicMock()
         param1.key = "modelFilterList"
-        param1.value = json.dumps(
-            [{"modelName": "gpt-4", "modelVersions": ["latest"]}]
-        )
+        param1.value = json.dumps([{"modelName": "gpt-4", "modelVersions": ["latest"]}])
         param_bindings = [param1]
 
         collector = ValidationCollector()
-        result_map, filter_type = create_model_versions_map_from_configuration_param_bindings(
-            param_bindings, collector
+        result_map, filter_type = (
+            create_model_versions_map_from_configuration_param_bindings(
+                param_bindings, collector
+            )
         )
         self.assertEqual(result_map, {"gpt-4": ["latest"]})
         self.assertIsNone(filter_type)
@@ -2316,6 +2421,7 @@ class TestExtractDeploymentId(unittest.TestCase):
     def test_url_without_trailing_slash(self):
         url = "https://host.domain/api/v1/deployments/deployment456"
         self.assertEqual(extract_deployment_id(url), "deployment456")
+
 
 class TestHandleMissingDependentVariables(unittest.TestCase):
     @patch("gen_ai_hub.evaluations.utils.gen_utils.extract_dataset_columns")
@@ -2525,9 +2631,7 @@ class TestHandleReferenceMissingRows(unittest.TestCase):
         "gen_ai_hub.evaluations.utils.gen_utils.populate_dataset_data_if_individual_metric_reference_provided"
     )
     def test_calls_both_population_functions(
-        self,
-        mock_populate_individual,
-        mock_populate_all,
+        self, mock_populate_individual, mock_populate_all
     ):
         # Arrange
         template_vars_data = [{"input": "Hello", "reference": "Hi"}]
@@ -2612,23 +2716,28 @@ class TestUpdateVariableMapping(unittest.TestCase):
         variable_mapping = {"var1": "field1", "var2": "field2"}
         prefix_key = "prompt/"
         variable_mapping_dict = {}
-        
-        result = update_variable_mapping(variable_mapping, prefix_key, variable_mapping_dict)
-        
-        self.assertEqual(result, {
-            "prompt/var1": "data/field1",
-            "prompt/var2": "data/field2"
-        })
-        self.assertEqual(variable_mapping_dict, result)  # Should modify the dict in place
+
+        result = update_variable_mapping(
+            variable_mapping, prefix_key, variable_mapping_dict
+        )
+
+        self.assertEqual(
+            result, {"prompt/var1": "data/field1", "prompt/var2": "data/field2"}
+        )
+        self.assertEqual(
+            variable_mapping_dict, result
+        )  # Should modify the dict in place
 
     def test_update_variable_mapping_with_existing_dict(self):
         """Test update_variable_mapping with existing dict"""
         variable_mapping = {"var1": "field1"}
         prefix_key = "metric1/"
         variable_mapping_dict = {"existing": "value"}
-        
-        result = update_variable_mapping(variable_mapping, prefix_key, variable_mapping_dict)
-        
+
+        result = update_variable_mapping(
+            variable_mapping, prefix_key, variable_mapping_dict
+        )
+
         self.assertIn("metric1/var1", result)
         self.assertIn("existing", result)
 
@@ -2637,16 +2746,18 @@ class TestGetAccumulatedConfigData(unittest.TestCase):
     def test_get_accumulated_config_data_single(self):
         """Test get_accumulated_config_data with single config"""
         config1 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test"}},
             metric_templates=[{"id": "metric1"}],
             metrics_list=["metric1"],
             variable_mapping={"prompt/input": "data/input"},
         )
-        
+
         result = get_accumulated_config_data([config1])
-        
+
         self.assertEqual(result.orch_config_data, config1.orch_config_data)
         self.assertEqual(result.metrics_list, ["metric1"])
         self.assertEqual(result.variable_mapping, {"prompt/input": "data/input"})
@@ -2654,7 +2765,9 @@ class TestGetAccumulatedConfigData(unittest.TestCase):
     def test_get_accumulated_config_data_multiple(self):
         """Test get_accumulated_config_data with multiple configs"""
         config1 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test1"}},
             metric_templates=[{"id": "metric1"}],
@@ -2662,32 +2775,39 @@ class TestGetAccumulatedConfigData(unittest.TestCase):
             variable_mapping={"prompt/input": "data/input"},
         )
         config2 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "llama2"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "llama2"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test1"}},
             metric_templates=[{"id": "metric1"}],
             metrics_list=["metric1"],
             variable_mapping={"prompt/output": "data/output"},
         )
-        
+
         result = get_accumulated_config_data([config1, config2])
-        
+
         self.assertEqual(len(result.orch_config_data), 2)
-        self.assertEqual(result.variable_mapping, {"prompt/input": "data/input", "prompt/output": "data/output"})
+        self.assertEqual(
+            result.variable_mapping,
+            {"prompt/input": "data/input", "prompt/output": "data/output"},
+        )
 
     def test_get_accumulated_config_data_with_none_mapping(self):
         """Test get_accumulated_config_data when variable_mapping is None"""
         config1 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test"}},
             metric_templates=[{"id": "metric1"}],
             metrics_list=["metric1"],
             variable_mapping=None,
         )
-        
+
         result = get_accumulated_config_data([config1])
-        
+
         self.assertEqual(result.variable_mapping, {})
 
     def test_get_accumulated_config_data_exception_handling(self):
@@ -2695,19 +2815,21 @@ class TestGetAccumulatedConfigData(unittest.TestCase):
         # Create a config that will cause an exception inside the try block
         # The exception should be caught and wrapped in RuntimeError
         config1 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test"}},
             metric_templates=[{"id": "metric1"}],
             metrics_list=["metric1"],
             variable_mapping={"prompt/input": "data/input"},
         )
-        
+
         # Create a bad config that will cause an error when extending
         class BadOrchConfig:
             def __iter__(self):
                 raise ValueError("Error during iteration")
-        
+
         bad_config = _EvaluationConfigData(
             orch_config_data=BadOrchConfig(),  # This will cause an error when extending
             dataset_type="json",
@@ -2716,7 +2838,7 @@ class TestGetAccumulatedConfigData(unittest.TestCase):
             metrics_list=["metric1"],
             variable_mapping=None,
         )
-        
+
         with self.assertRaises(RuntimeError) as cm:
             get_accumulated_config_data([config1, bad_config])
         self.assertRegex(str(cm.exception), "Failed to accumulate")
@@ -2731,19 +2853,21 @@ class TestCreateModelVersionsMapFromCustomMetricConfig(unittest.TestCase):
                 MODEL_CONFIGURATION_KEY: {
                     MODEL_NAME_KEY: "gpt-4",
                     MODEL_VERSION_KEY: "4.0",
-                }
+                },
             },
             {
                 "metricId": "metric2",
                 MODEL_CONFIGURATION_KEY: {
                     MODEL_NAME_KEY: "llama2",
                     MODEL_VERSION_KEY: "7b",
-                }
+                },
             },
         ]
-        
-        result = create_model_versions_map_from_custom_metric_config(custom_metric_config_data)
-        
+
+        result = create_model_versions_map_from_custom_metric_config(
+            custom_metric_config_data
+        )
+
         self.assertEqual(result, {"gpt-4": ["4.0"], "llama2": ["7b"]})
 
     def test_create_model_versions_map_from_custom_metric_config_empty(self):
@@ -2762,30 +2886,36 @@ class TestCreateModelVersionsMapFromCustomMetricConfig(unittest.TestCase):
             {
                 "metricId": "metric1",
                 MODEL_CONFIGURATION_KEY: {
-                    MODEL_NAME_KEY: "gpt-4",
+                    MODEL_NAME_KEY: "gpt-4"
                     # No version specified, should use LATEST_MODEL_VERSION_KEY
-                }
-            },
+                },
+            }
         ]
-        
-        result = create_model_versions_map_from_custom_metric_config(custom_metric_config_data)
-        
+
+        result = create_model_versions_map_from_custom_metric_config(
+            custom_metric_config_data
+        )
+
         self.assertEqual(result, {"gpt-4": [LATEST_MODEL_VERSION_KEY]})
 
-    def test_create_model_versions_map_from_custom_metric_config_missing_model_name(self):
+    def test_create_model_versions_map_from_custom_metric_config_missing_model_name(
+        self,
+    ):
         """Test create_model_versions_map_from_custom_metric_config with missing model name"""
         custom_metric_config_data = [
             {
                 "metricId": "metric1",
                 MODEL_CONFIGURATION_KEY: {
-                    MODEL_VERSION_KEY: "4.0",
+                    MODEL_VERSION_KEY: "4.0"
                     # Missing model name
-                }
-            },
+                },
+            }
         ]
-        
-        result = create_model_versions_map_from_custom_metric_config(custom_metric_config_data)
-        
+
+        result = create_model_versions_map_from_custom_metric_config(
+            custom_metric_config_data
+        )
+
         self.assertEqual(result, {})  # Should not add entry if model_name is missing
 
 
@@ -2794,9 +2924,11 @@ class TestUpdateTestOrchConfigException(unittest.TestCase):
         """Test update_test_orch_config exception handling"""
         collector = ValidationCollector()
         # Mock ORCHESTRATION_CONFIGURATION_V2 to raise an exception
-        with patch("gen_ai_hub.evaluations.utils.gen_utils.ORCHESTRATION_CONFIGURATION_V2", {}):
+        with patch(
+            "gen_ai_hub.evaluations.utils.gen_utils.ORCHESTRATION_CONFIGURATION_V2", {}
+        ):
             result = update_test_orch_config("gpt-4", "4.0", collector)
-            
+
             self.assertIsNone(result)
             with self.assertRaises(RuntimeError) as cm:
                 collector.raise_if_errors()
@@ -2808,9 +2940,9 @@ class TestValidateMetricName(unittest.TestCase):
         """Test validate_metric_name with empty metric"""
         collector = ValidationCollector()
         all_supported_metrics = ["bert_score", "bleu"]
-        
+
         validate_metric_name("", all_supported_metrics, collector)
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
         self.assertIn("Metric name cannot be empty", str(cm.exception))
@@ -2819,20 +2951,22 @@ class TestValidateMetricName(unittest.TestCase):
         """Test validate_metric_name with unsupported metric"""
         collector = ValidationCollector()
         all_supported_metrics = ["bert_score", "bleu"]
-        
+
         validate_metric_name("unknown_metric", all_supported_metrics, collector)
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("unknown_metric is neither a system supported metric", str(cm.exception))
+        self.assertIn(
+            "unknown_metric is neither a system supported metric", str(cm.exception)
+        )
 
     def test_validate_metric_name_valid(self):
         """Test validate_metric_name with valid metric"""
         collector = ValidationCollector()
         all_supported_metrics = ["bert_score", "bleu"]
-        
+
         validate_metric_name("bert_score", all_supported_metrics, collector)
-        
+
         collector.raise_if_errors()  # Should not raise
 
 
@@ -2849,9 +2983,9 @@ class TestCheckIfMetricIsDefinedWithSlash(unittest.TestCase):
                 "version": "v1.0",
             }
         ]
-        
+
         check_if_metric_is_defined(metrics, metric_templates, collector)
-        
+
         collector.raise_if_errors()  # Should not raise
 
     def test_check_if_metric_is_defined_with_slash_format_not_found(self):
@@ -2866,12 +3000,15 @@ class TestCheckIfMetricIsDefinedWithSlash(unittest.TestCase):
                 "version": "v1.0",
             }
         ]
-        
+
         check_if_metric_is_defined(metrics, metric_templates, collector)
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("scenario1/metric1/v1.0 is neither a system supported metric", str(cm.exception))
+        self.assertIn(
+            "scenario1/metric1/v1.0 is neither a system supported metric",
+            str(cm.exception),
+        )
 
 
 class TestExtractMetricsVariablesWithMetricName(unittest.TestCase):
@@ -2881,21 +3018,17 @@ class TestExtractMetricsVariablesWithMetricName(unittest.TestCase):
             {
                 "id": "metric1",
                 "name": "Metric 1",
-                "additionalProperties": {
-                    "variables": ["var1", "var2"]
-                }
+                "additionalProperties": {"variables": ["var1", "var2"]},
             },
             {
                 "id": "metric2",
                 "name": "Metric 2",
-                "additionalProperties": {
-                    "variables": ["var3"]
-                }
+                "additionalProperties": {"variables": ["var3"]},
             },
         ]
-        
+
         result = extract_metrics_variables(metric_templates, "metric1")
-        
+
         self.assertEqual(result, ["var1", "var2"])
 
     def test_extract_metrics_variables_with_metric_name_by_name_key(self):
@@ -2904,14 +3037,12 @@ class TestExtractMetricsVariablesWithMetricName(unittest.TestCase):
             {
                 "id": "metric1",
                 "name": "Metric 1",
-                "additionalProperties": {
-                    "variables": ["var1", "var2"]
-                }
-            },
+                "additionalProperties": {"variables": ["var1", "var2"]},
+            }
         ]
-        
+
         result = extract_metrics_variables(metric_templates, "Metric 1")
-        
+
         self.assertEqual(result, ["var1", "var2"])
 
 
@@ -2919,13 +3050,11 @@ class TestValidateIndividualCustomMetrics(unittest.TestCase):
     def test_validate_individual_custom_metrics(self):
         """Test validate_individual_custom_metrics"""
         collector = ValidationCollector()
-        variable_mapping = {
-            "custom_metric1/var1": "data/field1",
-        }
+        variable_mapping = {"custom_metric1/var1": "data/field1"}
         dataset_columns = ["field1"]
         custom_metric_ids = ["custom_metric1"]
         custom_metric_variables = {"var1"}
-        
+
         validate_individual_custom_metrics(
             variable_mapping,
             dataset_columns,
@@ -2933,17 +3062,19 @@ class TestValidateIndividualCustomMetrics(unittest.TestCase):
             custom_metric_variables,
             collector,
         )
-        
+
         collector.raise_if_errors()  # Should not raise
 
     def test_validate_individual_custom_metrics_removes_system_variables(self):
         """Test validate_individual_custom_metrics removes predefined system variables"""
         collector = ValidationCollector()
         variable_mapping = {}
-        dataset_columns = ["var1"]  # var1 is in dataset, so no error after system var is removed
+        dataset_columns = [
+            "var1"
+        ]  # var1 is in dataset, so no error after system var is removed
         custom_metric_ids = []
         custom_metric_variables = {AICORE_LLM_PROMPT_TEMPLATE_KEY, "var1"}
-        
+
         validate_individual_custom_metrics(
             variable_mapping,
             dataset_columns,
@@ -2951,7 +3082,7 @@ class TestValidateIndividualCustomMetrics(unittest.TestCase):
             custom_metric_variables,
             collector,
         )
-        
+
         # Should not raise since system variable is removed and var1 is in dataset
         collector.raise_if_errors()
 
@@ -2959,40 +3090,38 @@ class TestValidateIndividualCustomMetrics(unittest.TestCase):
 class TestValidateEmptyMappingWithCustomVars(unittest.TestCase):
     def test_validate_empty_mapping_with_custom_vars(self):
         """Test _validate_empty_mapping_with_custom_vars"""
-        from gen_ai_hub.evaluations.utils.gen_utils import _validate_empty_mapping_with_custom_vars
-        
+        from gen_ai_hub.evaluations.utils.gen_utils import (
+            _validate_empty_mapping_with_custom_vars,
+        )
+
         collector = ValidationCollector()
         variable_mapping = {}
         dataset_columns = ["field1"]
         custom_metric_variables = {"var1", "var2"}
-        
+
         _validate_empty_mapping_with_custom_vars(
-            variable_mapping,
-            dataset_columns,
-            custom_metric_variables,
-            collector,
+            variable_mapping, dataset_columns, custom_metric_variables, collector
         )
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
         self.assertIn("Variable mapping is empty", str(cm.exception))
 
     def test_validate_empty_mapping_with_custom_vars_all_in_dataset(self):
         """Test _validate_empty_mapping_with_custom_vars when all vars in dataset"""
-        from gen_ai_hub.evaluations.utils.gen_utils import _validate_empty_mapping_with_custom_vars
-        
+        from gen_ai_hub.evaluations.utils.gen_utils import (
+            _validate_empty_mapping_with_custom_vars,
+        )
+
         collector = ValidationCollector()
         variable_mapping = {}
         dataset_columns = ["var1", "var2"]
         custom_metric_variables = {"var1", "var2"}
-        
+
         _validate_empty_mapping_with_custom_vars(
-            variable_mapping,
-            dataset_columns,
-            custom_metric_variables,
-            collector,
+            variable_mapping, dataset_columns, custom_metric_variables, collector
         )
-        
+
         collector.raise_if_errors()  # Should not raise
 
 
@@ -3000,41 +3129,51 @@ class TestValidateMappingEntry(unittest.TestCase):
     def test_validate_mapping_entry_short_key(self):
         """Test _validate_mapping_entry with key less than 3 parts"""
         from gen_ai_hub.evaluations.utils.gen_utils import _validate_mapping_entry
-        
+
         collector = ValidationCollector()
         key = "metric/var"  # Only 2 parts
         value = "data/field"
         custom_metric_ids = ["metric"]
         custom_metric_variables = {"var"}
         dataset_columns = ["field"]
-        
+
         _validate_mapping_entry(
-            key, value, custom_metric_ids, custom_metric_variables, dataset_columns, collector
+            key,
+            value,
+            custom_metric_ids,
+            custom_metric_variables,
+            dataset_columns,
+            collector,
         )
-        
+
         collector.raise_if_errors()  # Should not raise (early return)
 
     def test_validate_mapping_entry_not_custom_metric(self):
         """Test _validate_mapping_entry with non-custom metric key"""
         from gen_ai_hub.evaluations.utils.gen_utils import _validate_mapping_entry
-        
+
         collector = ValidationCollector()
         key = "all_metrics/var1"  # COLUMN_MAPPING_DEFAULT_KEYS
         value = "data/field"
         custom_metric_ids = []
         custom_metric_variables = set()
         dataset_columns = ["field"]
-        
+
         _validate_mapping_entry(
-            key, value, custom_metric_ids, custom_metric_variables, dataset_columns, collector
+            key,
+            value,
+            custom_metric_ids,
+            custom_metric_variables,
+            dataset_columns,
+            collector,
         )
-        
+
         collector.raise_if_errors()  # Should not raise (early return)
 
     def test_validate_mapping_entry_invalid_variable(self):
         """Test _validate_mapping_entry with invalid variable"""
         from gen_ai_hub.evaluations.utils.gen_utils import _validate_mapping_entry
-        
+
         collector = ValidationCollector()
         # Key needs at least 3 parts for the function to process it
         key = "scenario1/metric1/invalid_var"
@@ -3043,11 +3182,16 @@ class TestValidateMappingEntry(unittest.TestCase):
         custom_metric_variables = {"valid_var"}
         # invalid_var is NOT in custom_metric_variables AND NOT in dataset_columns
         dataset_columns = ["field"]
-        
+
         _validate_mapping_entry(
-            key, value, custom_metric_ids, custom_metric_variables, dataset_columns, collector
+            key,
+            value,
+            custom_metric_ids,
+            custom_metric_variables,
+            dataset_columns,
+            collector,
         )
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
         self.assertIn("Invalid mapping value provided", str(cm.exception))
@@ -3055,7 +3199,7 @@ class TestValidateMappingEntry(unittest.TestCase):
     def test_validate_mapping_entry_missing_dataset_column(self):
         """Test _validate_mapping_entry with missing dataset column"""
         from gen_ai_hub.evaluations.utils.gen_utils import _validate_mapping_entry
-        
+
         collector = ValidationCollector()
         # Key needs at least 3 parts for the function to process it
         key = "scenario1/metric1/var1"
@@ -3065,11 +3209,16 @@ class TestValidateMappingEntry(unittest.TestCase):
         # var1 is in custom_metric_variables, so first check passes
         # missing_field (dataset_value) is not in dataset_columns, so second check should fail
         dataset_columns = ["other_field"]
-        
+
         _validate_mapping_entry(
-            key, value, custom_metric_ids, custom_metric_variables, dataset_columns, collector
+            key,
+            value,
+            custom_metric_ids,
+            custom_metric_variables,
+            dataset_columns,
+            collector,
         )
-        
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
         self.assertRegex(str(cm.exception), "The provided mapping.*is not valid")
@@ -3077,18 +3226,23 @@ class TestValidateMappingEntry(unittest.TestCase):
     def test_validate_mapping_entry_value_without_slash(self):
         """Test _validate_mapping_entry with value without slash"""
         from gen_ai_hub.evaluations.utils.gen_utils import _validate_mapping_entry
-        
+
         collector = ValidationCollector()
         key = "custom_metric1/var1"
         value = "just_field"  # No "data/" prefix
         custom_metric_ids = ["custom_metric1"]
         custom_metric_variables = {"var1"}
         dataset_columns = ["just_field"]
-        
+
         _validate_mapping_entry(
-            key, value, custom_metric_ids, custom_metric_variables, dataset_columns, collector
+            key,
+            value,
+            custom_metric_ids,
+            custom_metric_variables,
+            dataset_columns,
+            collector,
         )
-        
+
         collector.raise_if_errors()  # Should not raise
 
 
@@ -3097,14 +3251,11 @@ class TestHandleJsonSchemaMatch(unittest.TestCase):
         """Test handle_json_schema_match"""
         collector = ValidationCollector()
         metrics = [JSON_SCHEMA_MATCH_METRIC_ID, "other_metric"]
-        dataset_data = [
-            {"json_schema": '{"type": "object"}'},
-            {"other": "data"},
-        ]
+        dataset_data = [{"json_schema": '{"type": "object"}'}, {"other": "data"}]
         variable_mapping = {}
-        
+
         handle_json_schema_match(metrics, dataset_data, variable_mapping, collector)
-        
+
         # Should populate missing rows
         self.assertIn("json_schema", dataset_data[1])
         collector.raise_if_errors()  # Should not raise
@@ -3115,9 +3266,9 @@ class TestHandleJsonSchemaMatch(unittest.TestCase):
         metrics = ["other_metric"]
         dataset_data = [{"other": "data"}]
         variable_mapping = {}
-        
+
         handle_json_schema_match(metrics, dataset_data, variable_mapping, collector)
-        
+
         # Should not modify data
         self.assertNotIn("json_schema", dataset_data[0])
 
@@ -3126,14 +3277,13 @@ class TestValidateLanguageCodeAndDataPopulation(unittest.TestCase):
     def test_validate_language_code_and_data_population_valid(self):
         """Test validate_language_code_and_data_population with valid language codes"""
         collector = ValidationCollector()
-        dataset_data = [
-            {LANGUAGE_KEY: "en"},
-            {LANGUAGE_KEY: "fr"},
-        ]
+        dataset_data = [{LANGUAGE_KEY: "en"}, {LANGUAGE_KEY: "fr"}]
         variable_mapping = {}
-        
-        validate_language_code_and_data_population(dataset_data, variable_mapping, collector)
-        
+
+        validate_language_code_and_data_population(
+            dataset_data, variable_mapping, collector
+        )
+
         collector.raise_if_errors()  # Should not raise
 
     def test_validate_language_code_and_data_population_missing_value(self):
@@ -3144,9 +3294,11 @@ class TestValidateLanguageCodeAndDataPopulation(unittest.TestCase):
             {},  # Missing key entirely
         ]
         variable_mapping = {}
-        
-        validate_language_code_and_data_population(dataset_data, variable_mapping, collector)
-        
+
+        validate_language_code_and_data_population(
+            dataset_data, variable_mapping, collector
+        )
+
         # After populate_dataset_data_if_data_missing, the empty row should have "en"
         # But if it's still None or empty after population, it should error
         # Actually, the function populates first, so we need a case where all are empty
@@ -3155,8 +3307,10 @@ class TestValidateLanguageCodeAndDataPopulation(unittest.TestCase):
             {},  # Missing key
         ]
         collector2 = ValidationCollector()
-        validate_language_code_and_data_population(dataset_data2, variable_mapping, collector2)
-        
+        validate_language_code_and_data_population(
+            dataset_data2, variable_mapping, collector2
+        )
+
         # Should error because no valid value to populate from
         with self.assertRaises(RuntimeError):
             collector2.raise_if_errors()
@@ -3164,28 +3318,31 @@ class TestValidateLanguageCodeAndDataPopulation(unittest.TestCase):
     def test_validate_language_code_and_data_population_invalid_code(self):
         """Test validate_language_code_and_data_population with invalid language code"""
         collector = ValidationCollector()
-        dataset_data = [
-            {LANGUAGE_KEY: "invalid_lang_code"},
-        ]
+        dataset_data = [{LANGUAGE_KEY: "invalid_lang_code"}]
         variable_mapping = {}
-        
-        validate_language_code_and_data_population(dataset_data, variable_mapping, collector)
-        
+
+        validate_language_code_and_data_population(
+            dataset_data, variable_mapping, collector
+        )
+
         with self.assertRaises(RuntimeError) as cm:
             collector.raise_if_errors()
-        self.assertIn("is not supported by the language match metric", str(cm.exception))
+        self.assertIn(
+            "is not supported by the language match metric", str(cm.exception)
+        )
 
     def test_validate_language_code_and_data_population_with_mapping(self):
         """Test validate_language_code_and_data_population with variable mapping"""
         collector = ValidationCollector()
-        dataset_data = [
-            {"lang_field": "en"},
-            {"lang_field": "fr"},
-        ]
-        variable_mapping = {f"{LANGUAGE_MATCH_METRIC_ID}/{LANGUAGE_KEY}": "data/lang_field"}
-        
-        validate_language_code_and_data_population(dataset_data, variable_mapping, collector)
-        
+        dataset_data = [{"lang_field": "en"}, {"lang_field": "fr"}]
+        variable_mapping = {
+            f"{LANGUAGE_MATCH_METRIC_ID}/{LANGUAGE_KEY}": "data/lang_field"
+        }
+
+        validate_language_code_and_data_population(
+            dataset_data, variable_mapping, collector
+        )
+
         collector.raise_if_errors()  # Should not raise
 
 
@@ -3194,13 +3351,11 @@ class TestHandleLanguageMatch(unittest.TestCase):
         """Test handle_language_match"""
         collector = ValidationCollector()
         metrics = [LANGUAGE_MATCH_METRIC_ID, "other_metric"]
-        dataset_data = [
-            {LANGUAGE_KEY: "en"},
-        ]
+        dataset_data = [{LANGUAGE_KEY: "en"}]
         variable_mapping = {}
-        
+
         handle_language_match(metrics, dataset_data, variable_mapping, collector)
-        
+
         collector.raise_if_errors()  # Should not raise
 
     def test_handle_language_match_not_in_metrics(self):
@@ -3209,9 +3364,9 @@ class TestHandleLanguageMatch(unittest.TestCase):
         metrics = ["other_metric"]
         dataset_data = [{"other": "data"}]
         variable_mapping = {}
-        
+
         handle_language_match(metrics, dataset_data, variable_mapping, collector)
-        
+
         # Should not raise or modify
         collector.raise_if_errors()  # Should not raise
 
@@ -3220,15 +3375,14 @@ class TestUpdateArtifactDict(unittest.TestCase):
     def test_update_artifact_dict_with_string(self):
         """Test update_artifact_dict with string artifact"""
         artifact_reference = ArtifactSource(
-            artifact="artifact-id-123",
-            file_type="json",
+            artifact="artifact-id-123", file_type="json"
         )
         artifact_dict_count = {}
-        
+
         update_artifact_dict(artifact_reference, artifact_dict_count)
-        
+
         self.assertEqual(artifact_dict_count, {"artifact-id-123": 1})
-        
+
         # Test incrementing
         update_artifact_dict(artifact_reference, artifact_dict_count)
         self.assertEqual(artifact_dict_count, {"artifact-id-123": 2})
@@ -3236,46 +3390,44 @@ class TestUpdateArtifactDict(unittest.TestCase):
     def test_update_artifact_dict_with_artifact_object(self):
         """Test update_artifact_dict with Artifact object"""
         from ai_api_client_sdk.models.artifact import Artifact
-        
+
         mock_artifact = MagicMock(spec=Artifact)
         mock_artifact.id = "artifact-uuid-456"
-        
-        artifact_reference = ArtifactSource(
-            artifact=mock_artifact,
-            file_type="json",
-        )
+
+        artifact_reference = ArtifactSource(artifact=mock_artifact, file_type="json")
         artifact_dict_count = {}
-        
+
         update_artifact_dict(artifact_reference, artifact_dict_count)
-        
+
         self.assertEqual(artifact_dict_count, {"artifact-uuid-456": 1})
 
 
 class TestResolveOrchestrationConfigV2(unittest.TestCase):
     def test_resolve_orchestration_config_v2(self):
         """Test resolve_orchestration_config_v2"""
-        template1 = PromptTemplate(
-            role="user",
-            content="Template 1 with {{?var1}}"
-        )
-        template2 = PromptTemplate(
-            role="system",
-            content="Template 2"
-        )
-        llm = LLM(
-            name="gpt-4",
-            version="4.0",
-            params={"temperature": 0.7}
-        )
-        
+        template1 = PromptTemplate(role="user", content="Template 1 with {{?var1}}")
+        template2 = PromptTemplate(role="system", content="Template 2")
+        llm = LLM(name="gpt-4", version="4.0", params={"temperature": 0.7})
+
         result = resolve_orchestration_config_v2([template1, template2], llm)
-        
+
         self.assertIn(MODULES_KEY, result)
         self.assertIn(PROMPT_TEMPLATING_KEY, result[MODULES_KEY])
         self.assertIn(PROMPT_KEY, result[MODULES_KEY][PROMPT_TEMPLATING_KEY])
-        self.assertIn(TEMPLATE_KEY, result[MODULES_KEY][PROMPT_TEMPLATING_KEY][PROMPT_KEY])
-        self.assertEqual(len(result[MODULES_KEY][PROMPT_TEMPLATING_KEY][PROMPT_KEY][TEMPLATE_KEY]), 2)
+        self.assertIn(
+            TEMPLATE_KEY, result[MODULES_KEY][PROMPT_TEMPLATING_KEY][PROMPT_KEY]
+        )
+        self.assertEqual(
+            len(result[MODULES_KEY][PROMPT_TEMPLATING_KEY][PROMPT_KEY][TEMPLATE_KEY]), 2
+        )
         self.assertIn(MODEL_KEY, result[MODULES_KEY][PROMPT_TEMPLATING_KEY])
-        self.assertEqual(result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["name"], "gpt-4")
-        self.assertEqual(result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["version"], "4.0")
-        self.assertEqual(result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["parameters"], {"temperature": 0.7})
+        self.assertEqual(
+            result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["name"], "gpt-4"
+        )
+        self.assertEqual(
+            result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["version"], "4.0"
+        )
+        self.assertEqual(
+            result[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY]["parameters"],
+            {"temperature": 0.7},
+        )

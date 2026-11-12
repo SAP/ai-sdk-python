@@ -12,7 +12,10 @@ class APIVersion:
     :type description: str, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, version_id: str = None, url: str = None, description: str = None, **kwargs):
+
+    def __init__(
+        self, version_id: str = None, url: str = None, description: str = None, **kwargs
+    ):
         self.version_id: str = version_id
         self.url: str = url
         self.description: str = description

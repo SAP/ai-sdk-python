@@ -6,9 +6,9 @@ from packaging import version
 from gen_ai_hub.proxy.core import get_proxy_version
 from .clients import AsyncOpenAI, OpenAI
 
-if version.parse(openai.__version__) < version.parse('1.0.0'):
+if version.parse(openai.__version__) < version.parse("1.0.0"):
     raise ImportError(
-        f'Found openai=={openai.__version__}. Since v0.2.0 it only supports openai>=1.0.0! Update openai or run `pip install -U openai<1`'
+        f"Found openai=={openai.__version__}. Since v0.2.0 it only supports openai>=1.0.0! Update openai or run `pip install -U openai<1`"
     )
 # TODO: Adjust error message
 
@@ -37,7 +37,7 @@ _global_client = GlobalClient()
 
 
 def __getattr__(name: str) -> Any:
-    if name in ('completions', 'chat', 'embeddings', "responses"):
+    if name in ("completions", "chat", "embeddings", "responses"):
         return getattr(_global_client.client, name)
     else:
         return locals().get(name)

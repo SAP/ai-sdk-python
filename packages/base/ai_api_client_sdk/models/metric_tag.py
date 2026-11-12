@@ -9,7 +9,12 @@ class MetricTag(NameValue):
     """
 
     def __str__(self):
-        return "Metric tag name: " + str(self.name) + "Metric tag value: " + str(self.value)
+        return (
+            "Metric tag name: "
+            + str(self.name)
+            + "Metric tag value: "
+            + str(self.value)
+        )
 
     @staticmethod
     def from_dict(metric_tag_dict: Dict[str, str]):

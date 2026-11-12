@@ -8,13 +8,18 @@ class ExecutionBulkModifyResponse:
     :param exeuctions: Response to the bulk modify request of executions
     :type exeuctions: List[Union[BasicResponse, BulkModifyErrorResponse]]
     """
-    def __init__(self, executions: List[Union[BasicResponse, BulkModifyErrorResponse]], **kwargs):
-        self.executions: List[Union[BasicResponse, BulkModifyErrorResponse]] = executions
+
+    def __init__(
+        self, executions: List[Union[BasicResponse, BulkModifyErrorResponse]], **kwargs
+    ):
+        self.executions: List[Union[BasicResponse, BulkModifyErrorResponse]] = (
+            executions
+        )
 
     def __str__(self):
-        ebmr_str = ''
+        ebmr_str = ""
         for d in self.executions:
-            ebmr_str += f'{d.__str__()}\n'
+            ebmr_str += f"{d.__str__()}\n"
         return ebmr_str
 
     @staticmethod
@@ -27,9 +32,11 @@ class ExecutionBulkModifyResponse:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.execution_bulk_modify_response.ExecutionBulkModifyResponse`
         """
-        response_dict['executions'] = [
-            BulkModifyErrorResponse.from_dict(d) if 'error' in d else BasicResponse.from_dict(d)
-            for d in response_dict['executions']
+        response_dict["executions"] = [
+            BulkModifyErrorResponse.from_dict(d)
+            if "error" in d
+            else BasicResponse.from_dict(d)
+            for d in response_dict["executions"]
         ]
 
         return ExecutionBulkModifyResponse(**response_dict)

@@ -10,6 +10,7 @@ class InputArtifactBinding:
     :type id: str
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, key: str, artifact_id: str, **kwargs):
         self.key: str = key
         self.artifact_id: str = artifact_id
@@ -20,7 +21,7 @@ class InputArtifactBinding:
         :return: A dict, including all the attributes of the object
         :rtype: Dict[str, str]
         """
-        return {'key': self.key, 'artifact_id': self.artifact_id}
+        return {"key": self.key, "artifact_id": self.artifact_id}
 
     def __eq__(self, other):
         if not isinstance(other, InputArtifactBinding):

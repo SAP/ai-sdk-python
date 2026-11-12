@@ -8,14 +8,21 @@ import requests
 import time
 from requests.exceptions import ConnectionError
 
-from ai_api_client_sdk.exception import AIAPIAuthenticatorException, AIAPIAuthenticatorInvalidRequestException, \
-    AIAPIAuthenticatorAuthorizationException, AIAPIAuthenticatorServerException, \
-    AIAPIAuthenticatorForbiddenException, AIAPIAuthenticatorMethodNotAllowedException, \
-    AIAPIAuthenticatorTimeoutException
+from ai_api_client_sdk.exception import (
+    AIAPIAuthenticatorException,
+    AIAPIAuthenticatorInvalidRequestException,
+    AIAPIAuthenticatorAuthorizationException,
+    AIAPIAuthenticatorServerException,
+    AIAPIAuthenticatorForbiddenException,
+    AIAPIAuthenticatorMethodNotAllowedException,
+    AIAPIAuthenticatorTimeoutException,
+)
 from ai_api_client_sdk.helpers import _is_all_none
 
-PARAM_ERROR_MESSAGE = ('Either client_secret, or (cert_file_path, key_file_path) pair, '
-                       'or (cert_str, key_str) pair need to be provided')
+PARAM_ERROR_MESSAGE = (
+    "Either client_secret, or (cert_file_path, key_file_path) pair, "
+    "or (cert_str, key_str) pair need to be provided"
+)
 MAX_RETRY_ATTEMPTS_FOR_TOKEN = 3
 BASE_DELAY_FOR_TOKEN_RETRY = 0.3
 
@@ -42,41 +49,63 @@ class Authenticator:
     :type key_file_path: str, optional
     """
 
-    def __init__(self, auth_url: str, client_id: str, client_secret: str = None, cert_str: str = None,
-                 key_str: str = None, cert_file_path: str = None, key_file_path: str = None):
+    def __init__(
+        self,
+        auth_url: str,
+        client_id: str,
+        client_secret: str = None,
+        cert_str: str = None,
+        key_str: str = None,
+        cert_file_path: str = None,
+        key_file_path: str = None,
+    ):
         self.url: str = auth_url
         self.client_id: str = client_id
         self.client_secret: str = client_secret
-        self.cert_str: str = cert_str.replace('\\n', '\n') if cert_str else None
-        self.key_str: str = key_str.replace('\\n', '\n') if key_str else None
+        self.cert_str: str = cert_str.replace("\\n", "\n") if cert_str else None
+        self.key_str: str = key_str.replace("\\n", "\n") if key_str else None
         self.cert_file_path: str = cert_file_path
         self.key_file_path: str = key_file_path
-        if not ((client_secret is not None and _is_all_none(cert_str, key_str, cert_file_path, key_file_path))
-                or (cert_file_path is not None and key_file_path is not None and _is_all_none(client_secret,
-                                                                                                   cert_str, key_str))
-                or (cert_str is not None and key_str is not None and _is_all_none(client_secret, cert_file_path,
-                                                                                       key_file_path))):
+        if not (
+            (
+                client_secret is not None
+                and _is_all_none(cert_str, key_str, cert_file_path, key_file_path)
+            )
+            or (
+                cert_file_path is not None
+                and key_file_path is not None
+                and _is_all_none(client_secret, cert_str, key_str)
+            )
+            or (
+                cert_str is not None
+                and key_str is not None
+                and _is_all_none(client_secret, cert_file_path, key_file_path)
+            )
+        ):
             raise AIAPIAuthenticatorException(error_message=PARAM_ERROR_MESSAGE)
-        self.token = None # Token Caching
+        self.token = None  # Token Caching
         self.token_expiry_date = None
-        self.lock = Lock() # Thread-Safe Lock
+        self.lock = Lock()  # Thread-Safe Lock
 
     def _request_token_with_cert_key_str(self, data: dict):
         with tempfile.TemporaryDirectory() as temp_dir:
-            cert_file_path = os.path.join(temp_dir, f'cert.pem')
-            key_file_path = os.path.join(temp_dir, f'key.pem')
-            with open(cert_file_path, 'w') as f:
+            cert_file_path = os.path.join(temp_dir, f"cert.pem")
+            key_file_path = os.path.join(temp_dir, f"key.pem")
+            with open(cert_file_path, "w") as f:
                 f.write(self.cert_str)
-            with open(key_file_path, 'w') as f:
+            with open(key_file_path, "w") as f:
                 f.write(self.key_str)
-            response = requests.post(url=self.url, data=data, cert=(cert_file_path, key_file_path))
+            response = requests.post(
+                url=self.url, data=data, cert=(cert_file_path, key_file_path)
+            )
         return response
 
     def _should_retry_token_retrieval_params(
-            self, attempt: int,
-            response: Optional[requests.Response] = None,
-            status_code: Optional[int] = None,
-            exp: Optional[Exception] = None
+        self,
+        attempt: int,
+        response: Optional[requests.Response] = None,
+        status_code: Optional[int] = None,
+        exp: Optional[Exception] = None,
     ) -> dict:
         """
         Determines whether to retry the token retrieval operation based on the HTTP status code,
@@ -98,23 +127,27 @@ class Authenticator:
         """
 
         if status_code in [401, 403] or attempt == MAX_RETRY_ATTEMPTS_FOR_TOKEN:
-            return {"should_retry": False,
-                    "delay": 0}
+            return {"should_retry": False, "delay": 0}
 
         if status_code in [408, 502, 504] or (exp and isinstance(exp, ConnectionError)):
-            return {"should_retry": True,
-                    "delay": BASE_DELAY_FOR_TOKEN_RETRY * (2 ** attempt)}
+            return {
+                "should_retry": True,
+                "delay": BASE_DELAY_FOR_TOKEN_RETRY * (2**attempt),
+            }
 
         if status_code in [500, 503]:
-            return {"should_retry": True,
-                    "delay": BASE_DELAY_FOR_TOKEN_RETRY * (3 ** attempt)}
+            return {
+                "should_retry": True,
+                "delay": BASE_DELAY_FOR_TOKEN_RETRY * (3**attempt),
+            }
 
         if status_code == 429:
-            return {"should_retry": True,
-                    "delay": float(response.headers.get("Retry-After", 1))}
+            return {
+                "should_retry": True,
+                "delay": float(response.headers.get("Retry-After", 1)),
+            }
 
-        return {"should_retry": False,
-                "delay": 0}
+        return {"should_retry": False, "delay": 0}
 
     def _execute_token_request(self) -> requests.Response:
         """Executes a request to the xsuaa server to retrieve the token.
@@ -130,23 +163,30 @@ class Authenticator:
         if self.cert_str and self.key_str:
             return self._request_token_with_cert_key_str(data)
         if self.cert_file_path and self.key_file_path:
-            return requests.post(url=self.url, data=data, cert=(self.cert_file_path, self.key_file_path))
+            return requests.post(
+                url=self.url, data=data, cert=(self.cert_file_path, self.key_file_path)
+            )
         raise AIAPIAuthenticatorException(error_message=PARAM_ERROR_MESSAGE)
 
-    def _sleep_before_retry(self, attempt: int, *, response: Optional[requests.Response] = None,
-                            status_code: Optional[int] = None, exp: Optional[Exception] = None) -> bool:
+    def _sleep_before_retry(
+        self,
+        attempt: int,
+        *,
+        response: Optional[requests.Response] = None,
+        status_code: Optional[int] = None,
+        exp: Optional[Exception] = None,
+    ) -> bool:
         params = self._should_retry_token_retrieval_params(
-            attempt=attempt,
-            response=response,
-            status_code=status_code,
-            exp=exp,
+            attempt=attempt, response=response, status_code=status_code, exp=exp
         )
         if not params["should_retry"]:
             return False
         time.sleep(params["delay"])
         return True
 
-    def _retrieve_token_with_retries(self) -> tuple[requests.Response, int, Optional[str]]:
+    def _retrieve_token_with_retries(
+        self,
+    ) -> tuple[requests.Response, int, Optional[str]]:
         """Retrieves the token from the xsuaa server with retries.
 
         :return: A tuple containing: response, status_code, error_msg
@@ -169,9 +209,13 @@ class Authenticator:
                 if self._sleep_before_retry(attempt, exp=exception):
                     attempt += 1
                     continue
-                raise AIAPIAuthenticatorException(status_code=500, error_message=error_msg) from exception
+                raise AIAPIAuthenticatorException(
+                    status_code=500, error_message=error_msg
+                ) from exception
 
-            if self._sleep_before_retry(attempt, response=response, status_code=status_code):
+            if self._sleep_before_retry(
+                attempt, response=response, status_code=status_code
+            ):
                 attempt += 1
                 continue
 
@@ -204,9 +248,13 @@ class Authenticator:
         elif status_code == 408:
             raise AIAPIAuthenticatorTimeoutException(error_message=error_msg)
         elif status_code // 100 != 2:
-            raise AIAPIAuthenticatorServerException(status_code=status_code, error_message=error_msg)
+            raise AIAPIAuthenticatorServerException(
+                status_code=status_code, error_message=error_msg
+            )
 
-    def _update_token_from_response(self, response: requests.Response, error_msg: Optional[str]) -> None:
+    def _update_token_from_response(
+        self, response: requests.Response, error_msg: Optional[str]
+    ) -> None:
         """Updates the token from the response received from the xsuaa server.
         :param response: The response received from the xsuaa server.
         :type response: requests.Response
@@ -221,7 +269,9 @@ class Authenticator:
             self.token = f"Bearer {access_token}"
             self._calc_token_expiry_date(payload["expires_in"])
         except Exception as exception:  # pylint:disable=broad-except
-            raise AIAPIAuthenticatorException(status_code=500, error_message=error_msg) from exception
+            raise AIAPIAuthenticatorException(
+                status_code=500, error_message=error_msg
+            ) from exception
 
     def get_token(self) -> str:
         """Retrieves the token from the xsuaa server or from cache when expiration date not reached.
@@ -231,7 +281,7 @@ class Authenticator:
         :return: The Bearer token
         :rtype: str
         """
-        with self.lock: # Thread-Safe
+        with self.lock:  # Thread-Safe
             if self._should_refresh_token():
                 response, status_code, error_msg = self._retrieve_token_with_retries()
                 self._raise_for_status(status_code, error_msg)

@@ -16,7 +16,6 @@ from tests.mock import GOOGLE_GEMINI_INVOKE_RESPONSE, get_mocked_ai_core_client
 
 
 class TestGoogleGenerativeAILangchain(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.proxy_client = get_mocked_ai_core_client()

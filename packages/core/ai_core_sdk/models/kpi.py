@@ -2,15 +2,14 @@ from typing import Any, Dict, List, Union
 
 
 class Kpi:
-    """The Kpi object defines the Kpi data.
-    """
+    """The Kpi object defines the Kpi data."""
 
     def __init__(self, header: List[str], rows: List[Union[str, int]], **kwargs):
         self.header: List[str] = header
         self.rows: List[Union[str, int]] = rows
 
     def __str__(self):
-        return "KPIs header(s): " + ', '.join(self.header)
+        return "KPIs header(s): " + ", ".join(self.header)
 
     @staticmethod
     def from_dict(kpi_dict: Dict[str, Any]):

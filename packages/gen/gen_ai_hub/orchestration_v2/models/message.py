@@ -10,9 +10,19 @@ from typing import Union, Optional, List
 
 from pydantic import field_validator, ValidationError
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
+from gen_ai_hub.orchestration_v2.models.base import (
+    ABCBaseModel as BaseModel,
+    ResponseBaseModel,
+)
 from gen_ai_hub.orchestration_v2.models.multimodal_items import (
-    ContentPart, ImageItem, TextPart, ImageUrl, ImagePart, FileItem, FilePart, FileContent
+    ContentPart,
+    ImageItem,
+    TextPart,
+    ImageUrl,
+    ImagePart,
+    FileItem,
+    FilePart,
+    FileContent,
 )
 
 
@@ -30,6 +40,7 @@ class FunctionCall(ResponseBaseModel):
             hallucinate parameters not defined by your function schema. Validate the
             arguments in your code before calling your function.
     """
+
     name: str
     arguments: str
 
@@ -57,9 +68,11 @@ class MessageToolCall(ResponseBaseModel):
 
         function: The function that the model called.
     """
+
     id: str
     type: typing.Literal["function"] = "function"
     function: FunctionCall
+
 
 class ReasoningBlock(BaseModel):
     """
@@ -69,9 +82,9 @@ class ReasoningBlock(BaseModel):
         content: The reasoning content.
         signature: Signature string for hidden reasoning content.
     """
+
     content: Optional[str] = None
     signature: Optional[str] = None
-
 
 
 class Role(str, Enum):
@@ -111,6 +124,7 @@ class SystemMessage(BaseModel):
 
         content: The text content of the system message.
     """
+
     role: Role = Role.SYSTEM
     content: Union[str, List[TextPart]]
 
@@ -126,8 +140,13 @@ class UserMessage(BaseModel):
 
         content: The message content, which may be plain text or a sequence of text, images, or files.
     """
+
     role: Role = Role.USER
-    content: Union[str, ContentPart, List[Union[str, ContentPart, ImageItem, ImagePart, FileItem, FilePart]]]
+    content: Union[
+        str,
+        ContentPart,
+        List[Union[str, ContentPart, ImageItem, ImagePart, FileItem, FilePart]],
+    ]
 
     @field_validator("content", mode="before")
     def content_validation(cls, content):  # pylint: disable=no-self-argument
@@ -146,11 +165,21 @@ class UserMessage(BaseModel):
                 elif isinstance(item, str):
                     mapped_content.append(TextPart(text=item))
                 elif isinstance(item, ImageItem):
-                    mapped_content.append(ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail)))
+                    mapped_content.append(
+                        ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail))
+                    )
                 elif isinstance(item, FileItem):
-                    mapped_content.append(FilePart(file=FileContent(file_data=item.file_data, filename=item.filename)))
+                    mapped_content.append(
+                        FilePart(
+                            file=FileContent(
+                                file_data=item.file_data, filename=item.filename
+                            )
+                        )
+                    )
                 else:
-                    raise ValidationError("User message content list must contain only str, ImageItem or FileItem")
+                    raise ValidationError(
+                        "User message content list must contain only str, ImageItem or FileItem"
+                    )
         return mapped_content
 
 
@@ -171,6 +200,7 @@ class AssistantMessage(BaseModel):
 
         reasoning_content: A list of reasoning content blocks.
     """
+
     role: Role = Role.ASSISTANT
     content: Optional[Union[str, List[TextPart]]] = None
     refusal: Optional[str] = None
@@ -188,6 +218,7 @@ class DeveloperChatMessage(BaseModel):
     role: Role = Role.DEVELOPER
     content: Union[str, List[TextPart]]
 
+
 class ResponseChatMessage(ResponseBaseModel):
     """
     Represents a response message in a conversation.
@@ -204,14 +235,33 @@ class ResponseChatMessage(ResponseBaseModel):
 
         reasoning_content: A list of reasoning content blocks.
     """
+
     role: Role = Role.ASSISTANT
     content: str
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
     reasoning_content: Optional[List[ReasoningBlock]] = None
 
-ChatMessage = Union[SystemMessage, UserMessage, AssistantMessage, ToolChatMessage, DeveloperChatMessage,
-ResponseChatMessage]
 
-__all__ = ["Role", "SystemMessage", "UserMessage", "AssistantMessage", "ToolChatMessage", "DeveloperChatMessage",
-           "ChatMessage", "ResponseChatMessage", "FunctionCall", "MessageToolCall", "ReasoningBlock"]
+ChatMessage = Union[
+    SystemMessage,
+    UserMessage,
+    AssistantMessage,
+    ToolChatMessage,
+    DeveloperChatMessage,
+    ResponseChatMessage,
+]
+
+__all__ = [
+    "Role",
+    "SystemMessage",
+    "UserMessage",
+    "AssistantMessage",
+    "ToolChatMessage",
+    "DeveloperChatMessage",
+    "ChatMessage",
+    "ResponseChatMessage",
+    "FunctionCall",
+    "MessageToolCall",
+    "ReasoningBlock",
+]

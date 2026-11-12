@@ -6,10 +6,15 @@ Covers the three spec attachment points:
   - UserChatMessageContentItem     (TextPart / ImagePart)
   - ChatCompletionTool.cache_control
 """
+
 import unittest
 
 from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
-from gen_ai_hub.orchestration_v2.models.multimodal_items import TextPart, ImagePart, ImageUrl
+from gen_ai_hub.orchestration_v2.models.multimodal_items import (
+    TextPart,
+    ImagePart,
+    ImageUrl,
+)
 from gen_ai_hub.orchestration_v2.models.tools import FunctionTool, FunctionObject
 
 
@@ -47,7 +52,9 @@ class TestTextPartCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        part = TextPart(text="hello", cache_control=CacheControl(type="ephemeral", ttl="1h"))
+        part = TextPart(
+            text="hello", cache_control=CacheControl(type="ephemeral", ttl="1h")
+        )
         d = part.model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
@@ -56,10 +63,14 @@ class TestImagePartCacheControl(unittest.TestCase):
     """ImagePart.cache_control serialization."""
 
     def _image_part(self, **kwargs):
-        return ImagePart(image_url=ImageUrl(url="https://example.com/img.png"), **kwargs)
+        return ImagePart(
+            image_url=ImageUrl(url="https://example.com/img.png"), **kwargs
+        )
 
     def test_with_cache_control(self):
-        d = self._image_part(cache_control=CacheControl(type="ephemeral")).model_dump(by_alias=True, exclude_none=True)
+        d = self._image_part(cache_control=CacheControl(type="ephemeral")).model_dump(
+            by_alias=True, exclude_none=True
+        )
         self.assertEqual(d["type"], "image_url")
         self.assertEqual(d["cache_control"], {"type": "ephemeral"})
 
@@ -68,7 +79,9 @@ class TestImagePartCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        d = self._image_part(cache_control=CacheControl(type="ephemeral", ttl="1h")).model_dump(by_alias=True, exclude_none=True)
+        d = self._image_part(
+            cache_control=CacheControl(type="ephemeral", ttl="1h")
+        ).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
 
@@ -86,7 +99,9 @@ class TestFunctionToolCacheControl(unittest.TestCase):
         )
 
     def test_with_cache_control(self):
-        d = self._tool(cache_control=CacheControl(type="ephemeral")).model_dump(by_alias=True, exclude_none=True)
+        d = self._tool(cache_control=CacheControl(type="ephemeral")).model_dump(
+            by_alias=True, exclude_none=True
+        )
         self.assertEqual(d["cache_control"], {"type": "ephemeral"})
 
     def test_without_cache_control_omits_key(self):
@@ -94,7 +109,9 @@ class TestFunctionToolCacheControl(unittest.TestCase):
         self.assertNotIn("cache_control", d)
 
     def test_1h_ttl(self):
-        d = self._tool(cache_control=CacheControl(type="ephemeral", ttl="1h")).model_dump(by_alias=True, exclude_none=True)
+        d = self._tool(
+            cache_control=CacheControl(type="ephemeral", ttl="1h")
+        ).model_dump(by_alias=True, exclude_none=True)
         self.assertEqual(d["cache_control"], {"type": "ephemeral", "ttl": "1h"})
 
     def test_type_field_serializes(self):
@@ -105,6 +122,7 @@ class TestFunctionToolCacheControl(unittest.TestCase):
     def test_no_duplicate_type_from_subclass(self):
         """FunctionTool must not declare its own type_ field (inherits from ChatCompletionTool)."""
         import inspect
+
         own_fields = FunctionTool.model_fields
         # 'type_' is defined on ChatCompletionTool; FunctionTool should only add 'function'
         self.assertIn("function", own_fields)

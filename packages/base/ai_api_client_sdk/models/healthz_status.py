@@ -3,8 +3,8 @@ from typing import Any, Dict
 
 
 class HealthStatus(Enum):
-    READY = 'READY'
-    NOT_READY = 'NOT READY'
+    READY = "READY"
+    NOT_READY = "NOT READY"
 
 
 class HealthzStatus:
@@ -15,6 +15,7 @@ class HealthzStatus:
     :type message: str
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, status: HealthStatus, message: str, **kwargs):
         self.status: HealthStatus = status
         self.message: str = message
@@ -32,5 +33,5 @@ class HealthzStatus:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.healthz_status.HealthzStatus`
         """
-        healthz_status_dict['status'] = HealthStatus(healthz_status_dict['status'])
+        healthz_status_dict["status"] = HealthStatus(healthz_status_dict["status"])
         return HealthzStatus(**healthz_status_dict)

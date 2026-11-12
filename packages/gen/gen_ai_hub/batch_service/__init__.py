@@ -8,7 +8,6 @@ __all__ = [
     "BatchInput",
     "BatchOutput",
     "BatchSpec",
-
     # response
     "BatchStatus",
     "BatchCreateResponse",
@@ -22,10 +21,8 @@ __all__ = [
     "BatchCancelResponse",
     "BatchDeleteResponse",
     "ErrorResponse",
-
     # service
     "BatchService",
-
     # exceptions
     "BatchServiceError",
 ]

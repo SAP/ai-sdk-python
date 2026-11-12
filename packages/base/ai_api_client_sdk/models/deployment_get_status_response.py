@@ -2,7 +2,9 @@ from datetime import datetime
 from typing import Any, Dict
 
 from ai_api_client_sdk.helpers.datetime_parser import parse_datetime
-from ai_api_client_sdk.models.enactment_get_status_response import EnactmentGetStatusResponse
+from ai_api_client_sdk.models.enactment_get_status_response import (
+    EnactmentGetStatusResponse,
+)
 from ai_api_client_sdk.models.status import Status
 
 
@@ -22,11 +24,24 @@ class DeploymentGetStatusResponse(EnactmentGetStatusResponse):
     :type status_details: Dict[str, Any], optional
     """
 
-    def __init__(self, id: str, configuration_id: str,
-                 status: Status, created_at: datetime, modified_at: datetime, status_details: Dict[str, Any] = None,
-                 details: Dict[str, Any] = None):
-        super().__init__(id=id, configuration_id=configuration_id, status=status, created_at=created_at,
-                         modified_at=modified_at, status_details=status_details)
+    def __init__(
+        self,
+        id: str,
+        configuration_id: str,
+        status: Status,
+        created_at: datetime,
+        modified_at: datetime,
+        status_details: Dict[str, Any] = None,
+        details: Dict[str, Any] = None,
+    ):
+        super().__init__(
+            id=id,
+            configuration_id=configuration_id,
+            status=status,
+            created_at=created_at,
+            modified_at=modified_at,
+            status_details=status_details,
+        )
         self.details: Dict[str, Any] = details
 
     def __str__(self):
@@ -41,7 +56,7 @@ class DeploymentGetStatusResponse(EnactmentGetStatusResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.deployment_get_status_response.DeploymentGetStatusResponse`
         """
-        deployment_dict['status'] = Status(deployment_dict['status'])
-        deployment_dict['created_at'] = parse_datetime(deployment_dict['created_at'])
-        deployment_dict['modified_at'] = parse_datetime(deployment_dict['modified_at'])
+        deployment_dict["status"] = Status(deployment_dict["status"])
+        deployment_dict["created_at"] = parse_datetime(deployment_dict["created_at"])
+        deployment_dict["modified_at"] = parse_datetime(deployment_dict["modified_at"])
         return DeploymentGetStatusResponse(**deployment_dict)

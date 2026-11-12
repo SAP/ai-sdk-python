@@ -11,13 +11,13 @@ from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 
 from gen_ai_hub.proxy.core.proxy_clients import get_proxy_client, proxy_version_context
 
-FOUNDATION_MODEL_SCENARIO = 'foundation-models'
+FOUNDATION_MODEL_SCENARIO = "foundation-models"
 
 
 @dataclass
 class FoundationalModelExecutable:
-    _instances: ClassVar[Dict[str, 'FoundationalModelExecutable']] = {}
-    _model_to_scenario: ClassVar[Dict[str, 'FoundationalModelExecutable']] = {}
+    _instances: ClassVar[Dict[str, "FoundationalModelExecutable"]] = {}
+    _model_to_scenario: ClassVar[Dict[str, "FoundationalModelExecutable"]] = {}
     _discovered: ClassVar[bool] = False
 
     id_: str
@@ -41,7 +41,12 @@ class FoundationalModelExecutable:
         return cls._model_to_scenario.get(model_name)
 
     @classmethod
-    def discover(cls, client: AICoreV2Client, scenario_id: str = FOUNDATION_MODEL_SCENARIO, force: bool = False):
+    def discover(
+        cls,
+        client: AICoreV2Client,
+        scenario_id: str = FOUNDATION_MODEL_SCENARIO,
+        force: bool = False,
+    ):
         if cls._discovered and not force:
             return
         execs = client.executable.query(scenario_id=scenario_id)
@@ -49,84 +54,82 @@ class FoundationalModelExecutable:
             models = None
             model_version_default = None
             for param in exe.parameters:
-                if param.name == 'modelName':
+                if param.name == "modelName":
                     models = []
                     if param.description is not None:
-                        models = [m.strip() for m in param.description.partition(':')[-1].split(',')]
+                        models = [
+                            m.strip()
+                            for m in param.description.partition(":")[-1].split(",")
+                        ]
                     if param.default and param.default not in models:
                         models.append(param.default)
-                if param.name == 'modelVersion':
+                if param.name == "modelVersion":
                     model_version_default = param.default
-            cls(
-                id_=exe.id,
-                model_version_default=model_version_default,
-                models=models,
-            )
+            cls(id_=exe.id, model_version_default=model_version_default, models=models)
         cls._discovered = True
 
 
-def find_existing_config(client, executable_id, params, scenario_id=FOUNDATION_MODEL_SCENARIO):
+def find_existing_config(
+    client, executable_id, params, scenario_id=FOUNDATION_MODEL_SCENARIO
+):
     parameter_values_new = {p.key: p.value for p in params}
-    configs = client.configuration.query(
-        scenario_id=scenario_id)
+    configs = client.configuration.query(scenario_id=scenario_id)
     for config in configs.resources:
         if config.executable_id != executable_id:
             continue
         parameter_values = {p.key: p.value for p in config.parameter_bindings}
-        parameter_values['name'] = config.name
+        parameter_values["name"] = config.name
         if parameter_values == parameter_values_new:
             return config
 
 
-def get_deployments(ai_core_client, status=(Status.PENDING, Status.RUNNING, Status.UNKNOWN), **kwargs):
+def get_deployments(
+    ai_core_client, status=(Status.PENDING, Status.RUNNING, Status.UNKNOWN), **kwargs
+):
     if isinstance(status, Status):
         status = [status]
     deployments = []
     for status_ in status:
         deployments.extend(
-            ai_core_client.deployment.query(
-                **{**kwargs, 'status': status_}
-            ).resources)
+            ai_core_client.deployment.query(**{**kwargs, "status": status_}).resources
+        )
     return deployments
 
 
-def deploy(ai_core_client: AICoreV2Client,
-           model_name: str,
-           model_version: Optional[str] = None,
-           config_name: Optional[str] = None,
-           executable_id: Optional[str] = None,
-           scenario_id: str = FOUNDATION_MODEL_SCENARIO,
-           force: bool = False):
+def deploy(
+    ai_core_client: AICoreV2Client,
+    model_name: str,
+    model_version: Optional[str] = None,
+    config_name: Optional[str] = None,
+    executable_id: Optional[str] = None,
+    scenario_id: str = FOUNDATION_MODEL_SCENARIO,
+    force: bool = False,
+):
     FoundationalModelExecutable.discover(ai_core_client, scenario_id=scenario_id)
 
     config_name = model_name
-    params = [ParameterBinding(
-        key='modelName',
-        value=model_name,
-    )]
+    params = [ParameterBinding(key="modelName", value=model_name)]
     if model_version:
-        config_name = f'{model_name}-{model_version}'
-        params.append(ParameterBinding(
-            key='modelVersion',
-            value=model_version,
-        ))
+        config_name = f"{model_name}-{model_version}"
+        params.append(ParameterBinding(key="modelVersion", value=model_version))
 
-    params.append(ParameterBinding(
-        key='name',
-        value=config_name,
-    ))
+    params.append(ParameterBinding(key="name", value=config_name))
 
     executable = find_executable(model_name=model_name, executable_id=executable_id)
-    config = find_existing_config(ai_core_client, executable.id_, params, scenario_id=scenario_id)
+    config = find_existing_config(
+        ai_core_client, executable.id_, params, scenario_id=scenario_id
+    )
     if config is None:
-        config_name = config_name or f'{model_name}-{model_version or "default"}'
+        config_name = config_name or f"{model_name}-{model_version or 'default'}"
         config = ai_core_client.configuration.create(
             scenario_id=FOUNDATION_MODEL_SCENARIO,
             executable_id=executable.id_,
             name=config_name,
             parameter_bindings=params,
         )
-    deployments = get_deployments(ai_core_client, scenario_id=scenario_id, configuration_id=config.id)
+    deployments = get_deployments(
+        ai_core_client, scenario_id=scenario_id, configuration_id=config.id
+    )
     if len(deployments) > 0 and not force:
         return False, deployments[0], config
     return True, ai_core_client.deployment.create(configuration_id=config.id), config
@@ -139,7 +142,9 @@ def find_executable(model_name: str, executable_id: Optional[str] = None):
         try:
             executable = FoundationalModelExecutable.get_instance(executable_id)
         except KeyError:
-            executable = FoundationalModelExecutable(id_=executable_id, models=[model_name])
+            executable = FoundationalModelExecutable(
+                id_=executable_id, models=[model_name]
+            )
 
     if executable is None:
         raise ValueError(f"Executable not found for model '{model_name}'.")
@@ -154,7 +159,7 @@ def get_bedrock_models():
         ("amazon--nova-micro", "latest"),
         ("amazon--nova-premier", "latest"),
         ("anthropic--claude-4.5-haiku", "latest"),
-        ("anthropic--claude-4.5-sonnet", "latest")
+        ("anthropic--claude-4.5-sonnet", "latest"),
     ]
 
 
@@ -177,7 +182,7 @@ def get_standard_models():
         ("cohere--command-a-reasoning", "latest"),
         ("sap-rpt-1-small", "latest"),
         ("sap-rpt-1.5", "latest"),
-        ("sap-rpt-1.6","latest"),
+        ("sap-rpt-1.6", "latest"),
     ]
 
 
@@ -186,10 +191,12 @@ def _setup_models(client: AICoreV2Client, models: List[tuple], max_wait_seconds=
     running_deployments = []
     pending_deployments = []
     deployment_id_to_model = {}
-    
+
     for model, model_version in models:
         try:
-            newly_deployed, deployment, _ = deploy(ai_core_client=client, model_name=model, model_version=model_version)
+            newly_deployed, deployment, _ = deploy(
+                ai_core_client=client, model_name=model, model_version=model_version
+            )
             if newly_deployed or deployment.status in (Status.PENDING, Status.UNKNOWN):
                 pending_deployments.append(deployment)
             else:
@@ -198,20 +205,26 @@ def _setup_models(client: AICoreV2Client, models: List[tuple], max_wait_seconds=
         except Exception as e:
             print(f"Error for virtual deployment of model {model}-{model_version}: {e}")
             continue  # Skip model if it is not available
-    
+
     if pending_deployments:
-        check_pending_deployments(client, max_wait_seconds, pending_deployments, running_deployments)
+        check_pending_deployments(
+            client, max_wait_seconds, pending_deployments, running_deployments
+        )
 
     return {deployment_id_to_model[dep.id]: dep for dep in running_deployments}
 
 
-def check_pending_deployments(client: AICoreV2Client, max_wait_seconds: int, pending_deployments: list[Any],
-                              running_deployments: list[Any]):
+def check_pending_deployments(
+    client: AICoreV2Client,
+    max_wait_seconds: int,
+    pending_deployments: list[Any],
+    running_deployments: list[Any],
+):
     checked_deployments = []
     start = time.time()
     while pending_deployments or checked_deployments:
         if time.time() - start > max_wait_seconds:
-            raise TimeoutError('Timeout waiting for deployments to start.')
+            raise TimeoutError("Timeout waiting for deployments to start.")
         dep = pending_deployments.pop(0)
         dep = client.deployment.get(dep.id)
         if dep.status == Status.RUNNING:
@@ -247,26 +260,29 @@ def setup_aicore_instance(client: AICoreV2Client, max_wait_seconds=1200):
 
 class TestCaseAICoreSetupMixin:
     """Base mixin for AI Core setup - sets up all models"""
+
     @classmethod
     def setUpClass(cls):  # noqa: N802 - unittest framework method name
-        with proxy_version_context('gen-ai-hub'):
+        with proxy_version_context("gen-ai-hub"):
             cls.proxy_client = get_proxy_client()
         cls.aicore_deployments = setup_aicore_instance(cls.proxy_client.ai_core_client)
 
 
 class TestCaseBedrockSetupMixin:
     """Mixin specifically for bedrock tests - sets up only bedrock models"""
+
     @classmethod
     def setUpClass(cls):  # noqa: N802 - unittest framework method name
-        with proxy_version_context('gen-ai-hub'):
+        with proxy_version_context("gen-ai-hub"):
             cls.proxy_client = get_proxy_client()
         cls.aicore_deployments = setup_bedrock_models(cls.proxy_client.ai_core_client)
 
 
 class TestCaseStandardSetupMixin:
     """Mixin specifically for standard tests - sets up only standard models"""
+
     @classmethod
     def setUpClass(cls):  # noqa: N802 - unittest framework method name
-        with proxy_version_context('gen-ai-hub'):
+        with proxy_version_context("gen-ai-hub"):
             cls.proxy_client = get_proxy_client()
         cls.aicore_deployments = setup_standard_models(cls.proxy_client.ai_core_client)

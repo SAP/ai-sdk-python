@@ -2,6 +2,7 @@
 This module provides client wrappers for synchronous and asynchronous interactions
 with the Amazon Bedrock Runtime service.
 """
+
 import asyncio
 import contextvars
 import warnings
@@ -61,10 +62,12 @@ def prepare_request_dict(request_dict, aicore_deployment, aicore_proxy_client):
     """
     url_extension = request_dict["url_path"].rsplit("/", 1)[-1]
     request_dict["url_path"] = url_extension
-    request_dict["url"] = f"{aicore_deployment.url.rstrip('/')}/{url_extension.lstrip('/')}"
+    request_dict["url"] = (
+        f"{aicore_deployment.url.rstrip('/')}/{url_extension.lstrip('/')}"
+    )
     del request_dict["headers"]["User-Agent"]
     request_dict["headers"] = {
-        'accept': 'application/vnd.amazon.eventstream',
+        "accept": "application/vnd.amazon.eventstream",
         **request_dict["headers"],
         **aicore_proxy_client.request_header,
     }
@@ -106,18 +109,20 @@ class ClientWrapper(BaseClient):
         """
         # copy over all object attributes to the wrapper object
         self.__class__ = type(
-            client.__class__.__name__,
-            (self.__class__, client.__class__),
-            {},
+            client.__class__.__name__, (self.__class__, client.__class__), {}
         )
         self.__dict__ = client.__dict__
 
         self.aicore_deployment = aicore_deployment
-        self.aicore_proxy_client = aicore_proxy_client  # called proxy_client in other sdk integrations
+        self.aicore_proxy_client = (
+            aicore_proxy_client  # called proxy_client in other sdk integrations
+        )
 
     def _convert_to_request_dict(self, *args, **kwargs):
         request_dict = super()._convert_to_request_dict(*args, **kwargs)
-        return prepare_request_dict(request_dict, self.aicore_deployment, self.aicore_proxy_client)
+        return prepare_request_dict(
+            request_dict, self.aicore_deployment, self.aicore_proxy_client
+        )
 
     def invoke_model(self, *args, **kwargs):
         """Tolerates missing parameters and calls original
@@ -137,9 +142,12 @@ class ClientWrapper(BaseClient):
         """
         timeout = kwargs.pop("timeout", None)
         if timeout is not None:
-            warnings.warn("The timeout parameter is ignored. "
-                          "Timeouts should be defined via Session().client configuration.", DeprecationWarning,
-                          stacklevel=2)
+            warnings.warn(
+                "The timeout parameter is ignored. "
+                "Timeouts should be defined via Session().client configuration.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
 
         kwargs = tolerate_missing_model_id(kwargs)
         # pylint: disable=no-member
@@ -180,9 +188,7 @@ class AsyncClientWrapper(AioBaseClient):
         """
         # copy over all object attributes to the wrapper object
         self.__class__ = type(
-            client.__class__.__name__,
-            (self.__class__, client.__class__),
-            {},
+            client.__class__.__name__, (self.__class__, client.__class__), {}
         )
         self.__dict__ = client.__dict__
 
@@ -231,12 +237,14 @@ class AsyncClientWrapper(AioBaseClient):
 
     async def _convert_to_request_dict(self, *args, **kwargs):
         request_dict = await super()._convert_to_request_dict(*args, **kwargs)
-        return prepare_request_dict(request_dict, self.aicore_deployment, self.aicore_proxy_client)
+        return prepare_request_dict(
+            request_dict, self.aicore_deployment, self.aicore_proxy_client
+        )
 
     async def invoke_model(self, *args, **kwargs):
         """Tolerates missing parameters and calls original
-                invoke_model method.
-                """
+        invoke_model method.
+        """
         kwargs = tolerate_missing_model_id(kwargs)
         # pylint: disable=no-member
         return await super().invoke_model(*args, **kwargs)
@@ -251,25 +259,28 @@ class AsyncClientWrapper(AioBaseClient):
         """
         timeout = kwargs.pop("timeout", None)
         if timeout is not None:
-            warnings.warn("The timeout parameter is ignored. "
-                          "Timeouts should be defined via Session().client configuration.", DeprecationWarning,
-                          stacklevel=2)
+            warnings.warn(
+                "The timeout parameter is ignored. "
+                "Timeouts should be defined via Session().client configuration.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
         kwargs = tolerate_missing_model_id(kwargs)
         # pylint: disable=no-member
         return await super().invoke_model_with_response_stream(*args, **kwargs)
 
     async def converse(self, *args, **kwargs):
         """Tolerates missing parameters and calls original
-                converse method.
-                """
+        converse method.
+        """
         kwargs = tolerate_missing_model_id(kwargs)
         # pylint: disable=no-member
         return await super().converse(*args, **kwargs)
 
     async def converse_stream(self, *args, **kwargs):
         """Tolerates missing parameters and calls original
-                converse method.
-                """
+        converse method.
+        """
         kwargs = tolerate_missing_model_id(kwargs)
         # pylint: disable=no-member
         return await super().converse_stream(*args, **kwargs)
@@ -280,16 +291,16 @@ class Session(Session_):
     the current deployment for amazon bedrock models"""
 
     def client(
-            self,
-            *args,
-            model: str = "",
-            deployment_id: str = "",
-            model_name: str = "",
-            model_version: str = "",
-            config_id: str = "",
-            config_name: str = "",
-            proxy_client: Optional[BaseProxyClient] = None,
-            **kwargs,
+        self,
+        *args,
+        model: str = "",
+        deployment_id: str = "",
+        model_name: str = "",
+        model_version: str = "",
+        config_id: str = "",
+        config_name: str = "",
+        proxy_client: Optional[BaseProxyClient] = None,
+        **kwargs,
     ):
         """Creates client for the bedrock runtime service.
 
@@ -358,16 +369,16 @@ class AsyncSession:
 
     # pylint: disable=too-many-arguments
     async def async_client(
-            self,
-            *args,
-            model: str = "",
-            deployment_id: str = "",
-            model_name: str = "",
-            model_version: str = "",
-            config_id: str = "",
-            config_name: str = "",
-            proxy_client: Optional[BaseProxyClient] = None,
-            **kwargs,
+        self,
+        *args,
+        model: str = "",
+        deployment_id: str = "",
+        model_name: str = "",
+        model_version: str = "",
+        config_id: str = "",
+        config_name: str = "",
+        proxy_client: Optional[BaseProxyClient] = None,
+        **kwargs,
     ):
         """Creates async client for the bedrock runtime service.
 
@@ -416,4 +427,6 @@ class AsyncSession:
         )
         client = await context_manager.__aenter__()
         with set_deployment(deployment):
-            return AsyncClientWrapper(client, get_current_deployment(), proxy, context_manager)
+            return AsyncClientWrapper(
+                client, get_current_deployment(), proxy, context_manager
+            )

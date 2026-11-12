@@ -57,9 +57,7 @@ def validate_filtered_models(
     )
 
     if not orch_config_model_versions_map:
-        logger.info(
-            "No model filter list provided — skipping model filtering.",
-        )
+        logger.info("No model filter list provided — skipping model filtering.")
         return
 
     if model_filter_type not in {"allow", "deny"}:
@@ -129,9 +127,7 @@ def fetch_and_validate_orchestration_config(
     )
     configuration_param_bindings = configuration_response.parameter_bindings
     validate_filtered_models(
-        configuration_param_bindings,
-        orchestration_config_data,
-        error_collector,
+        configuration_param_bindings, orchestration_config_data, error_collector
     )
 
 
@@ -160,8 +156,10 @@ def validate_orchestration_url_across_configs(
             proxy_client,
         )
 
+
 def extract_deployment_id(orch_url) -> str:
     return orch_url.rstrip("/").split("/")[-1]
+
 
 def validate_orchestration_url(
     evaluation_config_data: _EvaluationConfigData,
@@ -217,8 +215,7 @@ def validate_orchestration_url(
 
 
 def validate_orchestration_configuration(
-    orchestration_config_data: List[dict],
-    error_collector: ValidationCollector,
+    orchestration_config_data: List[dict], error_collector: ValidationCollector
 ):
     """Validates the Orchestration configuration provided by user"""
     for orch_config in orchestration_config_data:
@@ -306,8 +303,7 @@ def validate_config_data_collection(
 
 
 def validate_merged_config_data(
-    evaluation_config_data: _EvaluationConfigData,
-    error_collector: ValidationCollector,
+    evaluation_config_data: _EvaluationConfigData, error_collector: ValidationCollector
 ):
     """handles the validation of config provided from the user"""
 

@@ -34,8 +34,8 @@ from gen_ai_hub.evaluations.utils.orch_config_utils import (
     validate_if_all_grounding_input_params_present_in_prompt_variables,
 )
 
-class TestValidateMetrics(unittest.TestCase):
 
+class TestValidateMetrics(unittest.TestCase):
     def test_metrics_empty_list(self):
         collector = ValidationCollector()
         metrics = []
@@ -156,7 +156,9 @@ class TestValidateMetrics(unittest.TestCase):
             },
         ]
 
-        validate_metrics(metrics, metric_templates, orchestration_config_data, collector)
+        validate_metrics(
+            metrics, metric_templates, orchestration_config_data, collector
+        )
 
         # Should not raise
         collector.raise_if_errors()
@@ -174,15 +176,17 @@ class TestValidateMetrics(unittest.TestCase):
         collector.raise_if_errors()
 
 
-
-
-
 class TestValidateOrchestrationUrl(unittest.TestCase):
-
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.update_test_orch_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.extract_deployment_id")
     def test_valid_orch_url(
@@ -210,7 +214,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_update_test_config.return_value = {"test": "config"}
 
         evaluation_config_data = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -230,9 +236,7 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.extract_deployment_id")
     def test_invalid_status_raises_validation_error(
-        self,
-        mock_extract_deployment_id,
-        mock_fetch_deployment_config,
+        self, mock_extract_deployment_id, mock_fetch_deployment_config
     ):
         from ai_api_client_sdk.models.status import Status
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
@@ -248,7 +252,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_fetch_deployment_config.return_value = mock_deployment_config
 
         evaluation_config_data = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -264,15 +270,20 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(
-            RuntimeError,
-            "Deployment status is.*expected 'RUNNING'",
+            RuntimeError, "Deployment status is.*expected 'RUNNING'"
         ):
             collector.raise_if_errors()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.update_test_orch_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.extract_deployment_id")
     def test_json_decode_error_handled(
@@ -300,7 +311,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_update_test_config.return_value = {"test": "config"}
 
         def side_effect(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get("error_collector")
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             error_collector.add_error(
                 ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
                 "Error occurred: Expecting value",
@@ -309,7 +322,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_call_orch_service.side_effect = side_effect
 
         evaluation_config_data = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -328,10 +343,7 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
             collector.raise_if_errors()
 
     @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_orchestration_url")
-    def test_validate_orch_url_across_configs_single_item(
-        self,
-        mock_validate_orch_url,
-    ):
+    def test_validate_orch_url_across_configs_single_item(self, mock_validate_orch_url):
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 
         collector = ValidationCollector()
@@ -363,10 +375,7 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         )
 
     @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_orchestration_url")
-    def test_validate_orch_url_across_configs_list(
-        self,
-        mock_validate_orch_url,
-    ):
+    def test_validate_orch_url_across_configs_list(self, mock_validate_orch_url):
         from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 
         collector = ValidationCollector()
@@ -416,10 +425,16 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
             None,
         )
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.update_test_orch_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.extract_deployment_id")
     def test_retry_exception_handled_as_success(
@@ -448,7 +463,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_call_orch_service.return_value = None
 
         evaluation_config_data = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -465,10 +482,16 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
 
         collector.raise_if_errors()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.call_orchestration_service_with_v2_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.update_test_orch_config")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.select_model_details_randomly"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.fetch_and_validate_orchestration_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_deployment_config")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.extract_deployment_id")
     def test_unexpected_exception_raises_validation_error(
@@ -496,7 +519,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_update_test_config.return_value = {"test": "config"}
 
         def side_effect(*args, **kwargs):
-            error_collector = args[4] if len(args) > 4 else kwargs.get("error_collector")
+            error_collector = (
+                args[4] if len(args) > 4 else kwargs.get("error_collector")
+            )
             error_collector.add_error(
                 ErrorCode.INVALID_ORCHESTRATION_CONFIG_ERROR,
                 "Error occurred: Unexpected error",
@@ -505,7 +530,9 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
         mock_call_orch_service.side_effect = side_effect
 
         evaluation_config_data = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -524,18 +551,16 @@ class TestValidateOrchestrationUrl(unittest.TestCase):
             collector.raise_if_errors()
 
 
-
-
-
 class TestValidateConfigDataCollection(unittest.TestCase):
-
     @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_merged_config_data")
     def test_validate_config_data_collection_single_item(self, mock_validate_merged):
         """Test validate_config_data_collection with single _EvaluationConfigData"""
         collector = ValidationCollector()
 
         config = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -552,7 +577,9 @@ class TestValidateConfigDataCollection(unittest.TestCase):
         collector = ValidationCollector()
 
         config1 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -560,7 +587,9 @@ class TestValidateConfigDataCollection(unittest.TestCase):
         )
 
         config2 = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-3"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-3"}}}}
+            ],
             dataset_type="json",
             dataset_data={},
             metric_templates=[],
@@ -575,12 +604,17 @@ class TestValidateConfigDataCollection(unittest.TestCase):
 
 
 class TestValidateMergedConfigData(unittest.TestCase):
-
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.handle_reference_missing_rows")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.handle_reference_missing_rows"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.handle_language_match")
     @patch("gen_ai_hub.evaluations.utils.validation_utils.handle_json_schema_match")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.handle_missing_dependent_variables_in_dataset")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_with_input_config")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.handle_missing_dependent_variables_in_dataset"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_with_input_config"
+    )
     @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_input_config")
     def test_validate_merged_config_data(
         self,
@@ -596,7 +630,9 @@ class TestValidateMergedConfigData(unittest.TestCase):
         collector = ValidationCollector()
 
         config = _EvaluationConfigData(
-            orch_config_data=[{"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}],
+            orch_config_data=[
+                {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
+            ],
             dataset_type="json",
             dataset_data={"row1": {"input": "test"}},
             metric_templates=[{"id": "metric1", "name": "metric1"}],
@@ -631,30 +667,19 @@ class TestValidateMergedConfigData(unittest.TestCase):
         )
 
         mock_handle_json_schema.assert_called_once_with(
-            config.metrics_list,
-            config.dataset_data,
-            config.variable_mapping,
-            collector,
+            config.metrics_list, config.dataset_data, config.variable_mapping, collector
         )
 
         mock_handle_language.assert_called_once_with(
-            config.metrics_list,
-            config.dataset_data,
-            config.variable_mapping,
-            collector,
+            config.metrics_list, config.dataset_data, config.variable_mapping, collector
         )
 
         mock_handle_reference.assert_called_once_with(
-            config.dataset_data,
-            config.variable_mapping,
-            config.metrics_list,
-            collector,
+            config.dataset_data, config.variable_mapping, config.metrics_list, collector
         )
 
 
-
 class TestValidateOrchestrationConfiguration(unittest.TestCase):
-
     def test_missing_modules(self):
         collector = ValidationCollector()
         orchestration_config_data = [{}]
@@ -673,14 +698,18 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_missing_model_name_in_llm_module_config(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {},
-                    "prompt": {"template": [{"content": "some content", "role": "user"}]},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {},
+                        "prompt": {
+                            "template": [{"content": "some content", "role": "user"}]
+                        },
+                    }
                 }
             }
-        }]
+        ]
 
         with self.assertRaisesRegex(RuntimeError, "Missing configuration for.*name"):
             validate_orchestration_configuration(orchestration_config_data, collector)
@@ -688,29 +717,35 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_template_ref_not_supported(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {"template_ref": "uuid"},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {"template_ref": "uuid"},
+                    }
                 }
             }
-        }]
+        ]
 
-        with self.assertRaisesRegex(RuntimeError, "template_ref inside prompt is not yet supported"):
+        with self.assertRaisesRegex(
+            RuntimeError, "template_ref inside prompt is not yet supported"
+        ):
             validate_orchestration_configuration(orchestration_config_data, collector)
             collector.raise_if_errors()
 
     def test_empty_template_list(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {"template": []},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {"template": []},
+                    }
                 }
             }
-        }]
+        ]
 
         with self.assertRaisesRegex(RuntimeError, "template list cannot be empty"):
             validate_orchestration_configuration(orchestration_config_data, collector)
@@ -718,14 +753,16 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_missing_content_in_template(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {"template": [{}]},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {"template": [{}]},
+                    }
                 }
             }
-        }]
+        ]
 
         with self.assertRaisesRegex(RuntimeError, "Each template must be a dictionary"):
             validate_orchestration_configuration(orchestration_config_data, collector)
@@ -733,22 +770,28 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_image_url_not_supported(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {
-                        "template": [{
-                            "role": "user",
-                            "content": [{
-                                "type": "image_url",
-                                "image_url": {"url": "https://image.com"}
-                            }]
-                        }]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {
+                            "template": [
+                                {
+                                    "role": "user",
+                                    "content": [
+                                        {
+                                            "type": "image_url",
+                                            "image_url": {"url": "https://image.com"},
+                                        }
+                                    ],
+                                }
+                            ]
+                        },
                     }
                 }
             }
-        }]
+        ]
 
         with self.assertRaisesRegex(RuntimeError, "image_url is not supported"):
             validate_orchestration_configuration(orchestration_config_data, collector)
@@ -756,64 +799,76 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
     def test_positive_case(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {
-                        "template": [{
-                            "content": "Prompt {{?var1}} {{?var2}}",
-                            "role": "user",
-                        }]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "Prompt {{?var1}} {{?var2}}",
+                                    "role": "user",
+                                }
+                            ]
+                        },
                     }
                 }
             }
-        }]
+        ]
 
         validate_orchestration_configuration(orchestration_config_data, collector)
         collector.raise_if_errors()  # Should not raise
 
     def test_grounding_output_missing(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {
-                        "template": [{"role": "user", "content": "Test {{?otherVar}}"}]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {"role": "user", "content": "Test {{?otherVar}}"}
+                            ]
+                        },
+                        "model": {"name": "gpt-4"},
                     },
-                    "model": {"name": "gpt-4"}
-                },
-                "grounding": {
-                    "config": {"placeholders": {"output": "groundingResult"}}
-                },
+                    "grounding": {
+                        "config": {"placeholders": {"output": "groundingResult"}}
+                    },
+                }
             }
-        }]
+        ]
 
         with self.assertRaises(RuntimeError) as context:
             validate_orchestration_configuration(orchestration_config_data, collector)
             collector.raise_if_errors()
 
-        self.assertIn(ErrorCode.INVALID_GROUNDING_CONFIGURATION.value, str(context.exception))
+        self.assertIn(
+            ErrorCode.INVALID_GROUNDING_CONFIGURATION.value, str(context.exception)
+        )
         self.assertIn("groundingResult", str(context.exception))
 
     def test_content_filter_supported_provider(self):
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {"template": [{"role": "user", "content": "Hello"}]},
-                    "model": {"name": "gpt-4"},
-                },
-                "filtering": {
-                    "input": {"filters": [{"type": "azure_content_safety"}]},
-                    "output": {"filters": [{"type": "azure_content_safety"}]},
-                },
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {"template": [{"role": "user", "content": "Hello"}]},
+                        "model": {"name": "gpt-4"},
+                    },
+                    "filtering": {
+                        "input": {"filters": [{"type": "azure_content_safety"}]},
+                        "output": {"filters": [{"type": "azure_content_safety"}]},
+                    },
+                }
             }
-        }]
+        ]
 
         metrics = [
             CONTENT_FILTER_ON_INPUT_METRIC_ID,
             CONTENT_FILTER_ON_OUTPUT_METRIC_ID,
-            "other_metric"
+            "other_metric",
         ]
 
         collector = ValidationCollector()
@@ -825,18 +880,20 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
         self.assertEqual(len(metrics), 3)
 
     def test_content_filter_unsupported_provider(self):
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "prompt": {"template": [{"role": "user", "content": "Hello"}]},
-                    "model": {"name": "gpt-4"},
-                },
-                "filtering": {
-                    "input": {"filters": [{"type": "unsupported_provider"}]},
-                    "output": {"filters": [{"type": "unsupported_provider"}]},
-                },
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {"template": [{"role": "user", "content": "Hello"}]},
+                        "model": {"name": "gpt-4"},
+                    },
+                    "filtering": {
+                        "input": {"filters": [{"type": "unsupported_provider"}]},
+                        "output": {"filters": [{"type": "unsupported_provider"}]},
+                    },
+                }
             }
-        }]
+        ]
 
         metrics = [
             CONTENT_FILTER_ON_INPUT_METRIC_ID,
@@ -859,17 +916,18 @@ class TestValidateOrchestrationConfiguration(unittest.TestCase):
 
 
 class TestValidateInputParameters(unittest.TestCase):
-
     def test_empty_metrics(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {"template": [{"content": "text", "role": "user"}]},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {"template": [{"content": "text", "role": "user"}]},
+                    }
                 }
             }
-        }]
+        ]
 
         with self.assertRaisesRegex(RuntimeError, "Metrics list cannot be empty"):
             validate_input_config(orchestration_config_data, [], [], collector)
@@ -877,35 +935,31 @@ class TestValidateInputParameters(unittest.TestCase):
 
     def test_valid_input_parameters(self):
         collector = ValidationCollector()
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "latest"},
-                    "prompt": {"template": [{"content": "text", "role": "user"}]},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "model": {"name": "gpt-4", "version": "latest"},
+                        "prompt": {"template": [{"content": "text", "role": "user"}]},
+                    }
                 }
             }
-        }]
+        ]
 
         metrics = ["bert_score"]
 
-        metric_templates = [{
-            "id": "bert_score",
-            "name": "BERT Score",
-            "evaluation_method": "computed",
-        }]
+        metric_templates = [
+            {"id": "bert_score", "name": "BERT Score", "evaluation_method": "computed"}
+        ]
 
         validate_input_config(
-            orchestration_config_data,
-            metrics,
-            metric_templates,
-            collector,
+            orchestration_config_data, metrics, metric_templates, collector
         )
 
         collector.raise_if_errors()  # Should not raise
 
 
 class TestValidateVariableMappingOfMetrics(unittest.TestCase):
-
     def test_valid_all_metrics_reference_mapping(self):
         collector = ValidationCollector()
         metrics = ["bleu", "bert_score"]
@@ -915,11 +969,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         }
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            [],
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, [], template_vars_data, variable_mapping, collector
         )
 
         collector.raise_if_errors()
@@ -933,11 +983,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         }
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            [],
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, [], template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -966,11 +1012,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         ]
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            metric_templates,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, metric_templates, template_vars_data, variable_mapping, collector
         )
 
         collector.raise_if_errors()
@@ -985,11 +1027,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         }
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            [],
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, [], template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1004,11 +1042,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         }
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            [],
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, [], template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1024,11 +1058,7 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
         }
 
         validate_variable_mapping_of_metrics(
-            metrics,
-            [],
-            template_vars_data,
-            variable_mapping,
-            collector,
+            metrics, [], template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1036,31 +1066,31 @@ class TestValidateVariableMappingOfMetrics(unittest.TestCase):
 
 
 class TestValidateVariableMappingOfPrompts(unittest.TestCase):
-
     def test_valid_variable_mapping(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "This is a prompt with {{?var1}} and {{?var2}}.", "role": "user"}
-                    ]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"var1": "value1", "var2": "value2"}]
-        variable_mapping = {
-            "prompt/var1": "data/var1",
-            "prompt/var2": "data/var2",
-        }
+        variable_mapping = {"prompt/var1": "data/var1", "prompt/var2": "data/var2"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         collector.raise_if_errors()
@@ -1068,24 +1098,28 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_missing_variable_in_mapping_and_dataset(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "This is a prompt with {{?var1}} and {{?var2}}.", "role": "user"}
-                    ]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"var1": "value1"}]
         variable_mapping = {"prompt/var1": "data/var1"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1094,21 +1128,25 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_system_defined_variable_in_prompt(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "This is a prompt with {{?prompt}}", "role": "user"}
-                    ]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?prompt}}",
+                                    "role": "user",
+                                }
+                            ]
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            [{"var1": "value1"}],
-            {},
-            collector,
+            orchestration_config_data, [{"var1": "value1"}], {}, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1117,24 +1155,28 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_variable_in_dataset_but_not_in_mapping(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "This is a prompt with {{?var1}} and {{?var2}}.", "role": "user"}
-                    ]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"var1": "value1", "var2": "value2"}]
         variable_mapping = {"prompt/var1": "data/var1"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         collector.raise_if_errors()
@@ -1142,27 +1184,28 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_variable_in_mapping_but_not_in_dataset(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "This is a prompt with {{?var1}} and {{?var2}}.", "role": "user"}
-                    ]
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "This is a prompt with {{?var1}} and {{?var2}}.",
+                                    "role": "user",
+                                }
+                            ]
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"var1": "value1"}]
-        variable_mapping = {
-            "prompt/var1": "data/var1",
-            "prompt/var2": "data/var2",
-        }
+        variable_mapping = {"prompt/var1": "data/var1", "prompt/var2": "data/var2"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
@@ -1171,25 +1214,29 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_variable_with_defaults_skipped_validation(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "Write about {{?topic}} in {{?sentiment}} way", "role": "user"}
-                    ],
-                    "defaults": {"topic": "apple"},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "Write about {{?topic}} in {{?sentiment}} way",
+                                    "role": "user",
+                                }
+                            ],
+                            "defaults": {"topic": "apple"},
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"sentiment": "positive"}]
         variable_mapping = {"prompt/sentiment": "data/sentiment"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         collector.raise_if_errors()
@@ -1197,35 +1244,36 @@ class TestValidateVariableMappingOfPrompts(unittest.TestCase):
     def test_variable_without_defaults_requires_validation(self):
         collector = ValidationCollector()
 
-        orchestration_config_data = [{
-            "modules": {"prompt_templating": {
-                "prompt": {
-                    "template": [
-                        {"content": "Write about {{?topic}} in {{?sentiment}} way", "role": "user"}
-                    ],
-                    "defaults": {"topic": "apple"},
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {
+                        "prompt": {
+                            "template": [
+                                {
+                                    "content": "Write about {{?topic}} in {{?sentiment}} way",
+                                    "role": "user",
+                                }
+                            ],
+                            "defaults": {"topic": "apple"},
+                        }
+                    }
                 }
-            }}
-        }]
+            }
+        ]
 
         template_vars_data = [{"topic": "banana"}]
         variable_mapping = {"prompt/topic": "data/topic"}
 
         validate_variable_mapping_of_prompts(
-            orchestration_config_data,
-            template_vars_data,
-            variable_mapping,
-            collector,
+            orchestration_config_data, template_vars_data, variable_mapping, collector
         )
 
         with self.assertRaises(RuntimeError):
             collector.raise_if_errors()
 
 
-
-
 class TestValidateIfGroundingInputPresentInPromptVariables(unittest.TestCase):
-
     def test_missing_modules_key(self):
         orch_config = {}
         collector = ValidationCollector()
@@ -1271,12 +1319,12 @@ class TestValidateIfGroundingInputPresentInPromptVariables(unittest.TestCase):
             "modules": {
                 "prompt_templating": {
                     "prompt": {
-                        "template": [{"content": "Test {{?var1}} and {{?var2}}", "role": "user"}]
+                        "template": [
+                            {"content": "Test {{?var1}} and {{?var2}}", "role": "user"}
+                        ]
                     }
                 },
-                "grounding": {
-                    "config": {"placeholders": {"input": ["var1", "var2"]}}
-                },
+                "grounding": {"config": {"placeholders": {"input": ["var1", "var2"]}}},
             }
         }
 
@@ -1296,9 +1344,7 @@ class TestValidateIfGroundingInputPresentInPromptVariables(unittest.TestCase):
                         "template": [{"content": "Test {{?var1}}", "role": "user"}]
                     }
                 },
-                "grounding": {
-                    "config": {"placeholders": {"input": ["var1", "var2"]}}
-                },
+                "grounding": {"config": {"placeholders": {"input": ["var1", "var2"]}}},
             }
         }
 
@@ -1314,17 +1360,15 @@ class TestValidateIfGroundingInputPresentInPromptVariables(unittest.TestCase):
         self.assertIn("var2", errors[0][1])
 
 
-
 class TestValidateFilteredModels(unittest.TestCase):
-
     def setUp(self):
-        self.valid_run_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "4.0"}
+        self.valid_run_data = [
+            {
+                "modules": {
+                    "prompt_templating": {"model": {"name": "gpt-4", "version": "4.0"}}
                 }
             }
-        }]
+        ]
 
     def test_allow_filter_allows_valid_model(self):
         param1 = MagicMock()
@@ -1411,9 +1455,7 @@ class TestValidateFilteredModels(unittest.TestCase):
         )
 
     def test_is_model_version_allowed_false(self):
-        self.assertFalse(
-            _is_model_version_allowed("gpt-4", "3.5", {"gpt-4": ["4.0"]})
-        )
+        self.assertFalse(_is_model_version_allowed("gpt-4", "3.5", {"gpt-4": ["4.0"]}))
 
     def test_is_model_version_denied_true(self):
         self.assertTrue(
@@ -1421,14 +1463,10 @@ class TestValidateFilteredModels(unittest.TestCase):
         )
 
     def test_is_model_version_denied_false(self):
-        self.assertFalse(
-            _is_model_version_denied("gpt-4", "3.5", {"gpt-4": ["4.0"]})
-        )
-
+        self.assertFalse(_is_model_version_denied("gpt-4", "3.5", {"gpt-4": ["4.0"]}))
 
 
 class TestFetchAndValidateOrchConfig(unittest.TestCase):
-
     @patch("gen_ai_hub.evaluations.utils.validation_utils.fetch_configuration_by_id")
     def test_fetch_and_validate_valid_allowlist(self, mock_fetch):
         mock_config_response = MagicMock()
@@ -1444,13 +1482,13 @@ class TestFetchAndValidateOrchConfig(unittest.TestCase):
         mock_config_response.parameter_bindings = [param1, param2]
         mock_fetch.return_value = mock_config_response
 
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "4.0"}
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {"model": {"name": "gpt-4", "version": "4.0"}}
                 }
             }
-        }]
+        ]
 
         collector = ValidationCollector()
 
@@ -1475,13 +1513,13 @@ class TestFetchAndValidateOrchConfig(unittest.TestCase):
         mock_config_response.parameter_bindings = [param1, param2]
         mock_fetch.return_value = mock_config_response
 
-        orchestration_config_data = [{
-            "modules": {
-                "prompt_templating": {
-                    "model": {"name": "gpt-4", "version": "4.0"}
+        orchestration_config_data = [
+            {
+                "modules": {
+                    "prompt_templating": {"model": {"name": "gpt-4", "version": "4.0"}}
                 }
             }
-        }]
+        ]
 
         collector = ValidationCollector()
 
@@ -1493,9 +1531,7 @@ class TestFetchAndValidateOrchConfig(unittest.TestCase):
             collector.raise_if_errors()
 
 
-
 class TestValidateVariableMappingWithInputConfig(unittest.TestCase):
-
     def setUp(self):
         self.orchestration_config_data = [
             {"modules": {"prompt_templating": {"model": {"name": "gpt-4"}}}}
@@ -1505,12 +1541,14 @@ class TestValidateVariableMappingWithInputConfig(unittest.TestCase):
         self.metrics = ["some.metric"]
         self.collector = ValidationCollector()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_metrics")
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_prompts")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_metrics"
+    )
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_prompts"
+    )
     def test_calls_all_validation_subfunctions(
-        self,
-        mock_validate_prompts,
-        mock_validate_metrics,
+        self, mock_validate_prompts, mock_validate_metrics
     ):
         validate_variable_mapping_with_input_config(
             self.orchestration_config_data,
@@ -1524,7 +1562,9 @@ class TestValidateVariableMappingWithInputConfig(unittest.TestCase):
         mock_validate_prompts.assert_called_once()
         mock_validate_metrics.assert_called_once()
 
-    @patch("gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_prompts")
+    @patch(
+        "gen_ai_hub.evaluations.utils.validation_utils.validate_variable_mapping_of_prompts"
+    )
     def test_raises_if_any_child_fails(self, mock_validate_prompts):
         mock_validate_prompts.side_effect = RuntimeError("Prompt validation failed")
 

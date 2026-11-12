@@ -12,12 +12,13 @@ class ExecutableQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Executable], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
     @staticmethod
     def from_dict(response_dict: Dict[str, Any]):
-        """Returns a :class:`ai_api_client_sdk.models.executable_query_response.ExecutableQueryResponse` object, created 
+        """Returns a :class:`ai_api_client_sdk.models.executable_query_response.ExecutableQueryResponse` object, created
         from the values in the dict provided as parameter
 
         :param response_dict: Dict which includes the necessary values to create the object
@@ -25,5 +26,7 @@ class ExecutableQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.executable_query_response.ExecutableQueryResponse`
         """
-        response_dict['resources'] = [Executable.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Executable.from_dict(r) for r in response_dict["resources"]
+        ]
         return ExecutableQueryResponse(**response_dict)

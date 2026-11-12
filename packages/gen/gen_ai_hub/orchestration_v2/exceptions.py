@@ -16,14 +16,14 @@ class OrchestrationError(Exception):
     """
 
     def __init__(
-            self,
-            request_id: str,
-            headers: httpx.Headers,
-            message: str,
-            code: int,
-            location: str,
-            intermediate_results: ModuleResults | dict,
-            retries: int = 0,
+        self,
+        request_id: str,
+        headers: httpx.Headers,
+        message: str,
+        code: int,
+        location: str,
+        intermediate_results: ModuleResults | dict,
+        retries: int = 0,
     ):
         """Initializes the OrchestrationError with detailed context.
 
@@ -53,6 +53,7 @@ class OrchestrationError(Exception):
         self.intermediate_results = intermediate_results
         self.retries = retries
         super().__init__(message)
+
 
 class OrchestrationErrorList(Exception):
     def __init__(self, errors: list[OrchestrationError]):

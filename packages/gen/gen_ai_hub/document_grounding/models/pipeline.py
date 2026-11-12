@@ -12,6 +12,7 @@ Model categories:
 
 All models use Pydantic for validation and serialization.
 """
+
 from typing import List, Optional, Union, Annotated, Literal
 from pydantic import BaseModel, Field
 from datetime import datetime
@@ -19,82 +20,102 @@ from enum import Enum
 
 # --- Models for Pipeline API ---
 
+
 class MetaData(BaseModel):
     destination: str
+
 
 class SharePointSite(BaseModel):
     name: str
     includePaths: Optional[List[str]] = None
 
+
 class SharePointConfig(BaseModel):
     site: SharePointSite
+
 
 class MSSharePointConfiguration(BaseModel):
     destination: str
     sharePoint: SharePointConfig
 
+
 class CommonConfiguration(BaseModel):
     destination: str
+
 
 class MSSharePointPipelineCreateRequest(BaseModel):
     type: Literal["MSSharePoint"] = "MSSharePoint"
     configuration: MSSharePointConfiguration
     metadata: Optional[MetaData] = None
 
+
 class S3PipelineCreateRequest(BaseModel):
     type: Literal["S3"] = "S3"
     configuration: CommonConfiguration
     metadata: Optional[MetaData] = None
+
 
 class SFTPPipelineCreateRequest(BaseModel):
     type: Literal["SFTP"] = "SFTP"
     configuration: CommonConfiguration
     metadata: Optional[MetaData] = None
 
+
 CreatePipelineRequest = Union[
     MSSharePointPipelineCreateRequest,
     S3PipelineCreateRequest,
-    SFTPPipelineCreateRequest
+    SFTPPipelineCreateRequest,
 ]
+
 
 class PipelineIdResponse(BaseModel):
     pipelineId: str
+
 
 class BasePipelineResponse(BaseModel):
     id: str
     type: str
     metadata: Optional[MetaData] = None
 
+
 class MSSharePointConfigurationGetResponse(BaseModel):
     destination: str
     sharePoint: SharePointConfig
+
 
 class MSSharePointPipelineGetResponse(BasePipelineResponse):
     type: Literal["MSSharePoint"] = "MSSharePoint"
     configuration: MSSharePointConfigurationGetResponse
 
+
 class S3PipelineGetResponse(BasePipelineResponse):
     type: Literal["S3"] = "S3"
     configuration: CommonConfiguration
+
 
 class SFTPPipelineGetResponse(BasePipelineResponse):
     type: Literal["SFTP"] = "SFTP"
     configuration: CommonConfiguration
 
+
 GetPipelineResponse = Annotated[
     MSSharePointPipelineGetResponse | S3PipelineGetResponse | SFTPPipelineGetResponse,
-    Field(discriminator="type")
+    Field(discriminator="type"),
 ]
+
 
 class GetPipelinesResponse(BaseModel):
     count: Optional[int]
     resources: List[GetPipelineResponse]
 
+
 class GetPipelineStatusResponse(BaseModel):
     lastStarted: Optional[str]
     status: Optional[str]
 
+
 # --- Search ---
+
 
 class DataRepositoryMetadataItem(BaseModel):
     key: str
@@ -116,6 +137,7 @@ class SearchPipelinesResponse(BaseModel):
 
 # --- Executions (Pipeline Runs) ---
 
+
 class PipelineExecutionStatus(str, Enum):
     NEW = "NEW"
     UNKNOWN = "UNKNOWN"
@@ -123,6 +145,7 @@ class PipelineExecutionStatus(str, Enum):
     FINISHED = "FINISHED"
     FINISHED_WITH_ERRORS = "FINISHEDWITHERRORS"
     TIMEOUT = "TIMEOUT"
+
 
 class PipelineExecution(BaseModel):
     id: str
@@ -138,6 +161,7 @@ class GetPipelineExecutionsResponse(BaseModel):
 
 # --- Documents ---
 
+
 class DocumentStatus(str, Enum):
     TO_BE_PROCESSED = "TO_BE_PROCESSED"
     INDEXED = "INDEXED"
@@ -146,6 +170,7 @@ class DocumentStatus(str, Enum):
     FAILED = "FAILED"
     FAILED_TO_BE_RETRIED = "FAILED_TO_BE_RETRIED"
     TO_BE_SCHEDULED = "TO_BE_SCHEDULED"
+
 
 class Document(BaseModel):
     id: str
@@ -165,6 +190,7 @@ class DocumentsStatusResponse(BaseModel):
 
 
 # --- Trigger ---
+
 
 class ManualPipelineTrigger(BaseModel):
     pipelineId: str

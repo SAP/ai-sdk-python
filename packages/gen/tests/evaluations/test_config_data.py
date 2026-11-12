@@ -3,7 +3,10 @@ from unittest.mock import MagicMock
 
 from gen_ai_hub.evaluations.models.evaluation_config import EvaluationConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateSpec, PromptTemplate
+from gen_ai_hub.prompt_registry.models.prompt_template import (
+    PromptTemplateSpec,
+    PromptTemplate,
+)
 from gen_ai_hub.evaluations.models.dataset_config import Dataset
 from gen_ai_hub.evaluations.models.metric_config import MetricConfig, MetricRef
 from gen_ai_hub.evaluations._internal._models import _EvaluationConfigData
@@ -27,7 +30,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"model": "gpt-3.5"}],
@@ -39,8 +42,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         # Create evaluation configs (all with llm, no orchestration_registry_reference)
@@ -51,7 +54,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 llm=LLM(name="gpt-3.5", version="1.0"),
@@ -59,8 +62,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
 
         accumulated, single_exec, reusable = build_accumulated_config(
@@ -86,7 +89,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"model": "gpt-3.5"}],
@@ -98,8 +101,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         eval_configs = [
@@ -109,7 +112,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test1.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 llm=LLM(name="gpt-3.5", version="1.0"),
@@ -117,8 +120,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test2.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
 
         accumulated, single_exec, reusable = build_accumulated_config(
@@ -144,7 +147,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"registry": "some-uuid"}],
@@ -156,8 +159,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         # Mixed configs: one with llm, one with orchestration_registry_reference
@@ -168,17 +171,18 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 orchestration_registry_reference="some-uuid",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
 
         accumulated, single_exec, reusable = build_accumulated_config(
-            eval_config_data, has_mixed_config_types=True  # Mixed: llm + registry
+            eval_config_data,
+            has_mixed_config_types=True,  # Mixed: llm + registry
         )
 
         # Should NOT use single execution flow due to mixed types
@@ -201,7 +205,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"registry": "uuid2"}],
@@ -213,8 +217,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         # All configs with orchestration_registry_reference
@@ -222,13 +226,13 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
             EvaluationConfig(
                 orchestration_registry_reference="uuid1",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 orchestration_registry_reference="uuid2",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
 
         accumulated, single_exec, reusable = build_accumulated_config(
@@ -253,7 +257,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"model": "gpt-3.5"}],
@@ -265,8 +269,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         eval_configs = [
@@ -276,7 +280,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 llm=LLM(name="gpt-3.5", version="1.0"),
@@ -284,8 +288,8 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric2"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric2"))],
+            ),
         ]
 
         accumulated, single_exec, reusable = build_accumulated_config(
@@ -311,7 +315,7 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
+                debug_mode=False,
             ),
             _EvaluationConfigData(
                 orch_config_data=[{"model": "gpt-3.5"}],
@@ -323,14 +327,12 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
                 tags={},
                 test_row_count=10,
                 repetitions=1,
-                debug_mode=False
-            )
+                debug_mode=False,
+            ),
         ]
 
         # Call without evaluation_configs
-        accumulated, single_exec, reusable = build_accumulated_config(
-            eval_config_data
-        )
+        accumulated, single_exec, reusable = build_accumulated_config(eval_config_data)
 
         # Should still work and use single execution (no mixed type detection)
         self.assertTrue(single_exec)
@@ -338,5 +340,5 @@ class TestBuildAccumulatedConfig(unittest.TestCase):
         self.assertIsInstance(accumulated, _EvaluationConfigData)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

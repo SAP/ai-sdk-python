@@ -54,17 +54,44 @@ class Deployment(Enactment):
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, id: str, deployment_url: str, configuration_id: str, configuration_name: str, scenario_id: str,
-                 status: Status, target_status: TargetStatus, created_at: datetime, modified_at: datetime,
-                 status_message: str = None, status_details: Dict[str, Any] = None, details: Dict[str, Any] = None,
-                 submission_time: datetime = None, start_time: datetime = None, completion_time: datetime = None,
-                 last_operation: Operation = None, latest_running_configuration_id: str = None, ttl: str = None,
-                 **kwargs):
-        super().__init__(id=id, configuration_id=configuration_id, configuration_name=configuration_name,
-                         scenario_id=scenario_id, status=status, target_status=target_status, created_at=created_at,
-                         modified_at=modified_at, status_message=status_message, status_details=status_details,
-                         submission_time=submission_time, start_time=start_time, completion_time=completion_time,
-                         **kwargs)
+    def __init__(
+        self,
+        id: str,
+        deployment_url: str,
+        configuration_id: str,
+        configuration_name: str,
+        scenario_id: str,
+        status: Status,
+        target_status: TargetStatus,
+        created_at: datetime,
+        modified_at: datetime,
+        status_message: str = None,
+        status_details: Dict[str, Any] = None,
+        details: Dict[str, Any] = None,
+        submission_time: datetime = None,
+        start_time: datetime = None,
+        completion_time: datetime = None,
+        last_operation: Operation = None,
+        latest_running_configuration_id: str = None,
+        ttl: str = None,
+        **kwargs,
+    ):
+        super().__init__(
+            id=id,
+            configuration_id=configuration_id,
+            configuration_name=configuration_name,
+            scenario_id=scenario_id,
+            status=status,
+            target_status=target_status,
+            created_at=created_at,
+            modified_at=modified_at,
+            status_message=status_message,
+            status_details=status_details,
+            submission_time=submission_time,
+            start_time=start_time,
+            completion_time=completion_time,
+            **kwargs,
+        )
         self.deployment_url: str = deployment_url
         self.last_operation: Operation = last_operation
         self.latest_running_configuration_id: str = latest_running_configuration_id
@@ -84,26 +111,36 @@ class Deployment(Enactment):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.deployment.Deployment`
         """
-        deployment_dict['status'] = Status(deployment_dict['status'])
-        deployment_dict['target_status'] = TargetStatus(deployment_dict['target_status'])
-        deployment_dict['created_at'] = parse_datetime(deployment_dict['created_at'])
-        deployment_dict['modified_at'] = parse_datetime(deployment_dict['modified_at'])
-        if deployment_dict.get('submission_time'):
-            deployment_dict['submission_time'] = parse_datetime(deployment_dict['submission_time'])
-        if deployment_dict.get('start_time'):
-            deployment_dict['start_time'] = parse_datetime(deployment_dict['start_time'])
-        if deployment_dict.get('completion_time'):
-            deployment_dict['completion_time'] = parse_datetime(deployment_dict['completion_time'])
-        if deployment_dict.get('last_operation'):
-            last_operation_str = deployment_dict.get('last_operation')
+        deployment_dict["status"] = Status(deployment_dict["status"])
+        deployment_dict["target_status"] = TargetStatus(
+            deployment_dict["target_status"]
+        )
+        deployment_dict["created_at"] = parse_datetime(deployment_dict["created_at"])
+        deployment_dict["modified_at"] = parse_datetime(deployment_dict["modified_at"])
+        if deployment_dict.get("submission_time"):
+            deployment_dict["submission_time"] = parse_datetime(
+                deployment_dict["submission_time"]
+            )
+        if deployment_dict.get("start_time"):
+            deployment_dict["start_time"] = parse_datetime(
+                deployment_dict["start_time"]
+            )
+        if deployment_dict.get("completion_time"):
+            deployment_dict["completion_time"] = parse_datetime(
+                deployment_dict["completion_time"]
+            )
+        if deployment_dict.get("last_operation"):
+            last_operation_str = deployment_dict.get("last_operation")
             try:
                 last_operation = Operation(last_operation_str)
             except ValueError as ve:
-                if 'not a valid Operation' in ve.args[0]:
-                    last_operation_name = humps.decamelize(last_operation_str).replace('-', '_')
+                if "not a valid Operation" in ve.args[0]:
+                    last_operation_name = humps.decamelize(last_operation_str).replace(
+                        "-", "_"
+                    )
                     extend_enum(Operation, last_operation_name, last_operation_str)
                     last_operation = Operation(last_operation_str)
                 else:
                     raise ve
-            deployment_dict['last_operation'] = last_operation
+            deployment_dict["last_operation"] = last_operation
         return Deployment(**deployment_dict)

@@ -2,8 +2,17 @@ from typing import List, Optional, Dict, Any
 from pydantic.config import ConfigDict
 
 from pydantic import BaseModel, Field, field_validator
-from gen_ai_hub.orchestration_v2 import (ResponseFormatText, ResponseFormatJsonObject, ResponseFormatJsonSchema,
-                                         FunctionTool, ImagePart, TextPart, ImageItem, ImageUrl, ContentPart)
+from gen_ai_hub.orchestration_v2 import (
+    ResponseFormatText,
+    ResponseFormatJsonObject,
+    ResponseFormatJsonSchema,
+    FunctionTool,
+    ImagePart,
+    TextPart,
+    ImageItem,
+    ImageUrl,
+    ContentPart,
+)
 
 
 class PromptTemplate(BaseModel):
@@ -18,7 +27,7 @@ class PromptTemplate(BaseModel):
 
     role: str
     """The role of the prompt template."""
-    content: str  | List[str| ContentPart| ImageItem]
+    content: str | List[str | ContentPart | ImageItem]
     """The content of the prompt template."""
 
     @field_validator("content", mode="before")
@@ -38,15 +47,20 @@ class PromptTemplate(BaseModel):
                 elif isinstance(item, str):
                     mapped_content.append(TextPart(text=item))
                 elif isinstance(item, ImageItem):
-                    mapped_content.append(ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail)))
+                    mapped_content.append(
+                        ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail))
+                    )
                 else:
-                    raise ValueError("Prompt template content list must contain only "
-                                     "str, ImageItem, TextPart, or ImagePart objects")
+                    raise ValueError(
+                        "Prompt template content list must contain only "
+                        "str, ImageItem, TextPart, or ImagePart objects"
+                    )
         else:
-            raise ValueError("Prompt template content must be a str or list of "
-                             "str, ImageItem, TextPart, or ImagePart objects")
+            raise ValueError(
+                "Prompt template content must be a str or list of "
+                "str, ImageItem, TextPart, or ImagePart objects"
+            )
         return mapped_content
-
 
 
 class PromptTemplateSpec(BaseModel):
@@ -65,9 +79,12 @@ class PromptTemplateSpec(BaseModel):
 
         additional_fields: Additional fields for the prompt template.
     """
+
     template: List[PromptTemplate]
     defaults: Optional[dict] = None
-    response_format: Optional[ResponseFormatText | ResponseFormatJsonObject | ResponseFormatJsonSchema] = None
+    response_format: Optional[
+        ResponseFormatText | ResponseFormatJsonObject | ResponseFormatJsonSchema
+    ] = None
     tools: Optional[List[dict | FunctionTool]] = None
     additional_fields: Optional[Dict[Any, Any]] = Field(default_factory=dict)
 
@@ -85,6 +102,7 @@ class PromptTemplatePostRequest(BaseModel):
 
         spec: The specification of the prompt template.
     """
+
     name: str
     """The name of the prompt template."""
     version: str
@@ -110,6 +128,7 @@ class PromptTemplatePostResponse(BaseModel):
 
         version: The version of the prompt template.
     """
+
     message: str
     """The message of the response."""
     id: str
@@ -143,6 +162,7 @@ class PromptTemplateGetResponse(BaseModel):
 
         spec: The specification of the prompt template.
     """
+
     id: str
     """The ID of the prompt template."""
     name: str
@@ -170,6 +190,7 @@ class PromptTemplateListResponse(BaseModel):
 
         resources: The list of PromptGetResponse objects.
     """
+
     count: int
     """The number of prompt templates."""
     resources: List[PromptTemplateGetResponse]
@@ -183,6 +204,7 @@ class PromptTemplateDeleteResponse(BaseModel):
     Args:
         message: The message of the response.
     """
+
     message: str
     """The message of the response."""
 
@@ -194,9 +216,12 @@ class PromptTemplateSubstitutionRequest(BaseModel):
     Args:
         input_params: User provided values to replace the placeholders of the prompt template.
     """
+
     model_config = ConfigDict(populate_by_name=True)
     """Pydantic configuration to allow population by field name."""
-    input_params: Optional[Dict[Any, Any]] = Field(default_factory=dict, alias='inputParams')
+    input_params: Optional[Dict[Any, Any]] = Field(
+        default_factory=dict, alias="inputParams"
+    )
     """User provided values to replace the placeholders of the prompt template."""
 
 
@@ -209,6 +234,7 @@ class PromptTemplateSubstitutionResponse(BaseModel):
 
         resource: List of TemplateGetResponse objects.
     """
+
     parsed_prompt: List[PromptTemplate]
     """The parsed prompt."""
     resource: Optional[PromptTemplateGetResponse] = None

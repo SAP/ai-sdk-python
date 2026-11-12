@@ -15,7 +15,14 @@ class AIAPIMeta:
     :type limits: class:`ai_api_client_sdk.models.ai_api_limits.AIAPILimits`, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, version: str, capabilities: AIAPICapabilities = None, limits: AIAPILimits = None, **kwargs):
+
+    def __init__(
+        self,
+        version: str,
+        capabilities: AIAPICapabilities = None,
+        limits: AIAPILimits = None,
+        **kwargs,
+    ):
         self.version: str = version
         self.capabilities: AIAPICapabilities = capabilities
         self.limits: AIAPILimits = limits
@@ -30,10 +37,14 @@ class AIAPIMeta:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.ai_api_meta.AIAPIMeta`
         """
-        if 'capabilities' in ai_api_meta_dict:
-            ai_api_meta_dict['capabilities'] = AIAPICapabilities.from_dict(ai_api_meta_dict['capabilities'])
-        if 'limits' in ai_api_meta_dict:
-            ai_api_meta_dict['limits'] = AIAPILimits.from_dict(ai_api_meta_dict['limits'])
+        if "capabilities" in ai_api_meta_dict:
+            ai_api_meta_dict["capabilities"] = AIAPICapabilities.from_dict(
+                ai_api_meta_dict["capabilities"]
+            )
+        if "limits" in ai_api_meta_dict:
+            ai_api_meta_dict["limits"] = AIAPILimits.from_dict(
+                ai_api_meta_dict["limits"]
+            )
         return AIAPIMeta(**ai_api_meta_dict)
 
     def __eq__(self, other):

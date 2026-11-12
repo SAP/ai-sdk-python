@@ -27,5 +27,7 @@ class ResourceGroupQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.docker_registry_secret_query_response.DockerRegistrySecretQueryResponse`
         """
-        response_dict['resources'] = [ResourceGroup.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            ResourceGroup.from_dict(r) for r in response_dict["resources"]
+        ]
         return ResourceGroupQueryResponse(**response_dict)

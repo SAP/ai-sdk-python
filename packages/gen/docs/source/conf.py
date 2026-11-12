@@ -12,15 +12,16 @@
 import importlib.metadata
 import pathlib
 import sys
+
 sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 
 # -- Project information -----------------------------------------------------
 
-project = 'SAP Cloud SDK for AI (Python) - generative'
-copyright = '2026, SAP SE'
-author = 'SAP SE'
+project = "SAP Cloud SDK for AI (Python) - generative"
+copyright = "2026, SAP SE"
+author = "SAP SE"
 
-release = importlib.metadata.version('sap-ai-sdk-gen')
+release = importlib.metadata.version("sap-ai-sdk-gen")
 
 
 # -- General configuration ---------------------------------------------------
@@ -28,17 +29,13 @@ release = importlib.metadata.version('sap-ai-sdk-gen')
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.duration',
-    'sphinx.ext.autodoc',
-    'myst_nb',
-]
+extensions = ["sphinx.ext.duration", "sphinx.ext.autodoc", "myst_nb"]
 
 nb_execution_mode = "off"
-nb_execution_allow_errors=True
+nb_execution_allow_errors = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -50,15 +47,15 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinxawesome_theme'
+html_theme = "sphinxawesome_theme"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-html_css_files = ['custom.css']
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
 
-# Disable (`--`) are being converted into em dashes (`—`). 
+# Disable (`--`) are being converted into em dashes (`—`).
 smartquotes = False
 
 html_title = "SAP Cloud SDK for AI (Python) - generative v" + release
@@ -80,13 +77,13 @@ autodoc_class_signature = "separated"
 add_module_names = False
 
 # Format typehints using 'short' notation (e.g., 'list' instead of 'typing.List')
-autodoc_typehints_format = 'short' 
+autodoc_typehints_format = "short"
 
 # group members by type (e.g. all methods together)
-autodoc_member_order = 'groupwise'  
+autodoc_member_order = "groupwise"
 
 # Don't show the module name before each documented member.
 add_module_names = False
 
 # Remove the given prefix from module names in the documentation.
-modindex_common_prefix = ['gen_ai_hub']
+modindex_common_prefix = ["gen_ai_hub"]

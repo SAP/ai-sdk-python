@@ -1,4 +1,3 @@
-
 class ModelBaseDataAllowedScenarios:
     """
     This class defines the allowed scenarios for the model base data.

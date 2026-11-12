@@ -26,6 +26,7 @@ class ImageDetailLevel(str, Enum):
 
         HIGH: The model uses a high-fidelity version of the image.
     """
+
     AUTO = "auto"
     LOW = "low"
     HIGH = "high"
@@ -42,6 +43,7 @@ class TextPart(BaseModel):
 
         cache_control: Optional cache control settings for prompt caching.
     """
+
     text: str
     type_: Literal["text"] = Field(default="text", alias="type")
     cache_control: Optional[CacheControl] = None
@@ -56,6 +58,7 @@ class ImageUrl(BaseModel):
 
         detail: The processing detail level for the image.
     """
+
     url: str
     detail: Optional[ImageDetailLevel] = None
 
@@ -71,6 +74,7 @@ class ImagePart(BaseModel):
 
         cache_control: Optional cache control settings for prompt caching.
     """
+
     image_url: ImageUrl
     type_: Literal["image_url"] = Field(default="image_url", alias="type")
     cache_control: Optional[CacheControl] = None
@@ -85,6 +89,7 @@ class FileContent(BaseModel):
 
         filename: The name of the file.
     """
+
     file_data: str
     filename: Optional[str] = None
 
@@ -100,6 +105,7 @@ class FilePart(BaseModel):
 
         cache_control: Optional cache control settings for prompt caching.
     """
+
     file: FileContent
     type_: Literal["file"] = Field(default="file", alias="type")
     cache_control: Optional[CacheControl] = None
@@ -133,9 +139,9 @@ class ImageItem(BaseModel):
 
     @staticmethod
     def from_file(
-            file_path: str,
-            mime_type: Optional[str] = None,
-            detail: Optional[ImageDetailLevel] = None,
+        file_path: str,
+        mime_type: Optional[str] = None,
+        detail: Optional[ImageDetailLevel] = None,
     ) -> "ImageItem":
         """Create an ImageItem from a local image file.
 
@@ -164,22 +170,24 @@ class ImageItem(BaseModel):
         return ImageItem(url=data_url, detail=detail)
 
     def model_dump(  # pylint: disable=arguments-differ
-            self,
-            *,
-            mode: Literal['json', 'python'] | str = 'python',
-            include: IncEx | None = None,
-            exclude: IncEx | None = None,
-            context: Any | None = None,
-            by_alias: bool = True,
-            exclude_unset: bool = False,
-            exclude_defaults: bool = False,
-            exclude_none: bool = False,
-            round_trip: bool = False,
-            warnings: bool | Literal['none', 'warn', 'error'] = True,
-            fallback: Callable[[Any], Any] | None = None,
-            serialize_as_any: bool = False,
+        self,
+        *,
+        mode: Literal["json", "python"] | str = "python",
+        include: IncEx | None = None,
+        exclude: IncEx | None = None,
+        context: Any | None = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        round_trip: bool = False,
+        warnings: bool | Literal["none", "warn", "error"] = True,
+        fallback: Callable[[Any], Any] | None = None,
+        serialize_as_any: bool = False,
     ) -> dict[str, Any]:
-        return ImagePart(image_url=ImageUrl(url=self.url, detail=self.detail)).model_dump(
+        return ImagePart(
+            image_url=ImageUrl(url=self.url, detail=self.detail)
+        ).model_dump(
             mode=mode,
             include=include,
             exclude=exclude,
@@ -211,9 +219,7 @@ class FileItem(BaseModel):
 
     @staticmethod
     def from_file(
-            file_path: str,
-            mime_type: Optional[str] = None,
-            filename: Optional[str] = None,
+        file_path: str, mime_type: Optional[str] = None, filename: Optional[str] = None
     ) -> "FileItem":
         """Create a FileItem from a local file.
 
@@ -242,22 +248,24 @@ class FileItem(BaseModel):
         return FileItem(file_data=data_url, filename=filename)
 
     def model_dump(  # pylint: disable=arguments-differ
-            self,
-            *,
-            mode: Literal['json', 'python'] | str = 'python',
-            include: IncEx | None = None,
-            exclude: IncEx | None = None,
-            context: Any | None = None,
-            by_alias: bool = True,
-            exclude_unset: bool = False,
-            exclude_defaults: bool = False,
-            exclude_none: bool = False,
-            round_trip: bool = False,
-            warnings: bool | Literal['none', 'warn', 'error'] = True,
-            fallback: Callable[[Any], Any] | None = None,
-            serialize_as_any: bool = False,
+        self,
+        *,
+        mode: Literal["json", "python"] | str = "python",
+        include: IncEx | None = None,
+        exclude: IncEx | None = None,
+        context: Any | None = None,
+        by_alias: bool = True,
+        exclude_unset: bool = False,
+        exclude_defaults: bool = False,
+        exclude_none: bool = False,
+        round_trip: bool = False,
+        warnings: bool | Literal["none", "warn", "error"] = True,
+        fallback: Callable[[Any], Any] | None = None,
+        serialize_as_any: bool = False,
     ) -> dict[str, Any]:
-        return FilePart(file=FileContent(file_data=self.file_data, filename=self.filename)).model_dump(
+        return FilePart(
+            file=FileContent(file_data=self.file_data, filename=self.filename)
+        ).model_dump(
             mode=mode,
             include=include,
             exclude=exclude,
@@ -272,5 +280,15 @@ class FileItem(BaseModel):
             serialize_as_any=serialize_as_any,
         )
 
-__all__ = ["ImageDetailLevel", "TextPart", "ImageUrl", "ImagePart", "ContentPart", "ImageItem",
-           "FileContent", "FilePart", "FileItem"]
+
+__all__ = [
+    "ImageDetailLevel",
+    "TextPart",
+    "ImageUrl",
+    "ImagePart",
+    "ContentPart",
+    "ImageItem",
+    "FileContent",
+    "FilePart",
+    "FileItem",
+]

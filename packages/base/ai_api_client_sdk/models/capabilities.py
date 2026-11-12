@@ -19,8 +19,16 @@ class Capabilities:
     :type extensions: class:`ai_api_client_sdk.models.extensions.Extensions`, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, ai_api: AIAPIMeta, runtime_identifier: str = None, runtime_api_version: str = None,
-                 description: str = None, extensions: Extensions = None, **kwargs):
+
+    def __init__(
+        self,
+        ai_api: AIAPIMeta,
+        runtime_identifier: str = None,
+        runtime_api_version: str = None,
+        description: str = None,
+        extensions: Extensions = None,
+        **kwargs,
+    ):
         self.ai_api: AIAPIMeta = ai_api
         self.runtime_identifier: str = runtime_identifier
         self.runtime_api_version: str = runtime_api_version
@@ -37,9 +45,11 @@ class Capabilities:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.capabilities.Capabilities`
         """
-        capabilities_dict['ai_api'] = AIAPIMeta.from_dict(capabilities_dict['ai_api'])
-        if 'extensions' in capabilities_dict:
-            capabilities_dict['extensions'] = Extensions.from_dict(capabilities_dict['extensions'])
+        capabilities_dict["ai_api"] = AIAPIMeta.from_dict(capabilities_dict["ai_api"])
+        if "extensions" in capabilities_dict:
+            capabilities_dict["extensions"] = Extensions.from_dict(
+                capabilities_dict["extensions"]
+            )
         return Capabilities(**capabilities_dict)
 
     def __str__(self):

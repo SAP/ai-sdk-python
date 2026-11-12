@@ -23,10 +23,17 @@ from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.orchestration.models.base import JSONSerializable
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.message import Message
-from gen_ai_hub.orchestration.models.response import OrchestrationResponse, OrchestrationResponseStreaming, \
-    OrchestrationResponseWithRetries
+from gen_ai_hub.orchestration.models.response import (
+    OrchestrationResponse,
+    OrchestrationResponseStreaming,
+    OrchestrationResponseWithRetries,
+)
 from gen_ai_hub.orchestration.models.template import TemplateValue
-from gen_ai_hub.orchestration.sse_client import SSEClient, AsyncSSEClient, _handle_http_error
+from gen_ai_hub.orchestration.sse_client import (
+    SSEClient,
+    AsyncSSEClient,
+    _handle_http_error,
+)
 from gen_ai_hub.proxy import get_proxy_client
 
 COMPLETION_SUFFIX = "/completion"
@@ -38,6 +45,7 @@ class OrchestrationRequest(JSONSerializable):
     Represents a request for the orchestration process, including configuration,
     template values, and message history.
     """
+
     config: OrchestrationConfig
     """The orchestration configuration for the request.
 
@@ -57,7 +65,9 @@ class OrchestrationRequest(JSONSerializable):
         """
         return {
             "orchestration_config": self.config.to_dict(),
-            "input_params": {value.name: str(value.value) for value in self.template_values},
+            "input_params": {
+                value.name: str(value.value) for value in self.template_values
+            },
             "messages_history": [message.to_dict() for message in self.history],
         }
 
@@ -96,15 +106,17 @@ def cache_if_not_none(func):
 
 # pylint: disable=too-many-arguments,too-many-positional-arguments
 @cache_if_not_none
-def discover_orchestration_api_url(base_url: str,
-                                   auth_url: str,
-                                   client_id: str,
-                                   client_secret: str,
-                                   resource_group: str,
-                                   config_id: Optional[str] = None,
-                                   config_name: Optional[str] = None,
-                                   orchestration_scenario: str = "orchestration",
-                                   executable_id: str = "orchestration") -> Optional[str]:
+def discover_orchestration_api_url(
+    base_url: str,
+    auth_url: str,
+    client_id: str,
+    client_secret: str,
+    resource_group: str,
+    config_id: Optional[str] = None,
+    config_name: Optional[str] = None,
+    orchestration_scenario: str = "orchestration",
+    executable_id: str = "orchestration",
+) -> Optional[str]:
     """Discovers the orchestration API URL based on provided configuration details.
 
     :param base_url: the base URL for the AI Core API.
@@ -133,15 +145,17 @@ def discover_orchestration_api_url(base_url: str,
         auth_url=auth_url,
         client_id=client_id,
         client_secret=client_secret,
-        resource_group=resource_group
+        resource_group=resource_group,
     )
     deployments = proxy_client.ai_core_client.deployment.query(
         scenario_id=orchestration_scenario,
         executable_ids=[executable_id],
-        status=Status.RUNNING
+        status=Status.RUNNING,
     )
     if deployments.count > 0:
-        sorted_deployments = sorted(deployments.resources, key=lambda x: x.start_time)[::-1]
+        sorted_deployments = sorted(deployments.resources, key=lambda x: x.start_time)[
+            ::-1
+        ]
         check_for = {}
         if config_name:
             check_for["configuration_name"] = config_name
@@ -150,15 +164,19 @@ def discover_orchestration_api_url(base_url: str,
         if not check_for:
             return sorted_deployments[0].deployment_url
         for deployment in sorted_deployments:
-            if all(getattr(deployment, key) == value for key, value in check_for.items()):
+            if all(
+                getattr(deployment, key) == value for key, value in check_for.items()
+            ):
                 return deployment.deployment_url
     return None
 
 
-def get_orchestration_api_url(proxy_client: GenAIHubProxyClient,
-                              deployment_id: Optional[str] = None,
-                              config_name: Optional[str] = None,
-                              config_id: Optional[str] = None) -> str:
+def get_orchestration_api_url(
+    proxy_client: GenAIHubProxyClient,
+    deployment_id: Optional[str] = None,
+    config_name: Optional[str] = None,
+    config_id: Optional[str] = None,
+) -> str:
     """Retrieves the orchestration API URL based on provided deployment or configuration details.
 
     :param proxy_client: The GenAIHubProxyClient instance.
@@ -177,32 +195,34 @@ def get_orchestration_api_url(proxy_client: GenAIHubProxyClient,
     if deployment_id:
         return f"{proxy_client.ai_core_client.base_url.rstrip('/')}/inference/deployments/{deployment_id}"
     url = discover_orchestration_api_url(
-        **proxy_client.model_dump(exclude='ai_core_client'),
+        **proxy_client.model_dump(exclude="ai_core_client"),
         config_name=config_name,
-        config_id=config_id
+        config_id=config_id,
     )
     if url is None:
-        raise ValueError('No Orchestration deployment found!')
+        raise ValueError("No Orchestration deployment found!")
     return url
 
 
 class OrchestrationService:
-    """A service for executing orchestration requests, allowing for the generation of 
+    """A service for executing orchestration requests, allowing for the generation of
     LLM-generated content through a pipeline of configured modules. This service supports both synchronous and
-    asynchronous request execution. For streaming responses, special care is taken to not close the underlying 
+    asynchronous request execution. For streaming responses, special care is taken to not close the underlying
     HTTP stream prematurely.
 
     https://api.sap.com/api/ORCHESTRATION_API/overview
     """
 
-    def __init__(self,
-                 api_url: Optional[str] = None,
-                 config: Optional[OrchestrationConfig] = None,
-                 proxy_client: Optional[GenAIHubProxyClient] = None,
-                 deployment_id: Optional[str] = None,
-                 config_name: Optional[str] = None,
-                 config_id: Optional[str] = None,
-                 timeout: Union[int, float, httpx.Timeout, None] = None):
+    def __init__(
+        self,
+        api_url: Optional[str] = None,
+        config: Optional[OrchestrationConfig] = None,
+        proxy_client: Optional[GenAIHubProxyClient] = None,
+        deployment_id: Optional[str] = None,
+        config_name: Optional[str] = None,
+        config_id: Optional[str] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
+    ):
         """Initializes the OrchestrationService with the provided parameters.
 
         :param api_url: The base URL for the orchestration API, defaults to None
@@ -220,11 +240,13 @@ class OrchestrationService:
         :param timeout: the timeout for HTTP requests, defaults to None
         :type timeout: Union[int, float, httpx.Timeout, None], optional
         """
-        self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")    
+        self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
         if api_url:
             self.api_url = api_url
         else:
-            self.api_url = get_orchestration_api_url(self.proxy_client, deployment_id, config_name, config_id)
+            self.api_url = get_orchestration_api_url(
+                self.proxy_client, deployment_id, config_name, config_id
+            )
         self.config = config
         self.timeout = timeout
         # create reusable httpx client to improve performance
@@ -264,8 +286,11 @@ class OrchestrationService:
         :return: Number of seconds to wait before retrying, or None if not specified.
         :rtype: Optional[float]
         """
-        if isinstance(error, httpx.HTTPStatusError) and error.response.status_code == 429:
-            retry_after = error.response.headers.get('Retry-After')
+        if (
+            isinstance(error, httpx.HTTPStatusError)
+            and error.response.status_code == 429
+        ):
+            retry_after = error.response.headers.get("Retry-After")
             if retry_after:
                 try:
                     # Retry-After can be in seconds (integer) or HTTP date format
@@ -275,8 +300,13 @@ class OrchestrationService:
                     return None
         return None
 
-    def _calculate_backoff(self, retry_count: int, base_delay: float = 1.0, max_delay: float = 60.0,
-                           min_delay: float = 0.0) -> float:
+    def _calculate_backoff(
+        self,
+        retry_count: int,
+        base_delay: float = 1.0,
+        max_delay: float = 60.0,
+        min_delay: float = 0.0,
+    ) -> float:
         """Calculates exponential backoff delay with jitter.
 
         :param retry_count: The current retry attempt number.
@@ -291,7 +321,7 @@ class OrchestrationService:
         :rtype: float
         """
         # Calculate exponential delay: base_delay * 2^retry_count
-        exp_delay = base_delay * (2 ** retry_count)
+        exp_delay = base_delay * (2**retry_count)
 
         # Cap at max_delay
         capped = min(exp_delay, max_delay)
@@ -305,13 +335,13 @@ class OrchestrationService:
         return random.uniform(lower, capped)
 
     def _execute_request(
-            self,
-            config: OrchestrationConfig,
-            template_values: List[TemplateValue],
-            history: List[Message],
-            stream: bool,
-            stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: OrchestrationConfig,
+        template_values: List[TemplateValue],
+        history: List[Message],
+        stream: bool,
+        stream_options: Optional[dict] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> Union[OrchestrationResponse, Iterable[OrchestrationResponseStreaming]]:
         """Executes an orchestration request synchronously.
         For streaming requests, this method creates a single HTTP stream. It manually enters the stream's
@@ -339,7 +369,9 @@ class OrchestrationService:
         :rtype: Iterator[Union[OrchestrationResponse, Iterable[OrchestrationResponseStreaming]]]
         """
         if config is None:
-            raise ValueError("A configuration is required to invoke the orchestration service.")
+            raise ValueError(
+                "A configuration is required to invoke the orchestration service."
+            )
         config_copy = deepcopy(config)
         config_copy._stream = stream
         if stream_options:
@@ -357,7 +389,7 @@ class OrchestrationService:
                 self.api_url + COMPLETION_SUFFIX,
                 headers=self.proxy_client.request_header,
                 json=request_obj.to_dict(),
-                timeout=self._determine_timeout(timeout)
+                timeout=self._determine_timeout(timeout),
             )
             return SSEClient(response_cm, prefix="data: ", final_message="[DONE]")
 
@@ -365,7 +397,7 @@ class OrchestrationService:
             self.api_url + COMPLETION_SUFFIX,
             headers=self.proxy_client.request_header,
             json=request_obj.to_dict(),
-            timeout=self._determine_timeout(timeout)
+            timeout=self._determine_timeout(timeout),
         )
         try:
             response.raise_for_status()
@@ -380,13 +412,13 @@ class OrchestrationService:
         )
 
     async def _a_execute_request(
-            self,
-            config: OrchestrationConfig,
-            template_values: List[TemplateValue],
-            history: List[Message],
-            stream: bool,
-            stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: OrchestrationConfig,
+        template_values: List[TemplateValue],
+        history: List[Message],
+        stream: bool,
+        stream_options: Optional[dict] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> Union[OrchestrationResponse, AsyncSSEClient]:
         """Executes an orchestration request asynchronously.
 
@@ -404,12 +436,14 @@ class OrchestrationService:
         :type timeout: Union[int, float, httpx.Timeout, None], optional
         :raises ValueError: If no configuration is provided.
         :raises OrchestrationError: If the HTTP request fails.
-        :return: An OrchestrationResponse if not streaming, or an AsyncSSEClient for iterating over 
+        :return: An OrchestrationResponse if not streaming, or an AsyncSSEClient for iterating over
         the streaming response.
         :rtype: Union[OrchestrationResponse, AsyncSSEClient]
         """
         if config is None:
-            raise ValueError("A configuration is required to invoke the orchestration service.")
+            raise ValueError(
+                "A configuration is required to invoke the orchestration service."
+            )
         config_copy = deepcopy(config)
         config_copy._stream = stream
         if stream_options:
@@ -426,7 +460,7 @@ class OrchestrationService:
                 self.api_url + COMPLETION_SUFFIX,
                 headers=self.proxy_client.request_header,
                 json=request_obj.to_dict(),
-                timeout=self._determine_timeout(timeout)
+                timeout=self._determine_timeout(timeout),
             )
             return AsyncSSEClient(response_cm, prefix="data: ", final_message="[DONE]")
 
@@ -434,7 +468,7 @@ class OrchestrationService:
             self.api_url + COMPLETION_SUFFIX,
             headers=self.proxy_client.request_header,
             json=request_obj.to_dict(),
-            timeout=self._determine_timeout(timeout)
+            timeout=self._determine_timeout(timeout),
         )
         try:
             response.raise_for_status()
@@ -449,11 +483,11 @@ class OrchestrationService:
         )
 
     def run(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request synchronously (non-streaming).
 
@@ -477,12 +511,12 @@ class OrchestrationService:
         )
 
     def stream(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        stream_options: Optional[dict] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> SSEClient:
         """Executes an orchestration request in streaming mode (synchronously).
 
@@ -509,11 +543,11 @@ class OrchestrationService:
         )
 
     async def arun(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> OrchestrationResponse:
         """Executes an orchestration request asynchronously (non-streaming).
 
@@ -537,12 +571,12 @@ class OrchestrationService:
         )
 
     async def astream(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            stream_options: Optional[dict] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        stream_options: Optional[dict] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> AsyncSSEClient:
         """Executes an orchestration request asynchronously in streaming mode.
 
@@ -568,7 +602,7 @@ class OrchestrationService:
             timeout=timeout,
         )
 
-    def close_http_connection(self):   
+    def close_http_connection(self):
         """
         Closes the httpx synchronous client.
         """
@@ -581,13 +615,13 @@ class OrchestrationService:
         await self.async_client.aclose()
 
     def run_with_retries(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
-            max_retries: int = 10,
-            base_delay: float = 1.0,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
+        max_retries: int = 10,
+        base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
         """Executes an orchestration request with automatic retry on rate limits (429) and server errors.
 
@@ -626,11 +660,24 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
-                time.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
+            except (
+                OrchestrationError,
+                httpx.HTTPStatusError,
+                httpx.ConnectError,
+                httpx.TimeoutException,
+            ) as error:
+                time.sleep(
+                    self.handle_retry(retry_count, base_delay, error, max_retries)
+                )
         return None
 
-    def handle_retry(self, retry_count: int, base_delay: float, error: OrchestrationError, max_retries: int) -> float:
+    def handle_retry(
+        self,
+        retry_count: int,
+        base_delay: float,
+        error: OrchestrationError,
+        max_retries: int,
+    ) -> float:
         """Handles retry logic with exponential backoff and jitter.
         If Retry-After header exists, use it as min_delay to add jitter on top
 
@@ -651,21 +698,24 @@ class OrchestrationService:
             raise error
 
         retry_after = self._get_retry_after(error)
-        delay = self._calculate_backoff(retry_count, base_delay,
-                                        min_delay=0.0 if retry_after is None else retry_after)
+        delay = self._calculate_backoff(
+            retry_count,
+            base_delay,
+            min_delay=0.0 if retry_after is None else retry_after,
+        )
         logging.info("Retry no. %d, due to rate limiting", retry_count)
         return delay
 
     async def arun_with_retries(
-            self,
-            config: Optional[OrchestrationConfig] = None,
-            template_values: Optional[List[TemplateValue]] = None,
-            history: Optional[List[Message]] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
-            max_retries: int = 10,
-            base_delay: float = 1.0,
+        self,
+        config: Optional[OrchestrationConfig] = None,
+        template_values: Optional[List[TemplateValue]] = None,
+        history: Optional[List[Message]] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
+        max_retries: int = 10,
+        base_delay: float = 1.0,
     ) -> OrchestrationResponseWithRetries | None:
-        """Executes an orchestration request asynchronously with automatic retry on rate limits (429) and 
+        """Executes an orchestration request asynchronously with automatic retry on rate limits (429) and
         server errors. Uses exponential backoff with jitter to handle rate limiting gracefully.
 
         :param config: the orchestration configuration, defaults to None
@@ -703,6 +753,13 @@ class OrchestrationService:
                     retries=retry_count,
                 )
 
-            except (OrchestrationError, httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as error:
-                await asyncio.sleep(self.handle_retry(retry_count, base_delay, error, max_retries))
+            except (
+                OrchestrationError,
+                httpx.HTTPStatusError,
+                httpx.ConnectError,
+                httpx.TimeoutException,
+            ) as error:
+                await asyncio.sleep(
+                    self.handle_retry(retry_count, base_delay, error, max_retries)
+                )
         return None

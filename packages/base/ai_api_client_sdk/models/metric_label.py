@@ -7,6 +7,7 @@ class MetricLabel(NameValue):
     """The MetricLabel object defines a metric label as a name-value pair. Refer to
     :class:`ai_api_client_sdk.models.base_models.NameValue`, for the object definition
     """
+
     @staticmethod
     def from_dict(metric_label_dict: Dict[str, str]):
         """Returns a :class:`ai_api_client_sdk.models.metric_label.MetricLabel` object, created from the values in the
@@ -25,4 +26,4 @@ class MetricLabel(NameValue):
         :return: A dict, including all the attributes of the object
         :rtype: Dict[str, str]
         """
-        return {'name': self.name, 'value': self.value}
+        return {"name": self.name, "value": self.value}

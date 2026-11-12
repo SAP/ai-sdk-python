@@ -12,6 +12,7 @@ class ScenarioQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Scenario], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class ScenarioQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.scenario_query_response.ScenarioQueryResponse`
         """
-        response_dict['resources'] = [Scenario.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Scenario.from_dict(r) for r in response_dict["resources"]
+        ]
         return ScenarioQueryResponse(**response_dict)

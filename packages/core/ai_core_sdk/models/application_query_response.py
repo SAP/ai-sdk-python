@@ -12,6 +12,7 @@ class ApplicationQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Application], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -26,5 +27,7 @@ class ApplicationQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.application_query_response.ApplicationQueryResponse`
         """
-        response_dict['resources'] = [Application.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Application.from_dict(r) for r in response_dict["resources"]
+        ]
         return ApplicationQueryResponse(**response_dict)

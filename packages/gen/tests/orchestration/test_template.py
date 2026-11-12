@@ -14,7 +14,7 @@ from gen_ai_hub.orchestration.models.response_format import (
     ResponseFormatText,
     ResponseFormatJsonObject,
     ResponseFormatFactory,
-    ResponseFormatJsonSchema
+    ResponseFormatJsonSchema,
 )
 from gen_ai_hub.orchestration.models.template import TemplateValue, Template
 from gen_ai_hub.orchestration.models.multimodal_items import ImageItem, ImageDetailLevel
@@ -52,17 +52,19 @@ class TestTemplate(unittest.TestCase):
 
     def test_template_with_response_format_text(self):
         messages = [UserMessage("Simple message")]
-        template = Template(messages, response_format='text')
+        template = Template(messages, response_format="text")
 
         json_data = template.to_dict()
         self.assertEqual(json_data["response_format"]["type"], ResponseFormatType.TEXT)
 
     def test_template_with_response_format_json_object(self):
         messages = [UserMessage("Simple message")]
-        template = Template(messages, response_format='json_object')
+        template = Template(messages, response_format="json_object")
 
         json_data = template.to_dict()
-        self.assertEqual(json_data["response_format"]["type"], ResponseFormatType.JSON_OBJECT)
+        self.assertEqual(
+            json_data["response_format"]["type"], ResponseFormatType.JSON_OBJECT
+        )
 
     def test_template_with_response_format_json_schema(self):
         messages = [UserMessage("Simple message")]
@@ -74,36 +76,51 @@ class TestTemplate(unittest.TestCase):
             "properties": {
                 "firstName": {
                     "type": "string",
-                    "description": "The person's first name."
+                    "description": "The person's first name.",
                 },
                 "lastName": {
                     "type": "string",
-                    "description": "The person's last name."
-                }
-            }
+                    "description": "The person's last name.",
+                },
+            },
         }
 
-        response_format = ResponseFormatJsonSchema(name="test", schema=json_schema_example, strict=True)
+        response_format = ResponseFormatJsonSchema(
+            name="test", schema=json_schema_example, strict=True
+        )
         template = Template(messages, response_format=response_format)
 
         json_data = template.to_dict()
-        self.assertEqual(json_data["response_format"]["type"], ResponseFormatType.JSON_SCHEMA)
+        self.assertEqual(
+            json_data["response_format"]["type"], ResponseFormatType.JSON_SCHEMA
+        )
         self.assertEqual(json_data["response_format"]["json_schema"]["name"], "test")
         self.assertTrue(json_data["response_format"]["json_schema"]["strict"])
-        self.assertEqual(json_data["response_format"]["json_schema"]["schema"], json_schema_example)
+        self.assertEqual(
+            json_data["response_format"]["json_schema"]["schema"], json_schema_example
+        )
 
     def test_response_format_factory(self):
         exp_result = ResponseFormatText()
-        response = ResponseFormatFactory.create_response_format_object(ResponseFormatType.TEXT)
+        response = ResponseFormatFactory.create_response_format_object(
+            ResponseFormatType.TEXT
+        )
         self.assertEqual(response.to_dict(), exp_result.to_dict())
 
         exp_result = ResponseFormatJsonObject()
-        response = ResponseFormatFactory.create_response_format_object(ResponseFormatType.JSON_OBJECT)
+        response = ResponseFormatFactory.create_response_format_object(
+            ResponseFormatType.JSON_OBJECT
+        )
         self.assertEqual(response.to_dict(), exp_result.to_dict())
 
-        exp_result = ResponseFormatJsonSchema(name="test", description="desc", schema={}, strict=True)
+        exp_result = ResponseFormatJsonSchema(
+            name="test", description="desc", schema={}, strict=True
+        )
         response = ResponseFormatFactory.create_response_format_object(
-            ResponseFormatJsonSchema(name="test", description="desc", schema={}, strict=True))
+            ResponseFormatJsonSchema(
+                name="test", description="desc", schema={}, strict=True
+            )
+        )
         self.assertEqual(response.to_dict(), exp_result.to_dict())
 
         exp_result = None
@@ -114,15 +131,20 @@ class TestTemplate(unittest.TestCase):
         not_valid_name = "test."
         try:
             ResponseFormatFactory.create_response_format_object(
-                ResponseFormatJsonSchema(name=not_valid_name, schema={}))
+                ResponseFormatJsonSchema(name=not_valid_name, schema={})
+            )
             self.fail("Expected the validation to fail due to an invalid name format")
         except ValueError:
             pass
 
     def test_response_format_name_too_long(self):
-        name_too_long = "ThisIsAveryLongNameLongerThenExpectedItShouldBeMaximum64Characters"
+        name_too_long = (
+            "ThisIsAveryLongNameLongerThenExpectedItShouldBeMaximum64Characters"
+        )
         try:
-            ResponseFormatFactory.create_response_format_object(ResponseFormatJsonSchema(name=name_too_long, schema={}))
+            ResponseFormatFactory.create_response_format_object(
+                ResponseFormatJsonSchema(name=name_too_long, schema={})
+            )
             self.fail("Expected the validation to fail due to length of name")
         except ValueError:
             pass
@@ -140,10 +162,10 @@ class TestTemplateWithTools(unittest.TestCase):
                     "type": "object",
                     "properties": {},
                     "required": [],
-                    "additionalProperties": False
+                    "additionalProperties": False,
                 },
-                "strict": False
-            }
+                "strict": False,
+            },
         }
         template = Template(messages, tools=[tool_dict])
         json_data = template.to_dict()
@@ -198,15 +220,16 @@ class TestTemplateWithTools(unittest.TestCase):
         template = Template(messages, tools=[plain_func])
         with self.assertRaises(ValueError) as cm:
             template.to_dict()
-        self.assertIn("If you are passing a function, decorate it with @function_tool", str(cm.exception))
-        
+        self.assertIn(
+            "If you are passing a function, decorate it with @function_tool",
+            str(cm.exception),
+        )
+
+
 class TestUserMessageMultimodal(unittest.TestCase):
     def test_user_message_with_single_string(self):
         msg = UserMessage("Hello world!")
-        expected = {
-            "role": Role.USER,
-            "content": "Hello world!"
-        }
+        expected = {"role": Role.USER, "content": "Hello world!"}
         self.assertEqual(msg.to_dict(), expected)
 
     def test_user_message_with_list_of_strings(self):
@@ -215,8 +238,8 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "Hello"},
-                {"type": "text", "text": "World"}
-            ]
+                {"type": "text", "text": "World"},
+            ],
         }
         self.assertEqual(msg.to_dict(), expected)
 
@@ -227,10 +250,11 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "Describe this image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/image.png"
-                }}
-            ]
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image.png"},
+                },
+            ],
         }
         self.assertEqual(msg.to_dict(), expected)
 
@@ -242,16 +266,22 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "First image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/1.png",
-                    "detail": ImageDetailLevel.LOW
-                }},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/1.png",
+                        "detail": ImageDetailLevel.LOW,
+                    },
+                },
                 {"type": "text", "text": "Second image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/2.png",
-                    "detail": ImageDetailLevel.HIGH
-                }}
-            ]
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/2.png",
+                        "detail": ImageDetailLevel.HIGH,
+                    },
+                },
+            ],
         }
         self.assertEqual(msg.to_dict(), expected)
 
@@ -272,4 +302,3 @@ class TestUserMessageMultimodal(unittest.TestCase):
             self.assertEqual(decoded, original)
         finally:
             os.unlink(tmp_path)
-

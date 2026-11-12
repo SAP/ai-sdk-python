@@ -80,7 +80,9 @@ def load_config_file(
         return []
 
 
-def read_local_csv_file(file_path: Path, error_collector: ValidationCollector) -> List[Dict[str, Any]]:
+def read_local_csv_file(
+    file_path: Path, error_collector: ValidationCollector
+) -> List[Dict[str, Any]]:
     """reads csv and returns the data as df"""
     try:
         df = pd.read_csv(

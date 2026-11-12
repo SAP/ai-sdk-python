@@ -7,7 +7,10 @@ from typing import Optional, Dict, List, Union
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
+from gen_ai_hub.orchestration_v2.models.base import (
+    ABCBaseModel as BaseModel,
+    ResponseBaseModel,
+)
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 
 
@@ -23,6 +26,7 @@ class EmbeddingsEncodingFormat(str, Enum):
         UINT8: Returns embeddings as an array of unsigned 8-bit integers.
         UBINARY: Returns embeddings in unsigned binary format.
     """
+
     FLOAT = "float"
     BASE64 = "base64"
     BINARY = "binary"
@@ -47,6 +51,7 @@ class EmbeddingsInputType(str, Enum):
         CLUSTERING: Text used in a clustering task.
         IMAGE: Image input.
     """
+
     TEXT = "text"
     DOCUMENT = "document"
     QUERY = "query"
@@ -66,6 +71,7 @@ class EmbeddingsModelParams(BaseModel):
         encoding_format: The format to return the embeddings in.
         normalize: Whether to normalize the embeddings.
     """
+
     dimensions: Optional[int] = None
     encoding_format: Optional[EmbeddingsEncodingFormat] = None
     normalize: Optional[bool] = None
@@ -82,6 +88,7 @@ class EmbeddingsModelDetails(BaseModel):
         timeout: Timeout for the embeddings request in seconds. Ignored for Vertex AI models.
         max_retries: Maximum number of retries. Ignored for Vertex AI models.
     """
+
     name: str
     version: Optional[str] = "latest"
     params: Optional[EmbeddingsModelParams] = None
@@ -96,6 +103,7 @@ class EmbeddingsModelConfig(BaseModel):
     Args:
         model: The embedding model details.
     """
+
     model: EmbeddingsModelDetails
 
 
@@ -107,6 +115,7 @@ class EmbeddingsModuleConfigs(BaseModel):
         embeddings: Required configuration for the embeddings model.
         masking: Optional configuration for data masking before embedding.
     """
+
     embeddings: EmbeddingsModelConfig
     masking: Optional[MaskingModuleConfig] = None
 
@@ -118,6 +127,7 @@ class EmbeddingsOrchestrationConfig(BaseModel):
     Args:
         modules: The module configurations including embeddings model and optional masking.
     """
+
     modules: EmbeddingsModuleConfigs
 
 
@@ -129,6 +139,7 @@ class EmbeddingsInput(BaseModel):
         text: The text to embed. Can be a single string or a list of strings.
         type: Optional type hint for the embedding model (text, document, or query).
     """
+
     text: Union[str, List[str]]
     type_: Optional[EmbeddingsInputType] = Field(default=None, alias="type")
 
@@ -141,6 +152,7 @@ class EmbeddingsUsage(ResponseBaseModel):
         prompt_tokens: The number of tokens used by the prompt.
         total_tokens: The total number of tokens used by the request.
     """
+
     prompt_tokens: int
     total_tokens: int
 
@@ -154,6 +166,7 @@ class EmbeddingResult(ResponseBaseModel):
         embedding: The embedding vector (array of floats) or a base64 string.
         index: The index of this embedding in the list.
     """
+
     object: str = "embedding"
     embedding: Union[List[float], str]
     index: int
@@ -169,6 +182,7 @@ class EmbeddingsResponse(ResponseBaseModel):
         model: The name of the model used to generate the embeddings.
         usage: Token usage information.
     """
+
     object: str = "list"
     data: List[EmbeddingResult]
     model: str
@@ -184,6 +198,7 @@ class EmbeddingsPostResponse(ResponseBaseModel):
         intermediate_results: Optional results from intermediate modules (e.g., masking).
         final_result: The embeddings response from the model.
     """
+
     request_id: str
     intermediate_results: Optional[Dict] = None
     final_result: EmbeddingsResponse
@@ -197,10 +212,23 @@ class EmbeddingsRequest(BaseModel):
         config: The embeddings orchestration configuration.
         input: The input text to embed.
     """
+
     config: EmbeddingsOrchestrationConfig
     input: EmbeddingsInput
 
-__all__ = ["EmbeddingsEncodingFormat", "EmbeddingsInputType", "EmbeddingsModelParams", "EmbeddingsModelDetails",
-           "EmbeddingsModelConfig", "EmbeddingsModuleConfigs", "EmbeddingsOrchestrationConfig", "EmbeddingsInput",
-           "EmbeddingsUsage", "EmbeddingResult", "EmbeddingsResponse",
-           "EmbeddingsPostResponse", "EmbeddingsRequest"]
+
+__all__ = [
+    "EmbeddingsEncodingFormat",
+    "EmbeddingsInputType",
+    "EmbeddingsModelParams",
+    "EmbeddingsModelDetails",
+    "EmbeddingsModelConfig",
+    "EmbeddingsModuleConfigs",
+    "EmbeddingsOrchestrationConfig",
+    "EmbeddingsInput",
+    "EmbeddingsUsage",
+    "EmbeddingResult",
+    "EmbeddingsResponse",
+    "EmbeddingsPostResponse",
+    "EmbeddingsRequest",
+]

@@ -35,7 +35,9 @@ class TestPipelinesAPIIntegration(unittest.TestCase):
 
     @classmethod
     def _create_pipeline(cls):
-        s3_config = S3PipelineCreateRequest(configuration=CommonConfiguration(destination="s3-secret-test-grounding"))
+        s3_config = S3PipelineCreateRequest(
+            configuration=CommonConfiguration(destination="s3-secret-test-grounding")
+        )
         return cls.client.create_pipeline(s3_config)
 
     @classmethod
@@ -87,15 +89,17 @@ class TestPipelinesAPIIntegration(unittest.TestCase):
         # wait for the pipeline to be created
         time.sleep(3)
         response = self.client.delete_pipeline_by_id(new_pipeline_id)
-        self.assertEqual(response.status_code, requests.status_codes.codes.NO_CONTENT, msg=response.text)
+        self.assertEqual(
+            response.status_code,
+            requests.status_codes.codes.NO_CONTENT,
+            msg=response.text,
+        )
         self.pipeline_ids.pop(-1)
 
     def test_search_pipelines(self):
         """Test searching pipelines."""
         request = SearchPipelineRequest(
-            dataRepositoryMetadata=[
-                {"key": "description", "value": ["details"]}
-         ]
+            dataRepositoryMetadata=[{"key": "description", "value": ["details"]}]
         )
         response = self.client.search_pipelines(request)
         self.assertIsInstance(response, SearchPipelinesResponse)

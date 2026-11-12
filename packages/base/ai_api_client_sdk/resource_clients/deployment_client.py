@@ -2,11 +2,19 @@ from datetime import datetime
 from typing import List, Union
 
 from ai_api_client_sdk.exception import AIAPIInvalidInputException
-from ai_api_client_sdk.models.base_models import BasicResponse, Order, BasicModifyRequest
+from ai_api_client_sdk.models.base_models import (
+    BasicResponse,
+    Order,
+    BasicModifyRequest,
+)
 from ai_api_client_sdk.models.deployment import Deployment
-from ai_api_client_sdk.models.deployment_bulk_modify_response import DeploymentBulkModifyResponse
+from ai_api_client_sdk.models.deployment_bulk_modify_response import (
+    DeploymentBulkModifyResponse,
+)
 from ai_api_client_sdk.models.deployment_create_response import DeploymentCreateResponse
-from ai_api_client_sdk.models.deployment_get_status_response import DeploymentGetStatusResponse
+from ai_api_client_sdk.models.deployment_get_status_response import (
+    DeploymentGetStatusResponse,
+)
 from ai_api_client_sdk.models.deployment_query_response import DeploymentQueryResponse
 from ai_api_client_sdk.models.log_response import LogResponse
 from ai_api_client_sdk.models.status import Status
@@ -19,7 +27,9 @@ class DeploymentClient(BaseClient):
     implements the base class :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    def create(self, configuration_id: str, ttl: str = None, resource_group: str = None) -> DeploymentCreateResponse:
+    def create(
+        self, configuration_id: str, ttl: str = None, resource_group: str = None
+    ) -> DeploymentCreateResponse:
         """Creates a deployment.
 
         :param configuration_id: ID of the configuration, that should configure the deployment
@@ -42,9 +52,10 @@ class DeploymentClient(BaseClient):
         """
         body = {"configuration_id": configuration_id}
         if ttl:
-            body['ttl'] = ttl
-        response_dict = self.rest_client.post(path='/deployments', body=body,
-                                              resource_group=resource_group)
+            body["ttl"] = ttl
+        response_dict = self.rest_client.post(
+            path="/deployments", body=body, resource_group=resource_group
+        )
         return DeploymentCreateResponse.from_dict(response_dict)
 
     def delete(self, deployment_id: str, resource_group: str = None) -> BasicResponse:
@@ -69,11 +80,14 @@ class DeploymentClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(f'/deployments/{deployment_id}', resource_group=resource_group)
+        response_dict = self.rest_client.delete(
+            f"/deployments/{deployment_id}", resource_group=resource_group
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def get(self, deployment_id: str, resource_group: str = None, select: str = None) -> \
-            Union[Deployment, DeploymentGetStatusResponse]:
+    def get(
+        self, deployment_id: str, resource_group: str = None, select: str = None
+    ) -> Union[Deployment, DeploymentGetStatusResponse]:
         """Retrieves the deployment from the server.
 
         :param deployment_id: ID of the deployment to be retrieved
@@ -96,17 +110,27 @@ class DeploymentClient(BaseClient):
         :rtype: class:Union[`ai_api_client_sdk.models.deployment.Deployment`,
             `ai_api_client_sdk.models.deployment_get_status_response.DeploymentGetStatusResponse`]
         """
-        if select and 'status' in select:
-            param = self._form_query_params(select='status')
-            deployment_dict = self.rest_client.get(path=f'/deployments/{deployment_id}',  params=param,
-                                                   resource_group=resource_group)
+        if select and "status" in select:
+            param = self._form_query_params(select="status")
+            deployment_dict = self.rest_client.get(
+                path=f"/deployments/{deployment_id}",
+                params=param,
+                resource_group=resource_group,
+            )
             return DeploymentGetStatusResponse.from_dict(deployment_dict)
         else:
-            deployment_dict = self.rest_client.get(path=f'/deployments/{deployment_id}', resource_group=resource_group)
+            deployment_dict = self.rest_client.get(
+                path=f"/deployments/{deployment_id}", resource_group=resource_group
+            )
             return Deployment.from_dict(deployment_dict)
 
-    def modify(self, deployment_id: str, target_status: TargetStatus = None, configuration_id: str = None,
-               resource_group: str = None) -> BasicResponse:
+    def modify(
+        self,
+        deployment_id: str,
+        target_status: TargetStatus = None,
+        configuration_id: str = None,
+        resource_group: str = None,
+    ) -> BasicResponse:
         """Modifies the deployment, by changing either the target status, or the configuration ID.
 
         :param deployment_id: ID of the deployment to be modified
@@ -133,18 +157,29 @@ class DeploymentClient(BaseClient):
         body = {}
         if target_status and configuration_id:
             raise AIAPIInvalidInputException(
-                'Either target_status or configuration_id should be provided as input, not both')
+                "Either target_status or configuration_id should be provided as input, not both"
+            )
         if target_status:
-            body['target_status'] = target_status.value
+            body["target_status"] = target_status.value
         elif configuration_id:
-            body['configuration_id'] = configuration_id
-        response_dict = self.rest_client.patch(path=f'/deployments/{deployment_id}', body=body,
-                                               resource_group=resource_group)
+            body["configuration_id"] = configuration_id
+        response_dict = self.rest_client.patch(
+            path=f"/deployments/{deployment_id}",
+            body=body,
+            resource_group=resource_group,
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def query(self, scenario_id: str = None, configuration_id: str = None, executable_ids: List[str] = None,
-              status: Status = None, top: int = None, skip: int = None,
-              resource_group: str = None) -> DeploymentQueryResponse:
+    def query(
+        self,
+        scenario_id: str = None,
+        configuration_id: str = None,
+        executable_ids: List[str] = None,
+        status: Status = None,
+        top: int = None,
+        skip: int = None,
+        resource_group: str = None,
+    ) -> DeploymentQueryResponse:
         """Queries the deployments.
 
         :param scenario_id: ID of the scenario the deployments should belong to, defaults to None
@@ -172,14 +207,27 @@ class DeploymentClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.deployment_query_response.DeploymentQueryResponse`
         """
-        params = self._form_query_params(scenario_id=scenario_id, configuration_id=configuration_id,
-                                         executable_ids=executable_ids, status=status.value if status else None,
-                                         top=top, skip=skip)
-        response_dict = self.rest_client.get(path='/deployments', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            configuration_id=configuration_id,
+            executable_ids=executable_ids,
+            status=status.value if status else None,
+            top=top,
+            skip=skip,
+        )
+        response_dict = self.rest_client.get(
+            path="/deployments", params=params, resource_group=resource_group
+        )
         return DeploymentQueryResponse.from_dict(response_dict)
 
-    def count(self, scenario_id: str = None, configuration_id: str = None, executable_ids: List[str] = None,
-              status: Status = None, resource_group: str = None) -> int:
+    def count(
+        self,
+        scenario_id: str = None,
+        configuration_id: str = None,
+        executable_ids: List[str] = None,
+        status: Status = None,
+        resource_group: str = None,
+    ) -> int:
         """Counts the number of deployments.
 
         :param scenario_id: ID of the scenario, the deployments should belong to, defaults to None
@@ -203,12 +251,25 @@ class DeploymentClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: int
         """
-        params = self._form_query_params(scenario_id=scenario_id, configuration_id=configuration_id,
-                                         executable_ids=executable_ids, status=status.value if status else None)
-        return self.rest_client.get(path='/deployments/$count', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            configuration_id=configuration_id,
+            executable_ids=executable_ids,
+            status=status.value if status else None,
+        )
+        return self.rest_client.get(
+            path="/deployments/$count", params=params, resource_group=resource_group
+        )
 
-    def query_logs(self, deployment_id: str, top: int = None, start: datetime = None, end: datetime = None,
-                   order: Order = None, resource_group: str = None) -> LogResponse:
+    def query_logs(
+        self,
+        deployment_id: str,
+        top: int = None,
+        start: datetime = None,
+        end: datetime = None,
+        order: Order = None,
+        resource_group: str = None,
+    ) -> LogResponse:
         """Queries the logs of the deployment.
 
         :param deployment_id: ID of the deployment
@@ -237,12 +298,16 @@ class DeploymentClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.log_response.LogResponse`
         """
         params = self._form_query_params(top=top, start=start, end=end, order=order)
-        response_dict = self.rest_client.get(path=f'/deployments/{deployment_id}/logs', params=params,
-                                             resource_group=resource_group)
+        response_dict = self.rest_client.get(
+            path=f"/deployments/{deployment_id}/logs",
+            params=params,
+            resource_group=resource_group,
+        )
         return LogResponse.from_dict(response_dict)
 
-    def bulk_modify(self, deployments: List[BasicModifyRequest],
-                    resource_group: str = None) -> DeploymentBulkModifyResponse:
+    def bulk_modify(
+        self, deployments: List[BasicModifyRequest], resource_group: str = None
+    ) -> DeploymentBulkModifyResponse:
         """Modifies the deployments
         :param deployments: List of deployment modify requests
         :type deployments: List[DeploymentModifyRequest]
@@ -261,8 +326,12 @@ class DeploymentClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.deployment_bulk_modify_response.DeploymentBulkModifyResponse`
         """
-        body = {'deployments': [bmr.to_dict() for bmr in deployments]}
-        headers = {'Content-Type': 'application/merge-patch+json'}
-        response_dict = self.rest_client.patch(path='/deployments', body=body, headers=headers,
-                                               resource_group=resource_group)
-        return DeploymentBulkModifyResponse.from_dict(response_dict)        
+        body = {"deployments": [bmr.to_dict() for bmr in deployments]}
+        headers = {"Content-Type": "application/merge-patch+json"}
+        response_dict = self.rest_client.patch(
+            path="/deployments",
+            body=body,
+            headers=headers,
+            resource_group=resource_group,
+        )
+        return DeploymentBulkModifyResponse.from_dict(response_dict)

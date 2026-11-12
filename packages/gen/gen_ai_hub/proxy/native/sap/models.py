@@ -1,5 +1,12 @@
 from typing import Annotated, Optional, Literal, Union, Any
-from pydantic import BaseModel, Field, RootModel, model_validator, model_serializer, SerializationInfo
+from pydantic import (
+    BaseModel,
+    Field,
+    RootModel,
+    model_validator,
+    model_serializer,
+    SerializationInfo,
+)
 
 
 class TargetColumn(BaseModel):
@@ -21,11 +28,11 @@ class TargetColumn(BaseModel):
     task_type: Optional[Literal["classification", "regression"]] = None
     top_k: Optional[int] = None
 
-    @model_serializer(mode='wrap')
+    @model_serializer(mode="wrap")
     def _serialize(self, handler, info: SerializationInfo) -> dict[str, Any]:
         d = handler(self)
         if info.exclude_none and self.prediction_placeholder is None:
-            d['prediction_placeholder'] = None
+            d["prediction_placeholder"] = None
         return d
 
 
@@ -71,7 +78,7 @@ class PredictionConfig(BaseModel):
 
     target_columns: list[TargetColumn]
     explanations: Optional[ExplanationConfig] = None
-    context_mode: Optional[Literal['default', 'deep']] = None
+    context_mode: Optional[Literal["default", "deep"]] = None
 
 
 class DataType(BaseModel):
@@ -84,11 +91,24 @@ class DataType(BaseModel):
         'double', 'datetime', 'timestamp']
     """
 
-    dtype: Literal['string', 'numeric', 'date',
-                   'time', 'boolean', 'largestring',
-                   'uuid', 'integer', 'int16',
-                   'int32', 'int64', 'uint8', 'decimal',
-                   'double', 'datetime', 'timestamp']
+    dtype: Literal[
+        "string",
+        "numeric",
+        "date",
+        "time",
+        "boolean",
+        "largestring",
+        "uuid",
+        "integer",
+        "int16",
+        "int32",
+        "int64",
+        "uint8",
+        "decimal",
+        "double",
+        "datetime",
+        "timestamp",
+    ]
 
 
 class RPTRequest(BaseModel):
@@ -167,7 +187,7 @@ class ResponseMetadata(BaseModel):
     num_columns: int
     num_predictions: int
     num_query_rows: int
-    context_mode: Literal['default', 'deep'] = 'default'
+    context_mode: Literal["default", "deep"] = "default"
 
 
 class ResponseStatus(BaseModel):
@@ -196,7 +216,9 @@ class PredictionItem(BaseModel):
 
     prediction: Union[str, float]
     confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    confidence_interval: Optional[Annotated[list[float], Field(min_length=2, max_length=2)]] = None
+    confidence_interval: Optional[
+        Annotated[list[float], Field(min_length=2, max_length=2)]
+    ] = None
 
 
 class Prediction(RootModel[dict[str, Union[list[PredictionItem], Any]]]):
@@ -259,9 +281,11 @@ class RPTException(Exception):
     :param detail: Optional list of additional error details.
     :type detail: Optional[list[ErrorResponseDetails]]
     """
-    def __init__(self,
-                 status: ResponseStatus,
-                 detail: Optional[list[ErrorResponseDetails]] = None
-                 ):
+
+    def __init__(
+        self,
+        status: ResponseStatus,
+        detail: Optional[list[ErrorResponseDetails]] = None,
+    ):
         self.status = status
         self.detail = detail

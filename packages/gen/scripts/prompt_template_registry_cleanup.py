@@ -12,7 +12,10 @@ from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateGetR
 # os.environ["AICORE_CLIENT_SECRET"] = "<client-secret>"
 ###
 
-def delete_prompt_template(prompt_template:PromptTemplateGetResponse, scenario:str, dry_run:bool):
+
+def delete_prompt_template(
+    prompt_template: PromptTemplateGetResponse, scenario: str, dry_run: bool
+):
     """
     Delete all versions of a given prompt template for a specific scenario.
 
@@ -21,17 +24,22 @@ def delete_prompt_template(prompt_template:PromptTemplateGetResponse, scenario:s
         scenario (str): The scenario associated with the template.
         dry_run (bool): If True, perform a dry run without actual deletion.
     """
-    template_history = client.get_prompt_template_history(scenario=scenario,
-                                                          name=prompt_template.name,
-                                                          version=prompt_template.version)
-    print(f"Deleting test prompt template versions for template '{prompt_template.name}'."
-          f" Found {len(template_history.resources)} versions.")
+    template_history = client.get_prompt_template_history(
+        scenario=scenario, name=prompt_template.name, version=prompt_template.version
+    )
+    print(
+        f"Deleting test prompt template versions for template '{prompt_template.name}'."
+        f" Found {len(template_history.resources)} versions."
+    )
     for history_version in template_history.resources:
         delete_history_version(history_version, client, dry_run)
 
-def delete_history_version(history_version:PromptTemplateGetResponse,
-                           prompt_template_client:PromptTemplateClient,
-                           dry_run:bool):
+
+def delete_history_version(
+    history_version: PromptTemplateGetResponse,
+    prompt_template_client: PromptTemplateClient,
+    dry_run: bool,
+):
     """
     Delete a specific version of a prompt template if it is not the head version.
 
@@ -47,17 +55,22 @@ def delete_history_version(history_version:PromptTemplateGetResponse,
         if not dry_run:
             prompt_template_client.delete_prompt_template_by_id(history_version.id)
         prefix = "DRY RUN:" if dry_run else ""
-        print(f"{prefix} Deleted prompt template version: "
-              f"name={name}, "
-              f"version={version}, "
-              f"scenario={scenario}, "
-              f"id={history_version.id}")
+        print(
+            f"{prefix} Deleted prompt template version: "
+            f"name={name}, "
+            f"version={version}, "
+            f"scenario={scenario}, "
+            f"id={history_version.id}"
+        )
     else:
-        print(f"Skipping deletion of the head version: "
-              f"name={name}, "
-              f"version={version}, "
-              f"scenario={scenario}, "
-              f"id={history_version.id}")
+        print(
+            f"Skipping deletion of the head version: "
+            f"name={name}, "
+            f"version={version}, "
+            f"scenario={scenario}, "
+            f"id={history_version.id}"
+        )
+
 
 if __name__ == "__main__":
     """
@@ -71,21 +84,29 @@ if __name__ == "__main__":
         --delete (str): "True" or "False" to indicate if templates should be deleted. Default is "false".
     """
     parser = argparse.ArgumentParser(description="Cleanup script for prompt templates.")
-    parser.add_argument("--scenario_name",
-                        required=False,
-                        help="The scenario name to process.",
-                        default="test_scenario")
-    parser.add_argument("--delete",
-                        required=False,
-                        help="True or False to indicate if templates should be deleted",
-                        default="false")
+    parser.add_argument(
+        "--scenario_name",
+        required=False,
+        help="The scenario name to process.",
+        default="test_scenario",
+    )
+    parser.add_argument(
+        "--delete",
+        required=False,
+        help="True or False to indicate if templates should be deleted",
+        default="false",
+    )
     args = parser.parse_args()
     scenario_name = args.scenario_name
     dry_run = args.delete.lower() == "false"
 
     client = PromptTemplateClient()
-    templates = client.get_prompt_templates(scenario=scenario_name, name=None, version=None)
-    print(f"Deleting test prompt templates for scenario '{scenario_name}'."
-          f" Found {len(templates.resources)} templates.")
+    templates = client.get_prompt_templates(
+        scenario=scenario_name, name=None, version=None
+    )
+    print(
+        f"Deleting test prompt templates for scenario '{scenario_name}'."
+        f" Found {len(templates.resources)} templates."
+    )
     for template in templates.resources:
         delete_prompt_template(template, scenario_name, dry_run)

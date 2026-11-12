@@ -5,15 +5,16 @@ from ai_core_sdk.models.repository import Repository
 
 
 class TestE2ERepositories(AICoreV2ClientE2ETestBase):
-
     def assert_repo(self, repo_dict: dict, repo: Repository):
-        self.assertEqual(repo_dict['name'], repo.name)
-        self.assertEqual(repo_dict['url'], repo.url)
+        self.assertEqual(repo_dict["name"], repo.name)
+        self.assertEqual(repo_dict["url"], repo.url)
         self.assertIsNotNone(repo.status)
 
-    def assert_repo_dict_in_repo_objects(self, repo_dict: dict, repos: List[Repository]):
+    def assert_repo_dict_in_repo_objects(
+        self, repo_dict: dict, repos: List[Repository]
+    ):
         for repo in repos:
-            if repo.name == repo_dict['name']:
+            if repo.name == repo_dict["name"]:
                 self.assert_repo(repo_dict, repo)
                 return
 
@@ -24,7 +25,7 @@ class TestE2ERepositories(AICoreV2ClientE2ETestBase):
         self.assertIsNotNone(response.message)
 
         # get
-        repo = self.ai_core_v2_client.repositories.get(name=repo_dict['name'])
+        repo = self.ai_core_v2_client.repositories.get(name=repo_dict["name"])
         self.assert_repo(repo_dict, repo)
 
         # query
@@ -34,15 +35,15 @@ class TestE2ERepositories(AICoreV2ClientE2ETestBase):
 
         # modify
         repo_patch_dict = {
-            'name': repo_dict['name'],
-            'username': 'test-patch-username',
-            'password': 'test-patch-password'
+            "name": repo_dict["name"],
+            "username": "test-patch-username",
+            "password": "test-patch-password",
         }
         response = self.ai_core_v2_client.repositories.modify(**repo_patch_dict)
-        self.assertEqual(repo_dict['name'], response.id)
+        self.assertEqual(repo_dict["name"], response.id)
         self.assertIsNotNone(response.message)
 
         # delete
-        response = self.ai_core_v2_client.repositories.delete(name=repo_dict['name'])
-        self.assertEqual(repo_dict['name'], response.id)
+        response = self.ai_core_v2_client.repositories.delete(name=repo_dict["name"])
+        self.assertEqual(repo_dict["name"], response.id)
         self.assertIsNotNone(response.message)

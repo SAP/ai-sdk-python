@@ -12,6 +12,7 @@ class ArtifactQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Artifact], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class ArtifactQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.artifact_query_response.ArtifactQueryResponse`
         """
-        response_dict['resources'] = [Artifact.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Artifact.from_dict(r) for r in response_dict["resources"]
+        ]
         return ArtifactQueryResponse(**response_dict)
