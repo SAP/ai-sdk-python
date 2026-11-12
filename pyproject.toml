@@ -5,7 +5,13 @@ requires-python = ">=3.10"
 license = "Apache-2.0"
 
 [dependency-groups]
-dev = ["pip-licenses>=5.5.5", "commitizen>=4", "sphinx>=7.0.0", "furo>=2025.12.19"]
+dev = [
+    "pip-licenses>=5.5.5",
+    "commitizen>=4",
+    "sphinx>=7.0.0",
+    "furo>=2025.12.19",
+    "ruff>=0.17.4",
+]
 
 [tool.uv.sources]
 sap-ai-sdk-base = { workspace = true }
@@ -29,3 +35,6 @@ ignore-packages = ["pylint", "astroid"]
 markers = [
     "bedrock: mark a test as a bedrock test running in a different environment",
 ]
+
+[tool.ruff.format]
+skip-magic-trailing-comma = true
