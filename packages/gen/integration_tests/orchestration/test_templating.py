@@ -10,14 +10,23 @@ from gen_ai_hub.orchestration.exceptions import OrchestrationError
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
 from gen_ai_hub.orchestration.models.llm import LLM
 from gen_ai_hub.orchestration.models.multimodal_items import ImageItem
-from gen_ai_hub.orchestration.models.message import SystemMessage, UserMessage, Message, ToolMessage, AssistantMessage
+from gen_ai_hub.orchestration.models.message import (
+    SystemMessage,
+    UserMessage,
+    Message,
+    ToolMessage,
+    AssistantMessage,
+)
 from gen_ai_hub.orchestration.models.response_format import ResponseFormatJsonSchema
 from gen_ai_hub.orchestration.models.template import Template, TemplateValue
 from gen_ai_hub.orchestration.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration.models.tools import function_tool
 from gen_ai_hub.orchestration.service import OrchestrationService
 from gen_ai_hub.prompt_registry.client import PromptTemplateClient
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateSpec, PromptTemplate
+from gen_ai_hub.prompt_registry.models.prompt_template import (
+    PromptTemplateSpec,
+    PromptTemplate,
+)
 from integration_tests.orchestration.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
@@ -29,17 +38,13 @@ def check_response_from_referenced_template(response, content: str):
 
 
 class TestTemplating(OrchestrationServiceTestBase):
-
     def setUp(self):
         super().setUp()
         self.service = OrchestrationService(api_url=self.api_url)
         self.llm = LLM(
             name="gpt-4o-mini",
             version="latest",
-            parameters={
-                "max_tokens": 50,
-                "temperature": 0.0,
-            },
+            parameters={"max_tokens": 50, "temperature": 0.0},
         )
 
     def test_templating_with_default(self):
@@ -53,10 +58,7 @@ class TestTemplating(OrchestrationServiceTestBase):
             defaults=[default],
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         response = self.service.run(config=config)
 
@@ -70,20 +72,14 @@ class TestTemplating(OrchestrationServiceTestBase):
             messages=[
                 SystemMessage("You are a friendly assistant."),
                 UserMessage("{{?user_query}}"),
-            ],
+            ]
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         user_input = TemplateValue(name="user_query", value="Why is the sky blue?")
 
-        response = self.service.run(
-            config=config,
-            template_values=[user_input],
-        )
+        response = self.service.run(config=config, template_values=[user_input])
 
         self.assertEqual(
             response.module_results.templating[1].content, user_input.value
@@ -93,27 +89,19 @@ class TestTemplating(OrchestrationServiceTestBase):
         self.assertTrue(response.orchestration_result.model.startswith(self.llm.name))
 
     def test_templating_with_no_messages(self):
-        template = Template(
-            messages=[],
-        )
+        template = Template(messages=[])
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
 
     def test_templating_with_invalid_message(self):
         template = Template(
-            messages=[Message(role="unknown-role", content="Hello, world!")],
+            messages=[Message(role="unknown-role", content="Hello, world!")]
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         with self.assertRaises(OrchestrationError):
             self.service.run(config=config)
@@ -125,13 +113,17 @@ class TestTemplating(OrchestrationServiceTestBase):
         prompt_template_version = "1.0.0"
         user_content = "You are a system under test."
         tenant_scoped_prompt_client = GenAIHubProxyClient(resource_group="")
-        prompt_template_client = PromptTemplateClient(tenant_scoped_prompt_client)        
-        spec = PromptTemplateSpec(template=[PromptTemplate(role="user", content=user_content)])
+        prompt_template_client = PromptTemplateClient(tenant_scoped_prompt_client)
+        spec = PromptTemplateSpec(
+            template=[PromptTemplate(role="user", content=user_content)]
+        )
         # reference prompt template
-        prompt_template_id = prompt_template_client.create_prompt_template(scenario=prompt_template_scenario,
-                                                                           name=prompt_template_name,
-                                                                           version=prompt_template_version,
-                                                                           prompt_template_spec=spec).id
+        prompt_template_id = prompt_template_client.create_prompt_template(
+            scenario=prompt_template_scenario,
+            name=prompt_template_name,
+            version=prompt_template_version,
+            prompt_template_spec=spec,
+        ).id
         config = OrchestrationConfig(
             template=TemplateRef.from_id(prompt_template_id=prompt_template_id),
             llm=self.llm,
@@ -142,9 +134,12 @@ class TestTemplating(OrchestrationServiceTestBase):
         check_response_from_referenced_template(response, user_content)
 
         config = OrchestrationConfig(
-            template=TemplateRef.from_tuple(scenario=prompt_template_scenario, name=prompt_template_name,
-                                            version=prompt_template_version),
-            llm=self.llm
+            template=TemplateRef.from_tuple(
+                scenario=prompt_template_scenario,
+                name=prompt_template_name,
+                version=prompt_template_version,
+            ),
+            llm=self.llm,
         )
 
         response = self.service.run(config=config)
@@ -160,20 +155,16 @@ class TestTemplating(OrchestrationServiceTestBase):
                 SystemMessage("You are a friendly assistant."),
                 UserMessage("{{?user_query}}"),
             ],
-            response_format="text"
+            response_format="text",
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
+        config = OrchestrationConfig(template=template, llm=self.llm)
+
+        user_input = TemplateValue(
+            name="user_query", value="Who was the first person on the moon?"
         )
 
-        user_input = TemplateValue(name="user_query", value="Who was the first person on the moon?")
-
-        response = self.service.run(
-            config=config,
-            template_values=[user_input],
-        )
+        response = self.service.run(config=config, template_values=[user_input])
 
         result = response.orchestration_result.choices[0].message.content
         self.assertIsInstance(result, str)
@@ -184,132 +175,128 @@ class TestTemplating(OrchestrationServiceTestBase):
             # The error means result is not a JSON object, so the test passes in this block
             pass
 
-    def test_templating_with_response_format_json_object(self):       
+    def test_templating_with_response_format_json_object(self):
         template = Template(
             messages=[
                 SystemMessage("You are a friendly assistant."),
                 UserMessage("{{?user_query}}"),
             ],
-            response_format="json_object"
+            response_format="json_object",
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
+        config = OrchestrationConfig(template=template, llm=self.llm)
+
+        user_input = TemplateValue(
+            name="user_query", value="Who was the first person on the moon? in json"
         )
 
-        user_input = TemplateValue(name="user_query", value="Who was the first person on the moon? in json")
-
-        response = self.service.run(
-            config=config,
-            template_values=[user_input],
-        )
+        response = self.service.run(config=config, template_values=[user_input])
 
         try:
-            parsed_result = json.loads(response.orchestration_result.choices[0].message.content)
+            parsed_result = json.loads(
+                response.orchestration_result.choices[0].message.content
+            )
         except json.JSONDecodeError:
             self.fail("Result of LLM is not a valid JSON object")
 
         self.assertIsInstance(parsed_result, dict)
 
-    def test_templating_with_response_format_json_schema(self): 
+    def test_templating_with_response_format_json_schema(self):
         json_schema = {
             "title": "Person",
             "type": "object",
             "properties": {
-                    "firstName": {
+                "firstName": {
                     "type": "string",
-                    "description": "The person's first name."
+                    "description": "The person's first name.",
                 },
-                    "lastName": {
+                "lastName": {
                     "type": "string",
-                    "description": "The person's last name."
-                }
-            }
+                    "description": "The person's last name.",
+                },
+            },
         }
 
-        exp_result = {
-            "firstName": "Neil",
-            "lastName": "Armstrong"
-        }
+        exp_result = {"firstName": "Neil", "lastName": "Armstrong"}
 
         template = Template(
             messages=[
                 SystemMessage("You are a friendly assistant."),
                 UserMessage("{{?user_query}}"),
             ],
-            response_format=ResponseFormatJsonSchema(name="person", description="person mapping", schema=json_schema)
+            response_format=ResponseFormatJsonSchema(
+                name="person", description="person mapping", schema=json_schema
+            ),
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
+        config = OrchestrationConfig(template=template, llm=self.llm)
+
+        user_input = TemplateValue(
+            name="user_query", value="Who was the first person on the moon? in json"
         )
 
-        user_input = TemplateValue(name="user_query", value="Who was the first person on the moon? in json")
-
-        response = self.service.run(
-            config=config,
-            template_values=[user_input],
-        )
+        response = self.service.run(config=config, template_values=[user_input])
 
         try:
-            parsed_result = json.loads(response.orchestration_result.choices[0].message.content)
+            parsed_result = json.loads(
+                response.orchestration_result.choices[0].message.content
+            )
         except json.JSONDecodeError:
             self.fail("Result of LLM is not a valid JSON object")
 
         self.assertIsInstance(parsed_result, dict)
         self.assertEqual(parsed_result, exp_result)
 
-    def test_templating_with_response_format_json_schema_strict(self): 
+    def test_templating_with_response_format_json_schema_strict(self):
         json_schema = {
             "type": "object",
             "properties": {
-                    "firstName": {
+                "firstName": {
                     "type": "string",
-                    "description": "The person's first name."
+                    "description": "The person's first name.",
                 },
-                    "lastName": {
+                "lastName": {
                     "type": "string",
-                    "description": "The person's last name."
-                }
+                    "description": "The person's last name.",
+                },
             },
             "additionalProperties": False,
-            "required" :["firstName", "lastName"]
+            "required": ["firstName", "lastName"],
         }
 
-        exp_result = {
-            "firstName": "Neil",
-            "lastName": "Armstrong"
-        }
+        exp_result = {"firstName": "Neil", "lastName": "Armstrong"}
 
         template = Template(
             messages=[
                 SystemMessage("You are a friendly assistant."),
                 UserMessage("{{?user_query}}"),
             ],
-            response_format=ResponseFormatJsonSchema(name="person", description="person mapping", schema=json_schema, strict=True)
+            response_format=ResponseFormatJsonSchema(
+                name="person",
+                description="person mapping",
+                schema=json_schema,
+                strict=True,
+            ),
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
+        config = OrchestrationConfig(template=template, llm=self.llm)
+
+        user_input = TemplateValue(
+            name="user_query", value="Who was the first person on the moon?"
         )
 
-        user_input = TemplateValue(name="user_query", value="Who was the first person on the moon?")
-
-        response = self.service.run(
-            config=config,
-            template_values=[user_input],
-        )
+        response = self.service.run(config=config, template_values=[user_input])
 
         try:
-            parsed_result = json.loads(response.orchestration_result.choices[0].message.content)
+            parsed_result = json.loads(
+                response.orchestration_result.choices[0].message.content
+            )
         except json.JSONDecodeError:
             self.fail("Result of LLM is not a valid JSON object")
 
         self.assertIsInstance(parsed_result, dict)
         self.assertEqual(parsed_result, exp_result)
+
 
 @retry_on_429_or_503_class()
 class TestTemplateWithTools(OrchestrationServiceTestBase):
@@ -319,10 +306,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
         self.llm = LLM(
             name="gpt-4o-mini",
             version="latest",
-            parameters={
-                "max_tokens": 200,
-                "temperature": 0.0,
-            },
+            parameters={"max_tokens": 200, "temperature": 0.0},
         )
 
     def test_sync_tool_call_loop(self):
@@ -331,9 +315,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
             """Multiply two numbers."""
             return a * b
 
-        tool_map: Dict[str, Any] = {
-            "multiply": multiply,
-        }
+        tool_map: Dict[str, Any] = {"multiply": multiply}
 
         template = Template(
             messages=[
@@ -343,10 +325,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
             tools=[multiply],
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         template_values = [
             TemplateValue(name="a", value=3),
@@ -354,10 +333,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
         ]
 
         # First run: should trigger a tool call
-        response = self.service.run(
-            config=config,
-            template_values=template_values,
-        )
+        response = self.service.run(config=config, template_values=template_values)
 
         # Check tool_calls in the response
         tool_calls = response.orchestration_result.choices[0].message.tool_calls
@@ -380,10 +356,13 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
         assistant_message = AssistantMessage(
             content=response.orchestration_result.choices[0].message.content,
             refusal=response.orchestration_result.choices[0].message.refusal,
-            tool_calls=response.orchestration_result.choices[0].message.tool_calls)
+            tool_calls=response.orchestration_result.choices[0].message.tool_calls,
+        )
 
         self.assertIsNone(assistant_message.refusal)
-        self.assertTrue(assistant_message.tool_calls)  # assert some tool calls are present
+        self.assertTrue(
+            assistant_message.tool_calls
+        )  # assert some tool calls are present
 
         history.append(assistant_message)
 
@@ -391,10 +370,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
             tool = tool_map[tool_call.function.name]
             result = tool.execute(**tool_call.function.parse_arguments())
             self.assertEqual(result, 21)
-            tool_message = ToolMessage(
-                content=f"{result}",
-                tool_call_id=tool_call.id,
-            )
+            tool_message = ToolMessage(content=f"{result}", tool_call_id=tool_call.id)
             self.assertEqual(tool_message.tool_call_id, tool_call.id)
             self.assertEqual(tool_message.content, str(result))
             self.assertEqual(tool_message.role, "tool")
@@ -402,9 +378,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
 
         # Second run: should return the final answer
         response2 = self.service.run(
-            config=config,
-            template_values=template_values,
-            history=history,
+            config=config, template_values=template_values, history=history
         )
 
         final_content = response2.orchestration_result.choices[0].message.content
@@ -432,10 +406,7 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
             tools=[multiply, add],
         )
 
-        config = OrchestrationConfig(
-            template=template,
-            llm=self.llm,
-        )
+        config = OrchestrationConfig(template=template, llm=self.llm)
 
         # Start streaming
         stream = self.service.stream(config=config)
@@ -443,26 +414,30 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
         final_tool_calls = {}
 
         for chunk in stream:
-            for tool_call in chunk.orchestration_result.choices[0].delta.tool_calls or []:
+            for tool_call in (
+                chunk.orchestration_result.choices[0].delta.tool_calls or []
+            ):
                 index = tool_call.index
 
                 if index not in final_tool_calls:
                     final_tool_calls[index] = tool_call
                 else:
                     # Concatenate arguments if split across chunks
-                    final_tool_calls[index].function.arguments += tool_call.function.arguments
+                    final_tool_calls[
+                        index
+                    ].function.arguments += tool_call.function.arguments
 
         self.assertEqual(len(final_tool_calls), 2)
 
         multiply_call = next(
-            call for call in final_tool_calls.values()
+            call
+            for call in final_tool_calls.values()
             if call.function.name == "multiply"
         )
         self.assertIsNotNone(multiply_call.id)
 
         add_call = next(
-            call for call in final_tool_calls.values()
-            if call.function.name == "add"
+            call for call in final_tool_calls.values() if call.function.name == "add"
         )
         self.assertIsNotNone(add_call.id)
 
@@ -470,9 +445,8 @@ class TestTemplateWithTools(OrchestrationServiceTestBase):
             json.loads(multiply_call.function.arguments), {"a": 3, "b": 12}
         )
 
-        self.assertEqual(
-            json.loads(add_call.function.arguments), {"a": 11, "b": 49}
-        )
+        self.assertEqual(json.loads(add_call.function.arguments), {"a": 11, "b": 49})
+
 
 @retry_on_429_or_503_class()
 class TestMultimodalTemplating(OrchestrationServiceTestBase):
@@ -493,16 +467,11 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         self.llm = LLM(
             name="gpt-4o",
             version="latest",
-            parameters={
-                "max_tokens": 50,
-                "temperature": 0.0,
-            },
+            parameters={"max_tokens": 50, "temperature": 0.0},
         )
 
     def test_image_from_url(self):
-        data_url = (
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAE0lEQVR4nGP8z4APMOGVZRip0gBBLAETee26JgAAAABJRU5ErkJggg=='
-        )
+        data_url = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAE0lEQVR4nGP8z4APMOGVZRip0gBBLAETee26JgAAAABJRU5ErkJggg=="
         image_item = ImageItem(url=data_url)
         multimodal_content = [image_item, "What color is this image?"]
 
@@ -541,9 +510,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         config = OrchestrationConfig(template=template, llm=self.llm)
         response = self.service.run(config=config)
 
-        self.assertEqual(
-            len(response.module_results.templating[0].content), 2
-        )
+        self.assertEqual(len(response.module_results.templating[0].content), 2)
         self.assertTrue(response.content)
 
     def test_multimodal_input_streaming(self):
@@ -554,7 +521,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         config = OrchestrationConfig(template=template, llm=self.llm)
         response = self.service.stream(config=config)
 
-        message = ''
+        message = ""
 
         for chunk in response:
             if chunk.orchestration_result.choices:

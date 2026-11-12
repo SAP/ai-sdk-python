@@ -19,7 +19,5 @@ def converse():
             ],
         }
     ]
-    response = bedrock.converse(
-        messages=conversation,
-    )
+    response = bedrock.converse(messages=conversation)
     return {"result": response["output"]["message"]["content"][0]["text"]}

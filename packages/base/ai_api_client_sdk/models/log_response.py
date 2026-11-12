@@ -12,6 +12,7 @@ class LogResultItem:
     :type timestamp: datetime
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, msg: str, timestamp: datetime, **kwargs):
         self.msg: str = msg
         self.timestamp: datetime = timestamp
@@ -26,7 +27,9 @@ class LogResultItem:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.log_response.LogResultItem`
         """
-        log_result_item_dict['timestamp'] = parse_datetime(log_result_item_dict['timestamp'])
+        log_result_item_dict["timestamp"] = parse_datetime(
+            log_result_item_dict["timestamp"]
+        )
         return LogResultItem(**log_result_item_dict)
 
 
@@ -36,6 +39,7 @@ class LogResponseData:
     :type result: List[class:`ai_api_client_sdk.models.log_response.LogResponseResultItem`]
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, result: List[LogResultItem], **kwargs):
         self.result: List[LogResultItem] = result
 
@@ -49,7 +53,9 @@ class LogResponseData:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.log_response.LogResponseData`
         """
-        log_response_data_dict['result'] = [LogResultItem.from_dict(r) for r in log_response_data_dict['result']]
+        log_response_data_dict["result"] = [
+            LogResultItem.from_dict(r) for r in log_response_data_dict["result"]
+        ]
         return LogResponseData(**log_response_data_dict)
 
 
@@ -59,6 +65,7 @@ class LogResponse:
     :type data: class:`ai_api_client_sdk.models.log_response.LogResponseData`
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, data: LogResponseData, **kwargs):
         self.data: LogResponseData = data
 
@@ -66,7 +73,7 @@ class LogResponse:
         res_str = "Log response messages: "
         for result_item in self.data.result:
             res_str += str(result_item.msg) + ", "
-        return res_str[:len(res_str) - 2]
+        return res_str[: len(res_str) - 2]
 
     @staticmethod
     def from_dict(log_response_dict: Dict[str, Any]):
@@ -78,5 +85,5 @@ class LogResponse:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.log_response.LogResponse`
         """
-        log_response_dict['data'] = LogResponseData.from_dict(log_response_dict['data'])
+        log_response_dict["data"] = LogResponseData.from_dict(log_response_dict["data"])
         return LogResponse(**log_response_dict)

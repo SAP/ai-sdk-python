@@ -15,6 +15,7 @@ class OrchestrationConfigPostRequest(BaseModel):
         scenario: The scenario of the orchestration config.
         spec: The orchestration config specification.
     """
+
     name: str = Field(max_length=120)
     version: str = Field(max_length=10)
     scenario: str = Field(max_length=120)
@@ -38,6 +39,7 @@ class OrchestrationConfigPostResponse(BaseModel):
         name: The config name.
         version: The config version.
     """
+
     message: str
     id: str
     scenario: str
@@ -59,6 +61,7 @@ class OrchestrationConfigGetResponse(BaseModel):
         is_version_head: Whether this is the head version.
         spec: The orchestration config specification (optional).
     """
+
     id: Optional[str] = None
     name: Optional[str] = None
     version: Optional[str] = None
@@ -77,7 +80,6 @@ class OrchestrationConfigGetResponse(BaseModel):
         return super().model_dump(**kwargs)
 
 
-
 class OrchestrationConfigListResponse(BaseModel):
     """
     Response to list orchestration configs request.
@@ -86,6 +88,7 @@ class OrchestrationConfigListResponse(BaseModel):
         count: Number of configs returned.
         resources: List of OrchestrationConfigGetResponse objects.
     """
+
     count: int
     resources: List[OrchestrationConfigGetResponse]
 
@@ -104,4 +107,5 @@ class OrchestrationConfigDeleteResponse(BaseModel):
     Args:
         message: Response message.
     """
+
     message: str

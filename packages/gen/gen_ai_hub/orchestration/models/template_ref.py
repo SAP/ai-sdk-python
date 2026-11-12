@@ -16,10 +16,7 @@ class TemplateRef(JSONSerializable):
             setattr(self, key, value)
 
     @classmethod
-    def from_id(
-            cls,
-            prompt_template_id: str
-    ):
+    def from_id(cls, prompt_template_id: str):
         """Creates a TemplateRef instance from a prompt template ID.
 
         :param prompt_template_id: The ID of the prompt template.
@@ -30,12 +27,7 @@ class TemplateRef(JSONSerializable):
         return cls(id=prompt_template_id)
 
     @classmethod
-    def from_tuple(
-            cls,
-            scenario: str,
-            name: str,
-            version: str
-    ):
+    def from_tuple(cls, scenario: str, name: str, version: str):
         """Creates a TemplateRef instance from a scenario, name, and version.
 
         :param scenario: The scenario of the prompt template.
@@ -58,4 +50,4 @@ class TemplateRef(JSONSerializable):
         template_ref = {}
         for key, value in self.__dict__.items():
             template_ref[key] = value
-        return { "template_ref": template_ref }
+        return {"template_ref": template_ref}

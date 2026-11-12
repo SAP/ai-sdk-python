@@ -23,8 +23,16 @@ class Scenario:
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, id: str, created_at: datetime, modified_at: datetime, name: str, description: str = None,
-                 labels: List[Label] = None, **kwargs):
+    def __init__(
+        self,
+        id: str,
+        created_at: datetime,
+        modified_at: datetime,
+        name: str,
+        description: str = None,
+        labels: List[Label] = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.name: str = name
         self.description: str = description
@@ -41,7 +49,12 @@ class Scenario:
         return True
 
     def __str__(self):
-        return "Scenario id: " + str(self.id) + ", Scenario description: " + str(self.description)
+        return (
+            "Scenario id: "
+            + str(self.id)
+            + ", Scenario description: "
+            + str(self.description)
+        )
 
     @staticmethod
     def from_dict(scenario_dict: Dict[str, Any]):
@@ -53,16 +66,18 @@ class Scenario:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.scenario.Scenario`
         """
-        scenario_dict['created_at'] = parse_datetime(scenario_dict['created_at'])
-        scenario_dict['modified_at'] = parse_datetime(scenario_dict['modified_at'])
-        if scenario_dict.get('labels'):
-            scenario_dict['labels'] = [Label.from_dict(l) for l in scenario_dict['labels']]
+        scenario_dict["created_at"] = parse_datetime(scenario_dict["created_at"])
+        scenario_dict["modified_at"] = parse_datetime(scenario_dict["modified_at"])
+        if scenario_dict.get("labels"):
+            scenario_dict["labels"] = [
+                Label.from_dict(l) for l in scenario_dict["labels"]
+            ]
         return Scenario(**scenario_dict)
 
     def is_llm_scenario(self):
         """Returns if the scenario is a LLM scenario or not
 
-                :return: True if scenario is llm scenario, False otherwise
-                :rtype: bool
-                """
+        :return: True if scenario is llm scenario, False otherwise
+        :rtype: bool
+        """
         return check_if_llm_scenario(scenario=self)

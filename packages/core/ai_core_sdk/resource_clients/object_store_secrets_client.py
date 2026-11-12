@@ -2,7 +2,9 @@ from ai_core_sdk.helpers import form_top_skip_params
 from ai_core_sdk.models import BasicResponse
 from ai_core_sdk.models.base_models import Message
 from ai_core_sdk.models.object_store_secret import ObjectStoreSecret
-from ai_core_sdk.models.object_store_secret_query_response import ObjectStoreSecretQueryResponse
+from ai_core_sdk.models.object_store_secret_query_response import (
+    ObjectStoreSecretQueryResponse,
+)
 from ai_core_sdk.resource_clients import BaseClient
 
 
@@ -11,11 +13,22 @@ class ObjectStoreSecretsClient(BaseClient):
     endpoints of the server. It implements the base class
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
-    __PATH = '/admin/objectStoreSecrets'
 
-    def create(self, name: str, type: str, data: dict, bucket: str = None, endpoint: str = None, region: str = None,
-               path_prefix: str = None, verifyssl: str = None, usehttps: str = None,
-               resource_group: str = None) -> Message:
+    __PATH = "/admin/objectStoreSecrets"
+
+    def create(
+        self,
+        name: str,
+        type: str,
+        data: dict,
+        bucket: str = None,
+        endpoint: str = None,
+        region: str = None,
+        path_prefix: str = None,
+        verifyssl: str = None,
+        usehttps: str = None,
+        resource_group: str = None,
+    ) -> Message:
         """Creates an object store secret.
 
         :param name: name of the object store secret
@@ -53,26 +66,24 @@ class ObjectStoreSecretsClient(BaseClient):
         :return: A list of metadata of available secrets
         :rtype: class:`ai_core_sdk.models.base_models.BasicNameResponse`
         """
-        body = {
-            'name': name,
-            'type': type,
-            'data': data,
-        }
+        body = {"name": name, "type": type, "data": data}
 
         if bucket:
-            body['bucket'] = bucket
+            body["bucket"] = bucket
         if endpoint:
-            body['endpoint'] = endpoint
+            body["endpoint"] = endpoint
         if region:
-            body['region'] = region
+            body["region"] = region
         if path_prefix:
-            body['path_prefix'] = path_prefix
+            body["path_prefix"] = path_prefix
         if verifyssl:
-            body['verifyssl'] = verifyssl
+            body["verifyssl"] = verifyssl
         if usehttps:
-            body['usehttps'] = usehttps
+            body["usehttps"] = usehttps
 
-        response_dict = self.rest_client.post(path=f'{self.__PATH}', body=body, resource_group=resource_group)
+        response_dict = self.rest_client.post(
+            path=f"{self.__PATH}", body=body, resource_group=resource_group
+        )
         return Message.from_dict(response_dict)
 
     def delete(self, name: str, resource_group: str = None) -> BasicResponse:
@@ -97,7 +108,9 @@ class ObjectStoreSecretsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'{self.__PATH}/{name}', resource_group=resource_group)
+        response_dict = self.rest_client.delete(
+            path=f"{self.__PATH}/{name}", resource_group=resource_group
+        )
         return BasicResponse.from_dict(response_dict)
 
     def get(self, name: str, resource_group: str = None) -> ObjectStoreSecret:
@@ -122,12 +135,24 @@ class ObjectStoreSecretsClient(BaseClient):
         :return: The retrieved object store secret
         :rtype: class:`ai_core_sdk.models.object_store_secret.ObjectStoreSecret`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{name}', resource_group=resource_group)
+        response_dict = self.rest_client.get(
+            path=f"{self.__PATH}/{name}", resource_group=resource_group
+        )
         return ObjectStoreSecret.from_dict(response_dict)
 
-    def modify(self, name: str, type: str, data: dict, bucket: str = None, endpoint: str = None, region: str = None,
-               path_prefix: str = None, verifyssl: str = None, usehttps: str = None,
-               resource_group: str = None) -> BasicResponse:
+    def modify(
+        self,
+        name: str,
+        type: str,
+        data: dict,
+        bucket: str = None,
+        endpoint: str = None,
+        region: str = None,
+        path_prefix: str = None,
+        verifyssl: str = None,
+        usehttps: str = None,
+        resource_group: str = None,
+    ) -> BasicResponse:
         """Modifies the object store secret
 
         :param name: name of the object store secret to be modified
@@ -165,29 +190,29 @@ class ObjectStoreSecretsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        body = {
-            'name': name,
-            'type': type,
-            'data': data,
-        }
+        body = {"name": name, "type": type, "data": data}
 
         if bucket:
-            body['bucket'] = bucket
+            body["bucket"] = bucket
         if endpoint:
-            body['endpoint'] = endpoint
+            body["endpoint"] = endpoint
         if region:
-            body['region'] = region
+            body["region"] = region
         if path_prefix:
-            body['path_prefix'] = path_prefix
+            body["path_prefix"] = path_prefix
         if verifyssl:
-            body['verifyssl'] = verifyssl
+            body["verifyssl"] = verifyssl
         if usehttps:
-            body['usehttps'] = usehttps
+            body["usehttps"] = usehttps
 
-        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{name}', body=body, resource_group=resource_group)
+        response_dict = self.rest_client.patch(
+            path=f"{self.__PATH}/{name}", body=body, resource_group=resource_group
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def query(self, top: int = None, skip: int = None, resource_group: str = None) -> ObjectStoreSecretQueryResponse:
+    def query(
+        self, top: int = None, skip: int = None, resource_group: str = None
+    ) -> ObjectStoreSecretQueryResponse:
         """Returns the object store secrets.
 
         :param top: Number of object store secrets to be retrieved, defaults to None
@@ -211,5 +236,7 @@ class ObjectStoreSecretsClient(BaseClient):
         :rtype: class:`ai_core_sdk.models.object_store_secret_query_response.ObjectStoreSecretQueryResponse`
         """
         params = form_top_skip_params(top, skip)
-        response_dict = self.rest_client.get(path=f'{self.__PATH}', params=params, resource_group=resource_group)
+        response_dict = self.rest_client.get(
+            path=f"{self.__PATH}", params=params, resource_group=resource_group
+        )
         return ObjectStoreSecretQueryResponse.from_dict(response_dict)

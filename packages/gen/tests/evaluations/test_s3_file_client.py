@@ -12,7 +12,6 @@ from gen_ai_hub.evaluations.helpers.s3_file_client import S3FileClient
 
 
 class TestS3FileClient(unittest.TestCase):
-
     def setUp(self):
         self.collector = ValidationCollector()
 
@@ -48,10 +47,7 @@ class TestS3FileClient(unittest.TestCase):
 
         S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_bucket_forbidden(self):
         mock_s3 = self._mock_boto_session()
@@ -61,28 +57,19 @@ class TestS3FileClient(unittest.TestCase):
 
         S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_no_credentials(self):
         with patch("boto3.Session", side_effect=module.NoCredentialsError()):
             S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_generic_error(self):
         with patch("boto3.Session", side_effect=Exception("boom")):
             S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_read_json_success(self):
         mock_s3 = self._mock_boto_session()
@@ -110,8 +97,7 @@ class TestS3FileClient(unittest.TestCase):
         c.read_json("x.json")
 
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_json_boto_error(self):
@@ -124,8 +110,7 @@ class TestS3FileClient(unittest.TestCase):
 
         self.assertEqual(c.read_json("x.json"), [])
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_json_generic_error(self):
@@ -136,35 +121,26 @@ class TestS3FileClient(unittest.TestCase):
 
         self.assertEqual(c.read_json("x.json"), [])
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_jsonl_success(self):
         mock_s3 = self._mock_boto_session()
-        mock_s3.get_object.return_value = {
-            "Body": BytesIO(b'{"x":1}\n{"y":2}')
-        }
+        mock_s3.get_object.return_value = {"Body": BytesIO(b'{"x":1}\n{"y":2}')}
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            c.read_jsonl("x.jsonl"),
-            [{"x": 1}, {"y": 2}],
-        )
+        self.assertEqual(c.read_jsonl("x.jsonl"), [{"x": 1}, {"y": 2}])
 
     def test_read_csv_success(self):
         mock_s3 = self._mock_boto_session()
         csv_data = "a,b\n1,2\n3,4"
-        mock_s3.get_object.return_value = {
-            "Body": BytesIO(csv_data.encode())
-        }
+        mock_s3.get_object.return_value = {"Body": BytesIO(csv_data.encode())}
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
         self.assertEqual(
-            c.read_csv("x.csv"),
-            [{"a": "1", "b": "2"}, {"a": "3", "b": "4"}],
+            c.read_csv("x.csv"), [{"a": "1", "b": "2"}, {"a": "3", "b": "4"}]
         )
 
     def test_upload_json_success(self):
@@ -182,10 +158,7 @@ class TestS3FileClient(unittest.TestCase):
         c = S3FileClient("bucket", error_collector=self.collector)
 
         self.assertFalse(c.upload_json({"a": 1}, "x.json"))
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.FILE_UPLOAD_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.FILE_UPLOAD_ERROR)
 
     def test_get_sqlitedb_tables_data_from_s3(self):
         mock_s3 = self._mock_boto_session()
@@ -200,18 +173,13 @@ class TestS3FileClient(unittest.TestCase):
         with open(tmp.name, "rb") as f:
             db_bytes = f.read()
 
-        mock_s3.download_fileobj.side_effect = (
-            lambda b, k, fd: fd.write(db_bytes)
-        )
+        mock_s3.download_fileobj.side_effect = lambda b, k, fd: fd.write(db_bytes)
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
         out = c.get_sqlitedb_tables_data_from_s3("db.sqlite", ["t"])
 
-        self.assertEqual(
-            out["t"],
-            [{"id": 1, "val": "A"}],
-        )
+        self.assertEqual(out["t"], [{"id": 1, "val": "A"}])
 
 
 import json
@@ -227,9 +195,7 @@ from gen_ai_hub.evaluations.exceptions.error_codes import ErrorCode
 from gen_ai_hub.evaluations.helpers.s3_file_client import S3FileClient
 
 
-
 class TestS3FileClient(unittest.TestCase):
-
     def setUp(self):
         self.collector = ValidationCollector()
 
@@ -264,10 +230,7 @@ class TestS3FileClient(unittest.TestCase):
 
         S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_bucket_forbidden(self):
         mock_s3 = self._mock_boto_session()
@@ -277,28 +240,19 @@ class TestS3FileClient(unittest.TestCase):
 
         S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_no_credentials(self):
         with patch("boto3.Session", side_effect=module.NoCredentialsError()):
             S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_init_generic_error(self):
         with patch("boto3.Session", side_effect=Exception("boom")):
             S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.INVALID_S3_CLIENT_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.INVALID_S3_CLIENT_ERROR)
 
     def test_read_json_success(self):
         mock_s3 = self._mock_boto_session()
@@ -326,8 +280,7 @@ class TestS3FileClient(unittest.TestCase):
         c.read_json("x.json")
 
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_json_boto_error(self):
@@ -340,8 +293,7 @@ class TestS3FileClient(unittest.TestCase):
 
         self.assertEqual(c.read_json("x.json"), [])
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_json_generic_error(self):
@@ -352,48 +304,34 @@ class TestS3FileClient(unittest.TestCase):
 
         self.assertEqual(c.read_json("x.json"), [])
         self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR,
+            self.collector.errors[0][0], ErrorCode.READ_FILE_DATA_FROM_ARTIFACT_ERROR
         )
 
     def test_read_jsonl_success(self):
         mock_s3 = self._mock_boto_session()
-        mock_s3.get_object.return_value = {
-            "Body": BytesIO(b'{"x":1}\n{"y":2}')
-        }
+        mock_s3.get_object.return_value = {"Body": BytesIO(b'{"x":1}\n{"y":2}')}
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            c.read_jsonl("x.jsonl"),
-            [{"x": 1}, {"y": 2}],
-        )
+        self.assertEqual(c.read_jsonl("x.jsonl"), [{"x": 1}, {"y": 2}])
 
     def test_read_jsonl_invalid_lines(self):
         mock_s3 = self._mock_boto_session()
-        mock_s3.get_object.return_value = {
-            "Body": BytesIO(b'{"x":1}\nbad\n{"y":2}')
-        }
+        mock_s3.get_object.return_value = {"Body": BytesIO(b'{"x":1}\nbad\n{"y":2}')}
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
-        self.assertEqual(
-            c.read_jsonl("x.jsonl"),
-            [{"x": 1}, {"y": 2}],
-        )
+        self.assertEqual(c.read_jsonl("x.jsonl"), [{"x": 1}, {"y": 2}])
 
     def test_read_csv_success(self):
         mock_s3 = self._mock_boto_session()
         csv_data = "a,b\n1,2\n3,4"
-        mock_s3.get_object.return_value = {
-            "Body": BytesIO(csv_data.encode())
-        }
+        mock_s3.get_object.return_value = {"Body": BytesIO(csv_data.encode())}
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
         self.assertEqual(
-            c.read_csv("x.csv"),
-            [{"a": "1", "b": "2"}, {"a": "3", "b": "4"}],
+            c.read_csv("x.csv"), [{"a": "1", "b": "2"}, {"a": "3", "b": "4"}]
         )
 
     def test_read_csv_parsing_error(self):
@@ -424,10 +362,7 @@ class TestS3FileClient(unittest.TestCase):
         c = S3FileClient("bucket", error_collector=self.collector)
 
         self.assertFalse(c.upload_json({"a": 1}, "x.json"))
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.FILE_UPLOAD_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.FILE_UPLOAD_ERROR)
 
     def test_upload_csv_empty_data(self):
         mock_s3 = self._mock_boto_session()
@@ -435,10 +370,7 @@ class TestS3FileClient(unittest.TestCase):
         c = S3FileClient("bucket", error_collector=self.collector)
 
         self.assertFalse(c.upload_csv([], "x.csv"))
-        self.assertEqual(
-            self.collector.errors[0][0],
-            ErrorCode.FILE_UPLOAD_ERROR,
-        )
+        self.assertEqual(self.collector.errors[0][0], ErrorCode.FILE_UPLOAD_ERROR)
 
     def test_get_sqlitedb_tables_data_from_s3(self):
         mock_s3 = self._mock_boto_session()
@@ -453,15 +385,10 @@ class TestS3FileClient(unittest.TestCase):
         with open(tmp.name, "rb") as f:
             db_bytes = f.read()
 
-        mock_s3.download_fileobj.side_effect = (
-            lambda b, k, fd: fd.write(db_bytes)
-        )
+        mock_s3.download_fileobj.side_effect = lambda b, k, fd: fd.write(db_bytes)
 
         c = S3FileClient("bucket", error_collector=self.collector)
 
         out = c.get_sqlitedb_tables_data_from_s3("db.sqlite", ["t"])
 
-        self.assertEqual(
-            out["t"],
-            [{"id": 1, "val": "A"}],
-        )
+        self.assertEqual(out["t"], [{"id": 1, "val": "A"}])

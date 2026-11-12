@@ -18,8 +18,15 @@ class MetricResource:
     :type custom_info: List[class:`ai_api_client_sdk.models.metric_custom_info.MetricCustomInfo`], optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, execution_id: str, metrics: List[Metric] = None, tags: List[MetricTag] = None,
-                 custom_info: List[MetricCustomInfo] = None, **kwargs):
+
+    def __init__(
+        self,
+        execution_id: str,
+        metrics: List[Metric] = None,
+        tags: List[MetricTag] = None,
+        custom_info: List[MetricCustomInfo] = None,
+        **kwargs,
+    ):
         self.execution_id: str = execution_id
         self.metrics: List[Metric] = metrics
         self.tags: List[MetricTag] = tags
@@ -29,7 +36,7 @@ class MetricResource:
         ret_string = "Metric execution id: " + str(self.execution_id) + ", Metrics: "
         for metric in self.metrics:
             ret_string += metric.name + ", "
-        return ret_string[:len(ret_string) - 2]
+        return ret_string[: len(ret_string) - 2]
 
     @staticmethod
     def from_dict(metric_resource_dict: Dict[str, Any]):
@@ -41,11 +48,17 @@ class MetricResource:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.metric_resource.MetricResource`
         """
-        if metric_resource_dict.get('metrics'):
-            metric_resource_dict['metrics'] = [Metric.from_dict(m) for m in metric_resource_dict['metrics']]
-        if metric_resource_dict.get('tags'):
-            metric_resource_dict['tags'] = [MetricTag.from_dict(mt) for mt in metric_resource_dict['tags']]
-        if metric_resource_dict.get('custom_info'):
-            metric_resource_dict['custom_info'] = \
-                [MetricCustomInfo.from_dict(mci) for mci in metric_resource_dict['custom_info']]
+        if metric_resource_dict.get("metrics"):
+            metric_resource_dict["metrics"] = [
+                Metric.from_dict(m) for m in metric_resource_dict["metrics"]
+            ]
+        if metric_resource_dict.get("tags"):
+            metric_resource_dict["tags"] = [
+                MetricTag.from_dict(mt) for mt in metric_resource_dict["tags"]
+            ]
+        if metric_resource_dict.get("custom_info"):
+            metric_resource_dict["custom_info"] = [
+                MetricCustomInfo.from_dict(mci)
+                for mci in metric_resource_dict["custom_info"]
+            ]
         return MetricResource(**metric_resource_dict)

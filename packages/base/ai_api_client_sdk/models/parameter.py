@@ -15,10 +15,18 @@ class Parameter:
     :type default: str
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    class Type(Enum):
-        STRING = 'string'
 
-    def __init__(self, name: str, type: Type, description: str = None, default: str = None, **kwargs):
+    class Type(Enum):
+        STRING = "string"
+
+    def __init__(
+        self,
+        name: str,
+        type: Type,
+        description: str = None,
+        default: str = None,
+        **kwargs,
+    ):
         self.name: str = name
         self.type: Parameter.Type = type  # pylint: disable=used-before-assignment
         self.description: str = description
@@ -30,9 +38,17 @@ class Parameter:
         return self.name == other.name and self.type == other.type
 
     def __str__(self):
-        return "Parameter name: " + str(self.name) + ", Parameter type: " + str(self.type.value) + ", Parameter " \
-                                                                                                   "description: " + \
-               str(self.description) + ", Parameter default value: " + str(self.default)
+        return (
+            "Parameter name: "
+            + str(self.name)
+            + ", Parameter type: "
+            + str(self.type.value)
+            + ", Parameter "
+            "description: "
+            + str(self.description)
+            + ", Parameter default value: "
+            + str(self.default)
+        )
 
     @staticmethod
     def from_dict(parameter_dict: Dict[str, Any]):
@@ -44,5 +60,5 @@ class Parameter:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.parameter.Parameter`
         """
-        parameter_dict['type'] = Parameter.Type(parameter_dict['type'])
+        parameter_dict["type"] = Parameter.Type(parameter_dict["type"])
         return Parameter(**parameter_dict)

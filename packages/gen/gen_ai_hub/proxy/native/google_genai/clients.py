@@ -11,6 +11,7 @@ from gen_ai_hub.proxy.core.utils import kwargs_if_set
 
 _deployment_cache = {}
 
+
 def _resolve_deployment(transport_instance, requested_model_name: str):
     """
     Finds the appropriate AI Core deployment based on the model name and any filtering kwargs in model_identification.
@@ -21,12 +22,14 @@ def _resolve_deployment(transport_instance, requested_model_name: str):
 
     model_identification = transport_instance.get_selector_kwargs().copy()
 
-    model_identification['model_name'] = requested_model_name
+    model_identification["model_name"] = requested_model_name
 
     if requested_model_name == "gemini-embedding-001":
-        model_identification['model_name'] = "gemini-embedding"
+        model_identification["model_name"] = "gemini-embedding"
 
-    deployment = transport_instance.proxy_client.select_deployment(**model_identification)
+    deployment = transport_instance.proxy_client.select_deployment(
+        **model_identification
+    )
 
     _deployment_cache[requested_model_name] = deployment
     return deployment
@@ -118,7 +121,7 @@ class AICoreDynamicTransport(httpx.BaseTransport):
         return self._inner_transport.handle_request(modified_request)
 
     def close(self):
-        """Closes the inner transport.""" 
+        """Closes the inner transport."""
         self._inner_transport.close()
 
 
@@ -158,21 +161,24 @@ class AsyncAICoreDynamicTransport(httpx.AsyncBaseTransport):
         """Closes the inner transport."""
         await self._inner_transport.aclose()
 
+
 class Models(GoogleModels):
     """
     Class that extends the original Google Models class for patch embed_content method.
     """
+
     def embed_content(
-            self,
-            *,
-            model: str,
-            contents: Union[types.ContentListUnion, types.ContentListUnionDict],
-            config: Optional[types.EmbedContentConfigOrDict] = None,
+        self,
+        *,
+        model: str,
+        contents: Union[types.ContentListUnion, types.ContentListUnionDict],
+        config: Optional[types.EmbedContentConfigOrDict] = None,
     ) -> types.EmbedContentResponse:
         """Need for add model version for "gemini-embedding" model."""
         if model == "gemini-embedding":
             model = "gemini-embedding-001"
         return super().embed_content(model=model, contents=contents, config=config)
+
 
 class Client(GoogleClient):
     """
@@ -181,18 +187,18 @@ class Client(GoogleClient):
     """
 
     def __init__(
-            self,
-            # Standard Google Args (kept for compatibility, though placeholders used)
-            vertexai: bool = True,
-            project: str = "placeholder",
-            location: str = "placeholder",
-            # AI Core Filtering Args
-            deployment_id: str = "",
-            config_id: str = "",
-            config_name: str = "",
-            proxy_client: BaseProxyClient = None,
-            timeout: int = None,
-            **kwargs
+        self,
+        # Standard Google Args (kept for compatibility, though placeholders used)
+        vertexai: bool = True,
+        project: str = "placeholder",
+        location: str = "placeholder",
+        # AI Core Filtering Args
+        deployment_id: str = "",
+        config_id: str = "",
+        config_name: str = "",
+        proxy_client: BaseProxyClient = None,
+        timeout: int = None,
+        **kwargs,
     ):
         """Initializes the Client.
 
@@ -216,18 +222,14 @@ class Client(GoogleClient):
         self.proxy_client = proxy_client or get_proxy_client()
 
         deployment_selector_kwargs = kwargs_if_set(
-            deployment_id=deployment_id,
-            config_id=config_id,
-            config_name=config_name,
+            deployment_id=deployment_id, config_id=config_id, config_name=config_name
         )
 
         sync_transport = AICoreDynamicTransport(
-            proxy_client=self.proxy_client,
-            **deployment_selector_kwargs
+            proxy_client=self.proxy_client, **deployment_selector_kwargs
         )
         async_transport = AsyncAICoreDynamicTransport(
-            proxy_client=self.proxy_client,
-            **deployment_selector_kwargs
+            proxy_client=self.proxy_client, **deployment_selector_kwargs
         )
 
         super().__init__(
@@ -236,14 +238,10 @@ class Client(GoogleClient):
             location=location,
             credentials=Credentials(token="dummy-token-placeholder"),
             http_options=types.HttpOptions(
-                client_args={
-                    "transport": sync_transport
-                    },
-                async_client_args={
-                    "transport": async_transport
-                    },
+                client_args={"transport": sync_transport},
+                async_client_args={"transport": async_transport},
                 timeout=timeout,
             ),
-            **kwargs
+            **kwargs,
         )
         self._models = Models(self._api_client)

@@ -22,24 +22,30 @@ PATH_PIPELINES_API_ = "/lm/document-grounding/pipelines"
 PIPELINE_ID = "123"
 
 BASE_PIPELINE_RESPONSE = BasePipelineResponse(id=PIPELINE_ID, type="S3")
-GET_PIPELINES_RESPONSE = GetPipelinesResponse(count=2, resources=[
-    S3PipelineGetResponse(id="testS3", configuration=CommonConfiguration(destination="s3-secret")),
-    SFTPPipelineGetResponse(id="testSFTP", configuration=CommonConfiguration(destination="sftp-secret"))
-    ])
+GET_PIPELINES_RESPONSE = GetPipelinesResponse(
+    count=2,
+    resources=[
+        S3PipelineGetResponse(
+            id="testS3", configuration=CommonConfiguration(destination="s3-secret")
+        ),
+        SFTPPipelineGetResponse(
+            id="testSFTP", configuration=CommonConfiguration(destination="sftp-secret")
+        ),
+    ],
+)
 
-GET_PIPELINE_STATUS_RESPONSE = GetPipelineStatusResponse(status="FINISHED", lastStarted="2025-10-10T00:00:00Z")
+GET_PIPELINE_STATUS_RESPONSE = GetPipelineStatusResponse(
+    status="FINISHED", lastStarted="2025-10-10T00:00:00Z"
+)
 PIPELINE_ID_RESPONSE = PipelineIdResponse(pipelineId=PIPELINE_ID)
 
 # ---- Search pipelines ----
 SEARCH_PIPELINES_REQUEST = SearchPipelineRequest(
-    dataRepositoryMetadata=[
-        DataRepositoryMetadataItem(key="new1", value=["details"])
-    ]
+    dataRepositoryMetadata=[DataRepositoryMetadataItem(key="new1", value=["details"])]
 )
 
 SEARCH_PIPELINES_RESPONSE = SearchPipelinesResponse(
-    count=1,
-    resources=[SearchPipelineData(pipelineId=PIPELINE_ID)]
+    count=1, resources=[SearchPipelineData(pipelineId=PIPELINE_ID)]
 )
 
 # ---- Executions (pipeline runs) ----
@@ -54,30 +60,18 @@ GET_EXECUTIONS_RESPONSE = GetPipelineExecutionsResponse(
     ],
 )
 
-GET_EXECUTION_BY_ID_RESPONSE = PipelineExecution(
-    id=EXECUTION_ID_1,
-    status="FINISHED",
-)
+GET_EXECUTION_BY_ID_RESPONSE = PipelineExecution(id=EXECUTION_ID_1, status="FINISHED")
 
 # ---- Documents for a specific execution ----
 DOCUMENT_ID_1 = "doc-1"
 DOCUMENT_ID_2 = "doc-2"
 
-DOC_EXEC_1 = Document(
-    id=DOCUMENT_ID_1,
-    status="INDEXED",
-    title="Execution Document 1",
-)
+DOC_EXEC_1 = Document(id=DOCUMENT_ID_1, status="INDEXED", title="Execution Document 1")
 
-DOC_EXEC_2 = Document(
-    id=DOCUMENT_ID_2,
-    status="FAILED",
-    title="Execution Document 2",
-)
+DOC_EXEC_2 = Document(id=DOCUMENT_ID_2, status="FAILED", title="Execution Document 2")
 
 GET_EXECUTION_DOCUMENTS_RESPONSE = DocumentsStatusResponse(
-    count=2,
-    resources=[DOC_EXEC_1, DOC_EXEC_2],
+    count=2, resources=[DOC_EXEC_1, DOC_EXEC_2]
 )
 
 GET_EXECUTION_DOCUMENT_BY_ID_RESPONSE = DOC_EXEC_1
@@ -87,26 +81,20 @@ DOCUMENT_ID_3 = "doc-3"
 DOCUMENT_ID_4 = "doc-4"
 
 DOC_PIPELINE_1 = Document(
-    id=DOCUMENT_ID_3,
-    status="REINDEXED",
-    title="Pipeline Document A",
+    id=DOCUMENT_ID_3, status="REINDEXED", title="Pipeline Document A"
 )
 
 DOC_PIPELINE_2 = Document(
-    id=DOCUMENT_ID_4,
-    status="TO_BE_PROCESSED",
-    title="Pipeline Document B",
+    id=DOCUMENT_ID_4, status="TO_BE_PROCESSED", title="Pipeline Document B"
 )
 
 GET_PIPELINE_DOCUMENTS_RESPONSE = DocumentsStatusResponse(
-    count=2,
-    resources=[DOC_PIPELINE_1, DOC_PIPELINE_2],
+    count=2, resources=[DOC_PIPELINE_1, DOC_PIPELINE_2]
 )
 
 GET_PIPELINE_DOCUMENT_BY_ID_RESPONSE = DOC_PIPELINE_2
 
 # ---- Manual trigger ----
 MANUAL_TRIGGER_REQUEST = ManualPipelineTrigger(
-    pipelineId=PIPELINE_ID,
-    metadataOnly=True,
+    pipelineId=PIPELINE_ID, metadataOnly=True
 )

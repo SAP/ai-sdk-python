@@ -15,7 +15,14 @@ class Application:
     """
 
     # pylint:disable=W0613
-    def __init__(self, path: str, revision: str, repository_url: str, application_name: str, **kwargs):
+    def __init__(
+        self,
+        path: str,
+        revision: str,
+        repository_url: str,
+        application_name: str,
+        **kwargs,
+    ):
         self.path: str = path
         self.revision: str = revision
         self.repository_url: str = repository_url

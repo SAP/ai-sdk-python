@@ -1,7 +1,17 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from sample_code import amazon, core, google, grounding, langchain_openai, openai, orchestration, prompt_registry, sap_rpt
+from sample_code import (
+    amazon,
+    core,
+    google,
+    grounding,
+    langchain_openai,
+    openai,
+    orchestration,
+    prompt_registry,
+    sap_rpt,
+)
 
 app = FastAPI(title="SAP AI Core Python SDK Sample Application")
 
@@ -48,7 +58,9 @@ app.get("/amazon/converse")(amazon.converse)
 # LangChain
 app.get("/langchain/invoke")(langchain_openai.invoke)
 app.get("/langchain/invoke_chain")(langchain_openai.invoke_chain)
-app.get("/langchain/structured-output-json-schema")(langchain_openai.invoke_with_structured_output_json_schema)
+app.get("/langchain/structured-output-json-schema")(
+    langchain_openai.invoke_with_structured_output_json_schema
+)
 app.get("/langchain/tool-chain")(langchain_openai.invoke_tool_chain)
 app.get("/langchain/rag-chain")(langchain_openai.invoke_rag_chain)
 app.get("/langchain/stream-chain")(langchain_openai.stream_chain)
@@ -74,7 +86,9 @@ app.get("/orchestration/input-filtering")(orchestration.input_filtering)
 app.get("/orchestration/output-filtering")(orchestration.output_filtering)
 app.get("/orchestration/completion-masking")(orchestration.completion_masking)
 app.get("/orchestration/reasoning-content")(orchestration.reasoning_content)
-app.get("/orchestration/reasoning-content-stream")(orchestration.reasoning_content_stream)
+app.get("/orchestration/reasoning-content-stream")(
+    orchestration.reasoning_content_stream
+)
 app.get("/orchestration/translation")(orchestration.translation)
 app.get("/orchestration/citations")(orchestration.sonar_with_citations)
 app.get("/orchestration/embedding")(orchestration.embedding)
@@ -88,7 +102,9 @@ app.get("/orchestration/tool-call-json")(orchestration.tool_call_json)
 app.post("/prompt-registry/template/create")(prompt_registry.create_prompt_template)
 app.get("/prompt-registry/templates")(prompt_registry.get_prompt_templates)
 app.post("/prompt-registry/template/fill")(prompt_registry.fill_prompt_template)
-app.delete("/prompt-registry/template/{template_id}")(prompt_registry.delete_prompt_template)
+app.delete("/prompt-registry/template/{template_id}")(
+    prompt_registry.delete_prompt_template
+)
 
 # Prompt Registry - Orchestration Configs
 app.post("/prompt-registry/config/create")(prompt_registry.create_orchestration_config)
@@ -97,8 +113,12 @@ app.get("/prompt-registry/configs")(prompt_registry.get_orchestration_configs)
 # Document Grounding - Vector API
 app.get("/document-grounding/vector/get-collections")(grounding.get_collections)
 app.post("/document-grounding/vector/create-collection")(grounding.create_collection)
-app.delete("/document-grounding/vector/delete-collection/{collection_id}")(grounding.delete_collection)
-app.post("/document-grounding/vector/add-documents/{collection_id}")(grounding.create_documents)
+app.delete("/document-grounding/vector/delete-collection/{collection_id}")(
+    grounding.delete_collection
+)
+app.post("/document-grounding/vector/add-documents/{collection_id}")(
+    grounding.create_documents
+)
 
 # Document Grounding - Pipeline API
 app.get("/document-grounding/pipeline/get-pipelines")(grounding.get_pipelines)

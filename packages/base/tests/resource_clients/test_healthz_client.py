@@ -8,10 +8,7 @@ from .resource_client_test_base import ResourceClientTestBase
 class TestHealthzClient(ResourceClientTestBase):
     @staticmethod
     def create_healthz_status_dict():
-        return {
-            "status": "READY",
-            "message": "test_message"
-        }
+        return {"status": "READY", "message": "test_message"}
 
     def test_test(self):
         hs_dict = self.create_healthz_status_dict()
@@ -19,8 +16,8 @@ class TestHealthzClient(ResourceClientTestBase):
         rest_client_mock.get.return_value = hs_dict.copy()
         hc = HealthzClient(rest_client_mock)
         hs = hc.get()
-        rest_client_mock.get.assert_called_with(path='/healthz')
-        self.assertEqual(hs_dict['message'], hs.message)
-        self.assertEqual(HealthStatus(hs_dict['status']), hs.status)
+        rest_client_mock.get.assert_called_with(path="/healthz")
+        self.assertEqual(hs_dict["message"], hs.message)
+        self.assertEqual(HealthStatus(hs_dict["status"]), hs.status)
         self.assertIn("Healthz status message: ", hs.__str__())
-        self.assertIn(hs_dict['message'], hs.__str__())
+        self.assertIn(hs_dict["message"], hs.__str__())

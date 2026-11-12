@@ -12,8 +12,16 @@ class ArtifactClient(BaseClient):
     implements the base class :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    def create(self, name: str, kind: Artifact.Kind, url: str, scenario_id: str, description: str = None,
-               labels: List[Label] = None, resource_group: str = None) -> ArtifactCreateResponse:
+    def create(
+        self,
+        name: str,
+        kind: Artifact.Kind,
+        url: str,
+        scenario_id: str,
+        description: str = None,
+        labels: List[Label] = None,
+        resource_group: str = None,
+    ) -> ArtifactCreateResponse:
         """Creates an artifact.
 
         :param name: Name of the artifact
@@ -42,19 +50,23 @@ class ArtifactClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.artifact_create_response.ArtifactCreateResponse`
         """
         body = {
-            'name': name,
-            'kind': kind.value,
-            'url': url,
-            'scenario_id': scenario_id
+            "name": name,
+            "kind": kind.value,
+            "url": url,
+            "scenario_id": scenario_id,
         }
         if description:
-            body['description'] = description
+            body["description"] = description
         if labels:
-            body['labels'] = [l.to_dict() for l in labels]
-        response_dict = self.rest_client.post(path='/artifacts', body=body, resource_group=resource_group)
+            body["labels"] = [l.to_dict() for l in labels]
+        response_dict = self.rest_client.post(
+            path="/artifacts", body=body, resource_group=resource_group
+        )
         return ArtifactCreateResponse.from_dict(response_dict)
 
-    def get(self, artifact_id: str, expand: str = None, resource_group: str = None) -> Artifact:
+    def get(
+        self, artifact_id: str, expand: str = None, resource_group: str = None
+    ) -> Artifact:
         """Retrieves the artifact from the server.
 
         :param artifact_id: ID of the artifact to be retrieved
@@ -77,14 +89,27 @@ class ArtifactClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.artifact.Artifact`
         """
         params = self._form_query_params(expand=expand)
-        artifact_dict = self.rest_client.get(path=f'/artifacts/{artifact_id}', params=params,
-                                             resource_group=resource_group)
+        artifact_dict = self.rest_client.get(
+            path=f"/artifacts/{artifact_id}",
+            params=params,
+            resource_group=resource_group,
+        )
         return Artifact.from_dict(artifact_dict)
 
-    def query(self, scenario_id: str = None, execution_id: str = None, name: str = None, kind: Artifact.Kind = None,
-              artifact_label_selector: List[str] = None, top: int = None, skip: int = None, search: str = None,
-              search_case_insensitive: bool = None, expand: str = None,
-              resource_group: str = None) -> ArtifactQueryResponse:
+    def query(
+        self,
+        scenario_id: str = None,
+        execution_id: str = None,
+        name: str = None,
+        kind: Artifact.Kind = None,
+        artifact_label_selector: List[str] = None,
+        top: int = None,
+        skip: int = None,
+        search: str = None,
+        search_case_insensitive: bool = None,
+        expand: str = None,
+        resource_group: str = None,
+    ) -> ArtifactQueryResponse:
         """Queries the artifacts.
 
         :param scenario_id: ID of the scenario the artifacts should belong to, defaults to None
@@ -121,15 +146,32 @@ class ArtifactClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.artifact_query_response.ArtifactQueryResponse`
         """
-        params = self._form_query_params(scenario_id=scenario_id, execution_id=execution_id, name=name, top=top,
-                                         skip=skip, artifact_label_selector=artifact_label_selector, search=search,
-                                         search_case_insensitive=search_case_insensitive, expand=expand,
-                                         kind=kind.value if kind else None)
-        response_dict = self.rest_client.get(path='/artifacts', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            execution_id=execution_id,
+            name=name,
+            top=top,
+            skip=skip,
+            artifact_label_selector=artifact_label_selector,
+            search=search,
+            search_case_insensitive=search_case_insensitive,
+            expand=expand,
+            kind=kind.value if kind else None,
+        )
+        response_dict = self.rest_client.get(
+            path="/artifacts", params=params, resource_group=resource_group
+        )
         return ArtifactQueryResponse.from_dict(response_dict)
 
-    def count(self, scenario_id: str = None, execution_id: str = None, name: str = None, kind: Artifact.Kind = None,
-              artifact_label_selector: List[str] = None, resource_group: str = None) -> int:
+    def count(
+        self,
+        scenario_id: str = None,
+        execution_id: str = None,
+        name: str = None,
+        kind: Artifact.Kind = None,
+        artifact_label_selector: List[str] = None,
+        resource_group: str = None,
+    ) -> int:
         """Counts the artifacts.
 
         :param scenario_id: ID of the scenario the artifacts should belong to, defaults to None
@@ -156,7 +198,13 @@ class ArtifactClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: int
         """
-        params = self._form_query_params(scenario_id=scenario_id, execution_id=execution_id, name=name,
-                                         kind=kind.value if kind else None,
-                                         artifact_label_selector=artifact_label_selector)
-        return self.rest_client.get(path='/artifacts/$count', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            execution_id=execution_id,
+            name=name,
+            kind=kind.value if kind else None,
+            artifact_label_selector=artifact_label_selector,
+        )
+        return self.rest_client.get(
+            path="/artifacts/$count", params=params, resource_group=resource_group
+        )

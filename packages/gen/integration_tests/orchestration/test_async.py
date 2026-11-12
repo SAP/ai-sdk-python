@@ -47,7 +47,9 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
     async def test_async_valid_llm(self):
         """Test that a valid LLM returns a result asynchronously."""
         response = await self.service.arun(config=self.config)
-        self.assertTrue(response.orchestration_result.model.startswith(self.config.llm.name))
+        self.assertTrue(
+            response.orchestration_result.model.startswith(self.config.llm.name)
+        )
 
     async def test_async_streaming(self):
         """Test asynchronous streaming mode returns at least one chunk."""
@@ -62,7 +64,9 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         """Test that passing invalid stream options raises an error asynchronously."""
         with self.assertRaises(OrchestrationError):
             # The invalid stream options should cause an error during the async call.
-            async for _ in await self.service.astream(config=self.config, stream_options={'unknown': 10}):
+            async for _ in await self.service.astream(
+                config=self.config, stream_options={"unknown": 10}
+            ):
                 pass
 
     async def test_async_reuse_client(self):
@@ -98,11 +102,13 @@ class AsyncLLMTest(OrchestrationServiceTestBase, unittest.IsolatedAsyncioTestCas
         config = OrchestrationConfig(
             template=Template(
                 messages=[
-                    SystemMessage("You are a famous professor for theoretical physics."),
+                    SystemMessage(
+                        "You are a famous professor for theoretical physics."
+                    ),
                     UserMessage("Elaborate on the relativity theory."),
-                ],
+                ]
             ),
-            llm=LLM(name="gpt-5-nano")
+            llm=LLM(name="gpt-5-nano"),
         )
 
         # First request - should time out

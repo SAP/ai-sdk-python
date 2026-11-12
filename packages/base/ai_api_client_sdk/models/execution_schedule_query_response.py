@@ -12,6 +12,7 @@ class ExecutionScheduleQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[ExecutionSchedule], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class ExecutionScheduleQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.execution_schedule_query_response.ExecutionScheduleQueryResponse`
         """
-        response_dict['resources'] = [ExecutionSchedule.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            ExecutionSchedule.from_dict(r) for r in response_dict["resources"]
+        ]
         return ExecutionScheduleQueryResponse(**response_dict)

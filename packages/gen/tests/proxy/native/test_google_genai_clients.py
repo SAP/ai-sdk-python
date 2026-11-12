@@ -7,12 +7,13 @@ from gen_ai_hub.proxy.native.google_genai.clients import (
     AsyncAICoreDynamicTransport,
 )
 
+
 class TestRewriteRequest(unittest.TestCase):
     def setUp(self):
         self.transport_instance = MagicMock()
         self.transport_instance.proxy_client.request_header = {
             "Authorization": "Bearer test-token",
-            "Custom-Header": "CustomValue"
+            "Custom-Header": "CustomValue",
         }
         self.transport_instance.proxy_client.select_deployment.return_value = MagicMock(
             url="https://base_url.com/deployment"
@@ -33,13 +34,13 @@ class TestRewriteRequest(unittest.TestCase):
 
     def test_rewrite_request_with_discovery_call(self):
         request = httpx.Request(
-            method="GET",
-            url=httpx.URL("https://api.base_url.com/models/"),
+            method="GET", url=httpx.URL("https://api.base_url.com/models/")
         )
         modified_request = _rewrite_request(self.transport_instance, request)
 
         self.assertEqual(modified_request.url.host, "api.base_url.com")
         self.assertEqual(modified_request.url.path, "/models/")
+
 
 class TestAICoreDynamicTransport(unittest.TestCase):
     def setUp(self):
@@ -69,6 +70,7 @@ class TestAICoreDynamicTransport(unittest.TestCase):
             self.transport.close()
             mock_close.assert_called_once()
 
+
 class TestAsyncAICoreDynamicTransport(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.proxy_client = MagicMock()
@@ -97,7 +99,9 @@ class TestAsyncAICoreDynamicTransport(unittest.IsolatedAsyncioTestCase):
             await self.transport.aclose()
             mock_aclose.assert_called_once()
 
+
 def test_flat_import_google_genai_clients():
     from gen_ai_hub.proxy.native.google_genai.clients import Client as client
     from gen_ai_hub.proxy.native.google_genai import Client as client_flat
+
     assert client == client_flat

@@ -9,10 +9,7 @@ class ModelClient(BaseClient):
 
     DEFAULT_SCENARIO_ID = "foundation-models"
 
-    def query(
-        self,
-        resource_group: str = None,
-    ) -> ModelQueryResponse:
+    def query(self, resource_group: str = None) -> ModelQueryResponse:
         """Queries the models.
 
         :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default

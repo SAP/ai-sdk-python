@@ -1,7 +1,9 @@
 from typing import Any, Dict, List
 
 from ai_api_client_sdk.models.model_version import ModelVersion
-from ai_api_client_sdk.models.model_base_data_allowed_scenarios import ModelBaseDataAllowedScenarios
+from ai_api_client_sdk.models.model_base_data_allowed_scenarios import (
+    ModelBaseDataAllowedScenarios,
+)
 
 
 class Model:

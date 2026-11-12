@@ -10,7 +10,6 @@ from integration_tests.test_helpers import retry_on_429_or_503
 
 
 class TestService(OrchestrationServiceTestBase):
-
     def setUp(self):
         super().setUp()
         self.service = OrchestrationService(self.api_url)
@@ -25,12 +24,7 @@ class TestService(OrchestrationServiceTestBase):
                 ],
                 defaults=[TemplateValue(name="name", value="Integration Test")],
             ),
-            llm=LLM(
-                name="gemini-2.5-flash",
-                parameters={
-                    'temperature': 0.0,
-                }
-            ),
+            llm=LLM(name="gemini-2.5-flash", parameters={"temperature": 0.0}),
         )
 
         service = OrchestrationService(api_url=self.api_url, config=config)
@@ -48,14 +42,9 @@ class TestService(OrchestrationServiceTestBase):
                 messages=[
                     SystemMessage("This is a system message."),
                     UserMessage("Hello, {{?name}}!"),
-                ],
+                ]
             ),
-            llm=LLM(
-                name="gemini-2.5-flash",
-                parameters={
-                    'temperature': 0.0,
-                }
-            ),
+            llm=LLM(name="gemini-2.5-flash", parameters={"temperature": 0.0}),
         )
 
         service = OrchestrationService(api_url=self.api_url, config=config)
@@ -76,16 +65,9 @@ class TestService(OrchestrationServiceTestBase):
         response = self.service.run(
             config=OrchestrationConfig(
                 template=Template(
-                    messages=[
-                        SystemMessage("This is a system message."),
-                    ],
+                    messages=[SystemMessage("This is a system message.")]
                 ),
-                llm=LLM(
-                    name="gemini-2.5-flash",
-                    parameters={
-                        'temperature': 0.0,
-                    }
-                ),
+                llm=LLM(name="gemini-2.5-flash", parameters={"temperature": 0.0}),
             ),
             history=[
                 UserMessage("Hello, World!"),
@@ -114,26 +96,25 @@ class TestService(OrchestrationServiceTestBase):
         """
         reusable_client = self.service.client
 
-        #First request
+        # First request
         config = OrchestrationConfig(
             template=Template(
                 messages=[
                     SystemMessage("This is a system message."),
                     UserMessage("Hello, {{?name}}!"),
-                ],
+                ]
             ),
-            llm=LLM(
-                name="gemini-2.5-flash",
-                parameters={
-                    'temperature': 0.0,
-                }
-            ),
+            llm=LLM(name="gemini-2.5-flash", parameters={"temperature": 0.0}),
         )
-        self.service.run(config=config, template_values=[TemplateValue("name", "World")])
+        self.service.run(
+            config=config, template_values=[TemplateValue("name", "World")]
+        )
         self.assertFalse(reusable_client.is_closed)
 
         # Second request
-        self.service.run(config=config, template_values=[TemplateValue("name", "Earth")])
+        self.service.run(
+            config=config, template_values=[TemplateValue("name", "Earth")]
+        )
 
         # ensure httpx client is reused
         self.assertEqual(reusable_client, self.service.client)
@@ -151,11 +132,13 @@ class TestService(OrchestrationServiceTestBase):
         config = OrchestrationConfig(
             template=Template(
                 messages=[
-                    SystemMessage("You are a famous professor for theoretical physics."),
+                    SystemMessage(
+                        "You are a famous professor for theoretical physics."
+                    ),
                     UserMessage("Elaborate on the relativity theory."),
-                ],
+                ]
             ),
-            llm=LLM(name="gpt-5-nano")
+            llm=LLM(name="gpt-5-nano"),
         )
 
         # First request - should time out
@@ -165,4 +148,3 @@ class TestService(OrchestrationServiceTestBase):
         # Second request - should succeed due to overwrite in request with higher timeout
         result = self.service.run(config=config, timeout=300)
         self.assertIsInstance(result, OrchestrationResponse)
-

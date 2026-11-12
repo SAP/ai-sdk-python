@@ -10,6 +10,7 @@ API requests and responses. Models are organized by API domain:
 These models provide type-safe data structures for interacting with the
 Document Grounding APIs and ensure proper validation of request/response data.
 """
+
 from .pipeline import (
     CreatePipelineRequest,
     MSSharePointPipelineCreateRequest,
@@ -39,7 +40,7 @@ from .pipeline import (
     PipelineExecutionStatus,
     DocumentStatus,
     BasePipelineResponse,
-    MSSharePointConfigurationGetResponse
+    MSSharePointConfigurationGetResponse,
 )
 
 from .retrieval import (
@@ -59,7 +60,7 @@ from .retrieval import (
     RetrievalPerFilterSearchResultError,
     RetrievalPerFilterSearchResultWithError,
     RetrievalSearchResults,
-    DataRepositories
+    DataRepositories,
 )
 
 from .vector import (
@@ -89,7 +90,7 @@ from .vector import (
     DocumentOutput,
     DocumentsChunk,
     VectorPerFilterSearchResult,
-    VectorSearchResults
+    VectorSearchResults,
 )
 
 __all__ = [
@@ -168,5 +169,5 @@ __all__ = [
     "DocumentOutput",
     "DocumentsChunk",
     "VectorPerFilterSearchResult",
-    "VectorSearchResults"
+    "VectorSearchResults",
 ]

@@ -12,6 +12,7 @@ class VersionQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Version], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class VersionQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.version_query_response.VersionQueryResponse`
         """
-        response_dict['resources'] = [Version.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Version.from_dict(r) for r in response_dict["resources"]
+        ]
         return VersionQueryResponse(**response_dict)

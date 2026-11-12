@@ -1,24 +1,32 @@
 import requests
 import time
 from httpx import TimeoutException
-from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, ModuleConfig,
-PartialOrchestrationConfig,
-CompletionRequestConfigurationReferenceByIdConfigRef,
-CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
+from gen_ai_hub.orchestration_v2.models.config import (
+    OrchestrationConfig,
+    ModuleConfig,
+    PartialOrchestrationConfig,
+    CompletionRequestConfigurationReferenceByIdConfigRef,
+    CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef,
+)
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
 from gen_ai_hub.orchestration_v2.models.response import CompletionPostResponse
-from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
+from gen_ai_hub.orchestration_v2.models.template import (
+    Template,
+    PromptTemplatingModuleConfig,
+)
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
-from integration_tests.constants import (DROPPED_MODEL_PARAMS_HEADER, DROP_TRIGGER_PARAMS,
-                                          OPENAI_GPT_5_3_CODEX_TEST_MODEL)
+from integration_tests.constants import (
+    DROPPED_MODEL_PARAMS_HEADER,
+    DROP_TRIGGER_PARAMS,
+    OPENAI_GPT_5_3_CODEX_TEST_MODEL,
+)
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
 @retry_on_429_or_503_class()
 class TestService(OrchestrationServiceTestBase):
-
     def setUp(self):
         super().setUp()
         self.service = OrchestrationService(self.api_url)
@@ -27,23 +35,24 @@ class TestService(OrchestrationServiceTestBase):
                 SystemMessage(content="This is a system message."),
                 UserMessage(content="Hello, {{?name}}!"),
             ],
-            defaults={"name": "Integration Test"}
+            defaults={"name": "Integration Test"},
         )
-        self.llm = LLMModelDetails(
-            name="gemini-2.5-flash",
-            params={
-                'temperature': 0.0,
-            }
+        self.llm = LLMModelDetails(name="gemini-2.5-flash", params={"temperature": 0.0})
+        self.prompt_template = PromptTemplatingModuleConfig(
+            prompt=self.template, model=self.llm
         )
-        self.prompt_template = PromptTemplatingModuleConfig(prompt=self.template, model=self.llm)
         self.module_config = ModuleConfig(prompt_templating=self.prompt_template)
         self.config_ref: dict = None
         self.config_ref = self.create_config_ref()
-        self.config_ref_id = CompletionRequestConfigurationReferenceByIdConfigRef(id=self.config_ref["id"])
-        self.config_ref_name = CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(
-            name=self.config_ref["name"],
-            version=self.config_ref["version"],
-            scenario=self.config_ref["scenario"]
+        self.config_ref_id = CompletionRequestConfigurationReferenceByIdConfigRef(
+            id=self.config_ref["id"]
+        )
+        self.config_ref_name = (
+            CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(
+                name=self.config_ref["name"],
+                version=self.config_ref["version"],
+                scenario=self.config_ref["scenario"],
+            )
         )
 
     def tearDown(self):
@@ -67,17 +76,12 @@ class TestService(OrchestrationServiceTestBase):
                 "modules": {
                     "prompt_templating": {
                         "prompt": {
-                            "template": [
-                                {"role": "user", "content": "Hello World"},
-                            ]
+                            "template": [{"role": "user", "content": "Hello World"}]
                         },
-                        "model": {
-                            "name": "gpt-4o",
-                            "version": "latest"
-                        }
-                    },
-                },
-            }
+                        "model": {"name": "gpt-4o", "version": "latest"},
+                    }
+                }
+            },
         }
 
         # Retry logic to handle potential rate limiting or transient issues when creating config reference
@@ -89,7 +93,7 @@ class TestService(OrchestrationServiceTestBase):
                 response_json = response.json()
 
                 # Check if response has required 'id' field
-                if 'id' not in response_json:
+                if "id" not in response_json:
                     if attempt < max_retries:
                         time.sleep(delay)
                         delay *= 2
@@ -105,34 +109,51 @@ class TestService(OrchestrationServiceTestBase):
                 else:
                     raise
 
-        raise RuntimeError("Failed to create config reference after multiple attempts "
-                           "due to rate limiting or missing 'id' in response.")
+        raise RuntimeError(
+            "Failed to create config reference after multiple attempts "
+            "due to rate limiting or missing 'id' in response."
+        )
 
     def test_service_request_with_default_config(self):
-        service = OrchestrationService(api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config))
+        service = OrchestrationService(
+            api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config)
+        )
         response = service.run()
         self.assertIsNotNone(response.headers)
         self.assertNotIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
         self.assertEqual(
-            response.intermediate_results.templating[1].content, "Hello, Integration Test!"
+            response.intermediate_results.templating[1].content,
+            "Hello, Integration Test!",
         )
 
     def test_run_reports_dropped_model_params_header(self):
-        llm = LLMModelDetails(name=OPENAI_GPT_5_3_CODEX_TEST_MODEL, params=DROP_TRIGGER_PARAMS,
-                              drop_unsupported_params=True)
+        llm = LLMModelDetails(
+            name=OPENAI_GPT_5_3_CODEX_TEST_MODEL,
+            params=DROP_TRIGGER_PARAMS,
+            drop_unsupported_params=True,
+        )
         prompt_template = PromptTemplatingModuleConfig(prompt=self.template, model=llm)
-        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template))
+        config = OrchestrationConfig(
+            modules=ModuleConfig(prompt_templating=prompt_template)
+        )
         response = self.service.run(config=config)
 
         self.assertIn(DROPPED_MODEL_PARAMS_HEADER, response.headers)
-        self.assertIn("frequency_penalty", response.headers[DROPPED_MODEL_PARAMS_HEADER])
+        self.assertIn(
+            "frequency_penalty", response.headers[DROPPED_MODEL_PARAMS_HEADER]
+        )
 
     def test_service_request_with_list_of_config(self):
-        service = OrchestrationService(api_url=self.api_url,
-                                       config=OrchestrationConfig(modules=[self.module_config]))
+        service = OrchestrationService(
+            api_url=self.api_url,
+            config=OrchestrationConfig(modules=[self.module_config]),
+        )
         response = service.run()
 
-        self.assertEqual(response.intermediate_results.templating[1].content, "Hello, Integration Test!")
+        self.assertEqual(
+            response.intermediate_results.templating[1].content,
+            "Hello, Integration Test!",
+        )
 
     def test_service_with_inference_config(self):
         service = OrchestrationService(api_url=self.api_url)
@@ -140,20 +161,16 @@ class TestService(OrchestrationServiceTestBase):
 
         config.modules.prompt_templating.model.name = "gemini-2.5-flash"
 
-        response = service.run(
-            config=config, placeholder_values={"name": "World"}
-        )
+        response = service.run(config=config, placeholder_values={"name": "World"})
 
-        self.assertTrue(
-            response.final_result.model.startswith("gemini-2.5-flash")
+        self.assertTrue(response.final_result.model.startswith("gemini-2.5-flash"))
+        self.assertEqual(
+            response.intermediate_results.templating[1].content, "Hello, World!"
         )
-        self.assertEqual(response.intermediate_results.templating[1].content, "Hello, World!")
 
     def test_service_with_history(self):
         template = Template(
-            template=[
-                SystemMessage(content="This is a system message.")
-            ]
+            template=[SystemMessage(content="This is a system message.")]
         )
         prompt_template = PromptTemplatingModuleConfig(prompt=template, model=self.llm)
         module_config = ModuleConfig(prompt_templating=prompt_template)
@@ -165,20 +182,24 @@ class TestService(OrchestrationServiceTestBase):
                 UserMessage(content="Hello, World!"),
                 UserMessage(content="How are you?"),
                 UserMessage(content="What is your name?"),
-            ]
+            ],
         )
 
         self.assertEqual(len(response.intermediate_results.templating), 4)
-        self.assertEqual(response.intermediate_results.templating[0].content, "Hello, World!")
-        self.assertEqual(response.intermediate_results.templating[1].content, "How are you?")
+        self.assertEqual(
+            response.intermediate_results.templating[0].content, "Hello, World!"
+        )
+        self.assertEqual(
+            response.intermediate_results.templating[1].content, "How are you?"
+        )
         self.assertEqual(
             response.intermediate_results.templating[2].content, "What is your name?"
         )
         self.assertEqual(
-            response.intermediate_results.templating[3].content, "This is a system message."
+            response.intermediate_results.templating[3].content,
+            "This is a system message.",
         )
-        self.assertTrue(response.final_result.model.startswith("gemini-2")
-        )
+        self.assertTrue(response.final_result.model.startswith("gemini-2"))
 
     def test_reuse_client(self):
         """
@@ -186,7 +207,7 @@ class TestService(OrchestrationServiceTestBase):
         """
         reusable_client = self.service.client
 
-        #First request
+        # First request
         config = OrchestrationConfig(modules=self.module_config)
         self.service.run(config=config, placeholder_values={"name": "World"})
         self.assertFalse(reusable_client.is_closed)
@@ -207,12 +228,16 @@ class TestService(OrchestrationServiceTestBase):
         """
         template = Template(
             template=[
-                SystemMessage(content="You are a famous professor for theoretical physics."),
+                SystemMessage(
+                    content="You are a famous professor for theoretical physics."
+                ),
                 UserMessage(content="Elaborate on the relativity theory."),
             ]
         )
         prompt_template = PromptTemplatingModuleConfig(prompt=template, model=self.llm)
-        config = OrchestrationConfig(modules=ModuleConfig(prompt_templating=prompt_template))
+        config = OrchestrationConfig(
+            modules=ModuleConfig(prompt_templating=prompt_template)
+        )
 
         # First request - should time out
         with self.assertRaises(TimeoutException):
@@ -223,38 +248,58 @@ class TestService(OrchestrationServiceTestBase):
         self.assertIsInstance(result, CompletionPostResponse)
 
     def test_config_ref_by_id(self):
-        service = OrchestrationService(api_url=self.api_url, config_ref=self.config_ref_id)
+        service = OrchestrationService(
+            api_url=self.api_url, config_ref=self.config_ref_id
+        )
         response = service.run()
         self.assertIsInstance(response, CompletionPostResponse)
-        self.assertEqual(response.intermediate_results.templating[0].content, "Hello World")
+        self.assertEqual(
+            response.intermediate_results.templating[0].content, "Hello World"
+        )
 
     def test_config_ref_by_snv(self):
-        service = OrchestrationService(api_url=self.api_url, config_ref=self.config_ref_name)
+        service = OrchestrationService(
+            api_url=self.api_url, config_ref=self.config_ref_name
+        )
         response = service.run()
         self.assertIsInstance(response, CompletionPostResponse)
-        self.assertEqual(response.intermediate_results.templating[0].content, "Hello World")
+        self.assertEqual(
+            response.intermediate_results.templating[0].content, "Hello World"
+        )
 
     def test_config_ref_with_empty_partial_override(self):
         # An empty PartialOrchestrationConfig carries no overrides; the server should resolve
         # the referenced config unchanged, exactly as if no override had been sent.
-        service = OrchestrationService(api_url=self.api_url, config_ref=self.config_ref_id, config=PartialOrchestrationConfig())
+        service = OrchestrationService(
+            api_url=self.api_url,
+            config_ref=self.config_ref_id,
+            config=PartialOrchestrationConfig(),
+        )
         response = service.run()
         self.assertIsInstance(response, CompletionPostResponse)
-        self.assertEqual(response.intermediate_results.templating[0].content, "Hello World")
+        self.assertEqual(
+            response.intermediate_results.templating[0].content, "Hello World"
+        )
 
     def test_config_and_config_ref_provided_error_class(self):
         with self.assertRaises(ValueError):
-            OrchestrationService(api_url=self.api_url,
-                                 config=OrchestrationConfig(modules=self.module_config),
-                                 config_ref=self.config_ref_id)
+            OrchestrationService(
+                api_url=self.api_url,
+                config=OrchestrationConfig(modules=self.module_config),
+                config_ref=self.config_ref_id,
+            )
 
     def test_config_and_config_ref_provided_error_class_and_methode(self):
-        service = OrchestrationService(api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config))
+        service = OrchestrationService(
+            api_url=self.api_url, config=OrchestrationConfig(modules=self.module_config)
+        )
         with self.assertRaises(ValueError):
             service.run(config_ref=self.config_ref_name)
 
     def test_config_and_config_ref_provided_error_methode(self):
         service = OrchestrationService(api_url=self.api_url)
         with self.assertRaises(ValueError):
-            service.run(config=OrchestrationConfig(modules=self.module_config), config_ref=self.config_ref_id)
-
+            service.run(
+                config=OrchestrationConfig(modules=self.module_config),
+                config_ref=self.config_ref_id,
+            )

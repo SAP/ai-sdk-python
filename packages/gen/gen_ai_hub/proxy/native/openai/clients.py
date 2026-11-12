@@ -21,18 +21,23 @@ from openai.resources.completions import Completions as Completions_
 from openai.resources.embeddings import AsyncEmbeddings as AsyncEmbeddings_
 from openai.resources.embeddings import Embeddings as Embeddings_
 from openai.resources.responses import Responses as Responses_
-from openai.resources.responses  import AsyncResponses as AsyncResponses_
+from openai.resources.responses import AsyncResponses as AsyncResponses_
 from openai.types import Completion, Embedding
 from openai.types.chat import ChatCompletion, ChatCompletionMessageParam
 from openai.types.chat.parsed_chat_completion import ParsedChatCompletion
-from openai.types.responses import Response, ResponseStreamEvent, ResponseInputParam, ParsedResponse
+from openai.types.responses import (
+    Response,
+    ResponseStreamEvent,
+    ResponseInputParam,
+    ParsedResponse,
+)
 
 
 from gen_ai_hub.proxy.core import get_proxy_client
 from gen_ai_hub.proxy.core.base import BaseProxyClient
 from gen_ai_hub.proxy.core.utils import NOT_GIVEN, NotGiven, if_set, kwargs_if_set
 
-DEFAULT_API_VERSION = '2025-03-01-preview'  # https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key#api-evolution
+DEFAULT_API_VERSION = "2025-03-01-preview"  # https://learn.microsoft.com/en-us/azure/ai-foundry/openai/api-version-lifecycle?tabs=key#api-evolution
 
 # Model name patterns
 COHERE_MODEL_PATTERN = r"^cohere--"
@@ -40,8 +45,8 @@ O_SERIES_MODEL_PATTERN = r"^o\d+"
 GPT_5_MODEL_PATTERN = r"^gpt-5(-mini|-nano)?$"
 COHERE_REASONING_MODEL_PATTERN = r"^cohere--command-.*-reasoning$"
 
-ResponseFormatT = TypeVar('ResponseFormatT')
-_current_deployment = contextvars.ContextVar('current_deployment')
+ResponseFormatT = TypeVar("ResponseFormatT")
+_current_deployment = contextvars.ContextVar("current_deployment")
 
 
 @contextmanager
@@ -73,16 +78,18 @@ class Embeddings(Embeddings_):
     and provides functionality to create embeddings based on the provided input.
     """
 
-    def create(self,
-               *,
-               input: Union[str, List[str], List[int], List[List[int]], None],
-               model: str | None | NotGiven = NOT_GIVEN,
-               deployment_id: str | None | NotGiven = NOT_GIVEN,
-               model_name: str | None | NotGiven = NOT_GIVEN,
-               model_version: str | None | NotGiven = NOT_GIVEN,
-               config_id: str | None | NotGiven = NOT_GIVEN,
-               config_name: str | None | NotGiven = NOT_GIVEN,
-               **kwargs) -> Embedding:
+    def create(
+        self,
+        *,
+        input: Union[str, List[str], List[int], List[List[int]], None],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Embedding:
         """Creates embeddings based on the provided input and model information.
 
         For NVIDIA models, use extra_body to specify additional parameters:
@@ -118,7 +125,7 @@ class Embeddings(Embeddings_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
 
         with set_deployment(deployment):
             return super().create(input=input, model=model_name, **kwargs)
@@ -131,16 +138,18 @@ class AsyncEmbeddings(AsyncEmbeddings_):
     from a selected deployment on a proxy client.
     """
 
-    async def create(self,
-                     *,
-                     input: Union[str, List[str], List[int], List[List[int]], None],
-                     model: str | None | NotGiven = NOT_GIVEN,
-                     deployment_id: str | None | NotGiven = NOT_GIVEN,
-                     model_name: str | None | NotGiven = NOT_GIVEN,
-                     model_version: str | None | NotGiven = NOT_GIVEN,
-                     config_id: str | None | NotGiven = NOT_GIVEN,
-                     config_name: str | None | NotGiven = NOT_GIVEN,
-                     **kwargs) -> Embedding:
+    async def create(
+        self,
+        *,
+        input: Union[str, List[str], List[int], List[List[int]], None],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Embedding:
         """Asynchronously creates embeddings for the given input using a specific model.
 
         :param input: the input data for which embeddings are to be created.
@@ -170,7 +179,7 @@ class AsyncEmbeddings(AsyncEmbeddings_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
 
         with set_deployment(deployment):
             return await super().create(input=input, model=model_name, **kwargs)
@@ -183,16 +192,18 @@ class Completions(Completions_):
      to the specific requirements.
     """
 
-    def create(self,
-               *,
-               prompt: Union[str, List[str], List[int], List[List[int]], None],
-               model: str | None | NotGiven = NOT_GIVEN,
-               deployment_id: str | None | NotGiven = NOT_GIVEN,
-               model_name: str | None | NotGiven = NOT_GIVEN,
-               model_version: str | None | NotGiven = NOT_GIVEN,
-               config_id: str | None | NotGiven = NOT_GIVEN,
-               config_name: str | None | NotGiven = NOT_GIVEN,
-               **kwargs) -> Completion | Stream[Completion]:
+    def create(
+        self,
+        *,
+        prompt: Union[str, List[str], List[int], List[List[int]], None],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Completion | Stream[Completion]:
         """This method creates a completion based on the provided parameters. It uses a proxy client to select a
         deployment and then calls the create method of the parent class to generate a completion.
 
@@ -223,7 +234,7 @@ class Completions(Completions_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
@@ -237,17 +248,19 @@ class AsyncCompletions(AsyncCompletions_):
      create method to cater to the specific requirements.
     """
 
-    async def create(self,
-                     *,
-                     prompt: Union[str, List[str], List[int], List[List[int]], None],
-                     model: str | None | NotGiven = NOT_GIVEN,
-                     deployment_id: str | None | NotGiven = NOT_GIVEN,
-                     model_name: str | None | NotGiven = NOT_GIVEN,
-                     model_version: str | None | NotGiven = NOT_GIVEN,
-                     config_id: str | None | NotGiven = NOT_GIVEN,
-                     config_name: str | None | NotGiven = NOT_GIVEN,
-                     **kwargs) -> Completion | Stream[Completion]:
-        """Asynchronously creates a completion or a stream of completions based on the given prompt and 
+    async def create(
+        self,
+        *,
+        prompt: Union[str, List[str], List[int], List[List[int]], None],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Completion | Stream[Completion]:
+        """Asynchronously creates a completion or a stream of completions based on the given prompt and
         other parameters.
 
         :param prompt: the input prompt(s) for the completion.
@@ -277,7 +290,7 @@ class AsyncCompletions(AsyncCompletions_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
@@ -299,22 +312,31 @@ class Chat(Chat_):
 
 class ChatCompletions(ChatCompletions_):
     """
-        A class that handles chat completions, extending from the class 'ChatCompletions_'.
+    A class that handles chat completions, extending from the class 'ChatCompletions_'.
     """
 
-    def _prepare_chat(self, config_id, config_name, deployment_id, kwargs, model, model_name, model_version):
+    def _prepare_chat(
+        self,
+        config_id,
+        config_name,
+        deployment_id,
+        kwargs,
+        model,
+        model_name,
+        model_version,
+    ):
         """
         Prepares the deployment and model name for the create and parse completion request.
-        
+
         Args:
             config_id: The configuration ID to use for chat completion
-            config_name: The configuration name to use for chat completion  
+            config_name: The configuration name to use for chat completion
             deployment_id: The deployment ID to use for chat completion
             kwargs: Keyword arguments dictionary that may be modified
             model: The model to use for chat completion
             model_name: The model name to use for chat completion,
             model_version: The model version to use for chat completion
-            
+
         Returns:
             tuple: (deployment, model_name) prepared for the request
         """
@@ -328,26 +350,28 @@ class ChatCompletions(ChatCompletions_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
         # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        if not self.supports_temperature(model_name) and "temperature" in kwargs:
+            kwargs.pop("temperature")
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
-            kwargs.pop('max_completion_tokens', None)
+            kwargs.pop("n", None)
+            kwargs.pop("max_completion_tokens", None)
         return deployment, model_name
 
-    def create(self,
-               *,
-               messages: List[ChatCompletionMessageParam],
-               model: str | None | NotGiven = NOT_GIVEN,
-               deployment_id: str | None | NotGiven = NOT_GIVEN,
-               model_name: str | None | NotGiven = NOT_GIVEN,
-               model_version: str | None | NotGiven = NOT_GIVEN,
-               config_id: str | None | NotGiven = NOT_GIVEN,
-               config_name: str | None | NotGiven = NOT_GIVEN,
-               **kwargs) -> ChatCompletion:
+    def create(
+        self,
+        *,
+        messages: List[ChatCompletionMessageParam],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ChatCompletion:
         """Creates a chat completion using the provided parameters.
 
         :param messages: the list of chat completion message parameters.
@@ -367,23 +391,32 @@ class ChatCompletions(ChatCompletions_):
         :return: the chat completion created with the provided parameters.
         :rtype: ChatCompletion
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             return super().create(messages=messages, model=model_name, **kwargs)
 
-    def parse(self,
-              *,
-              messages: Iterable[ChatCompletionMessageParam],
-              model: str | None | NotGiven = NOT_GIVEN,
-              deployment_id: str | None | NotGiven = NOT_GIVEN,
-              model_name: str | None | NotGiven = NOT_GIVEN,
-              model_version: str | None | NotGiven = NOT_GIVEN,
-              config_id: str | None | NotGiven = NOT_GIVEN,
-              config_name: str | None | NotGiven = NOT_GIVEN,
-              response_format: type[ResponseFormatT] | NotGiven = NOT_GIVEN,
-              **kwargs) -> ParsedChatCompletion[ResponseFormatT]:
+    def parse(
+        self,
+        *,
+        messages: Iterable[ChatCompletionMessageParam],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        response_format: type[ResponseFormatT] | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ParsedChatCompletion[ResponseFormatT]:
         """Parses chat completions using the provided parameters and returns a ParsedChatCompletion object.
         This method provides richer integrations with Python specific types by converting pydantic models
         into JSON schemas and parsing the response content back into the given model.
@@ -407,11 +440,23 @@ class ChatCompletions(ChatCompletions_):
         :return: the parsed chat completion with the structured response.
         :rtype: ParsedChatCompletion[ResponseFormatT]
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
-            return super().parse(messages=messages, model=model_name, response_format=response_format, **kwargs)
+            return super().parse(
+                messages=messages,
+                model=model_name,
+                response_format=response_format,
+                **kwargs,
+            )
 
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
@@ -424,19 +469,30 @@ class ChatCompletions(ChatCompletions_):
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return (
+            not re.search(O_SERIES_MODEL_PATTERN, model_name)
+            and not re.search(GPT_5_MODEL_PATTERN, model_name)
+            and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name)
+        )
 
 
 class Responses(Responses_):
     """
-        The Responses class is a subclass of Responses_. It provides a way to create a response for the given input and
-         certain other configurations. It extends from the base class Responses_ and overrides the create method to
-         cater to the specific requirements.
+    The Responses class is a subclass of Responses_. It provides a way to create a response for the given input and
+     certain other configurations. It extends from the base class Responses_ and overrides the create method to
+     cater to the specific requirements.
     """
 
-    def _prepare_chat(self, config_id, config_name, deployment_id, kwargs, model, model_name, model_version):
+    def _prepare_chat(
+        self,
+        config_id,
+        config_name,
+        deployment_id,
+        kwargs,
+        model,
+        model_name,
+        model_version,
+    ):
         """
         Prepares the deployment and model name for the create and parse responses request.
 
@@ -462,27 +518,29 @@ class Responses(Responses_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
         # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        if not self.supports_temperature(model_name) and "temperature" in kwargs:
+            kwargs.pop("temperature")
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
-            kwargs.pop('max_completion_tokens', None)
+            kwargs.pop("n", None)
+            kwargs.pop("max_completion_tokens", None)
         return deployment, model_name
 
-    def create(self,
-               *,
-               input: str | ResponseInputParam | Omit = None,
-               instructions: str | Omit = None,
-               model: str | None | NotGiven = NOT_GIVEN,
-               deployment_id: str | None | NotGiven = NOT_GIVEN,
-               model_name: str | None | NotGiven = NOT_GIVEN,
-               model_version: str | None | NotGiven = NOT_GIVEN,
-               config_id: str | None | NotGiven = NOT_GIVEN,
-               config_name: str | None | NotGiven = NOT_GIVEN,
-               **kwargs) -> Response | Stream[ResponseStreamEvent]:
+    def create(
+        self,
+        *,
+        input: str | ResponseInputParam | Omit = None,
+        instructions: str | Omit = None,
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Response | Stream[ResponseStreamEvent]:
         """This method creates a response based on the provided parameters. It uses a proxy client to select a
         deployment and then calls the create method of the parent class to generate a response.
 
@@ -505,26 +563,36 @@ class Responses(Responses_):
         :return: the response or stream of responsess created based on the provided input.
         :rtype: Response | Stream[ResponseStreamEvent]:
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
-            return super().create(instructions=instructions, input=input, model=model_name, **kwargs)
+            return super().create(
+                instructions=instructions, input=input, model=model_name, **kwargs
+            )
 
     def parse(
         self,
-            *,
-            input: str | ResponseInputParam | Omit = None,
-            instructions: str | Omit = None,
-            model: str | None | NotGiven = NOT_GIVEN,
-            deployment_id: str | None | NotGiven = NOT_GIVEN,
-            model_name: str | None | NotGiven = NOT_GIVEN,
-            model_version: str | None | NotGiven = NOT_GIVEN,
-            config_id: str | None | NotGiven = NOT_GIVEN,
-            config_name: str | None | NotGiven = NOT_GIVEN,
-            **kwargs) -> ParsedResponse[TextFormatT]:
+        *,
+        input: str | ResponseInputParam | Omit = None,
+        instructions: str | Omit = None,
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ParsedResponse[TextFormatT]:
         """Parses responses using the provided parameters and returns a ParsedResponse object.
         This method provides richer integrations with Python specific types by converting pydantic models
         into JSON schemas and parsing the response content back into the given model
@@ -549,13 +617,22 @@ class Responses(Responses_):
         :rtype: ParsedResponse
         """
 
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
-            return super().parse(instructions=instructions, input=input, model=model_name, **kwargs)
+            return super().parse(
+                instructions=instructions, input=input, model=model_name, **kwargs
+            )
 
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
@@ -568,9 +645,11 @@ class Responses(Responses_):
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return (
+            not re.search(O_SERIES_MODEL_PATTERN, model_name)
+            and not re.search(GPT_5_MODEL_PATTERN, model_name)
+            and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name)
+        )
 
 
 class AsyncChat(AsyncChat_):
@@ -593,7 +672,16 @@ class AsyncChatCompletions(AsyncChatCompletions_):
     to create and manage chat completions in an asynchronous manner.
     """
 
-    def _prepare_chat(self, config_id, config_name, deployment_id, kwargs, model, model_name, model_version):
+    def _prepare_chat(
+        self,
+        config_id,
+        config_name,
+        deployment_id,
+        kwargs,
+        model,
+        model_name,
+        model_version,
+    ):
         proxy_client: BaseProxyClient = self._client.proxy_client
         model_name = if_set(model_name, if_set(model))
         model_identification = kwargs_if_set(
@@ -604,28 +692,30 @@ class AsyncChatCompletions(AsyncChatCompletions_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
 
         # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        if not self.supports_temperature(model_name) and "temperature" in kwargs:
+            kwargs.pop("temperature")
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
-            kwargs.pop('max_completion_tokens', None)
+            kwargs.pop("n", None)
+            kwargs.pop("max_completion_tokens", None)
 
         return deployment, model_name
 
-    async def create(self,
-                     *,
-                     messages: List[ChatCompletionMessageParam],
-                     model: str | None | NotGiven = NOT_GIVEN,
-                     deployment_id: str | None | NotGiven = NOT_GIVEN,
-                     model_name: str | None | NotGiven = NOT_GIVEN,
-                     model_version: str | None | NotGiven = NOT_GIVEN,
-                     config_id: str | None | NotGiven = NOT_GIVEN,
-                     config_name: str | None | NotGiven = NOT_GIVEN,
-                     **kwargs) -> ChatCompletion:
+    async def create(
+        self,
+        *,
+        messages: List[ChatCompletionMessageParam],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ChatCompletion:
         """Asynchronously creates a new chat completion.
 
         :param messages: the list of chat completion message parameters.
@@ -645,24 +735,33 @@ class AsyncChatCompletions(AsyncChatCompletions_):
         :return: the created chat completion.
         :rtype: ChatCompletion
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             return await super().create(messages=messages, model=model_name, **kwargs)
 
-    async def parse(self,
-                    *,
-                    messages: Iterable[ChatCompletionMessageParam],
-                    model: str | None | NotGiven = NOT_GIVEN,
-                    deployment_id: str | None | NotGiven = NOT_GIVEN,
-                    model_name: str | None | NotGiven = NOT_GIVEN,
-                    model_version: str | None | NotGiven = NOT_GIVEN,
-                    config_id: str | None | NotGiven = NOT_GIVEN,
-                    config_name: str | None | NotGiven = NOT_GIVEN,
-                    response_format: type[ResponseFormatT] | NotGiven = NOT_GIVEN,
-                    **kwargs) -> ParsedChatCompletion[ResponseFormatT]:
-        """Asynchronously parses chat completions using the provided parameters and 
+    async def parse(
+        self,
+        *,
+        messages: Iterable[ChatCompletionMessageParam],
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        response_format: type[ResponseFormatT] | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ParsedChatCompletion[ResponseFormatT]:
+        """Asynchronously parses chat completions using the provided parameters and
         returns a ParsedChatCompletion object.
         This method provides richer integrations with Python specific types by converting pydantic models
         into JSON schemas and parsing the response content back into the given model.
@@ -686,11 +785,23 @@ class AsyncChatCompletions(AsyncChatCompletions_):
         :return: the parsed chat completion with the structured response.
         :rtype: ParsedChatCompletion[ResponseFormatT]
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
-            return await super().parse(messages=messages, model=model_name, response_format=response_format, **kwargs)
+            return await super().parse(
+                messages=messages,
+                model=model_name,
+                response_format=response_format,
+                **kwargs,
+            )
 
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
@@ -702,20 +813,31 @@ class AsyncChatCompletions(AsyncChatCompletions_):
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return (
+            not re.search(O_SERIES_MODEL_PATTERN, model_name)
+            and not re.search(GPT_5_MODEL_PATTERN, model_name)
+            and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name)
+        )
 
 
 class AsyncResponses(AsyncResponses_):
     """
-        The asynch Responses class is a subclass of AsyncResponses_.
-        It provides a way to create a response for the given input and certain other configurations.
-        It extends from the base class AsyncResponses_ and overrides the create method to cater to the specific
-        requirements.
+    The asynch Responses class is a subclass of AsyncResponses_.
+    It provides a way to create a response for the given input and certain other configurations.
+    It extends from the base class AsyncResponses_ and overrides the create method to cater to the specific
+    requirements.
     """
 
-    def _prepare_chat(self, config_id, config_name, deployment_id, kwargs, model, model_name, model_version):
+    def _prepare_chat(
+        self,
+        config_id,
+        config_name,
+        deployment_id,
+        kwargs,
+        model,
+        model_name,
+        model_version,
+    ):
         """
         Prepares the deployment and model name for the create and parse responses request.
 
@@ -741,27 +863,29 @@ class AsyncResponses(AsyncResponses_):
             config_name=config_name,
         )
         deployment = proxy_client.select_deployment(**model_identification)
-        model_name = deployment.model_name or '???'
+        model_name = deployment.model_name or "???"
         # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        if not self.supports_temperature(model_name) and "temperature" in kwargs:
+            kwargs.pop("temperature")
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
-            kwargs.pop('max_completion_tokens', None)
+            kwargs.pop("n", None)
+            kwargs.pop("max_completion_tokens", None)
         return deployment, model_name
 
-    async def create(self,
-               *,
-               input: str | ResponseInputParam | Omit = None,
-               instructions: str | Omit = None,
-               model: str | None | NotGiven = NOT_GIVEN,
-               deployment_id: str | None | NotGiven = NOT_GIVEN,
-               model_name: str | None | NotGiven = NOT_GIVEN,
-               model_version: str | None | NotGiven = NOT_GIVEN,
-               config_id: str | None | NotGiven = NOT_GIVEN,
-               config_name: str | None | NotGiven = NOT_GIVEN,
-               **kwargs) -> Response | AsyncStream[ResponseStreamEvent]:
+    async def create(
+        self,
+        *,
+        input: str | ResponseInputParam | Omit = None,
+        instructions: str | Omit = None,
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> Response | AsyncStream[ResponseStreamEvent]:
         """Async method that creates a response based on the provided parameters. It uses a proxy client to select a
         deployment and then calls the create method of the parent class to generate a response.
 
@@ -784,26 +908,36 @@ class AsyncResponses(AsyncResponses_):
         :return: the response or stream of responsess created based on the provided input.
         :rtype: Response | AsyncStream[ResponseStreamEvent]:
         """
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
-            return await super().create(instructions=instructions, input=input, model=model_name, **kwargs)
+            return await super().create(
+                instructions=instructions, input=input, model=model_name, **kwargs
+            )
 
     async def parse(
         self,
-            *,
-            input: str | ResponseInputParam | Omit = None,
-            instructions: str | Omit = None,
-            model: str | None | NotGiven = NOT_GIVEN,
-            deployment_id: str | None | NotGiven = NOT_GIVEN,
-            model_name: str | None | NotGiven = NOT_GIVEN,
-            model_version: str | None | NotGiven = NOT_GIVEN,
-            config_id: str | None | NotGiven = NOT_GIVEN,
-            config_name: str | None | NotGiven = NOT_GIVEN,
-            **kwargs) -> ParsedResponse[TextFormatT]:
+        *,
+        input: str | ResponseInputParam | Omit = None,
+        instructions: str | Omit = None,
+        model: str | None | NotGiven = NOT_GIVEN,
+        deployment_id: str | None | NotGiven = NOT_GIVEN,
+        model_name: str | None | NotGiven = NOT_GIVEN,
+        model_version: str | None | NotGiven = NOT_GIVEN,
+        config_id: str | None | NotGiven = NOT_GIVEN,
+        config_name: str | None | NotGiven = NOT_GIVEN,
+        **kwargs,
+    ) -> ParsedResponse[TextFormatT]:
         """Async parses responses using the provided parameters and returns a ParsedResponse object.
         This method provides richer integrations with Python specific types by converting pydantic models
         into JSON schemas and parsing the response content back into the given model
@@ -828,13 +962,22 @@ class AsyncResponses(AsyncResponses_):
         :rtype: ParsedResponse
         """
 
-        deployment, model_name = self._prepare_chat(config_id, config_name, deployment_id, kwargs, model, model_name,
-                                                    model_version)
+        deployment, model_name = self._prepare_chat(
+            config_id,
+            config_name,
+            deployment_id,
+            kwargs,
+            model,
+            model_name,
+            model_version,
+        )
 
         with set_deployment(deployment):
             kwargs.pop("root_client", None)
             kwargs.pop("root_async_client", None)
-            return await super().parse(instructions=instructions, input=input, model=model_name, **kwargs)
+            return await super().parse(
+                instructions=instructions, input=input, model=model_name, **kwargs
+            )
 
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
@@ -847,9 +990,12 @@ class AsyncResponses(AsyncResponses_):
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return (
+            not re.search(O_SERIES_MODEL_PATTERN, model_name)
+            and not re.search(GPT_5_MODEL_PATTERN, model_name)
+            and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name)
+        )
+
 
 class OpenAIWithRawResponse:
     """
@@ -896,7 +1042,11 @@ class OpenAIWithRawResponse:
         self.completions = resources.CompletionsWithRawResponse(client.completions)
         self.chat = resources.ChatWithRawResponse(client.chat)
         self.edits = None
-        self.embeddings = resources.EmbeddingsWithRawResponse(client.embeddings) if client.embeddings else None
+        self.embeddings = (
+            resources.EmbeddingsWithRawResponse(client.embeddings)
+            if client.embeddings
+            else None
+        )
         self.files = None
         self.images = None
         self.audio = None
@@ -921,27 +1071,27 @@ class AsyncOpenAIWithRawResponse:
 
     Attributes:
         completions: An instance of `resources.AsyncCompletionsWithRawResponse` for managing completions with the API.
-        
+
         chat: An instance of `resources.AsyncChatWithRawResponse` for managing chat with the API.
 
         embeddings: An instance of `resources.AsyncEmbeddingsWithRawResponse` for managing embeddings with the API.
 
         edits: Currently a placeholder with no functionality.
-    
+
         files: Currently a placeholder with no functionality.
-    
+
         images: Currently a placeholder with no functionality.
-    
+
         audio: Currently a placeholder with no functionality.
-    
+
         moderations: Currently a placeholder with no functionality.
-    
+
         models: Currently a placeholder with no functionality.
-    
+
         fine_tuning: Currently a placeholder with no functionality.
-    
+
         fine_tunes: Currently a placeholder with no functionality.
-    
+
         beta: Currently a placeholder with no functionality.
     """
 
@@ -973,7 +1123,7 @@ def _prepare_url(url: str) -> httpx.URL:
 
     url = httpx.URL(url)
     if url.is_relative_url:
-        deployment_url = httpx.URL(get_current_deployment().url.rstrip('/') + '/')
+        deployment_url = httpx.URL(get_current_deployment().url.rstrip("/") + "/")
         url = deployment_url.raw_path + url.raw_path.lstrip(b"/")
         return deployment_url.copy_with(raw_path=url)
     return url
@@ -1017,11 +1167,13 @@ class OpenAI(OpenAI_):
         responses from the API.
     """
 
-    def __init__(self,
-                 *,
-                 proxy_client: Optional[BaseProxyClient] = None,
-                 api_version: Optional[str] = DEFAULT_API_VERSION,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        *,
+        proxy_client: Optional[BaseProxyClient] = None,
+        api_version: Optional[str] = DEFAULT_API_VERSION,
+        **kwargs,
+    ) -> None:
         """Initializes the OpenAI API client with the provided parameters.
 
         :param proxy_client: An instance of a Proxy Client. Defaults to None.
@@ -1030,10 +1182,19 @@ class OpenAI(OpenAI_):
         :type api_version: Optional[str], optional
         """
         self.proxy_client = proxy_client or get_proxy_client()
-        for kwarg in ('api_key', 'organization', 'base_url'):
+        for kwarg in ("api_key", "organization", "base_url"):
             kwargs.pop(kwarg, None)
-        default_query = {'api-version': api_version or DEFAULT_API_VERSION, **kwargs.pop('default_query', {})}
-        super().__init__(api_key='???', base_url='???', organization='???', default_query=default_query, **kwargs)
+        default_query = {
+            "api-version": api_version or DEFAULT_API_VERSION,
+            **kwargs.pop("default_query", {}),
+        }
+        super().__init__(
+            api_key="???",
+            base_url="???",
+            organization="???",
+            default_query=default_query,
+            **kwargs,
+        )
 
         self.completions = Completions(self)
         self.chat = Chat(self)
@@ -1060,7 +1221,9 @@ class OpenAI(OpenAI_):
         return _prepare_url(url)
 
     def request(self, cast_to, options, *args, **kwargs):
-        options.json_data.update(get_current_deployment().additional_request_body_kwargs())
+        options.json_data.update(
+            get_current_deployment().additional_request_body_kwargs()
+        )
         return super().request(cast_to, options, *args, **kwargs)
 
 
@@ -1102,11 +1265,13 @@ class AsyncOpenAI(AsyncOpenAI_):
         with_raw_response (AsyncOpenAIWithRawResponse): A client that returns raw API responses.
     """
 
-    def __init__(self,
-                 *,
-                 proxy_client: Optional[BaseProxyClient] = None,
-                 api_version: Optional[str] = DEFAULT_API_VERSION,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        *,
+        proxy_client: Optional[BaseProxyClient] = None,
+        api_version: Optional[str] = DEFAULT_API_VERSION,
+        **kwargs,
+    ) -> None:
         """Initializes the AsyncOpenAI client with the provided parameters.
 
         :param proxy_client: An instance of a Proxy Client. Defaults to None.
@@ -1115,10 +1280,19 @@ class AsyncOpenAI(AsyncOpenAI_):
         :type api_version: Optional[str], optional
         """
         self.proxy_client = proxy_client or get_proxy_client()
-        for kwarg in ('api_key', 'organization', 'base_url'):
+        for kwarg in ("api_key", "organization", "base_url"):
             kwargs.pop(kwarg, None)
-        default_query = {'api-version': api_version or DEFAULT_API_VERSION, **kwargs.pop('default_query', {})}
-        super().__init__(api_key='???', base_url='???', organization='???', default_query=default_query, **kwargs)
+        default_query = {
+            "api-version": api_version or DEFAULT_API_VERSION,
+            **kwargs.pop("default_query", {}),
+        }
+        super().__init__(
+            api_key="???",
+            base_url="???",
+            organization="???",
+            default_query=default_query,
+            **kwargs,
+        )
 
         self.completions = AsyncCompletions(self)
         self.chat = AsyncChat(self)
@@ -1154,5 +1328,7 @@ class AsyncOpenAI(AsyncOpenAI_):
         :return: the response from the request.
         :rtype: CoroutineType[Any, Any, ResponseT@request]
         """
-        options.json_data.update(get_current_deployment().additional_request_body_kwargs())
+        options.json_data.update(
+            get_current_deployment().additional_request_body_kwargs()
+        )
         return super().request(cast_to, options, *args, **kwargs)

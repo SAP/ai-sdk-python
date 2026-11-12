@@ -1,97 +1,86 @@
 import unittest
 
-from integration_tests.constants import SAP_RPT_1_0_TEST_MODEL, SAP_RPT_1_5_TEST_MODEL, SAP_RPT_1_6_TEST_MODEL
+from integration_tests.constants import (
+    SAP_RPT_1_0_TEST_MODEL,
+    SAP_RPT_1_5_TEST_MODEL,
+    SAP_RPT_1_6_TEST_MODEL,
+)
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
 from gen_ai_hub.proxy.native.sap.client import RPTClient
-from gen_ai_hub.proxy.native.sap.models import RPTRequest, RPTResponse, PredictionConfig, TargetColumn
+from gen_ai_hub.proxy.native.sap.models import (
+    RPTRequest,
+    RPTResponse,
+    PredictionConfig,
+    TargetColumn,
+)
 
 request_by_row_dict = {
-            "prediction_config": {
-                "target_columns": [
-                    {
-                        "name": "COSTCENTER",
-                        "prediction_placeholder": "[PREDICT]",
-                        "task_type": "classification"
-                    }
-                ]
-            },
-            "index_column": "ID",
-            "rows": [
-                {
-                    "PRODUCT": "Couch",
-                    "PRICE": 999.99,
-                    "ORDERDATE": "28-11-2025",
-                    "ID": "35",
-                    "COSTCENTER": "[PREDICT]"
-                },
-                {
-                    "PRODUCT": "Office Chair",
-                    "PRICE": 150.8,
-                    "ORDERDATE": "02-11-2025",
-                    "ID": "44",
-                    "COSTCENTER": "Office Furniture"
-                },
-                {
-                    "PRODUCT": "Server Rack",
-                    "PRICE": 2200.00,
-                    "ORDERDATE": "01-11-2025",
-                    "ID": "104",
-                    "COSTCENTER": "Data Infrastructure"
-                }
-            ],
-            "data_schema": {
-                "PRODUCT": {
-                    "dtype": "string"
-                },
-                "PRICE": {
-                    "dtype": "numeric"
-                },
-                "ORDERDATE": {
-                    "dtype": "date"
-                },
-                "ID": {
-                    "dtype": "string"
-                },
-                "COSTCENTER": {
-                    "dtype": "string"
-                }
+    "prediction_config": {
+        "target_columns": [
+            {
+                "name": "COSTCENTER",
+                "prediction_placeholder": "[PREDICT]",
+                "task_type": "classification",
             }
-        }
+        ]
+    },
+    "index_column": "ID",
+    "rows": [
+        {
+            "PRODUCT": "Couch",
+            "PRICE": 999.99,
+            "ORDERDATE": "28-11-2025",
+            "ID": "35",
+            "COSTCENTER": "[PREDICT]",
+        },
+        {
+            "PRODUCT": "Office Chair",
+            "PRICE": 150.8,
+            "ORDERDATE": "02-11-2025",
+            "ID": "44",
+            "COSTCENTER": "Office Furniture",
+        },
+        {
+            "PRODUCT": "Server Rack",
+            "PRICE": 2200.00,
+            "ORDERDATE": "01-11-2025",
+            "ID": "104",
+            "COSTCENTER": "Data Infrastructure",
+        },
+    ],
+    "data_schema": {
+        "PRODUCT": {"dtype": "string"},
+        "PRICE": {"dtype": "numeric"},
+        "ORDERDATE": {"dtype": "date"},
+        "ID": {"dtype": "string"},
+        "COSTCENTER": {"dtype": "string"},
+    },
+}
 
 request_by_columns_dict = {
-  "prediction_config": {
-    "target_columns": [
-      {
-        "name": "COSTCENTER",
-        "prediction_placeholder": "[PREDICT]",
-        "task_type": "classification"
-      }
-    ]
-  },
-  "columns": {
-      "PRODUCT": ["Couch", "Office Chair", "Server Rack"],
-      "PRICE": [999.99, 150.8, 2200.00],
-      "ORDERDATE": ["28-11-2025", "02-11-2025", "01-11-2025"],
-      "ID": ["35", "44", "104"],
-      "COSTCENTER": ["[PREDICT]", "Office Furniture", "Data Infrastructure"]
-  },
-  "data_schema": {
-      "PRODUCT": {
-          "dtype": "string"
-      },
-      "PRICE": {
-          "dtype": "numeric"
-      },
-      "ORDERDATE": {
-          "dtype": "date"
-      },
-      "ID": {
-          "dtype": "string"
-      },
-      "COSTCENTER": {
-          "dtype": "string"
-      }
-  }
+    "prediction_config": {
+        "target_columns": [
+            {
+                "name": "COSTCENTER",
+                "prediction_placeholder": "[PREDICT]",
+                "task_type": "classification",
+            }
+        ]
+    },
+    "columns": {
+        "PRODUCT": ["Couch", "Office Chair", "Server Rack"],
+        "PRICE": [999.99, 150.8, 2200.00],
+        "ORDERDATE": ["28-11-2025", "02-11-2025", "01-11-2025"],
+        "ID": ["35", "44", "104"],
+        "COSTCENTER": ["[PREDICT]", "Office Furniture", "Data Infrastructure"],
+    },
+    "data_schema": {
+        "PRODUCT": {"dtype": "string"},
+        "PRICE": {"dtype": "numeric"},
+        "ORDERDATE": {"dtype": "date"},
+        "ID": {"dtype": "string"},
+        "COSTCENTER": {"dtype": "string"},
+    },
 }
 
 rows_regression_template = lambda prediction_placeholder: [
@@ -135,8 +124,8 @@ rows_regression_template = lambda prediction_placeholder: [
 rows_regression = rows_regression_template("[PREDICT]")
 rows_regression_with_none = rows_regression_template(None)
 
-class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
 
+class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
     def setUp(self) -> None:
         self.client = RPTClient(proxy_client=self.proxy_client)
 
@@ -145,7 +134,9 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         self.assertIsNotNone(url)
 
     def test_client_find_url_by_model_name_and_version(self):
-        url = self.client._get_url(model_name=SAP_RPT_1_6_TEST_MODEL, model_version="latest")
+        url = self.client._get_url(
+            model_name=SAP_RPT_1_6_TEST_MODEL, model_version="latest"
+        )
         self.assertIsNotNone(url)
 
     def test_client_find_url_by_config_name(self):
@@ -190,9 +181,14 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder="[PREDICT]")
-                ]),
-            rows=rows_regression
+                    TargetColumn(
+                        name="DISCOUNT_RATE",
+                        task_type="regression",
+                        prediction_placeholder="[PREDICT]",
+                    )
+                ]
+            ),
+            rows=rows_regression,
         )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
@@ -204,9 +200,14 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder=None)
-                ]),
-            rows=rows_regression_with_none
+                    TargetColumn(
+                        name="DISCOUNT_RATE",
+                        task_type="regression",
+                        prediction_placeholder=None,
+                    )
+                ]
+            ),
+            rows=rows_regression_with_none,
         )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
@@ -218,82 +219,95 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name="DISCOUNT_RATE", task_type="regression", prediction_placeholder="[PREDICT]")
-                ]),
-            rows=rows_regression
+                    TargetColumn(
+                        name="DISCOUNT_RATE",
+                        task_type="regression",
+                        prediction_placeholder="[PREDICT]",
+                    )
+                ]
+            ),
+            rows=rows_regression,
         )
 
         with self.assertRaises(Exception):
-            self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL, timeout=0.001)
-
-
+            self.client.predict(
+                body=body, model_name=SAP_RPT_1_6_TEST_MODEL, timeout=0.001
+            )
 
     def test_predict_classification_with_top_k(self):
-        body = RPTRequest(**{
-            **request_by_columns_dict,
-            'prediction_config': {
-                'target_columns': [
-                    {
-                        'name': 'COSTCENTER',
-                        'prediction_placeholder': '[PREDICT]',
-                        'task_type': 'classification',
-                        'top_k': 2
-                    }
-                ]
+        body = RPTRequest(
+            **{
+                **request_by_columns_dict,
+                "prediction_config": {
+                    "target_columns": [
+                        {
+                            "name": "COSTCENTER",
+                            "prediction_placeholder": "[PREDICT]",
+                            "task_type": "classification",
+                            "top_k": 2,
+                        }
+                    ]
+                },
             }
-        })
+        )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
-        costcenter_predictions = response.predictions[0]['COSTCENTER']
+        costcenter_predictions = response.predictions[0]["COSTCENTER"]
         self.assertGreaterEqual(len(costcenter_predictions), 1)
 
     def test_predict_response_includes_context_mode(self):
         body = RPTRequest(**request_by_columns_dict)
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
-        self.assertIn(response.metadata.context_mode, ['default', 'deep'])
+        self.assertIn(response.metadata.context_mode, ["default", "deep"])
 
     def test_regression_prediction_includes_confidence_interval(self):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name='DISCOUNT_RATE', task_type='regression', prediction_placeholder='[PREDICT]')
-                ]),
-            rows=rows_regression
+                    TargetColumn(
+                        name="DISCOUNT_RATE",
+                        task_type="regression",
+                        prediction_placeholder="[PREDICT]",
+                    )
+                ]
+            ),
+            rows=rows_regression,
         )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
-        discount_predictions = response.predictions[0]['DISCOUNT_RATE']
+        discount_predictions = response.predictions[0]["DISCOUNT_RATE"]
         self.assertIsNotNone(discount_predictions[0].confidence_interval)
         self.assertEqual(len(discount_predictions[0].confidence_interval), 2)
         self.assertIsNone(discount_predictions[0].confidence)
 
     def test_predict_with_explanations(self):
-        body = RPTRequest(**{
-            **request_by_columns_dict,
-            'prediction_config': {
-                'target_columns': [
-                    {
-                        'name': 'COSTCENTER',
-                        'prediction_placeholder': '[PREDICT]',
-                        'task_type': 'classification'
-                    }
-                ],
-                'explanations': {
-                    'top_column_scores': 3,
-                    'top_relevant_context_rows': 2
-                }
+        body = RPTRequest(
+            **{
+                **request_by_columns_dict,
+                "prediction_config": {
+                    "target_columns": [
+                        {
+                            "name": "COSTCENTER",
+                            "prediction_placeholder": "[PREDICT]",
+                            "task_type": "classification",
+                        }
+                    ],
+                    "explanations": {
+                        "top_column_scores": 3,
+                        "top_relevant_context_rows": 2,
+                    },
+                },
             }
-        })
+        )
         response = self.client.predict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertIsNotNone(response.explanations)
         self.assertIsNotNone(response.explanations.top_column_scores)
         self.assertIsNotNone(response.explanations.top_relevant_context_rows)
-
 
     def test_happy_path_rpt_1_0(self):
         body = RPTRequest(**request_by_row_dict)
@@ -309,14 +323,16 @@ class RPTClientTests(TestCaseStandardSetupMixin, unittest.TestCase):
         self.assertEqual(response.status.code, 0)
         self.assertIn("COSTCENTER", response.predictions[0].model_dump())
 
-class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTestCase):
 
+class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
         self.client = RPTClient(proxy_client=self.proxy_client)
 
     async def test_apredict_by_row(self):
         body = RPTRequest(**request_by_row_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
+        response = await self.client.apredict(
+            body=body, model_name=SAP_RPT_1_6_TEST_MODEL
+        )
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.predictions[0]["ID"], "35")
@@ -326,7 +342,9 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_apredict_by_columns(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
+        response = await self.client.apredict(
+            body=body, model_name=SAP_RPT_1_6_TEST_MODEL
+        )
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
         self.assertEqual(response.metadata.num_columns, 5)
@@ -336,23 +354,31 @@ class AsyncRPTClientTests(TestCaseStandardSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_apredict_response_includes_context_mode(self):
         body = RPTRequest(**request_by_columns_dict)
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
+        response = await self.client.apredict(
+            body=body, model_name=SAP_RPT_1_6_TEST_MODEL
+        )
         self.assertIsInstance(response, RPTResponse)
-        self.assertIn(response.metadata.context_mode, ['default', 'deep'])
+        self.assertIn(response.metadata.context_mode, ["default", "deep"])
 
     async def test_apredict_regression_includes_confidence_interval(self):
         body = RPTRequest(
             prediction_config=PredictionConfig(
                 target_columns=[
-                    TargetColumn(name='DISCOUNT_RATE', task_type='regression', prediction_placeholder='[PREDICT]')
-                ]),
-            rows=rows_regression
+                    TargetColumn(
+                        name="DISCOUNT_RATE",
+                        task_type="regression",
+                        prediction_placeholder="[PREDICT]",
+                    )
+                ]
+            ),
+            rows=rows_regression,
         )
-        response = await self.client.apredict(body=body, model_name=SAP_RPT_1_6_TEST_MODEL)
+        response = await self.client.apredict(
+            body=body, model_name=SAP_RPT_1_6_TEST_MODEL
+        )
         self.assertIsInstance(response, RPTResponse)
         self.assertEqual(response.status.code, 0)
-        discount_predictions = response.predictions[0]['DISCOUNT_RATE']
+        discount_predictions = response.predictions[0]["DISCOUNT_RATE"]
         self.assertIsNotNone(discount_predictions[0].confidence_interval)
         self.assertEqual(len(discount_predictions[0].confidence_interval), 2)
         self.assertIsNone(discount_predictions[0].confidence)
-

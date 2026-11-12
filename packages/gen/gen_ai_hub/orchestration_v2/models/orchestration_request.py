@@ -2,9 +2,13 @@ from typing import List, Optional
 from pydantic import model_validator
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
-from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
-                                                       PartialOrchestrationConfig)
+from gen_ai_hub.orchestration_v2.models.config import (
+    OrchestrationConfig,
+    OrchestrationConfigReference,
+    PartialOrchestrationConfig,
+)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
+
 
 class CompletionPostRequest(BaseModel):
     """
@@ -14,6 +18,7 @@ class CompletionPostRequest(BaseModel):
     When ``config_ref`` is used, ``config`` may carry a ``PartialOrchestrationConfig``
     that overrides parts of the referenced configuration.
     """
+
     config: Optional[OrchestrationConfig | PartialOrchestrationConfig] = None
     config_ref: Optional[OrchestrationConfigReference] = None
     placeholder_values: Optional[dict[str, str]] = None
@@ -44,10 +49,13 @@ class CompletionPostRequest(BaseModel):
                     "Inline usage requires a full 'config' (OrchestrationConfig). "
                     "A PartialOrchestrationConfig is only valid as an override alongside 'config_ref'."
                 )
-        elif self.config is not None and not isinstance(self.config, PartialOrchestrationConfig):
+        elif self.config is not None and not isinstance(
+            self.config, PartialOrchestrationConfig
+        ):
             raise ValueError(
                 "When 'config_ref' is provided, 'config' must be a PartialOrchestrationConfig override."
             )
         return self
+
 
 __all__ = ["CompletionPostRequest"]

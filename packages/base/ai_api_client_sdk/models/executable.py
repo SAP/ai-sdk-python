@@ -37,10 +37,22 @@ class Executable:
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, id: str, scenario_id: str, version_id: str, name: str, deployable: bool, created_at: datetime,
-                 modified_at: datetime, description: str = None, parameters: List[Parameter] = None,
-                 input_artifacts: List[InputArtifact] = None, output_artifacts: List[OutputArtifact] = None,
-                 labels: List[Label] = None, **kwargs):
+    def __init__(
+        self,
+        id: str,
+        scenario_id: str,
+        version_id: str,
+        name: str,
+        deployable: bool,
+        created_at: datetime,
+        modified_at: datetime,
+        description: str = None,
+        parameters: List[Parameter] = None,
+        input_artifacts: List[InputArtifact] = None,
+        output_artifacts: List[OutputArtifact] = None,
+        labels: List[Label] = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.scenario_id: str = scenario_id
         self.version_id: str = version_id
@@ -63,7 +75,12 @@ class Executable:
         return True
 
     def __str__(self):
-        return "Executable id: " + str(self.id) + ", Executable description: " + str(self.description)
+        return (
+            "Executable id: "
+            + str(self.id)
+            + ", Executable description: "
+            + str(self.description)
+        )
 
     @staticmethod
     def from_dict(executable_dict: Dict[str, Any]):
@@ -75,16 +92,23 @@ class Executable:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.executable.Executable`
         """
-        executable_dict['created_at'] = parse_datetime(executable_dict['created_at'])
-        executable_dict['modified_at'] = parse_datetime(executable_dict['modified_at'])
-        if executable_dict.get('parameters'):
-            executable_dict['parameters'] = [Parameter.from_dict(p) for p in executable_dict['parameters']]
-        if executable_dict.get('input_artifacts'):
-            executable_dict['input_artifacts'] = \
-                [InputArtifact.from_dict(ia) for ia in executable_dict['input_artifacts']]
-        if executable_dict.get('output_artifacts'):
-            executable_dict['output_artifacts'] = \
-                [OutputArtifact.from_dict(oa) for oa in executable_dict['output_artifacts']]
-        if executable_dict.get('labels'):
-            executable_dict['labels'] = [Label.from_dict(l) for l in executable_dict['labels']]
+        executable_dict["created_at"] = parse_datetime(executable_dict["created_at"])
+        executable_dict["modified_at"] = parse_datetime(executable_dict["modified_at"])
+        if executable_dict.get("parameters"):
+            executable_dict["parameters"] = [
+                Parameter.from_dict(p) for p in executable_dict["parameters"]
+            ]
+        if executable_dict.get("input_artifacts"):
+            executable_dict["input_artifacts"] = [
+                InputArtifact.from_dict(ia) for ia in executable_dict["input_artifacts"]
+            ]
+        if executable_dict.get("output_artifacts"):
+            executable_dict["output_artifacts"] = [
+                OutputArtifact.from_dict(oa)
+                for oa in executable_dict["output_artifacts"]
+            ]
+        if executable_dict.get("labels"):
+            executable_dict["labels"] = [
+                Label.from_dict(l) for l in executable_dict["labels"]
+            ]
         return Executable(**executable_dict)

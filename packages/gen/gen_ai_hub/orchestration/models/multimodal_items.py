@@ -6,21 +6,24 @@ from typing import Dict, Any, Optional, Union
 
 from gen_ai_hub.orchestration.models.base import JSONSerializable
 
+
 class ImageDetailLevel(Enum):
     """
     Controls the resolution and detail level for image analysis.
 
     Attributes:
-    
+
     - AUTO: The model determines the detail level automatically.
 
     - LOW: The model uses a low-fidelity, faster version of the image.
 
     - HIGH: The model uses a high-fidelity version of the image.
     """
+
     AUTO = "auto"
     LOW = "low"
     HIGH = "high"
+
 
 @dataclass
 class TextPart(JSONSerializable):
@@ -28,11 +31,12 @@ class TextPart(JSONSerializable):
     Represents a text segment within a multimodal content block.
 
     Args:
-    
+
     - text: The string content of the text part.
-    
+
     - type: The type identifier, defaulting to "text".
     """
+
     text: str
     type: str = field(default="text")
 
@@ -42,10 +46,7 @@ class TextPart(JSONSerializable):
         :return: A dictionary representation of the TextPart.
         :rtype: dict
         """
-        return {
-            "type": self.type,
-            "text": self.text,
-        }
+        return {"type": self.type, "text": self.text}
 
 
 @dataclass
@@ -54,11 +55,12 @@ class ImageUrl:
     A data structure holding the URL and detail level for an image.
 
     Args:
-    
+
     - url: The location of the image, as a standard or data URL.
-    
+
     - detail: The processing detail level for the image.
     """
+
     url: str
     detail: Optional[ImageDetailLevel] = None
 
@@ -69,10 +71,11 @@ class ImagePart(JSONSerializable):
     Represents an image segment within a multimodal content block.
 
     Args:
-    
+
     - image_url: An `ImageUrl` object containing the image's location and detail level.
     - type: The type identifier, defaulting to "image_url".
     """
+
     image_url: ImageUrl
     type: str = field(default="image_url")
 
@@ -82,12 +85,7 @@ class ImagePart(JSONSerializable):
         :return: A dictionary representation of the ImagePart.
         :rtype: dict
         """
-        base = {
-            "type": self.type,
-            "image_url": {
-                "url": self.image_url.url,
-            },
-        }
+        base = {"type": self.type, "image_url": {"url": self.image_url.url}}
 
         if self.image_url.detail:
             base["image_url"]["detail"] = self.image_url.detail
@@ -112,14 +110,12 @@ class ImageItem(JSONSerializable):
     """
 
     def __init__(
-        self,
-        url: Optional[str] = None,
-        detail: Optional[ImageDetailLevel] = None,
+        self, url: Optional[str] = None, detail: Optional[ImageDetailLevel] = None
     ):
         """Initializes an ImageItem instance.
 
         :param url: The image location as a standard or data URL, defaults to None
-            
+
                     Standard URL example: 'https://example.com/image.png'
 
                     Data URL example: 'data:image/png;base64,...'

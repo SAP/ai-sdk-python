@@ -10,28 +10,24 @@ from httpx import Response
 
 from gen_ai_hub.proxy.gen_ai_hub_proxy import temporary_headers_addition
 from gen_ai_hub.proxy.native.openai import AsyncOpenAI, OpenAI
-from tests.mock import (
-    get_mocked_ai_core_client,
-    OPENAI_EMBEDDINGS_RESPONSE
-)
+from tests.mock import get_mocked_ai_core_client, OPENAI_EMBEDDINGS_RESPONSE
 
 
 class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.proxy_client = get_mocked_ai_core_client()
 
     async def test_async_embedding(self):
-        kwargs = {'model_name': 'gpt-4o-mini'}
+        kwargs = {"model_name": "gpt-4o-mini"}
         client = AsyncOpenAI(proxy_client=self.proxy_client)
 
         counter = Counter()
 
         def mock_callback(request):
-            body = json.loads(request.content.decode('utf-8'))
-            self.assertEqual(body['input'], request.headers['test-func'])
-            counter[request.headers['test-func']] += 1
+            body = json.loads(request.content.decode("utf-8"))
+            self.assertEqual(body["input"], request.headers["test-func"])
+            counter[request.headers["test-func"]] += 1
             return Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
 
         @contextmanager
@@ -43,11 +39,13 @@ class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
         n_requests = 10
 
         async def test_f(test_value):
-            with temporary_headers_addition({'test-func': test_value}):
+            with temporary_headers_addition({"test-func": test_value}):
                 for _ in range(n_requests):
-                    await client.embeddings.create(**{**kwargs, 'input': test_value})
+                    await client.embeddings.create(**{**kwargs, "input": test_value})
 
-        deployment = self.proxy_client.select_deployment(model_name='text-embedding-ada-002')
+        deployment = self.proxy_client.select_deployment(
+            model_name="text-embedding-ada-002"
+        )
         with mocker(deployment.prediction_url):
             await asyncio.gather(*[test_f(str(i)) for i in range(5)])
         for key, value in counter.items():
@@ -55,21 +53,20 @@ class AsyncOpenAITests(unittest.IsolatedAsyncioTestCase):
 
 
 class SyncOpenAITests(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.proxy_client = get_mocked_ai_core_client()
 
     def test_sync_embedding(self):
-        kwargs = {'model_name': 'gpt-4o-mini'}
+        kwargs = {"model_name": "gpt-4o-mini"}
         client = OpenAI(proxy_client=self.proxy_client)
 
         counter = Counter()
 
         def mock_callback(request):
-            body = json.loads(request.content.decode('utf-8'))
-            self.assertEqual(body['input'], request.headers['test-func'])
-            counter[request.headers['test-func']] += 1
+            body = json.loads(request.content.decode("utf-8"))
+            self.assertEqual(body["input"], request.headers["test-func"])
+            counter[request.headers["test-func"]] += 1
             return Response(200, json=OPENAI_EMBEDDINGS_RESPONSE)
 
         @contextmanager
@@ -81,15 +78,16 @@ class SyncOpenAITests(unittest.TestCase):
         n_requests = 10
 
         def test_f(test_value):
-            with temporary_headers_addition({'test-func': test_value}):
+            with temporary_headers_addition({"test-func": test_value}):
                 for _ in range(n_requests):
-                    client.embeddings.create(**{**kwargs, 'input': test_value})
+                    client.embeddings.create(**{**kwargs, "input": test_value})
 
-        deployment = self.proxy_client.select_deployment(model_name='text-embedding-ada-002')
+        deployment = self.proxy_client.select_deployment(
+            model_name="text-embedding-ada-002"
+        )
         with mocker(deployment.prediction_url):
             threads = [
-                threading.Thread(target=test_f, args=(str(i),))
-                for i in range(5)
+                threading.Thread(target=test_f, args=(str(i),)) for i in range(5)
             ]
             for thread in threads:
                 thread.start()

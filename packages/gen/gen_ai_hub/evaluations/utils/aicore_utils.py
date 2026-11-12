@@ -109,15 +109,13 @@ def create_deployment_by_configuration_id(
     try:
         # create deployment
         deployment_response = ai_core_client.deployment.create(
-            configuration_id=configuration_id,
-            resource_group=resource_group,
+            configuration_id=configuration_id, resource_group=resource_group
         )
 
         # wait till the deployment is up and running
         def deployment_status_fetcher():
             return ai_core_client.deployment.get(
-                deployment_id=deployment_response.id,
-                resource_group=resource_group,
+                deployment_id=deployment_response.id, resource_group=resource_group
             )
 
         def extract_deployment_url(response):
@@ -329,7 +327,10 @@ def resolve_artifact_path(
         artifact_url_relative_path = url_part[sep + 1 :]
         object_store_secret_details: ObjectStoreSecret = (
             fetch_object_store_secret_by_name(
-                ai_core_client, object_store_secret_name, resource_group, error_collector
+                ai_core_client,
+                object_store_secret_name,
+                resource_group,
+                error_collector,
             )
         )
         if object_store_secret_details is None:
@@ -405,8 +406,7 @@ def call_orchestration_service_with_v2_config(
     try:
         # Create the orchestration service with the deployment URL
         orchestration_service = OrchestrationService(
-            api_url=orchestration_deployment_url,
-            proxy_client=proxy_client,
+            api_url=orchestration_deployment_url, proxy_client=proxy_client
         )
 
         # Convert the dict config to OrchestrationConfig object
@@ -511,10 +511,7 @@ def upload_evaluation_dataset_data(
             )
             return "", ""
 
-    return (
-        artifact_folder_path,
-        aicore_configuration_dataset_file_path,
-    )
+    return (artifact_folder_path, aicore_configuration_dataset_file_path)
 
 
 def register_aicore_artifact(
@@ -576,10 +573,7 @@ def register_aicore_configuration(
             accumulated_config_data.variable_mapping
         )  # to validate if this generates the right escaped string
 
-        logger.info(
-            "The generated variable mapping is %s",
-            variable_mapping,
-        )
+        logger.info("The generated variable mapping is %s", variable_mapping)
         tags = accumulated_config_data.tags
         run_ids = ",".join(
             run_ids_list
@@ -693,6 +687,7 @@ def fetch_orchestration_config_from_registry(
         )
     return None
 
+
 def resolve_metric_identifiers(
     metrics: List[MetricConfig],
     ai_core_client: AICoreV2Client,
@@ -706,16 +701,14 @@ def resolve_metric_identifiers(
 
     for metric in metrics:
         metric_info = _resolve_single_metric(
-            metric,
-            ai_core_client,
-            resource_group,
-            error_collector,
+            metric, ai_core_client, resource_group, error_collector
         )
 
         if metric_info:
             metric_templates.append(metric_info)
 
     return metric_templates
+
 
 def _resolve_single_metric(
     metric: MetricConfig,
@@ -727,26 +720,17 @@ def _resolve_single_metric(
 
     if metric_reference.id is not None:
         return _resolve_metric_by_id(
-            metric_reference.id,
-            ai_core_client,
-            resource_group,
-            error_collector,
+            metric_reference.id, ai_core_client, resource_group, error_collector
         )
 
     if _has_scenario_name_version(metric_reference):
         return _resolve_metric_by_metadata(
-            metric_reference,
-            ai_core_client,
-            resource_group,
-            error_collector,
+            metric_reference, ai_core_client, resource_group, error_collector
         )
 
     if _is_system_defined_metric(metric_reference):
         return _resolve_system_metric(
-            metric_reference.name,
-            ai_core_client,
-            resource_group,
-            error_collector,
+            metric_reference.name, ai_core_client, resource_group, error_collector
         )
 
     error_collector.add_error(
@@ -759,14 +743,12 @@ def _resolve_single_metric(
     )
     return None
 
+
 def _has_scenario_name_version(metric_reference) -> bool:
     return all(
-        [
-            metric_reference.scenario,
-            metric_reference.name,
-            metric_reference.version,
-        ]
+        [metric_reference.scenario, metric_reference.name, metric_reference.version]
     )
+
 
 def _is_system_defined_metric(metric_reference) -> bool:
     return (
@@ -782,10 +764,7 @@ def _resolve_metric_by_id(
     error_collector: ValidationCollector,
 ) -> Dict | None:
     metric_info = get_custom_metric_by_id(
-        metric_id,
-        ai_core_client,
-        resource_group,
-        error_collector,
+        metric_id, ai_core_client, resource_group, error_collector
     )
 
     if not metric_info:
@@ -796,6 +775,7 @@ def _resolve_metric_by_id(
         return None
 
     return metric_info
+
 
 def _resolve_metric_by_metadata(
     metric_reference,
@@ -821,6 +801,7 @@ def _resolve_metric_by_metadata(
 
     return metric_info
 
+
 def _resolve_system_metric(
     metric_name: str,
     ai_core_client: AICoreV2Client,
@@ -828,10 +809,7 @@ def _resolve_system_metric(
     error_collector: ValidationCollector,
 ) -> Dict | None:
     metric_info = get_metric_template_info_from_server(
-        metric_name,
-        ai_core_client,
-        resource_group,
-        error_collector,
+        metric_name, ai_core_client, resource_group, error_collector
     )
 
     if not metric_info:
@@ -842,7 +820,6 @@ def _resolve_system_metric(
         return None
 
     return metric_info
-
 
 
 def resolve_metric_names(

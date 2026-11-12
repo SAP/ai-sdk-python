@@ -14,6 +14,7 @@ class ExecutionCreateResponse(BasicResponse):
     :type status: class:`ai_api_client_sdk.models.status.Status`
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, id: str, message: str, status: Status, **kwargs):
         super().__init__(id=id, message=message, **kwargs)
         self.status: Status = status
@@ -28,5 +29,5 @@ class ExecutionCreateResponse(BasicResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.execution_create_response.ExecutionCreateResponse`
         """
-        response_dict['status'] = Status(response_dict['status'])
+        response_dict["status"] = Status(response_dict["status"])
         return ExecutionCreateResponse(**response_dict)

@@ -19,9 +19,7 @@ from gen_ai_hub.evaluations.constants import (
     METRICS_TABLE_KEY,
 )
 from gen_ai_hub.evaluations.helpers.s3_file_client import S3FileClient
-from gen_ai_hub.evaluations._internal._models import (
-    _AWSObjectStoreData,
-)
+from gen_ai_hub.evaluations._internal._models import _AWSObjectStoreData
 
 
 @dataclass
@@ -33,6 +31,7 @@ class ExecutionStatusDetails:
     :param status: Current status of the execution
     :type status: Any
     """
+
     details: Any
     status: Any
 
@@ -193,24 +192,15 @@ class EvaluationRun:
         failed_pod_details = self._extract_failed_pods(status_details)
         workflow_lookup = self._build_workflow_lookup(status_details)
 
-        self._enrich_failed_pods(
-            failed_pod_details,
-            workflow_lookup,
-        )
+        self._enrich_failed_pods(failed_pod_details, workflow_lookup)
 
-        return ExecutionStatusDetails(
-            details=failed_pod_details,
-            status=current_status,
-        )
+        return ExecutionStatusDetails(details=failed_pod_details, status=current_status)
 
     def _extract_failed_pods(self, status_details: dict) -> list[dict]:
         details = status_details.get("details", [])
 
         return [
-            {
-                "name": c["pod_name"],
-                "last_log_message": c["last_log_messages"],
-            }
+            {"name": c["pod_name"], "last_log_message": c["last_log_messages"]}
             for c in details
             if c.get("exit_code", 0) > 0
         ]
@@ -226,9 +216,7 @@ class EvaluationRun:
         return workflow_lookup
 
     def _enrich_failed_pods(
-        self,
-        failed_pods: list[dict],
-        workflow_lookup: dict,
+        self, failed_pods: list[dict], workflow_lookup: dict
     ) -> None:
         for pod in failed_pods:
             pod_name = pod.get("name", "")
@@ -236,17 +224,9 @@ class EvaluationRun:
             if self._apply_step_level_message(pod, pod_name):
                 continue
 
-            self._apply_metric_level_message(
-                pod,
-                pod_name,
-                workflow_lookup,
-            )
+            self._apply_metric_level_message(pod, pod_name, workflow_lookup)
 
-    def _apply_step_level_message(
-        self,
-        pod: dict,
-        pod_name: str,
-    ) -> bool:
+    def _apply_step_level_message(self, pod: dict, pod_name: str) -> bool:
         for key, message in self._STEP_ERROR_MESSAGES.items():
             if key in pod_name:
                 pod[ADDITIONAL_INFO_KEY] = message
@@ -254,10 +234,7 @@ class EvaluationRun:
         return False
 
     def _apply_metric_level_message(
-        self,
-        pod: dict,
-        pod_name: str,
-        workflow_lookup: dict,
+        self, pod: dict, pod_name: str, workflow_lookup: dict
     ) -> None:
         suffix = pod_name.split("-")[-1]
         workflow = workflow_lookup.get(suffix)
@@ -276,7 +253,6 @@ class EvaluationRun:
     def _extract_metric_name(self, name: str) -> str | None:
         match = re.search(r"metric_name:([^,)\s]+(?: [^,)\s]+)*)", name)
         return match.group(1) if match else None
-
 
     def get_debug_logs(self):
         """Get the complete trace of execution logs.
@@ -341,10 +317,7 @@ class EvaluationRun:
                     self._run_context.object_store_credentials.aws_secret_access_key,
                 )
                 results_db_file_key = f"{secret_path_prefix}/{self._run_context.execution_id}/tmp/{RESULTS_FILE_KEY}"
-                tables_to_load = [
-                    COMPLETIONS_TABLE_KEY,
-                    METRICS_TABLE_KEY,
-                ]
+                tables_to_load = [COMPLETIONS_TABLE_KEY, METRICS_TABLE_KEY]
                 data = s3_file_client.get_sqlitedb_tables_data_from_s3(
                     results_db_file_key, tables_to_load
                 )
@@ -403,9 +376,7 @@ class Results:
         :return: Filtered list containing only rows matching the run_id
         :rtype: list
         """
-        run_id = uuid.UUID(
-            run_id
-        ).hex
+        run_id = uuid.UUID(run_id).hex
         filtered_store = [
             current_row for current_row in data if current_row.get("run_id") == run_id
         ]
@@ -463,5 +434,6 @@ class Results:
                 "Error while trying to fetch aggregation results from tracking service with error of: ",
                 e,
             ) from e
+
 
 __all__ = ["EvaluationRun", "Results"]

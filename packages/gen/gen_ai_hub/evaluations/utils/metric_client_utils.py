@@ -41,10 +41,7 @@ def _get_custom_metric_details(
             "Authorization": token,  # already sends token in Bearer token format
             "AI-Resource-Group": resource_group,
         }
-        response = requests.get(
-            url=url_built,
-            headers=headers,
-        )
+        response = requests.get(url=url_built, headers=headers)
         response = response.json()
         return response
 
@@ -81,9 +78,7 @@ def get_custom_metric_by_id(
     :rtype: dict | None
     """
     path = f"{METRIC_SERVER_ENDPOINT}/{metric_id}"
-    logger.debug(
-        f"Sending GET request to {path} for metric ID: {metric_id}",
-    )
+    logger.debug(f"Sending GET request to {path} for metric ID: {metric_id}")
     try:
         # Not using rest_client of aicore as fields are getting snake cased by the rest client while all keys in schema of metric client uses camelCase like additionalProperties. if used via rest client its returning additional_properties whereas we need additionalProperties
         url_built = f"{ai_core_client.base_url}{path}"
@@ -95,10 +90,7 @@ def get_custom_metric_by_id(
         }
         # response = requests.post(completion_url, json=test_orch_config, headers=headers)
 
-        response = requests.get(
-            url=url_built,
-            headers=headers,
-        )
+        response = requests.get(url=url_built, headers=headers)
         response = response.json()
         return response
     except Exception as e:
@@ -175,7 +167,7 @@ def get_metric_version_history(
     """
     path = f"/lm/scenarios/{scenario}{EVALUATION_METRICS_ENDPOINT}/{metric_id}/versions/{version}/history"
     logger.debug(
-        f"Sending GET request to {path} for scenario: {scenario}, metric: {metric_id}, version: {version}",
+        f"Sending GET request to {path} for scenario: {scenario}, metric: {metric_id}, version: {version}"
     )
 
     try:
@@ -188,10 +180,7 @@ def get_metric_version_history(
             "Authorization": token,  # already sends token in Bearer token format
             "AI-Resource-Group": resource_group,
         }
-        response = requests.get(
-            url=url_built,
-            headers=headers,
-        )
+        response = requests.get(url=url_built, headers=headers)
         response = response.json()
         resources = response.get("resources", [])
         if resources:

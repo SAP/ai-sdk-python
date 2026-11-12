@@ -1,26 +1,29 @@
 import unittest
 
-from google.genai.types import GenerateContentResponse, GenerateContentConfig, Content, EmbedContentResponse, Part
+from google.genai.types import (
+    GenerateContentResponse,
+    GenerateContentConfig,
+    Content,
+    EmbedContentResponse,
+    Part,
+)
 
 from gen_ai_hub.proxy.native.google_genai.clients import Client
-from integration_tests.constants import GEMINI_2_5_FLASH_LITE_TEST_MODEL, GOOGLE_EMBEDDING_TEST_MODEL
+from integration_tests.constants import (
+    GEMINI_2_5_FLASH_LITE_TEST_MODEL,
+    GOOGLE_EMBEDDING_TEST_MODEL,
+)
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 
 
 def get_test_messages(text="Write a story about a magic backpack."):
     if not text:
         text = "Write a story about a magic backpack."
-    user_prompt_content = Content(
-        role="user",
-        parts=[
-            Part(text=text),
-        ],
-    )
+    user_prompt_content = Content(role="user", parts=[Part(text=text)])
     return [user_prompt_content]
 
 
 class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
-
     def test_client_discovery(self):
         google_deployments = [
             deployment
@@ -33,9 +36,7 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     def test_genai_chat(self):
         client = Client(proxy_client=self.proxy_client)
-        chat_session = client.chats.create(
-            model=GEMINI_2_5_FLASH_LITE_TEST_MODEL
-        )
+        chat_session = client.chats.create(model=GEMINI_2_5_FLASH_LITE_TEST_MODEL)
         model_response = chat_session.send_message("Hello.")
         self.assertIsInstance(model_response, GenerateContentResponse)
         model_response = chat_session.send_message(
@@ -63,13 +64,14 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         )
         chunks = [chunk for chunk in response]
         self.assertTrue(all(isinstance(chunk.text, str) for chunk in chunks))
-        self.assertGreater(len(chunks), 1, "Only one chunk received - stream seems to be buffered.")
+        self.assertGreater(
+            len(chunks), 1, "Only one chunk received - stream seems to be buffered."
+        )
 
     def test_genai_embedding(self):
         client = Client(proxy_client=self.proxy_client)
         response = client.models.embed_content(
-            model=GOOGLE_EMBEDDING_TEST_MODEL,
-            contents="What's the meaning of life?"
+            model=GOOGLE_EMBEDDING_TEST_MODEL, contents="What's the meaning of life?"
         )
         self.assertIsInstance(response, EmbedContentResponse)
 
@@ -77,12 +79,12 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         client = Client(proxy_client=self.proxy_client)
         response = client.models.embed_content(
             model=f"{GOOGLE_EMBEDDING_TEST_MODEL}-001",
-            contents="What's the meaning of life?"
+            contents="What's the meaning of life?",
         )
         self.assertIsInstance(response, EmbedContentResponse)
 
-class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTestCase):
 
+class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTestCase):
     async def test_genai_generate_content_async(self):
         async with Client(proxy_client=self.proxy_client).aio as aclient:
             response = await aclient.models.generate_content(
@@ -94,9 +96,7 @@ class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTe
 
     async def test_genai_chat_async(self):
         async with Client(proxy_client=self.proxy_client).aio as aclient:
-            chat_session = aclient.chats.create(
-                model=GEMINI_2_5_FLASH_LITE_TEST_MODEL
-            )
+            chat_session = aclient.chats.create(model=GEMINI_2_5_FLASH_LITE_TEST_MODEL)
             model_response = await chat_session.send_message("Hello.")
             self.assertIsInstance(model_response, GenerateContentResponse)
             model_response = await chat_session.send_message(
@@ -115,7 +115,9 @@ class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTe
             )
             chunks = [chunk async for chunk in async_response_stream]
             self.assertTrue(all(isinstance(chunk.text, str) for chunk in chunks))
-            self.assertGreater(len(chunks), 1, "Only one chunk received - stream seems to be buffered.")
+            self.assertGreater(
+                len(chunks), 1, "Only one chunk received - stream seems to be buffered."
+            )
 
 
 if __name__ == "__main__":

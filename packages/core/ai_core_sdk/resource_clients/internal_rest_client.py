@@ -6,16 +6,10 @@ from ai_core_sdk.helpers import is_within_aicore
 
 
 class InternalRestClient(RestClient):
-    """InternalRestClient is a class implemented for sending requests to services within aicore. The InternalRestClient should only be used for services that do not require authentication when called within aicore.
-    """
+    """InternalRestClient is a class implemented for sending requests to services within aicore. The InternalRestClient should only be used for services that do not require authentication when called within aicore."""
 
     def __init__(
-        self,
-        base_url=None,
-        get_token=None,
-        resource_group=None,
-        *args,
-        **kwargs,
+        self, base_url=None, get_token=None, resource_group=None, *args, **kwargs
     ):
         # Disallows parameters set by this class. This way this class must not be adjusted as the signiture of its parent class changes.
         if base_url or get_token or resource_group:
@@ -63,14 +57,13 @@ class InternalRestClient(RestClient):
         resource_group=None,
         return_bytes_content=False,
         convert_body_to_camel_case=True,
-        **kwargs
+        **kwargs,
     ):
         headers = headers or {}
 
-        headers.update({
-            "AI-MAIN-TENANT": self.tenant,
-            "AI-RESOURCE-GROUP": self.resource_group,
-        })
+        headers.update(
+            {"AI-MAIN-TENANT": self.tenant, "AI-RESOURCE-GROUP": self.resource_group}
+        )
 
         return super()._handle_request(
             method=method,
@@ -81,5 +74,5 @@ class InternalRestClient(RestClient):
             resource_group=resource_group,
             return_bytes_content=return_bytes_content,
             convert_body_to_camel_case=convert_body_to_camel_case,
-            **kwargs
+            **kwargs,
         )

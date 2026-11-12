@@ -48,4 +48,3 @@ class ContentFilter(JSONSerializable):
         :rtype: dict
         """
         return {"type": self.provider, "config": self.config}
-

@@ -9,8 +9,8 @@ from typing import Optional
 
 from .base import BaseProxyClient
 
-THREAD_PROXY_VERSION_OVERWRITE = 'proxy_version_overwrite'
-PROXY_VERSION_ENV_VARIABLE = 'LLM_PROXY_VERSION'
+THREAD_PROXY_VERSION_OVERWRITE = "proxy_version_overwrite"
+PROXY_VERSION_ENV_VARIABLE = "LLM_PROXY_VERSION"
 
 no_value = object()
 
@@ -35,6 +35,7 @@ class ProxyClients:
         :return: A wrapper function.
         :rtype: Callable
         """
+
         def wrapper(proxy_cls: type[BaseProxyClient]) -> type[BaseProxyClient]:
             """Register the proxy client class.
 
@@ -45,7 +46,7 @@ class ProxyClients:
             :rtype: type[BaseProxyClient]
             """
             if not issubclass(proxy_cls, BaseProxyClient):
-                raise ValueError('You can only register ProxyClient subclasses')
+                raise ValueError("You can only register ProxyClient subclasses")
             self.clients[name] = proxy_cls
             return proxy_cls
 
@@ -62,7 +63,9 @@ class ProxyClients:
         proxy_version = proxy_version or get_proxy_version()
         return self.clients[proxy_version]
 
-    def get_proxy_cls_name(self, proxy_client_cls: type[BaseProxyClient] | BaseProxyClient) -> str:
+    def get_proxy_cls_name(
+        self, proxy_client_cls: type[BaseProxyClient] | BaseProxyClient
+    ) -> str:
         """Get the name of the proxy client class.
 
         :param proxy_client_cls: The proxy client class or instance.
@@ -75,16 +78,20 @@ class ProxyClients:
         if not inspect.isclass(proxy_client_cls):
             proxy_client_cls = type(proxy_client_cls)
         if not issubclass(proxy_client_cls, BaseProxyClient):
-            raise ValueError("'proxy_client_cls' has to be a ProxyClient class or an instance of an ProxyClient class.")
+            raise ValueError(
+                "'proxy_client_cls' has to be a ProxyClient class or an instance of an ProxyClient class."
+            )
 
         for name, cls in self.clients.items():
             if cls is proxy_client_cls:
                 return name
-        raise KeyError(f'{proxy_client_cls} is not a registered client.')
+        raise KeyError(f"{proxy_client_cls} is not a registered client.")
 
 
 @contextmanager
-def proxy_version_context(proxy_version: str, catalog: Optional[ProxyClients] = None) -> None:
+def proxy_version_context(
+    proxy_version: str, catalog: Optional[ProxyClients] = None
+) -> None:
     """Context manager to set a thread-local proxy version.
 
     :param proxy_version: The proxy version to set.
@@ -96,7 +103,7 @@ def proxy_version_context(proxy_version: str, catalog: Optional[ProxyClients] = 
     """
     catalog = catalog or proxy_clients
     if not isinstance(proxy_version, str):
-        raise ValueError('proxy_version has to be a string')
+        raise ValueError("proxy_version has to be a string")
 
     old_value = getattr(catalog._thread_local, catalog.thread_variable_name, no_value)
     setattr(catalog._thread_local, catalog.thread_variable_name, proxy_version.lower())
@@ -111,7 +118,9 @@ def proxy_version_context(proxy_version: str, catalog: Optional[ProxyClients] = 
             setattr(catalog._thread_local, catalog.thread_variable_name, old_value)
 
 
-def set_proxy_version(proxy_version: str, catalog: Optional[ProxyClients] = None) -> None:
+def set_proxy_version(
+    proxy_version: str, catalog: Optional[ProxyClients] = None
+) -> None:
     """Set the global proxy version.
 
     :param proxy_version: The proxy version to set.
@@ -123,20 +132,20 @@ def set_proxy_version(proxy_version: str, catalog: Optional[ProxyClients] = None
     """
     catalog = catalog or proxy_clients
     if not isinstance(proxy_version, str):
-        raise ValueError('proxy_version has to be a string')
+        raise ValueError("proxy_version has to be a string")
 
     catalog.proxy_version = proxy_version.lower()
 
 
 def get_proxy_version(catalog: Optional[ProxyClients] = None) -> str:
     """Get the current proxy version. The version is selected in the following order:
-    
+
     - thread-local overwrite (set with proxy_version_context)
-    
+
     - global overwrite (set with set_proxy_version)
-    
+
     - environment variable (LLM_PROXY_VERSION)
-    
+
     - first registered proxy version
 
     :param catalog: The catalog from which to get the proxy version. If none is provided,
@@ -147,24 +156,30 @@ def get_proxy_version(catalog: Optional[ProxyClients] = None) -> str:
     """
 
     catalog = catalog or proxy_clients
-    thread_overwrite = getattr(catalog._thread_local, catalog.thread_variable_name, None)
+    thread_overwrite = getattr(
+        catalog._thread_local, catalog.thread_variable_name, None
+    )
     env_version = os.environ.get(PROXY_VERSION_ENV_VARIABLE, None)
     fallback_version = [*catalog.clients.keys()][0] if catalog.clients else None
-    proxy_version = thread_overwrite or catalog.proxy_version or env_version or fallback_version
+    proxy_version = (
+        thread_overwrite or catalog.proxy_version or env_version or fallback_version
+    )
     if not proxy_version:
-        raise ValueError('No proxy version set. Please use set_proxy_version or proxy_version_context.')
+        raise ValueError(
+            "No proxy version set. Please use set_proxy_version or proxy_version_context."
+        )
     return proxy_version
 
 
-def get_proxy_client(proxy_version: str | None = None,
-                     catalog: Optional[ProxyClients] = None,
-                     **kwargs) -> BaseProxyClient:
+def get_proxy_client(
+    proxy_version: str | None = None, catalog: Optional[ProxyClients] = None, **kwargs
+) -> BaseProxyClient:
     """Get a proxy client for the given proxy version.
 
     :param proxy_version: The version of the proxy client to retrieve. If not provided, the function will
                           attempt to retrieve the version using the `get_proxy_version` function.
     :type proxy_version: str | None, optional
-    :param catalog: The catalog from which to retrieve the proxy client. If not provided, the function will 
+    :param catalog: The catalog from which to retrieve the proxy client. If not provided, the function will
                     default to the `proxy_clients` catalog
     :type catalog: Optional[ProxyClients], optional
     :param kwargs: Arbitrary keyword arguments that will be passed to the constructor of the proxy client class.

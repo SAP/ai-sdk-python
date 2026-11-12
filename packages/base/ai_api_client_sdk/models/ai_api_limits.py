@@ -13,7 +13,13 @@ class AIAPILimits:
     :type deployments: class:`ai_api_client_sdk.models.ai_api_limits_deployments.AIAPILimitsDeployments`, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, executions: AIAPILimitsExecutions = None, deployments: AIAPILimitsDeployments = None, **kwargs):
+
+    def __init__(
+        self,
+        executions: AIAPILimitsExecutions = None,
+        deployments: AIAPILimitsDeployments = None,
+        **kwargs,
+    ):
         self.executions: AIAPILimitsExecutions = executions
         self.deployments: AIAPILimitsDeployments = deployments
 
@@ -27,10 +33,14 @@ class AIAPILimits:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.ai_api_limits.AIAPILimits`
         """
-        if 'executions' in ai_api_limits_dict:
-            ai_api_limits_dict['executions'] = AIAPILimitsExecutions.from_dict(ai_api_limits_dict['executions'])
-        if 'deployments' in ai_api_limits_dict:
-            ai_api_limits_dict['deployments'] = AIAPILimitsDeployments.from_dict(ai_api_limits_dict['deployments'])
+        if "executions" in ai_api_limits_dict:
+            ai_api_limits_dict["executions"] = AIAPILimitsExecutions.from_dict(
+                ai_api_limits_dict["executions"]
+            )
+        if "deployments" in ai_api_limits_dict:
+            ai_api_limits_dict["deployments"] = AIAPILimitsDeployments.from_dict(
+                ai_api_limits_dict["deployments"]
+            )
         return AIAPILimits(**ai_api_limits_dict)
 
     def __eq__(self, other):

@@ -20,6 +20,7 @@ class DataMaskingProviderName(str, Enum):
     Values: SAP_DATA_PRIVACY_INTEGRATION: Refers to the SAP Data Privacy Integration service, which offers
     anonymization and pseudonymization capabilities for sensitive data.
     """
+
     SAP_DATA_PRIVACY_INTEGRATION = "sap_data_privacy_integration"
 
 
@@ -35,6 +36,7 @@ class MaskingMethod(str, Enum):
 
         PSEUDONYMIZATION: Replaces sensitive data with reversible placeholders (e.g., MASKED_ENTITY_ID).
     """
+
     ANONYMIZATION = "anonymization"
     PSEUDONYMIZATION = "pseudonymization"
 
@@ -130,6 +132,7 @@ class DPIMethodConstant(BaseModel):
     """
     Replaces the entity with the specified value followed by an incrementing number
     """
+
     method: str = "constant"
     value: str
 
@@ -138,6 +141,7 @@ class DPIMethodFabricatedData(BaseModel):
     """
     Replaces the entity with a randomly generated value appropriate to its type.
     """
+
     method: str = "fabricated_data"
 
 
@@ -146,6 +150,7 @@ class DPICustomEntity(BaseModel):
     regex: Regular expression to match the entity
     replacement_strategy: Replacement strategy to be used for the entity
     """
+
     regex: str
     replacement_strategy: DPIMethodConstant
 
@@ -155,8 +160,11 @@ class DPIStandardEntity(BaseModel):
     type: Standard entity type to be masked
     replacement_strategy: Replacement strategy to be used for the entity
     """
+
     type_: ProfileEntity = Field(..., alias="type")
-    replacement_strategy: Optional[Union[DPIMethodConstant, DPIMethodFabricatedData]] = None
+    replacement_strategy: Optional[
+        Union[DPIMethodConstant, DPIMethodFabricatedData]
+    ] = None
 
 
 class MaskGroundingInput(BaseModel):
@@ -164,7 +172,9 @@ class MaskGroundingInput(BaseModel):
     Controls whether the input to the grounding module will be masked with the configuration
     supplied in the masking module
     """
+
     enabled: bool = False
+
 
 class MaskFileInputMethod(str, Enum):
     """
@@ -178,6 +188,7 @@ class MaskFileInputMethod(str, Enum):
 
         SKIP: Skips masking of file inputs, leaving them unchanged.
     """
+
     ANONYMIZATION = "anonymization"
     SKIP = "skip"
 
@@ -201,12 +212,16 @@ class MaskingProviderConfig(BaseModel):
 
         mask_file_input_method: The method of masking to apply to file inputs. Required if file inputs are provided.
     """
-    type_: DataMaskingProviderName = Field(default=DataMaskingProviderName.SAP_DATA_PRIVACY_INTEGRATION, alias="type")
+
+    type_: DataMaskingProviderName = Field(
+        default=DataMaskingProviderName.SAP_DATA_PRIVACY_INTEGRATION, alias="type"
+    )
     method: MaskingMethod
     entities: List[Union[DPIStandardEntity, DPICustomEntity]]
     allowlist: Optional[List[str]] = None
     mask_grounding_input: Optional[MaskGroundingInput] = None
     mask_file_input_method: Optional[MaskFileInputMethod] = None
+
 
 class MaskingModuleConfig(BaseModel):
     """
@@ -218,8 +233,11 @@ class MaskingModuleConfig(BaseModel):
     IMPORTANT: use exactly one of the parameters to set the list of masking provider configurations.
     DEPRECATED: parameter 'masking_providers' will be removed Sept 15, 2026. Use 'providers' instead.
     """
+
     providers: Optional[List[MaskingProviderConfig]] = Field(min_length=1, default=None)
-    masking_providers: Optional[List[MaskingProviderConfig]] = Field(min_length=1, default=None)
+    masking_providers: Optional[List[MaskingProviderConfig]] = Field(
+        min_length=1, default=None
+    )
 
     @model_validator(mode="after")
     def enforce_exactly_one_provider_list(self):
@@ -235,6 +253,17 @@ class MaskingModuleConfig(BaseModel):
 
         return self
 
-__all__ = ["DataMaskingProviderName", "MaskingMethod", "MaskFileInputMethod", "ProfileEntity", "DPIMethodConstant",
-           "DPIMethodFabricatedData", "DPICustomEntity", "DPIStandardEntity", "MaskGroundingInput",
-           "MaskingProviderConfig", "MaskingModuleConfig"]
+
+__all__ = [
+    "DataMaskingProviderName",
+    "MaskingMethod",
+    "MaskFileInputMethod",
+    "ProfileEntity",
+    "DPIMethodConstant",
+    "DPIMethodFabricatedData",
+    "DPICustomEntity",
+    "DPIStandardEntity",
+    "MaskGroundingInput",
+    "MaskingProviderConfig",
+    "MaskingModuleConfig",
+]

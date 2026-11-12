@@ -60,7 +60,7 @@ def create_aws_object_store_secret(
 
     except AIAPIServerException as e:
         # Check if this is a 409 Conflict (secret already exists)
-        if hasattr(e, 'status_code') and e.status_code == 409:
+        if hasattr(e, "status_code") and e.status_code == 409:
             # Return a mock response object with the expected message attribute
             # so the caller can handle this gracefully with replace_existing=True
             class ConflictResponse:

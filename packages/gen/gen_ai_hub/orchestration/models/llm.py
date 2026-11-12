@@ -13,10 +13,7 @@ class LLM(JSONSerializable):
     """
 
     def __init__(
-        self,
-        name: str,
-        version: str = "latest",
-        parameters: Optional[Dict] = None,
+        self, name: str, version: str = "latest", parameters: Optional[Dict] = None
     ):
         """Initializes the LLM with specified name, version, and parameters.
 
@@ -25,13 +22,13 @@ class LLM(JSONSerializable):
         :param version: Version of the LLM, defaults to "latest"
         :type version: str, optional
         :param parameters: Additional parameters for the LLM, defaults to None
-        
+
             Common parameters include:
-            
+
             - 'temperature': Controls randomness in output. Lower values (e.g., 0.2)
               make output more focused and deterministic, while higher values (e.g., 0.8)
               make output more diverse and creative.
-                
+
             - 'max_tokens': Sets the maximum number of tokens to generate in the response.
               This can help control the length of the model's output.
 

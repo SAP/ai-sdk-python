@@ -9,5 +9,7 @@ from ai_api_client_sdk.resource_clients.execution_client import ExecutionClient
 from ai_api_client_sdk.resource_clients.meta_client import MetaClient
 from ai_api_client_sdk.resource_clients.metrics_client import MetricsClient
 from ai_api_client_sdk.resource_clients.model_client import ModelClient
-from ai_api_client_sdk.resource_clients.resource_groups_client import ResourceGroupsClient
+from ai_api_client_sdk.resource_clients.resource_groups_client import (
+    ResourceGroupsClient,
+)
 from ai_api_client_sdk.resource_clients.scenario_client import ScenarioClient

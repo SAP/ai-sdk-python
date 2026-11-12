@@ -10,7 +10,8 @@ class RepositoriesClient(BaseClient):
     endpoints of the server. It implements the base class
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
-    __PATH = '/admin/repositories'
+
+    __PATH = "/admin/repositories"
 
     def create(self, name: str, url: str, username: str, password: str) -> Message:
         """On-boards a new GitOps repository
@@ -32,7 +33,7 @@ class RepositoriesClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_core_sdk.models.base_models.BasicNameResponse`
         """
-        body = {'name': name, 'url': url, 'username': username, 'password': password}
+        body = {"name": name, "url": url, "username": username, "password": password}
         response_dict = self.rest_client.post(path=self.__PATH, body=body)
         return Message.from_dict(response_dict)
 
@@ -54,7 +55,7 @@ class RepositoriesClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'{self.__PATH}/{name}')
+        response_dict = self.rest_client.delete(path=f"{self.__PATH}/{name}")
         return BasicResponse.from_dict(response_dict)
 
     def get(self, name: str) -> Repository:
@@ -73,7 +74,7 @@ class RepositoriesClient(BaseClient):
         :return: The access details for a repository
         :rtype: class:`ai_core_client_sdk.models.docker_registry_secret.DockerRegistrySecret`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{name}')
+        response_dict = self.rest_client.get(path=f"{self.__PATH}/{name}")
         return Repository.from_dict(response_dict)
 
     def modify(self, name: str, username: str, password: str) -> BasicResponse:
@@ -96,8 +97,8 @@ class RepositoriesClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        body = {'username': username, 'password': password}
-        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{name}', body=body)
+        body = {"username": username, "password": password}
+        response_dict = self.rest_client.patch(path=f"{self.__PATH}/{name}", body=body)
         return BasicResponse.from_dict(response_dict)
 
     def query(self) -> RepositoryQueryResponse:

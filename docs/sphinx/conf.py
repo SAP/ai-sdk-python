@@ -1,8 +1,5 @@
 project = "SAP AI SDK Python"
-extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",
-]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
 html_theme = "furo"
 exclude_patterns = ["_autogen/*/modules.rst"]
 autodoc_default_options = {

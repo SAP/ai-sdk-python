@@ -12,6 +12,7 @@ class RepositoryQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Repository], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -26,5 +27,7 @@ class RepositoryQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.repository_query_response.RepositoryQueryResponse`
         """
-        response_dict['resources'] = [Repository.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Repository.from_dict(r) for r in response_dict["resources"]
+        ]
         return RepositoryQueryResponse(**response_dict)

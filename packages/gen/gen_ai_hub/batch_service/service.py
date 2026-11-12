@@ -12,7 +12,12 @@ import httpx
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.batch_service.exceptions import BatchServiceError
-from gen_ai_hub.batch_service.models.request import BatchCreateRequest, BatchInput, BatchOutput, BatchSpec
+from gen_ai_hub.batch_service.models.request import (
+    BatchCreateRequest,
+    BatchInput,
+    BatchOutput,
+    BatchSpec,
+)
 from gen_ai_hub.batch_service.models.response import (
     BatchCreateResponse,
     BatchListResponse,
@@ -32,8 +37,8 @@ def _handle_http_error(response: httpx.Response) -> None:
     except httpx.HTTPStatusError as error:
         try:
             payload = response.json()
-            request_id = payload.get('request_id', '')
-            error_message = payload.get('message', response.text)
+            request_id = payload.get("request_id", "")
+            error_message = payload.get("message", response.text)
         except Exception as exc:
             raise error from exc
         raise BatchServiceError(
@@ -157,8 +162,7 @@ class BatchService:
         return BatchCreateResponse(**response.json())
 
     def list(
-        self,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchListResponse:
         """List all batch jobs for the current resource group.
 
@@ -176,9 +180,7 @@ class BatchService:
         return BatchListResponse(**response.json())
 
     def get(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchDetailResponse:
         """Retrieve details of a specific batch job.
 
@@ -198,9 +200,7 @@ class BatchService:
         return BatchDetailResponse(**response.json())
 
     def get_status(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchStatusResponse:
         """Retrieve the current status of a batch job.
 
@@ -220,9 +220,7 @@ class BatchService:
         return BatchStatusResponse(**response.json())
 
     def cancel(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchCancelResponse:
         """Schedule a batch job for cancellation.
 
@@ -242,9 +240,7 @@ class BatchService:
         return BatchCancelResponse(**response.json())
 
     def delete(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchDeleteResponse:
         """Delete a batch job (only allowed for terminal states: COMPLETED, FAILED, CANCELLED).
 
@@ -310,8 +306,7 @@ class BatchService:
         return BatchCreateResponse(**response.json())
 
     async def alist(
-        self,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchListResponse:
         """Async variant of :meth:`list`.
 
@@ -329,9 +324,7 @@ class BatchService:
         return BatchListResponse(**response.json())
 
     async def aget(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchDetailResponse:
         """Async variant of :meth:`get`.
 
@@ -351,9 +344,7 @@ class BatchService:
         return BatchDetailResponse(**response.json())
 
     async def aget_status(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchStatusResponse:
         """Async variant of :meth:`get_status`.
 
@@ -373,9 +364,7 @@ class BatchService:
         return BatchStatusResponse(**response.json())
 
     async def acancel(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchCancelResponse:
         """Async variant of :meth:`cancel`.
 
@@ -395,9 +384,7 @@ class BatchService:
         return BatchCancelResponse(**response.json())
 
     async def adelete(
-        self,
-        batch_id: str,
-        timeout: Union[int, float, httpx.Timeout, None] = None,
+        self, batch_id: str, timeout: Union[int, float, httpx.Timeout, None] = None
     ) -> BatchDeleteResponse:
         """Async variant of :meth:`delete`.
 

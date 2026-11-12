@@ -1,6 +1,12 @@
 from unittest import TestCase
 
-from ai_api_client_sdk.models.base_models import KeyValue, NameValue, Name, QueryResponse, BasicResponse
+from ai_api_client_sdk.models.base_models import (
+    KeyValue,
+    NameValue,
+    Name,
+    QueryResponse,
+    BasicResponse,
+)
 
 
 class TestBaseModels(TestCase):

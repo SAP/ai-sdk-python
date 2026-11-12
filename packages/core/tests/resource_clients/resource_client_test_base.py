@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 class ResourceClientTestBase(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.resource_group = 'test_resource_group'
+        cls.resource_group = "test_resource_group"
 
     def setUp(self):
         super().setUp()
@@ -17,8 +17,13 @@ class ResourceClientTestBase(TestCase):
         for k in d.keys():
             self.assertEqual(d[k], getattr(o, k))
 
-    def assert_object_lists(self, dict_list: List[Dict[str, Any]], object_list: list,
-                            assert_object_function: Callable = None, sort_key: str = 'id'):
+    def assert_object_lists(
+        self,
+        dict_list: List[Dict[str, Any]],
+        object_list: list,
+        assert_object_function: Callable = None,
+        sort_key: str = "id",
+    ):
         if not assert_object_function:
             assert_object_function = self.assert_object
         self.assertEqual(len(dict_list), len(object_list))

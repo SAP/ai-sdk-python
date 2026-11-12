@@ -47,7 +47,6 @@ class TestVectorAPIIntegration(unittest.TestCase):
         cls.collection_id = None
         cls.document_id = None
 
-
     def test_integration(self):
         # --- Collections ---
 
@@ -81,8 +80,7 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertIn(self.collection_title, test_collection.title)
 
         self.assertEqual(
-            test_collection.embeddingConfig.modelName,
-            "text-embedding-3-large",
+            test_collection.embeddingConfig.modelName, "text-embedding-3-large"
         )
 
         metadata_keys = {m.key: m.value for m in (test_collection.metadata or [])}
@@ -105,7 +103,7 @@ class TestVectorAPIIntegration(unittest.TestCase):
 
         expected_metadata = {
             "purpose": ["demonstration"],
-            "a-random-key": ["hello world!"]
+            "a-random-key": ["hello world!"],
         }
 
         metadata_dict = {m.key: m.value for m in response.metadata}
@@ -118,10 +116,11 @@ class TestVectorAPIIntegration(unittest.TestCase):
 
         # Check async creation status (CREATED/PENDING).
         self.assertTrue(self.__class__.collection_id)
-        response = self.client.get_collection_creation_status(self.__class__.collection_id)
+        response = self.client.get_collection_creation_status(
+            self.__class__.collection_id
+        )
 
         self.assertTrue(response.status)
-
 
         # --- Documents ---
 
@@ -129,7 +128,9 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertTrue(self.__class__.collection_id)
 
         document = BaseDocument(
-            metadata=[VectorKeyValueListPair(key="url", value=["http://hello.com", "123"])],
+            metadata=[
+                VectorKeyValueListPair(key="url", value=["http://hello.com", "123"])
+            ],
             chunks=[
                 TextOnlyBaseChunk(
                     content=(
@@ -182,7 +183,9 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertTrue(self.__class__.collection_id)
         self.assertTrue(self.__class__.document_id)
 
-        response = self.client.get_document_by_id(self.__class__.collection_id, self.__class__.document_id)
+        response = self.client.get_document_by_id(
+            self.__class__.collection_id, self.__class__.document_id
+        )
 
         self.assertEqual(response.id, self.__class__.document_id)
         self.assertTrue(response.metadata)
@@ -237,7 +240,9 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertEqual(updated_metadata.value, ["http://hello1.com"])
 
         # Follow-up check — ensure data is persisted via GET
-        fetched_doc = self.client.get_document_by_id(self.__class__.collection_id, self.__class__.document_id)
+        fetched_doc = self.client.get_document_by_id(
+            self.__class__.collection_id, self.__class__.document_id
+        )
 
         self.assertEqual(fetched_doc.id, self.__class__.document_id)
         fetched_metadata = {m.key: m.value for m in fetched_doc.metadata}
@@ -248,7 +253,10 @@ class TestVectorAPIIntegration(unittest.TestCase):
         second_chunk = fetched_doc.chunks[1]
 
         self.assertIn("not the AI copilot", first_chunk.content)
-        self.assertIn("It enables the companion of the Intelligent Enterprise", second_chunk.content)
+        self.assertIn(
+            "It enables the companion of the Intelligent Enterprise",
+            second_chunk.content,
+        )
 
         # --- Search ---
 
@@ -293,7 +301,9 @@ class TestVectorAPIIntegration(unittest.TestCase):
         self.assertEqual(metadata_dict["url"], ["http://hello1.com"])
 
         self.assertTrue(document_result.chunks)
-        self.assertTrue(any("Joule" in chunk.content for chunk in document_result.chunks))
+        self.assertTrue(
+            any("Joule" in chunk.content for chunk in document_result.chunks)
+        )
 
         for chunk in document_result.chunks:
             self.assertIsInstance(chunk.id, str)
@@ -305,7 +315,9 @@ class TestVectorAPIIntegration(unittest.TestCase):
         # Delete a document (204 No Content).
         self.assertTrue(self.__class__.collection_id)
         self.assertTrue(self.__class__.document_id)
-        response = self.client.delete_document(self.__class__.collection_id, self.__class__.document_id)
+        response = self.client.delete_document(
+            self.__class__.collection_id, self.__class__.document_id
+        )
         self.assertEqual(response.status_code, requests.status_codes.codes.NO_CONTENT)
 
         # Delete a collection (204 No Content).
@@ -315,5 +327,7 @@ class TestVectorAPIIntegration(unittest.TestCase):
 
         # Verify deletion status after deletion.
         self.assertTrue(self.__class__.collection_id)
-        response = self.client.get_collection_deletion_status(self.__class__.collection_id)
+        response = self.client.get_collection_deletion_status(
+            self.__class__.collection_id
+        )
         self.assertIn(response.status, ["DELETED", "PENDING"])

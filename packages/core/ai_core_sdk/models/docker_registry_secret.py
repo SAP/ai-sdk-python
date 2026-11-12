@@ -7,6 +7,7 @@ class DockerRegistrySecret(Name):
     """The DockerRegistrySecret object defines the docker registry secret. Refer to
     :class:`ai_api_client_sdk.models.base_models.Name`, for the object definition
     """
+
     def __str__(self):
         return "DockerRegistrySecret name: " + str(self.name)
 

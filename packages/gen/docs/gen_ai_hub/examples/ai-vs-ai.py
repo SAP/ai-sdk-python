@@ -2,11 +2,11 @@ import uuid
 from random import sample
 from time import sleep
 
-from langchain_classic.prompts.chat import (
-    ChatPromptTemplate,
-    MessagesPlaceholder,
+from langchain_classic.prompts.chat import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.chat_history import (
+    BaseChatMessageHistory,
+    InMemoryChatMessageHistory,
 )
-from langchain_core.chat_history import BaseChatMessageHistory, InMemoryChatMessageHistory
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory
 
@@ -57,20 +57,14 @@ def create_instructed_model(base_model, speaking_name, session_id):
         ]
     )
     model = prompt | base_model
-    return {
-        "model": model,
-        "speaking_name": speaking_name,
-        "session_id": session_id,
-    }
+    return {"model": model, "speaking_name": speaking_name, "session_id": session_id}
 
 
 def converse_ai(model_dict, prompt) -> str:
     config = {"configurable": {"session_id": model_dict["session_id"]}}
     model = model_dict["model"]
     model_with_message_history = RunnableWithMessageHistory(
-        model,
-        get_session_history,
-        input_messages_key="messages",
+        model, get_session_history, input_messages_key="messages"
     )
     response = model_with_message_history.invoke(
         {

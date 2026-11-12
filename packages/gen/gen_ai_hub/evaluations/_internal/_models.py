@@ -1,6 +1,7 @@
 from typing import List, Any, Optional, Union
 from dataclasses import dataclass, field
 
+
 @dataclass
 class _EvaluationConfigData:
     """
@@ -65,5 +66,6 @@ class _AWSObjectStoreData:
     :param aws_secret_access_key: AWS secret access key.
     :type aws_secret_access_key: str
     """
+
     aws_access_key_id: str
     aws_secret_access_key: str
