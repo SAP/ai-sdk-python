@@ -37,8 +37,42 @@ DEFAULT_API_VERSION = '2025-03-01-preview'  # https://learn.microsoft.com/en-us/
 # Model name patterns
 COHERE_MODEL_PATTERN = r"^cohere--"
 O_SERIES_MODEL_PATTERN = r"^o\d+"
-GPT_5_MODEL_PATTERN = r"^gpt-5(-mini|-nano)?$"
+GPT_5_MODEL_PATTERN = r"^gpt-5(?:-mini|-nano)?(?:-\d{4}-\d{2}-\d{2})?$"
+GPT_REASONING_MODEL_PATTERN = r"^gpt-(?:5|6)(?:[.-]|$)"
+GPT_CHAT_MODEL_PATTERN = r"^gpt-(?:5|6)(?:\.\d+)?-chat(?:-|$)"
+# Azure documents Astra as an exception to reasoning temperature restrictions.
+# https://learn.microsoft.com/en-us/azure/ai-foundry/openai/how-to/reasoning
+GPT_ASTRA_MODEL_PATTERN = r"^gpt-6-astra(?:-|$)"
 COHERE_REASONING_MODEL_PATTERN = r"^cohere--command-.*-reasoning$"
+
+
+def _supports_temperature(model_name: str, reasoning_effort: Optional[str] = None) -> bool:
+    """Check temperature support, allowing explicit non-reasoning GPT requests.
+
+    GPT-5/6 reasoning variants are filtered by default. Chat variants, Astra,
+    and newer GPT models requested with reasoning effort ``none`` are preserved.
+    The original GPT-5, o-series and Cohere reasoning models remain filtered.
+    """
+    if (re.search(O_SERIES_MODEL_PATTERN, model_name)
+            or re.search(GPT_5_MODEL_PATTERN, model_name)
+            or re.search(COHERE_REASONING_MODEL_PATTERN, model_name)):
+        return False
+    if (re.search(GPT_REASONING_MODEL_PATTERN, model_name)
+            and not re.search(GPT_CHAT_MODEL_PATTERN, model_name)
+            and not re.search(GPT_ASTRA_MODEL_PATTERN, model_name)):
+        return reasoning_effort == 'none'
+    return True
+
+
+def _filter_temperature(model_name: str, kwargs: dict) -> None:
+    """Handle both Chat Completions and Responses reasoning parameter formats."""
+    reasoning_effort = kwargs.get('reasoning_effort')
+    reasoning = kwargs.get('reasoning')
+    if isinstance(reasoning, dict):
+        reasoning_effort = reasoning.get('effort')
+    if not _supports_temperature(model_name, reasoning_effort):
+        kwargs.pop('temperature', None)
+
 
 ResponseFormatT = TypeVar('ResponseFormatT')
 _current_deployment = contextvars.ContextVar('current_deployment')
@@ -329,9 +363,7 @@ class ChatCompletions(ChatCompletions_):
         )
         deployment = proxy_client.select_deployment(**model_identification)
         model_name = deployment.model_name or '???'
-        # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        _filter_temperature(model_name, kwargs)
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
             kwargs.pop('n', None)
@@ -416,17 +448,15 @@ class ChatCompletions(ChatCompletions_):
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
         """Checks if the given model supports the `temperature` parameter.
-        Reasoning models do not support temperature e.g., o1[-mini], o3[-mini], 5[-mini, -nano],
-        cohere--command-a-reasoning
+        Reasoning models (o-series, GPT-5/6 and Cohere reasoning) are filtered
+        by default; GPT chat variants support temperature.
 
         :param model_name: the name of the model to check.
         :type model_name: str
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return _supports_temperature(model_name)
 
 
 class Responses(Responses_):
@@ -463,12 +493,10 @@ class Responses(Responses_):
         )
         deployment = proxy_client.select_deployment(**model_identification)
         model_name = deployment.model_name or '???'
-        # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
-        # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
+        _filter_temperature(model_name, kwargs)
+        # The Responses API never supports the Chat Completions 'n' parameter.
+        kwargs.pop('n', None)
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
             kwargs.pop('max_completion_tokens', None)
         return deployment, model_name
 
@@ -560,17 +588,15 @@ class Responses(Responses_):
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
         """Checks if the given model supports the `temperature` parameter.
-        Reasoning models do not support temperature e.g., o1[-mini], o3[-mini], 5[-mini, -nano],
-        cohere--command-a-reasoning
+        Reasoning models (o-series, GPT-5/6 and Cohere reasoning) are filtered
+        by default; GPT chat variants support temperature.
 
         :param model_name: the name of the model to check.
         :type model_name: str
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return _supports_temperature(model_name)
 
 
 class AsyncChat(AsyncChat_):
@@ -606,9 +632,7 @@ class AsyncChatCompletions(AsyncChatCompletions_):
         deployment = proxy_client.select_deployment(**model_identification)
         model_name = deployment.model_name or '???'
 
-        # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
+        _filter_temperature(model_name, kwargs)
         # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
             kwargs.pop('n', None)
@@ -695,16 +719,15 @@ class AsyncChatCompletions(AsyncChatCompletions_):
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
         """Checks if the given model supports the `temperature` parameter.
-        Reasoning models do not support temperature e.g., o1[-mini], o3[-mini], cohere--command-a-reasoning
+        Reasoning models (o-series, GPT-5/6 and Cohere reasoning) are filtered
+        by default; GPT chat variants support temperature.
 
         :param model_name: the name of the model to check.
         :type model_name: str
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return _supports_temperature(model_name)
 
 
 class AsyncResponses(AsyncResponses_):
@@ -742,12 +765,10 @@ class AsyncResponses(AsyncResponses_):
         )
         deployment = proxy_client.select_deployment(**model_identification)
         model_name = deployment.model_name or '???'
-        # Reasoning models do not support temperature
-        if not self.supports_temperature(model_name) and 'temperature' in kwargs:
-            kwargs.pop('temperature')
-        # Cohere models do not support the 'n' and 'max_completion_tokens' parameters
+        _filter_temperature(model_name, kwargs)
+        # The Responses API never supports the Chat Completions 'n' parameter.
+        kwargs.pop('n', None)
         if model_name and re.search(COHERE_MODEL_PATTERN, model_name):
-            kwargs.pop('n', None)
             kwargs.pop('max_completion_tokens', None)
         return deployment, model_name
 
@@ -839,17 +860,15 @@ class AsyncResponses(AsyncResponses_):
     @staticmethod
     def supports_temperature(model_name: str) -> bool:
         """Checks if the given model supports the `temperature` parameter.
-        Reasoning models do not support temperature e.g., o1[-mini], o3[-mini], 5[-mini, -nano],
-        cohere--command-a-reasoning
+        Reasoning models (o-series, GPT-5/6 and Cohere reasoning) are filtered
+        by default; GPT chat variants support temperature.
 
         :param model_name: the name of the model to check.
         :type model_name: str
         :return: True if the model supports `temperature`, False otherwise
         :rtype: bool
         """
-        return (not re.search(O_SERIES_MODEL_PATTERN, model_name)
-                and not re.search(GPT_5_MODEL_PATTERN, model_name)
-                and not re.search(COHERE_REASONING_MODEL_PATTERN, model_name))
+        return _supports_temperature(model_name)
 
 class OpenAIWithRawResponse:
     """
