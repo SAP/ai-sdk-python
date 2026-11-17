@@ -13,40 +13,42 @@ Model categories:
 All models use Pydantic for validation and serialization.
 """
 from typing import List, Optional, Union, Annotated, Literal
-from pydantic import BaseModel, Field
+from pydantic import Field
 from datetime import datetime
 from enum import Enum
 
+from gen_ai_hub._base_model import SdkBaseModel
+
 # --- Models for Pipeline API ---
 
-class MetaData(BaseModel):
+class MetaData(SdkBaseModel):
     destination: str
 
-class SharePointSite(BaseModel):
+class SharePointSite(SdkBaseModel):
     name: str
     includePaths: Optional[List[str]] = None
 
-class SharePointConfig(BaseModel):
+class SharePointConfig(SdkBaseModel):
     site: SharePointSite
 
-class MSSharePointConfiguration(BaseModel):
+class MSSharePointConfiguration(SdkBaseModel):
     destination: str
     sharePoint: SharePointConfig
 
-class CommonConfiguration(BaseModel):
+class CommonConfiguration(SdkBaseModel):
     destination: str
 
-class MSSharePointPipelineCreateRequest(BaseModel):
+class MSSharePointPipelineCreateRequest(SdkBaseModel):
     type: Literal["MSSharePoint"] = "MSSharePoint"
     configuration: MSSharePointConfiguration
     metadata: Optional[MetaData] = None
 
-class S3PipelineCreateRequest(BaseModel):
+class S3PipelineCreateRequest(SdkBaseModel):
     type: Literal["S3"] = "S3"
     configuration: CommonConfiguration
     metadata: Optional[MetaData] = None
 
-class SFTPPipelineCreateRequest(BaseModel):
+class SFTPPipelineCreateRequest(SdkBaseModel):
     type: Literal["SFTP"] = "SFTP"
     configuration: CommonConfiguration
     metadata: Optional[MetaData] = None
@@ -57,15 +59,15 @@ CreatePipelineRequest = Union[
     SFTPPipelineCreateRequest
 ]
 
-class PipelineIdResponse(BaseModel):
+class PipelineIdResponse(SdkBaseModel):
     pipelineId: str
 
-class BasePipelineResponse(BaseModel):
+class BasePipelineResponse(SdkBaseModel):
     id: str
     type: str
     metadata: Optional[MetaData] = None
 
-class MSSharePointConfigurationGetResponse(BaseModel):
+class MSSharePointConfigurationGetResponse(SdkBaseModel):
     destination: str
     sharePoint: SharePointConfig
 
@@ -86,30 +88,30 @@ GetPipelineResponse = Annotated[
     Field(discriminator="type")
 ]
 
-class GetPipelinesResponse(BaseModel):
+class GetPipelinesResponse(SdkBaseModel):
     count: Optional[int]
     resources: List[GetPipelineResponse]
 
-class GetPipelineStatusResponse(BaseModel):
+class GetPipelineStatusResponse(SdkBaseModel):
     lastStarted: Optional[str]
     status: Optional[str]
 
 # --- Search ---
 
-class DataRepositoryMetadataItem(BaseModel):
+class DataRepositoryMetadataItem(SdkBaseModel):
     key: str
     value: List[str]
 
 
-class SearchPipelineRequest(BaseModel):
+class SearchPipelineRequest(SdkBaseModel):
     dataRepositoryMetadata: List[DataRepositoryMetadataItem]
 
 
-class SearchPipelineData(BaseModel):
+class SearchPipelineData(SdkBaseModel):
     pipelineId: str
 
 
-class SearchPipelinesResponse(BaseModel):
+class SearchPipelinesResponse(SdkBaseModel):
     count: Optional[int]
     resources: List[SearchPipelineData]
 
@@ -124,14 +126,14 @@ class PipelineExecutionStatus(str, Enum):
     FINISHED_WITH_ERRORS = "FINISHEDWITHERRORS"
     TIMEOUT = "TIMEOUT"
 
-class PipelineExecution(BaseModel):
+class PipelineExecution(SdkBaseModel):
     id: str
     status: Optional[PipelineExecutionStatus] = None
     createdAt: Optional[datetime] = None
     modifiedAt: Optional[datetime] = None
 
 
-class GetPipelineExecutionsResponse(BaseModel):
+class GetPipelineExecutionsResponse(SdkBaseModel):
     count: Optional[int]
     resources: List[PipelineExecution]
 
@@ -147,7 +149,7 @@ class DocumentStatus(str, Enum):
     FAILED_TO_BE_RETRIED = "FAILED_TO_BE_RETRIED"
     TO_BE_SCHEDULED = "TO_BE_SCHEDULED"
 
-class Document(BaseModel):
+class Document(SdkBaseModel):
     id: str
     status: Optional[DocumentStatus] = None
     viewLocation: Optional[str] = None
@@ -159,13 +161,13 @@ class Document(BaseModel):
     lastUpdatedTimestamp: Optional[datetime] = None
 
 
-class DocumentsStatusResponse(BaseModel):
+class DocumentsStatusResponse(SdkBaseModel):
     count: Optional[int]
     resources: List[Document]
 
 
 # --- Trigger ---
 
-class ManualPipelineTrigger(BaseModel):
+class ManualPipelineTrigger(SdkBaseModel):
     pipelineId: str
     metadataOnly: Optional[bool] = None

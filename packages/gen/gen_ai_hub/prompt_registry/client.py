@@ -20,6 +20,7 @@ from .models.orchestration_config import (
     OrchestrationConfigListResponse,
     OrchestrationConfigDeleteResponse,
     OrchestrationConfig)
+from gen_ai_hub._base_model import validate_response
 
 # Constants
 PATH_SCENARIOS = "/lm/scenarios"
@@ -72,7 +73,7 @@ class PromptTemplateClient(PromptRegistryClient):
                                          body=request.model_dump(by_alias=True, exclude_none=True),
                                          convert_body_to_camel_case=False)
 
-        return PromptTemplatePostResponse(**response)
+        return validate_response(PromptTemplatePostResponse, response)
 
     def get_prompt_templates(self, scenario: str, name: str, version: str, retrieve: str = None,
                              include_spec: bool = None) -> PromptTemplateListResponse:
@@ -101,7 +102,7 @@ class PromptTemplateClient(PromptRegistryClient):
 
         response = self.rest_client.get(path=PATH_PROMPT_TEMPLATES, params=query_params)
 
-        return PromptTemplateListResponse(**response)
+        return validate_response(PromptTemplateListResponse, response)
 
     def get_prompt_template_by_id(self, template_id: str) -> PromptTemplateGetResponse:
         """Retrieve a specific version of the prompt template by ID.
@@ -114,7 +115,7 @@ class PromptTemplateClient(PromptRegistryClient):
 
         response = self.rest_client.get(path=f"{PATH_PROMPT_TEMPLATES}/{template_id}")
 
-        return PromptTemplateGetResponse(**response)
+        return validate_response(PromptTemplateGetResponse, response)
 
     def get_prompt_template_history(self, scenario: str, name: str, version: str, top: int = None, skip: int = None) -> PromptTemplateListResponse:
         """Retrieve the history of edits to the prompt template. Only for imperative managed prompt templates.
@@ -144,7 +145,7 @@ class PromptTemplateClient(PromptRegistryClient):
             params = params or None
         )
 
-        return PromptTemplateListResponse(**response)
+        return validate_response(PromptTemplateListResponse, response)
 
     def delete_prompt_template_by_id(self, template_id: str) -> PromptTemplateDeleteResponse:
         """Delete a specific version of the prompt template by ID.
@@ -157,7 +158,7 @@ class PromptTemplateClient(PromptRegistryClient):
 
         response = self.rest_client.delete(f"{PATH_PROMPT_TEMPLATES}/{template_id}")
 
-        return PromptTemplateDeleteResponse(**response)
+        return validate_response(PromptTemplateDeleteResponse, response)
 
     def import_prompt_template(self, file: bytes) -> PromptTemplatePostResponse:
         """Import a runtime/declarative prompt template into the design time environment.
@@ -171,7 +172,7 @@ class PromptTemplateClient(PromptRegistryClient):
         # Content-Type: multipart/form-data is added automatically by requests when a file is passed in the request.
         kwargs = {"files": {"file": file}}
         response = self.rest_client.post(path=f"{PATH_PROMPT_TEMPLATES}/import", **kwargs)
-        return PromptTemplatePostResponse(**response)
+        return validate_response(PromptTemplatePostResponse, response)
 
     def export_prompt_template(self, template_id: str) -> bytes:
         """Export a design time template in a declarative compatible yaml file. Supports only single file export.
@@ -215,7 +216,7 @@ class PromptTemplateClient(PromptRegistryClient):
                                          body=request.model_dump(by_alias=True),
                                          **kwargs)
 
-        return PromptTemplateSubstitutionResponse(**response)
+        return validate_response(PromptTemplateSubstitutionResponse, response)
 
     def fill_prompt_template_by_id(self,
                                    template_id: str,
@@ -240,7 +241,7 @@ class PromptTemplateClient(PromptRegistryClient):
                                          body=request.model_dump(by_alias=True),
                                          **kwargs)
 
-        return PromptTemplateSubstitutionResponse(**response)
+        return validate_response(PromptTemplateSubstitutionResponse, response)
 
 class OrchestrationConfigClient(PromptRegistryClient):
     """
@@ -269,7 +270,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
                                          body=request.model_dump(by_alias=True, exclude_none=True),
                                          convert_body_to_camel_case=False)
 
-        return OrchestrationConfigPostResponse(**response)
+        return validate_response(OrchestrationConfigPostResponse, response)
 
     def get_orchestration_configs(
             self, scenario: str, name: str, version: str, retrieve: str = None, include_spec: bool = None,
@@ -304,7 +305,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
         response = self.rest_client.get(path=PATH_REGISTRY_CONFIG, params=query_params,
                                         convert_params_to_camel_case=False)
 
-        return OrchestrationConfigListResponse(**response)
+        return validate_response(OrchestrationConfigListResponse, response)
 
     def get_orchestration_config_by_id(self, config_id: str, resolve_template_ref: bool = None
                                        ) -> OrchestrationConfigGetResponse:
@@ -321,7 +322,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
         query_params = {"resolve_template_ref": resolve_template_ref}
         response = self.rest_client.get(path=f"{PATH_REGISTRY_CONFIG}/{config_id}", params=query_params,
                                         convert_params_to_camel_case=False)
-        return OrchestrationConfigGetResponse(**response)
+        return validate_response(OrchestrationConfigGetResponse, response)
 
     def get_orchestration_config_history(self, scenario: str, name: str, version: str, include_spec: bool = None,
                                          resolve_template_ref:bool = None) -> OrchestrationConfigListResponse:
@@ -346,7 +347,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
             params={"include_spec": include_spec, "resolve_template_ref": resolve_template_ref},
             convert_params_to_camel_case=False
         )
-        return OrchestrationConfigListResponse(**response)
+        return validate_response(OrchestrationConfigListResponse, response)
 
     def delete_orchestration_config_by_id(self, config_id: str) -> OrchestrationConfigDeleteResponse:
         """Delete a specific version of the orchestration config by ID.
@@ -359,7 +360,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
         """
 
         response = self.rest_client.delete(f"{PATH_REGISTRY_CONFIG}/{config_id}")
-        return OrchestrationConfigDeleteResponse(**response)
+        return validate_response(OrchestrationConfigDeleteResponse, response)
 
     def import_orchestration_config(self, file: bytes) -> OrchestrationConfigPostResponse:
         """Import a runtime/declarative orchestration config into the design time environment.
@@ -373,7 +374,7 @@ class OrchestrationConfigClient(PromptRegistryClient):
         # Content-Type: multipart/form-data is added automatically by requests when a file is passed in the request.
         kwargs = {"files": {"file": file}}
         response = self.rest_client.post(path=f"{PATH_REGISTRY_CONFIG}/import", **kwargs)
-        return OrchestrationConfigPostResponse(**response)
+        return validate_response(OrchestrationConfigPostResponse, response)
 
     def export_orchestration_config(self, config_id: str) -> bytes:
         """Export a design orchestration config  in a declarative compatible yaml file.

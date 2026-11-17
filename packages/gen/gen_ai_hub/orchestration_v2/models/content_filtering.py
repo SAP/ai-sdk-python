@@ -6,13 +6,13 @@ from typing import List, Optional, Union
 
 from pydantic import model_validator, Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.content_filter import (AzureContentSafetyOutputFilterConfig,
 AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
 FilteringStreamOptions, ContentFilter)
 
 
-class InputFiltering(BaseModel):
+class InputFiltering(SdkBaseModel):
     """Module for managing and applying input content filters.
 
         Args:
@@ -24,7 +24,7 @@ class InputFiltering(BaseModel):
     ] = Field(min_length=1)
 
 
-class OutputFiltering(BaseModel):
+class OutputFiltering(SdkBaseModel):
     """Module for managing and applying output content filters.
 
         Args:
@@ -40,7 +40,7 @@ class OutputFiltering(BaseModel):
     stream_options: Optional[FilteringStreamOptions] = None
 
 
-class FilteringModuleConfig(BaseModel):
+class FilteringModuleConfig(SdkBaseModel):
     """Module for managing and applying content filters.
 
     Args:

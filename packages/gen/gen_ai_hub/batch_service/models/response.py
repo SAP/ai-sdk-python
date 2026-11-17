@@ -7,7 +7,7 @@ from typing import Optional
 
 from pydantic import Field
 
-from gen_ai_hub.batch_service.models.base import ResponseBaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class BatchStatus(str, Enum):
@@ -29,7 +29,7 @@ class BatchStatus(str, Enum):
     CANCELLING = "CANCELLING"
 
 
-class BatchCreateResponse(ResponseBaseModel):
+class BatchCreateResponse(SdkBaseModel):
     """Response returned by ``POST /llm-batch-service/v1/batches``.
 
     Confirms that the batch job has been accepted and provides the assigned
@@ -51,7 +51,7 @@ class BatchCreateResponse(ResponseBaseModel):
     message: Optional[str] = Field(None, description="Human-readable status message")
 
 
-class BatchSummary(ResponseBaseModel):
+class BatchSummary(SdkBaseModel):
     """Summary entry for a single batch job as returned in a list response.
 
     :param id: Unique identifier (UUID) of the batch job.
@@ -73,7 +73,7 @@ class BatchSummary(ResponseBaseModel):
     status: Optional[str] = Field(None, description="Current job status")
 
 
-class BatchListResponse(ResponseBaseModel):
+class BatchListResponse(SdkBaseModel):
     """Response returned by ``GET /llm-batch-service/v1/batches``.
 
     Contains a count and a list of batch job summaries for the current
@@ -89,7 +89,7 @@ class BatchListResponse(ResponseBaseModel):
     resources: Optional[list[BatchSummary]] = Field(None, description="List of batch job summaries")
 
 
-class BatchStatusDetail(ResponseBaseModel):
+class BatchStatusDetail(SdkBaseModel):
     """Status block embedded inside :class:`BatchDetailResponse`.
 
     :param current_status: The job's current lifecycle status.
@@ -108,7 +108,7 @@ class BatchStatusDetail(ResponseBaseModel):
     message: Optional[str] = Field(None, description="Optional human-readable status message")
 
 
-class BatchInputDetail(ResponseBaseModel):
+class BatchInputDetail(SdkBaseModel):
     """Input configuration as returned in a batch detail response.
 
     :param uri: Object-store URI of the input ``.jsonl`` file.
@@ -118,7 +118,7 @@ class BatchInputDetail(ResponseBaseModel):
     uri: Optional[str] = Field(None, description="Input file URI")
 
 
-class BatchOutputDetail(ResponseBaseModel):
+class BatchOutputDetail(SdkBaseModel):
     """Output configuration as returned in a batch detail response.
 
     :param uri: Object-store URI of the output directory.
@@ -128,7 +128,7 @@ class BatchOutputDetail(ResponseBaseModel):
     uri: Optional[str] = Field(None, description="Output directory URI")
 
 
-class BatchDetailResponse(ResponseBaseModel):
+class BatchDetailResponse(SdkBaseModel):
     """Response returned by ``GET /llm-batch-service/v1/batches/{batch_id}``.
 
     Provides the full configuration and current status of a specific batch job.
@@ -161,7 +161,7 @@ class BatchDetailResponse(ResponseBaseModel):
     status: Optional[BatchStatusDetail] = Field(None, description="Current status details")
 
 
-class BatchStatusResponse(ResponseBaseModel):
+class BatchStatusResponse(SdkBaseModel):
     """Response returned by ``GET /llm-batch-service/v1/batches/{batch_id}/status``.
 
     :param current_status: The job's current lifecycle status.
@@ -180,7 +180,7 @@ class BatchStatusResponse(ResponseBaseModel):
     message: Optional[str] = Field(None, description="Optional human-readable status message")
 
 
-class BatchCancelResponse(ResponseBaseModel):
+class BatchCancelResponse(SdkBaseModel):
     """Response returned by ``PATCH /llm-batch-service/v1/batches/{batch_id}/cancel``.
 
     Confirms that the cancellation request has been accepted. The job will
@@ -199,7 +199,7 @@ class BatchCancelResponse(ResponseBaseModel):
     message: Optional[str] = Field(None, description="Human-readable confirmation message")
 
 
-class BatchDeleteResponse(ResponseBaseModel):
+class BatchDeleteResponse(SdkBaseModel):
     """Response returned by ``DELETE /llm-batch-service/v1/batches/{batch_id}``.
 
     Confirms that the batch job record has been deleted. Only jobs in a
@@ -218,7 +218,7 @@ class BatchDeleteResponse(ResponseBaseModel):
     message: Optional[str] = Field(None, description="Human-readable confirmation message")
 
 
-class ErrorResponse(ResponseBaseModel):
+class ErrorResponse(SdkBaseModel):
     """Error response body returned by the batch service on 4xx/5xx responses.
 
     :param request_id: Unique request identifier, useful for tracing the

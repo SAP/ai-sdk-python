@@ -1,4 +1,3 @@
-from .base import ABCBaseModel, ResponseBaseModel
 from .request import BatchCreateRequest, BatchInput, BatchOutput, BatchSpec
 from .response import (
     BatchStatus,
@@ -16,9 +15,6 @@ from .response import (
 )
 
 __all__ = [
-    # base
-    "ABCBaseModel",
-    "ResponseBaseModel",
     # request
     "BatchCreateRequest",
     "BatchInput",

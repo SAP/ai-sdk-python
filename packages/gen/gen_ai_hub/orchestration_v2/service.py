@@ -18,6 +18,7 @@ from ai_api_client_sdk.models.status import Status
 
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.orchestration_v2.models.orchestration_request import CompletionPostRequest
+from gen_ai_hub._base_model import validate_response
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
                                                        PartialOrchestrationConfig)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
@@ -383,8 +384,8 @@ class OrchestrationService:
         except httpx.HTTPStatusError as error:
             _handle_http_error(error, response)
 
-        data = response.json()
-        return CompletionPostResponse(**data, headers=dict(response.headers))
+        data = response.json() | {"headers": dict(response.headers)}
+        return validate_response(CompletionPostResponse, data)
 
     async def _a_execute_request(
             self,
@@ -458,8 +459,8 @@ class OrchestrationService:
         except httpx.HTTPStatusError as error:
             _handle_http_error(error, response)
 
-        data = response.json()
-        return CompletionPostResponse(**data, headers=dict(response.headers))
+        data = response.json() | {"headers": dict(response.headers)}
+        return validate_response(CompletionPostResponse, data)
 
     def run(
             self,
@@ -768,7 +769,7 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return EmbeddingsPostResponse(**data)
+        return validate_response(EmbeddingsPostResponse, data)
 
     async def aembed(
             self,
@@ -804,7 +805,7 @@ class OrchestrationService:
             _handle_http_error(error, response)
 
         data = response.json()
-        return EmbeddingsPostResponse(**data)
+        return validate_response(EmbeddingsPostResponse, data)
 
     def close_http_connection(self):
         """

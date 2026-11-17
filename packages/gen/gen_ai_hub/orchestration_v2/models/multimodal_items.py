@@ -11,7 +11,7 @@ from typing import Any, Optional, Union, Literal, Callable
 from pydantic import Field
 from pydantic.main import IncEx
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
@@ -31,7 +31,7 @@ class ImageDetailLevel(str, Enum):
     HIGH = "high"
 
 
-class TextPart(BaseModel):
+class TextPart(SdkBaseModel):
     """
     Represents a text segment within a multimodal content block.
 
@@ -47,7 +47,7 @@ class TextPart(BaseModel):
     cache_control: Optional[CacheControl] = None
 
 
-class ImageUrl(BaseModel):
+class ImageUrl(SdkBaseModel):
     """
     A data structure holding the URL and detail level for an image.
 
@@ -60,7 +60,7 @@ class ImageUrl(BaseModel):
     detail: Optional[ImageDetailLevel] = None
 
 
-class ImagePart(BaseModel):
+class ImagePart(SdkBaseModel):
     """
     Represents an image segment within a multimodal content block.
 
@@ -76,7 +76,7 @@ class ImagePart(BaseModel):
     cache_control: Optional[CacheControl] = None
 
 
-class FileContent(BaseModel):
+class FileContent(SdkBaseModel):
     """
     A data structure holding the data and name for a file.
 
@@ -89,7 +89,7 @@ class FileContent(BaseModel):
     filename: Optional[str] = None
 
 
-class FilePart(BaseModel):
+class FilePart(SdkBaseModel):
     """
     Represents a file segment within a multimodal content block.
 
@@ -108,7 +108,7 @@ class FilePart(BaseModel):
 ContentPart = Union[TextPart, ImagePart, FilePart]
 
 
-class ImageItem(BaseModel):
+class ImageItem(SdkBaseModel):
     """
     Represents an image for use in multimodal messages.
 
@@ -195,7 +195,7 @@ class ImageItem(BaseModel):
         )
 
 
-class FileItem(BaseModel):
+class FileItem(SdkBaseModel):
     """
     Represents a file for use in multimodal messages.
 

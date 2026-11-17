@@ -1,8 +1,9 @@
 from typing import Annotated, Optional, Literal, Union, Any
-from pydantic import BaseModel, Field, RootModel, model_validator, model_serializer, SerializationInfo
+from pydantic import Field, RootModel, model_validator, model_serializer, SerializationInfo
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class TargetColumn(BaseModel):
+class TargetColumn(SdkBaseModel):
     """Represents a target column in data.
 
     :param name: Name of the target column.
@@ -29,7 +30,7 @@ class TargetColumn(BaseModel):
         return d
 
 
-class ExplanationConfig(BaseModel):
+class ExplanationConfig(SdkBaseModel):
     """
     Configuration for explainability outputs.
 
@@ -43,7 +44,7 @@ class ExplanationConfig(BaseModel):
     top_relevant_context_rows: int = Field(default=0, ge=0, le=20)
 
 
-class ExplanationResult(BaseModel):
+class ExplanationResult(SdkBaseModel):
     """
     Explanation data for predictions.
 
@@ -57,7 +58,7 @@ class ExplanationResult(BaseModel):
     top_relevant_context_rows: Optional[list[list[int]]]
 
 
-class PredictionConfig(BaseModel):
+class PredictionConfig(SdkBaseModel):
     """
     The configuration object specifying which columns to predict
 
@@ -74,7 +75,7 @@ class PredictionConfig(BaseModel):
     context_mode: Optional[Literal['default', 'deep']] = None
 
 
-class DataType(BaseModel):
+class DataType(SdkBaseModel):
     """Schema definition for a column.
 
     :param dtype: The data type of the column.
@@ -91,7 +92,7 @@ class DataType(BaseModel):
                    'double', 'datetime', 'timestamp']
 
 
-class RPTRequest(BaseModel):
+class RPTRequest(SdkBaseModel):
     """Request model for predictions.
 
     Provide exactly one of ``rows`` or ``columns``.
@@ -138,7 +139,7 @@ class RPTRequest(BaseModel):
         Ensures the non-provided alternative (``rows`` or ``columns``) is omitted from the dump
         and that ``None`` values are excluded.
 
-        :param kwargs: Keyword arguments forwarded to ``pydantic.BaseModel.model_dump``.
+        :param kwargs: Keyword arguments forwarded to ``pydantic.SdkBaseModel.model_dump``.
         :type kwargs: Any
         :return: Serialized dictionary representation of the model.
         :rtype: dict
@@ -147,7 +148,7 @@ class RPTRequest(BaseModel):
         return super().model_dump(**kwargs)
 
 
-class ResponseMetadata(BaseModel):
+class ResponseMetadata(SdkBaseModel):
     """Response metadata.
 
     :param num_rows: Total number of input rows.
@@ -170,7 +171,7 @@ class ResponseMetadata(BaseModel):
     context_mode: Literal['default', 'deep'] = 'default'
 
 
-class ResponseStatus(BaseModel):
+class ResponseStatus(SdkBaseModel):
     """Status information for a prediction request.
 
     :param code: Numeric status code.
@@ -183,7 +184,7 @@ class ResponseStatus(BaseModel):
     message: str
 
 
-class PredictionItem(BaseModel):
+class PredictionItem(SdkBaseModel):
     """Single prediction result.
 
     :param prediction: The predicted value.
@@ -213,7 +214,7 @@ class Prediction(RootModel[dict[str, Union[list[PredictionItem], Any]]]):
         return self.root[key]
 
 
-class RPTResponse(BaseModel):
+class RPTResponse(SdkBaseModel):
     """Response model for an RPT request.
 
     :param id: Unique identifier for the response.
@@ -235,7 +236,7 @@ class RPTResponse(BaseModel):
     metadata: ResponseMetadata
 
 
-class ErrorResponseDetails(BaseModel):
+class ErrorResponseDetails(SdkBaseModel):
     """Details of an error response.
 
     :param loc: Location in the request where the error occurred.

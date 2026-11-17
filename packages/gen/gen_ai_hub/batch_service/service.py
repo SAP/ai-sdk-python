@@ -13,6 +13,7 @@ from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.batch_service.exceptions import BatchServiceError
 from gen_ai_hub.batch_service.models.request import BatchCreateRequest, BatchInput, BatchOutput, BatchSpec
+from gen_ai_hub._base_model import validate_response
 from gen_ai_hub.batch_service.models.response import (
     BatchCreateResponse,
     BatchListResponse,
@@ -154,7 +155,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchCreateResponse(**response.json())
+        return validate_response(BatchCreateResponse, response.json())
 
     def list(
         self,
@@ -173,7 +174,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchListResponse(**response.json())
+        return validate_response(BatchListResponse, response.json())
 
     def get(
         self,
@@ -195,7 +196,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchDetailResponse(**response.json())
+        return validate_response(BatchDetailResponse, response.json())
 
     def get_status(
         self,
@@ -217,7 +218,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchStatusResponse(**response.json())
+        return validate_response(BatchStatusResponse, response.json())
 
     def cancel(
         self,
@@ -239,7 +240,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchCancelResponse(**response.json())
+        return validate_response(BatchCancelResponse, response.json())
 
     def delete(
         self,
@@ -261,7 +262,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchDeleteResponse(**response.json())
+        return validate_response(BatchDeleteResponse, response.json())
 
     # ------------------------------------------------------------------
     # Async API
@@ -307,7 +308,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchCreateResponse(**response.json())
+        return validate_response(BatchCreateResponse, response.json())
 
     async def alist(
         self,
@@ -326,7 +327,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchListResponse(**response.json())
+        return validate_response(BatchListResponse, response.json())
 
     async def aget(
         self,
@@ -348,7 +349,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchDetailResponse(**response.json())
+        return validate_response(BatchDetailResponse, response.json())
 
     async def aget_status(
         self,
@@ -370,7 +371,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchStatusResponse(**response.json())
+        return validate_response(BatchStatusResponse, response.json())
 
     async def acancel(
         self,
@@ -392,7 +393,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchCancelResponse(**response.json())
+        return validate_response(BatchCancelResponse, response.json())
 
     async def adelete(
         self,
@@ -414,7 +415,7 @@ class BatchService:
         )
         if not response.is_success:
             _handle_http_error(response)
-        return BatchDeleteResponse(**response.json())
+        return validate_response(BatchDeleteResponse, response.json())
 
     # ------------------------------------------------------------------
     # Resource management

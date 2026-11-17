@@ -1,11 +1,12 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig
 
 
-class OrchestrationConfigPostRequest(BaseModel):
+class OrchestrationConfigPostRequest(SdkBaseModel):
     """
     Request to create an orchestration config.
 
@@ -27,7 +28,7 @@ class OrchestrationConfigPostRequest(BaseModel):
         return super().model_dump(**kwargs)
 
 
-class OrchestrationConfigPostResponse(BaseModel):
+class OrchestrationConfigPostResponse(SdkBaseModel):
     """
     Response to the orchestration config post request.
 
@@ -45,7 +46,7 @@ class OrchestrationConfigPostResponse(BaseModel):
     version: str
 
 
-class OrchestrationConfigGetResponse(BaseModel):
+class OrchestrationConfigGetResponse(SdkBaseModel):
     """
     Response to a get orchestration config request.
 
@@ -78,7 +79,7 @@ class OrchestrationConfigGetResponse(BaseModel):
 
 
 
-class OrchestrationConfigListResponse(BaseModel):
+class OrchestrationConfigListResponse(SdkBaseModel):
     """
     Response to list orchestration configs request.
 
@@ -97,7 +98,7 @@ class OrchestrationConfigListResponse(BaseModel):
         return super().model_dump(**kwargs)
 
 
-class OrchestrationConfigDeleteResponse(BaseModel):
+class OrchestrationConfigDeleteResponse(SdkBaseModel):
     """
     Response to a delete orchestration config request.
 

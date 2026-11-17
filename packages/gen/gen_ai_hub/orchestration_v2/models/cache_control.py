@@ -3,10 +3,10 @@ from typing import Any, Dict, Literal, Optional
 
 from pydantic import model_serializer
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class CacheControl(BaseModel):
+class CacheControl(SdkBaseModel):
     """Marks a message content block or tool definition for prompt caching.
 
     When attached to a content block, the model stores intermediate computation

@@ -1,12 +1,14 @@
 from typing import List, Optional, Dict, Any
 from pydantic.config import ConfigDict
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import Field, field_validator
+
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2 import (ResponseFormatText, ResponseFormatJsonObject, ResponseFormatJsonSchema,
                                          FunctionTool, ImagePart, TextPart, ImageItem, ImageUrl, ContentPart)
 
 
-class PromptTemplate(BaseModel):
+class PromptTemplate(SdkBaseModel):
     """
     Represents a prompt template.
 
@@ -49,7 +51,7 @@ class PromptTemplate(BaseModel):
 
 
 
-class PromptTemplateSpec(BaseModel):
+class PromptTemplateSpec(SdkBaseModel):
     """
     Represents a prompt template specification.
 
@@ -72,7 +74,7 @@ class PromptTemplateSpec(BaseModel):
     additional_fields: Optional[Dict[Any, Any]] = Field(default_factory=dict)
 
 
-class PromptTemplatePostRequest(BaseModel):
+class PromptTemplatePostRequest(SdkBaseModel):
     """
     Represents a request to create a prompt template.
 
@@ -95,7 +97,7 @@ class PromptTemplatePostRequest(BaseModel):
     """The specification of the prompt template."""
 
 
-class PromptTemplatePostResponse(BaseModel):
+class PromptTemplatePostResponse(SdkBaseModel):
     """
     Represents a response to a request to create a prompt template.
 
@@ -122,7 +124,7 @@ class PromptTemplatePostResponse(BaseModel):
     """The version of the prompt template."""
 
 
-class PromptTemplateGetResponse(BaseModel):
+class PromptTemplateGetResponse(SdkBaseModel):
     """
     Represents a response to a request to get a prompt template.
 
@@ -161,7 +163,7 @@ class PromptTemplateGetResponse(BaseModel):
     """The specification of the prompt template."""
 
 
-class PromptTemplateListResponse(BaseModel):
+class PromptTemplateListResponse(SdkBaseModel):
     """
     Represents a response to a request to list prompt templates.
 
@@ -176,7 +178,7 @@ class PromptTemplateListResponse(BaseModel):
     """The list of PromptGetResponse objects."""
 
 
-class PromptTemplateDeleteResponse(BaseModel):
+class PromptTemplateDeleteResponse(SdkBaseModel):
     """
     Represents a response to a request to delete a prompt template.
 
@@ -187,7 +189,7 @@ class PromptTemplateDeleteResponse(BaseModel):
     """The message of the response."""
 
 
-class PromptTemplateSubstitutionRequest(BaseModel):
+class PromptTemplateSubstitutionRequest(SdkBaseModel):
     """
     Represents a request to substitute a prompt template.
 
@@ -200,7 +202,7 @@ class PromptTemplateSubstitutionRequest(BaseModel):
     """User provided values to replace the placeholders of the prompt template."""
 
 
-class PromptTemplateSubstitutionResponse(BaseModel):
+class PromptTemplateSubstitutionResponse(SdkBaseModel):
     """
     Represents a response to a request to substitute a prompt template.
 

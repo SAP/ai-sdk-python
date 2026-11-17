@@ -6,10 +6,10 @@ from typing import Literal
 
 from pydantic import Field
 
-from gen_ai_hub.batch_service.models.base import ABCBaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class BatchInput(ABCBaseModel):
+class BatchInput(SdkBaseModel):
     """Input configuration for a batch job.
 
     Points to the ``.jsonl`` file in an object store that contains the
@@ -23,7 +23,7 @@ class BatchInput(ABCBaseModel):
     uri: str = Field(..., description="Input file URI (must be a .jsonl file)")
 
 
-class BatchOutput(ABCBaseModel):
+class BatchOutput(SdkBaseModel):
     """Output configuration for a batch job.
 
     Points to the directory in an object store where results will be written
@@ -37,7 +37,7 @@ class BatchOutput(ABCBaseModel):
     uri: str = Field(..., description="Output directory URI")
 
 
-class BatchSpec(ABCBaseModel):
+class BatchSpec(SdkBaseModel):
     """Specification of the LLM to use for a batch job.
 
     :param provider: LLM provider name as registered in SAP AI Core
@@ -52,7 +52,7 @@ class BatchSpec(ABCBaseModel):
     model: str = Field(..., description="Model name")
 
 
-class BatchCreateRequest(ABCBaseModel):
+class BatchCreateRequest(SdkBaseModel):
     """Request body sent to ``POST /llm-batch-service/v1/batches``.
 
     Describes a new batch processing job: where to read input from, where to

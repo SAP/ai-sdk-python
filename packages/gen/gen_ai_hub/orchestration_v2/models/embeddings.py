@@ -7,7 +7,7 @@ from typing import Optional, Dict, List, Union
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel, ResponseBaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 
 
@@ -57,7 +57,7 @@ class EmbeddingsInputType(str, Enum):
     IMAGE = "image"
 
 
-class EmbeddingsModelParams(BaseModel):
+class EmbeddingsModelParams(SdkBaseModel):
     """
     Additional parameters for generating embeddings.
 
@@ -71,7 +71,7 @@ class EmbeddingsModelParams(BaseModel):
     normalize: Optional[bool] = None
 
 
-class EmbeddingsModelDetails(BaseModel):
+class EmbeddingsModelDetails(SdkBaseModel):
     """
     The model and parameters to be used for generating embeddings.
 
@@ -89,7 +89,7 @@ class EmbeddingsModelDetails(BaseModel):
     max_retries: Optional[int] = Field(default=2, ge=0, le=5)
 
 
-class EmbeddingsModelConfig(BaseModel):
+class EmbeddingsModelConfig(SdkBaseModel):
     """
     Configuration for the embeddings model.
 
@@ -99,7 +99,7 @@ class EmbeddingsModelConfig(BaseModel):
     model: EmbeddingsModelDetails
 
 
-class EmbeddingsModuleConfigs(BaseModel):
+class EmbeddingsModuleConfigs(SdkBaseModel):
     """
     Module configurations for the embeddings endpoint.
 
@@ -111,7 +111,7 @@ class EmbeddingsModuleConfigs(BaseModel):
     masking: Optional[MaskingModuleConfig] = None
 
 
-class EmbeddingsOrchestrationConfig(BaseModel):
+class EmbeddingsOrchestrationConfig(SdkBaseModel):
     """
     Configuration for the Embeddings Orchestration endpoint.
 
@@ -121,7 +121,7 @@ class EmbeddingsOrchestrationConfig(BaseModel):
     modules: EmbeddingsModuleConfigs
 
 
-class EmbeddingsInput(BaseModel):
+class EmbeddingsInput(SdkBaseModel):
     """
     Input for the embeddings endpoint.
 
@@ -133,7 +133,7 @@ class EmbeddingsInput(BaseModel):
     type_: Optional[EmbeddingsInputType] = Field(default=None, alias="type")
 
 
-class EmbeddingsUsage(ResponseBaseModel):
+class EmbeddingsUsage(SdkBaseModel):
     """
     Token usage information for the embeddings request.
 
@@ -145,7 +145,7 @@ class EmbeddingsUsage(ResponseBaseModel):
     total_tokens: int
 
 
-class EmbeddingResult(ResponseBaseModel):
+class EmbeddingResult(SdkBaseModel):
     """
     A single embedding result.
 
@@ -159,7 +159,7 @@ class EmbeddingResult(ResponseBaseModel):
     index: int
 
 
-class EmbeddingsResponse(ResponseBaseModel):
+class EmbeddingsResponse(SdkBaseModel):
     """
     The response from the embedding model, following OpenAI specification.
 
@@ -175,7 +175,7 @@ class EmbeddingsResponse(ResponseBaseModel):
     usage: EmbeddingsUsage
 
 
-class EmbeddingsPostResponse(ResponseBaseModel):
+class EmbeddingsPostResponse(SdkBaseModel):
     """
     Response for an embeddings POST request.
 
@@ -189,7 +189,7 @@ class EmbeddingsPostResponse(ResponseBaseModel):
     final_result: EmbeddingsResponse
 
 
-class EmbeddingsRequest(BaseModel):
+class EmbeddingsRequest(SdkBaseModel):
     """
     Request body for the embeddings endpoint.
 
