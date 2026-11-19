@@ -86,3 +86,37 @@ class TestModelClient(ResourceClientTestBase):
             path="/scenarios/foundation-models/models",
             resource_group=self.resource_group,
         )
+
+    def test_get_models_calls_query_models(self):
+        n = 3
+        model_dicts = [self.create_model_dict() for _ in range(n)]
+        rest_client_mock = MagicMock()
+        rest_client_mock.get.return_value = {
+            "resources": copy.deepcopy(model_dicts),
+            "count": n,
+        }
+        ec = ModelClient(rest_client_mock)
+        eqrs = ec.get_models()
+        rest_client_mock.get.assert_called_with(
+            path="/scenarios/foundation-models/models",
+            resource_group=None,
+        )
+        self.assert_object_lists(
+            copy.deepcopy(model_dicts),
+            eqrs,
+            self.assert_model,
+            sort_key="model",
+        )
+        self.assert_object_lists(
+            copy.deepcopy(model_dicts[0]["versions"]),
+            eqrs[0].versions,
+            self.assert_model_version,
+            sort_key="name",
+        )
+
+        rest_client_mock.get.return_value = {"resources": [], "count": 0}
+        ec.query(resource_group=self.resource_group)
+        rest_client_mock.get.assert_called_with(
+            path="/scenarios/foundation-models/models",
+            resource_group=self.resource_group,
+        )
