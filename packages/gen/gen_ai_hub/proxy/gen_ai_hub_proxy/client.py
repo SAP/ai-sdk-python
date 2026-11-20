@@ -12,6 +12,7 @@ from enum import Enum
 from fnmatch import fnmatch
 from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type, Union
 
+from ai_api_client_sdk.models.model import Model
 from ai_api_client_sdk.models.status import Status
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 from pydantic import BaseModel, PrivateAttr, model_validator, Field, ConfigDict, ValidationError
@@ -275,6 +276,14 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         return self.get_request_header()
 
     @property
+    def models(self) -> List[Model]:
+        return self._get_models()
+
+    @property
+    def model_class(self) -> Type[Model]:
+        return Model
+
+    @property
     def deployments(self) -> List[Deployment]:
         return self.get_deployments()
 
@@ -284,6 +293,10 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
 
     def _get_matched_deployments(self, **search_key_value):
         return [deployment for deployment in self.deployments if _deployment_matches(deployment, **search_key_value)]
+
+    def _get_models(self) -> List[Model]:
+        query_result = self.ai_core_client.model.query()
+        return query_result.resources
 
     def select_deployment(self, raise_on_multiple: bool = False, **search_key_value):
         if not search_key_value:
