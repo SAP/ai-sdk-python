@@ -163,6 +163,37 @@ class Deployment(BaseDeployment):
         return None
 
 
+class ModelBaseDataAllowedScenario(BaseModel):
+    scenario_id: str
+    executable_id: str
+
+
+class ModelVersion(BaseModel):
+    name: str
+    is_latest: bool
+    deprecated: bool
+    retirement_date: Optional[str] = None
+    context_length: Optional[int] = None
+    input_types: Optional[List[str]] = None
+    capabilities: Optional[List[str]] = None
+    metadata: Optional[List[Dict[str, str]]] = None
+    cost: Optional[List[Dict[str, str | None]]] = None
+    suggested_replacements: Optional[List[str]] = None
+    streaming_supported: Optional[bool] = None
+    orchestration_capabilities: Optional[List[str]] = None
+
+
+class Model(BaseModel):
+    executable_id: str
+    model: str
+    description: str = None
+    versions: List[ModelVersion] = None
+    display_name: str = None
+    access_type: str = None
+    provider: str = None
+    allowed_scenarios: List[ModelBaseDataAllowedScenario] = None
+
+
 class FoundationalModelScenario(BaseModel):
     """Represents a foundational model scenario in the GenAI Hub."""
     model_config = ConfigDict(
@@ -194,6 +225,7 @@ class FoundationalModelScenario(BaseModel):
             if prediction_url_suffix is not None:
                 data['prediction_url_suffix'] = '/' + prediction_url_suffix.lstrip('/')
         return data
+
 
 
 def _deployment_matches(deployment: BaseDeployment, **search_key_value: Dict[str, str]):
@@ -275,6 +307,14 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         return self.get_request_header()
 
     @property
+    def models(self) -> List[Model]:
+        return self._get_models()
+
+    @property
+    def model_class(self) -> Type[Model]:
+        return Model
+
+    @property
     def deployments(self) -> List[Deployment]:
         return self.get_deployments()
 
@@ -284,6 +324,46 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
 
     def _get_matched_deployments(self, **search_key_value):
         return [deployment for deployment in self.deployments if _deployment_matches(deployment, **search_key_value)]
+
+    def _get_models(self) -> List[Model]:
+        query_result = self.ai_core_client.model.query()
+        resources = query_result.resources
+        models = []
+        for resource in resources:
+            versions = []
+            for version in resource.versions:
+                versions.append(
+                    ModelVersion(
+                        name=version.name,
+                        is_latest=version.is_latest,
+                        deprecated=version.deprecated, 
+                        retirement_date=version.retirement_date, 
+                        context_length=version.context_length, 
+                        input_types=version.input_types, 
+                        capabilities=version.capabilities, 
+                        metadata=version.metadata, 
+                        cost=version.cost, 
+                        suggested_replacements=version.suggested_replacements, 
+                        streaming_supported=version.streaming_supported, 
+                        orchestration_capabilities=version.orchestration_capabilities,
+                    )
+                )
+            allowed_scenarios = [
+                ModelBaseDataAllowedScenario.model_validate(allowed_scenario)
+                for allowed_scenario in resource.allowed_scenarios
+            ]
+            model = Model(
+                executable_id=resource.executable_id,
+                model=resource.model,
+                description=resource.description,
+                versions=versions,
+                display_name=resource.display_name,
+                access_type=resource.access_type,
+                provider=resource.provider,
+                allowed_scenarios=allowed_scenarios,
+            )
+            models.append(model)
+        return models
 
     def select_deployment(self, raise_on_multiple: bool = False, **search_key_value):
         if not search_key_value:
