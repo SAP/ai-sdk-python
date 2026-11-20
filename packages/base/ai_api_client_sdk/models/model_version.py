@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any, Dict, Optional, List
 
 
@@ -11,7 +10,7 @@ class ModelVersion:
     :param deprecated: True if model version is deprecated, otherwise false
     :type deprecated: bool
     :param retirement_date: Retirement date of the model version, defaults to None
-    :type retirement_date: datetime, optional
+    :type retirement_date: str, optional
     :param context_length: Context length of the model version, defaults to None
     :type context_length: int, optional
     :param input_types: Input types supported by the model version, defaults to None
@@ -36,12 +35,12 @@ class ModelVersion:
         name: str,
         is_latest: bool,
         deprecated: bool,
-        retirement_date: Optional[datetime] = None,
+        retirement_date: Optional[str] = None,
         context_length: Optional[int] = None,
         input_types: Optional[List[str]] = None,
         capabilities: Optional[List[str]] = None,
-        metadata: Optional[Dict[str, str]] = None,
-        cost: Optional[Dict[str, str]] = None,
+        metadata: Optional[List[Dict[str, str]]] = None,
+        cost: Optional[List[Dict[str, str]]] = None,
         suggested_replacements: Optional[List[str]] = None,
         streaming_supported: Optional[bool] = None,
         orchestration_capabilities: Optional[List[str]] = None,
@@ -50,12 +49,12 @@ class ModelVersion:
         self.name: str = name
         self.is_latest: bool = is_latest
         self.deprecated: bool = deprecated
-        self.retirement_date: Optional[datetime] = retirement_date
+        self.retirement_date: Optional[str] = retirement_date
         self.context_length: Optional[int] = context_length
         self.input_types: Optional[List[str]] = input_types
         self.capabilities: Optional[List[str]] = capabilities
-        self.metadata: Optional[Dict[str, str]] = metadata
-        self.cost: Optional[Dict[str, str]] = cost
+        self.metadata: Optional[List[Dict[str, str]]] = metadata
+        self.cost: Optional[List[Dict[str, str]]] = cost
         self.suggested_replacements: Optional[List[str]] = suggested_replacements
         self.streaming_supported: Optional[bool] = streaming_supported
         self.orchestration_capabilities: Optional[List[str]] = (
