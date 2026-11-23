@@ -1,3 +1,5 @@
+import unittest
+
 from ai_api_client_sdk.models.base_models import BasicModifyRequest
 from ai_api_client_sdk.models.status import Status
 from ai_api_client_sdk.models.target_status import TargetStatus
@@ -5,6 +7,7 @@ from .ai_api_v2_client_e2e_test_base import AIAPIV2ClientE2ETestBase
 
 
 class TestE2EExecutions(AIAPIV2ClientE2ETestBase):
+    @unittest.skip("skip until a new valid AWS key is available")
     def test_executions(self):
         configuration = self.get_a_configuration(deployable=False)
         n = 3
