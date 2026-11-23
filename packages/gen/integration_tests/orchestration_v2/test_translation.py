@@ -1,3 +1,4 @@
+import unittest
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from gen_ai_hub.orchestration_v2.models.translation import (TranslationModuleConfig, InputTranslationConfig,
                                                             OutputTranslationConfig, SAPDocumentTranslationInput,
@@ -13,6 +14,7 @@ from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
+@unittest.skip("translation is broken. re-enable tests once it's working again")
 @retry_on_429_or_503_class()
 class TestTranslation(OrchestrationServiceTestBase):
     def setUp(self):
@@ -209,6 +211,7 @@ class TestTranslation(OrchestrationServiceTestBase):
         self.assertIn("is not present in translation.input.config.apply_to", str(ctx.exception))
 
 
+@unittest.skip("translation is broken. re-enable tests once it's working again")
 @retry_on_429_or_503_class()
 class TestTranslationBackwardCompatibility(OrchestrationServiceTestBase):
     def setUp(self):

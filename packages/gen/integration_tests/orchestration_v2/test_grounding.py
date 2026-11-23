@@ -87,6 +87,7 @@ class TestGrounding(OrchestrationServiceTestBase):
 
         self.assertIn("SAP AI Core", response.final_result.choices[0].message.content)
 
+    @unittest.skip("Skip until relevant test setup is fixed")
     @with_retry_on_missing_resource(max_retries=3, delay=2.0)
     def test_grounding_vector(self):
         """

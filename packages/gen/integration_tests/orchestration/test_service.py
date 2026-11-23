@@ -26,7 +26,7 @@ class TestService(OrchestrationServiceTestBase):
                 defaults=[TemplateValue(name="name", value="Integration Test")],
             ),
             llm=LLM(
-                name="gemini-2.5-flash",
+                name="gemini-3.8-flash",
                 parameters={
                     'temperature': 0.0,
                 }
@@ -51,7 +51,7 @@ class TestService(OrchestrationServiceTestBase):
                 ],
             ),
             llm=LLM(
-                name="gemini-2.5-flash",
+                name="gemini-3.8-flash",
                 parameters={
                     'temperature': 0.0,
                 }
@@ -60,14 +60,14 @@ class TestService(OrchestrationServiceTestBase):
 
         service = OrchestrationService(api_url=self.api_url, config=config)
 
-        config.llm.name = "gemini-2.5-flash"
+        config.llm.name = "gemini-3.8-flash"
 
         response = service.run(
             config=config, template_values=[TemplateValue("name", "World")]
         )
 
         self.assertTrue(
-            response.orchestration_result.model.startswith("gemini-2.5-flash")
+            response.orchestration_result.model.startswith("gemini-3.8-flash")
         )
         self.assertEqual(response.module_results.templating[1].content, "Hello, World!")
 
@@ -81,7 +81,7 @@ class TestService(OrchestrationServiceTestBase):
                     ],
                 ),
                 llm=LLM(
-                    name="gemini-2.5-flash",
+                    name="gemini-3.8-flash",
                     parameters={
                         'temperature': 0.0,
                     }
@@ -104,7 +104,7 @@ class TestService(OrchestrationServiceTestBase):
             response.module_results.templating[3].content, "This is a system message."
         )
         self.assertEqual(
-            response.orchestration_result.model.startswith("gemini-2"), True
+            response.orchestration_result.model.startswith("gemini-3"), True
         )
 
     @retry_on_429_or_503(max_retries=3, initial_delay=2.0, backoff_factor=2.0)
@@ -123,7 +123,7 @@ class TestService(OrchestrationServiceTestBase):
                 ],
             ),
             llm=LLM(
-                name="gemini-2.5-flash",
+                name="gemini-3.8-flash",
                 parameters={
                     'temperature': 0.0,
                 }

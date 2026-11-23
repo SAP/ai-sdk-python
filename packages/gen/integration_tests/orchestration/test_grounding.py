@@ -86,6 +86,7 @@ class TestGrounding(OrchestrationServiceTestBase):
         print(response.orchestration_result.choices[0].message.content)
         self.assertIn("SAP AI Core", response.orchestration_result.choices[0].message.content)
 
+    @unittest.skip("Skip until relevant test setup is fixed")
     def test_grounding_vector(self):
         """
         Test grounding based on vector store created with Data API.

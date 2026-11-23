@@ -30,7 +30,7 @@ class TestService(OrchestrationServiceTestBase):
             defaults={"name": "Integration Test"}
         )
         self.llm = LLMModelDetails(
-            name="gemini-2.5-flash",
+            name="gemini-3.8-flash",
             params={
                 'temperature': 0.0,
             }
@@ -138,14 +138,14 @@ class TestService(OrchestrationServiceTestBase):
         service = OrchestrationService(api_url=self.api_url)
         config = OrchestrationConfig(modules=self.module_config)
 
-        config.modules.prompt_templating.model.name = "gemini-2.5-flash"
+        config.modules.prompt_templating.model.name = "gemini-3.8-flash"
 
         response = service.run(
             config=config, placeholder_values={"name": "World"}
         )
 
         self.assertTrue(
-            response.final_result.model.startswith("gemini-2.5-flash")
+            response.final_result.model.startswith("gemini-3.8-flash")
         )
         self.assertEqual(response.intermediate_results.templating[1].content, "Hello, World!")
 
@@ -177,7 +177,7 @@ class TestService(OrchestrationServiceTestBase):
         self.assertEqual(
             response.intermediate_results.templating[3].content, "This is a system message."
         )
-        self.assertTrue(response.final_result.model.startswith("gemini-2")
+        self.assertTrue(response.final_result.model.startswith("gemini-3")
         )
 
     def test_reuse_client(self):

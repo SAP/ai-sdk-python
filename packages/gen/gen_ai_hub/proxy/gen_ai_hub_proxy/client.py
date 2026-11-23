@@ -33,7 +33,7 @@ class GenAIHubRestClient:
     :param proxy_client: The GenAIHubProxyClient instance to get the rest_client and headers from.
     """
 
-    def __init__(self, proxy_client: 'GenAIHubProxyClient'):
+    def  __init__(self, proxy_client: 'GenAIHubProxyClient'):
         """Initialize the GenAIHubRestClient.
 
         :param proxy_client: The GenAIHubProxyClient instance to get the rest_client and headers from.

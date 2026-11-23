@@ -72,7 +72,7 @@ class TestLLM(OrchestrationServiceTestBase):
           #  "gpt-4",
             "gpt-4o",
             "gpt-4o-mini",
-            "gemini-2.5-flash",
+            "gemini-3.8-flash",
         ]
     )
     def test_valid_llm(self, name="gpt-4o-mini"):

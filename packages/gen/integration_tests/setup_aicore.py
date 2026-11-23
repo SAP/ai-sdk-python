@@ -170,7 +170,7 @@ def get_standard_models():
         ("mistralai--mistral-small-instruct", "latest"),
         ("nvidia--llama-3.2-nv-embedqa-1b", "latest"),
         ("text-embedding-3-small", "latest"),
-        ("gemini-2.5-flash-lite", "latest"),
+        ("gemini-3.8-flash", "latest"),
         ("gemini-embedding", "latest"),
         ("sonar", "latest"),
         ("sonar-deep-research", "latest"),

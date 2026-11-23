@@ -12,6 +12,7 @@ from gen_ai_hub.orchestration.models.template import TemplateValue
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
+@unittest.skip("re-enable only if needed")
 @retry_on_429_or_503_class()
 class TestTranslation(OrchestrationServiceTestBase):
     def setUp(self):

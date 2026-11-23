@@ -3,7 +3,7 @@ import unittest
 from google.genai.types import GenerateContentResponse, GenerateContentConfig, Content, EmbedContentResponse, Part
 
 from gen_ai_hub.proxy.native.google_genai.clients import Client
-from integration_tests.constants import GEMINI_2_5_FLASH_LITE_TEST_MODEL, GOOGLE_EMBEDDING_TEST_MODEL
+from integration_tests.constants import GEMINI_3_8_FLASH_TEST_MODEL, GOOGLE_EMBEDDING_TEST_MODEL
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 
 
@@ -34,7 +34,7 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
     def test_genai_chat(self):
         client = Client(proxy_client=self.proxy_client)
         chat_session = client.chats.create(
-            model=GEMINI_2_5_FLASH_LITE_TEST_MODEL
+            model=GEMINI_3_8_FLASH_TEST_MODEL
         )
         model_response = chat_session.send_message("Hello.")
         self.assertIsInstance(model_response, GenerateContentResponse)
@@ -46,7 +46,7 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
     def test_genai_generate_content(self):
         client = Client(proxy_client=self.proxy_client)
         response = client.models.generate_content(
-            model=GEMINI_2_5_FLASH_LITE_TEST_MODEL,
+            model=GEMINI_3_8_FLASH_TEST_MODEL,
             contents=get_test_messages(),
             config=GenerateContentConfig(temperature=0),
         )
@@ -55,7 +55,7 @@ class GoogleGenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
     def test_genai_stream_generate_content(self):
         client = Client(proxy_client=self.proxy_client)
         response = client.models.generate_content_stream(
-            model=GEMINI_2_5_FLASH_LITE_TEST_MODEL,
+            model=GEMINI_3_8_FLASH_TEST_MODEL,
             contents=get_test_messages(
                 text="You are a story teller. Write a paragraph about a magic kingdom."
             ),
@@ -86,7 +86,7 @@ class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTe
     async def test_genai_generate_content_async(self):
         async with Client(proxy_client=self.proxy_client).aio as aclient:
             response = await aclient.models.generate_content(
-                model=GEMINI_2_5_FLASH_LITE_TEST_MODEL,
+                model=GEMINI_3_8_FLASH_TEST_MODEL,
                 contents=get_test_messages(),
                 config=GenerateContentConfig(temperature=0),
             )
@@ -95,7 +95,7 @@ class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTe
     async def test_genai_chat_async(self):
         async with Client(proxy_client=self.proxy_client).aio as aclient:
             chat_session = aclient.chats.create(
-                model=GEMINI_2_5_FLASH_LITE_TEST_MODEL
+                model=GEMINI_3_8_FLASH_TEST_MODEL
             )
             model_response = await chat_session.send_message("Hello.")
             self.assertIsInstance(model_response, GenerateContentResponse)
@@ -107,7 +107,7 @@ class AsyncGoogleGenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTe
     async def test_genai_stream_generate_content_async(self):
         async with Client(proxy_client=self.proxy_client).aio as aclient:
             async_response_stream = await aclient.models.generate_content_stream(
-                model=GEMINI_2_5_FLASH_LITE_TEST_MODEL,
+                model=GEMINI_3_8_FLASH_TEST_MODEL,
                 contents=get_test_messages(
                     text="You are a story teller. Write a paragraph about a magic kingdom."
                 ),

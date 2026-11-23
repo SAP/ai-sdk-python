@@ -537,7 +537,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
             },
         )
         self.file_llm = LLMModelDetails(
-            name="gemini-2.5-flash",
+            name="gemini-3.8-flash",
             version="latest",
             params={
                 "max_tokens": 50,

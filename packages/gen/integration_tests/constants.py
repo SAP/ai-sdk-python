@@ -5,11 +5,10 @@
 # - to ensure that the latest models are used for testing.
 
 AMAZON_NOVA_MICRO_TEST_MODEL = "amazon--nova-micro"
-AMAZON_NOVA_PREMIER_TEST_MODEL = "amazon--nova-premier"
 AMAZON_TITAN_EMBEDDING_TEST_MODEL = "amazon--titan-embed-text"
 CLAUDE_4_5_SONNET_TEST_MODEL = "anthropic--claude-4.5-sonnet"
 CLAUDE_4_5_HAIKU_TEST_MODEL = "anthropic--claude-4.5-haiku"
-GEMINI_2_5_FLASH_LITE_TEST_MODEL = "gemini-2.5-flash-lite"
+GEMINI_3_8_FLASH_TEST_MODEL = "gemini-3.8-flash"
 GOOGLE_EMBEDDING_TEST_MODEL = "gemini-embedding"
 NVIDIA_EMBEDDING_TEST_MODEL = "nvidia--llama-3.2-nv-embedqa-1b"
 OPENAI_EMBEDDING_TEST_MODEL = "text-embedding-3-small"

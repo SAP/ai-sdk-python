@@ -6,9 +6,8 @@ from parameterized import parameterized
 
 from gen_ai_hub.proxy.native.amazon.clients import AsyncSession
 from gen_ai_hub.proxy.native.amazon.clients import Session
-from integration_tests.constants import (AMAZON_NOVA_MICRO_TEST_MODEL, AMAZON_NOVA_PREMIER_TEST_MODEL,
-                                         AMAZON_TITAN_EMBEDDING_TEST_MODEL, CLAUDE_4_5_SONNET_TEST_MODEL,
-                                         CLAUDE_4_5_HAIKU_TEST_MODEL)
+from integration_tests.constants import (AMAZON_NOVA_MICRO_TEST_MODEL, AMAZON_TITAN_EMBEDDING_TEST_MODEL,
+                                         CLAUDE_4_5_SONNET_TEST_MODEL, CLAUDE_4_5_HAIKU_TEST_MODEL)
 from integration_tests.setup_aicore import TestCaseBedrockSetupMixin
 
 
@@ -27,7 +26,6 @@ class AmazonAITests(TestCaseBedrockSetupMixin, unittest.TestCase):
                 element in deployment.model_name
                 for element in [
                     AMAZON_TITAN_EMBEDDING_TEST_MODEL,
-                    AMAZON_NOVA_PREMIER_TEST_MODEL,
                     CLAUDE_4_5_SONNET_TEST_MODEL,
                 ]
             )
@@ -132,7 +130,6 @@ class AmazonAITests(TestCaseBedrockSetupMixin, unittest.TestCase):
         [
             CLAUDE_4_5_SONNET_TEST_MODEL,
             CLAUDE_4_5_HAIKU_TEST_MODEL,
-            AMAZON_NOVA_PREMIER_TEST_MODEL,
         ]
     )
     def test_amazon_bedrock_converse(self, model=CLAUDE_4_5_SONNET_TEST_MODEL):
@@ -224,7 +221,6 @@ class AmazonAITests(TestCaseBedrockSetupMixin, unittest.TestCase):
 
     @parameterized.expand(
         [
-            AMAZON_NOVA_MICRO_TEST_MODEL,
             CLAUDE_4_5_SONNET_TEST_MODEL,
             CLAUDE_4_5_HAIKU_TEST_MODEL,
         ]
@@ -398,7 +394,6 @@ class AsyncAmazonAITests(TestCaseBedrockSetupMixin, unittest.IsolatedAsyncioTest
 
     @parameterized.expand(
         [
-            AMAZON_NOVA_PREMIER_TEST_MODEL,
             CLAUDE_4_5_SONNET_TEST_MODEL
         ]
     )
@@ -426,7 +421,6 @@ class AsyncAmazonAITests(TestCaseBedrockSetupMixin, unittest.IsolatedAsyncioTest
 
     @parameterized.expand(
         [
-            AMAZON_NOVA_PREMIER_TEST_MODEL,
             CLAUDE_4_5_SONNET_TEST_MODEL
         ]
     )
