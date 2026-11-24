@@ -12,7 +12,7 @@ The class names have not changed i.e., you can continue to use existing code.
 
 **Note**: Content packages for AICore are no longer supported.
 
-Renovate is set up for this repository. For further information, you can refer to their [official website](https://www.mend.io/mend-renovate/).
+Renovate is set up for this repository. For further information, you can take a look at the [official website](https://www.mend.io/mend-renovate/).
 
 ## Releasing to public PyPI
 

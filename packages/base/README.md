@@ -14,7 +14,7 @@ The main client class is the [AIAPIV2Client](ai_api_client_sdk/ai_api_v2_client.
 has resource clients as properties. The resource client implementations can be found in folder [resource_clients](ai_api_client_sdk/resource_clients). 
 The resources, response types etc. are represented by model classes. These can be found in folder [models](ai_api_client_sdk/models).
 
-Renovate is set up for this repository. For further information, you can refer to their [official website](https://www.mend.io/mend-renovate/).
+Renovate is set up for this repository. For further information, you can take a look at the [official website](https://www.mend.io/mend-renovate/).
 
 ## Usage
 

@@ -32,7 +32,7 @@ Please follow these conventions when contributing to the codebase.
 
 ## Renovate Setup
 
-Renovate is set up for this repository. For further information, you can refer to their [official website](https://www.mend.io/mend-renovate/).
+Renovate is set up for this repository. For further information, you can take a look at the [official website](https://www.mend.io/mend-renovate/).
 
 ## Integration Tests
 
