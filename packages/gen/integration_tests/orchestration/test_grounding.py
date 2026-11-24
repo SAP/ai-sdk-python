@@ -15,6 +15,7 @@ from integration_tests.orchestration.test_base import OrchestrationServiceTestBa
 from integration_tests.test_helpers import retry_on_429_or_503_class, retry_on_429_or_503
 
 
+@unittest.skip("Skip until grounding service in test landscape working again")
 @retry_on_429_or_503_class()
 class TestGrounding(OrchestrationServiceTestBase):
 
