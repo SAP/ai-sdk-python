@@ -60,7 +60,7 @@ To keep quality and reliability high, contributions should meet these criteria:
 
 When adding features or changing behavior:
 
-* Update user-facing package documentation in [PYPIDESCRIPTION.md](PYPIDESCRIPTION.md) where applicable.
+* Update user-facing package documentation in PYPIDESCRIPTION.md where applicable.
 * Update or add inline code documentation where necessary.
 * Update relevant documentation under [docs](docs) if the change affects usage.
 
