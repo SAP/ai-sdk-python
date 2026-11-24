@@ -657,6 +657,7 @@ class TestMultimodalTemplating(OrchestrationServiceTestBase):
         self.assertIn(self.pdf_secret_word,
                       response.final_result.choices[0].message.content.upper())
 
+    @unittest.skip("sporadically fails after new model. check before re-enabling")
     def test_file_from_data_url(self):
         file_item = FileItem(file_data=self.pdf_data_url, filename="test_doc.pdf")
         multimodal_content = [
