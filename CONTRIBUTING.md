@@ -62,7 +62,7 @@ When adding features or changing behavior:
 
 * Update user-facing package documentation in PYPIDESCRIPTION.md where applicable.
 * Update or add inline code documentation where necessary.
-* Update relevant documentation under [docs](docs) if the change affects usage.
+* Update relevant documentation under [AI SDK docs](https://github.com/SAP/ai-sdk/tree/main/docs-python), if the change affects usage.
 
 ## Issues and Planning
 

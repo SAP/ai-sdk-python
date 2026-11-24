@@ -80,10 +80,6 @@ Once the documentation is built by GitHub Actions, it is hosted and available fo
 
 Note that the content on this site reflects the most recent documentation build from the `gh-pages` branch.
 
-### Contributing to this Project
-
-This project is Innersource and if you wish to contribute to this project please request write access to the repository by requesting CAM profile `AI Github AI SDK-Contributors`. More details on contributing to this project can be found in the [CONTRIBUTING.md](https://github.com/SAP/ai-sdk-python/blob/main/CONTRIBUTING.md) file.
-
 ## Kudos
 
 Kudos to the authors (especially Mathis Börner). 
