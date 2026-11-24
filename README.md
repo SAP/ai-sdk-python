@@ -5,7 +5,7 @@
 
 SAP Cloud SDK for AI is the official Software Development Kit (SDK) for SAP AI Core, SAP Generative AI Hub, and Orchestration Service.
 
-The SDK formerly known as generative AI Hub SDK was rebranded.
+This repository contains three packages, formerly known as the AI API Client SDK (`sap-ai-sdk-base`), AI Core SDK (`sap-ai-sdk-core`), and Generative AI Hub SDK (`sap-ai-sdk-gen`).
 
 ## Installation
 
@@ -29,7 +29,7 @@ pip install "sap-ai-sdk-gen[google,amazon]"
 
 ## Development
 
-Main SDK modules are under [gen_ai_hub](gen_ai_hub).
+The main SDK modules are located under [`gen_ai_hub`](packages/gen/gen_ai_hub).
 
 Integration tests are split into two groups:
 
@@ -48,7 +48,13 @@ You can also use the Makefile targets for acceptance test runs.
 
 ## Documentation
 
-Documentation sources are in [docs](docs), and generated API docs are included there as well.
+For user-facing documentation, see the [AI SDK docs](https://github.com/SAP/ai-sdk/tree/main/docs-python).
+
+To generate API reference docs locally:
+
+```bash
+make docs
+```
 
 ## Support, Feedback, Contributing
 
