@@ -14,15 +14,15 @@ pip install sap-ai-sdk-gen[all]
 The class names have not changed i.e., you can continue to use existing code.
 
 > [!NOTE]  
-> Please refer to the [Generative AI Hub SDK Documentation](https://github.wdf.sap.corp/pages/AI/generative-ai-hub-sdk)
+> Please refer to the [AI SDK Python Documentation](https://sap.github.io/ai-sdk/docs/python/overview)
 
 ## Development
 
-The main modules are located in the subfolder [proxy](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy):
+The main modules are located in the subfolder [proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy):
 
-- [gen_ai_hub_proxy](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/gen_ai_hub_proxy)
-- [langchain](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/langchain)
-- [native](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/tree/main/gen_ai_hub/proxy/native)
+- [gen_ai_hub_proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/gen_ai_hub_proxy)
+- [langchain](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/langchain)
+- [native](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/native)
 
 ### Docstring Convention
 In this project, we use the `reStructuredText` format for all Python docstrings, following the guidelines outlined in [PEP 257](https://peps.python.org/pep-0257/) and the [Sphinx documentation style guide](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html).
@@ -32,7 +32,7 @@ Please follow these conventions when contributing to the codebase.
 
 ## Renovate Setup
 
-Renovate is set up for this repository. For further information, take a look at the [documentation in ml-api-facade](https://github.wdf.sap.corp/AI/ml-api-facade/blob/master/docs/renovate.md).
+Renovate is set up for this repository. For further information, you can refer to their [official website](https://www.mend.io/mend-renovate/).
 
 ## Integration Tests
 
@@ -76,16 +76,14 @@ Our project leverages GitHub Actions to automate the documentation building proc
 
 Once the documentation is built by GitHub Actions, it is hosted and available for viewing at the GitHub Pages site. You can access the latest version of the internal documentation at the following URL:
 
-[SAP Cloud SDK for AI (Python) - generative](https://github.wdf.sap.corp/pages/AI/generative-ai-hub-sdk/)
+[SAP Cloud SDK for AI (Python) - generative](https://sap.github.io/ai-sdk/docs/python/overview)
 
 Note that the content on this site reflects the most recent documentation build from the `gh-pages` branch.
 
 ### Contributing to this Project
 
-This project is Innersource and if you wish to contribute to this project please request write access to the repository by requesting CAM profile `AI Github AI SDK-Contributors`. More details on contributing to this project can be found in the [CONTRIBUTING.md](https://github.wdf.sap.corp/AI/generative-ai-hub-sdk/blob/main/CONTRIBUTING.md) file.
+This project is Innersource and if you wish to contribute to this project please request write access to the repository by requesting CAM profile `AI Github AI SDK-Contributors`. More details on contributing to this project can be found in the [CONTRIBUTING.md](https://github.com/SAP/ai-sdk-python/blob/main/CONTRIBUTING.md) file.
 
 ## Kudos
-
-The code for this SDK is originated from [llm-commons](https://github.tools.sap/AI-Playground-Projects/llm-commons).
 
 Kudos to the authors (especially Mathis Börner). 

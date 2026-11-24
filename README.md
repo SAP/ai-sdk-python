@@ -27,8 +27,6 @@ Install selected extras:
 pip install "sap-ai-sdk-gen[google,amazon]"
 ```
 
-For detailed configuration and usage examples, see [README_sphynx.md](README_sphynx.md).
-
 ## Development
 
 Main SDK modules are under [gen_ai_hub](gen_ai_hub).
@@ -51,8 +49,6 @@ You can also use the Makefile targets for acceptance test runs.
 ## Documentation
 
 Documentation sources are in [docs](docs), and generated API docs are included there as well.
-
-For local documentation workflows and SDK configuration details, see [README_sphynx.md](README_sphynx.md).
 
 ## Support, Feedback, Contributing
 
