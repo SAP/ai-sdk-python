@@ -1,5 +1,4 @@
 import unittest
-import pytest
 import time
 from typing import cast
 
@@ -23,7 +22,7 @@ from gen_ai_hub.proxy import get_proxy_client
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
 
-@pytest.mark.skip("Skip until relevant test setup is fixed")
+@unittest.skip("Skip until relevant test setup is fixed")
 @retry_on_429_or_503_class()
 class TestPipelinesAPIIntegration(unittest.TestCase):
     """
