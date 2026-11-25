@@ -16,16 +16,32 @@ class InputArtifact:
     """
 
     def __str__(self):
-        return "Input artifact name: " + str(self.name) + ", Input artifact kind: " + str(self.kind) + \
-               ", Input artifact description: " + str(self.description)
+        return (
+            "Input artifact name: "
+            + str(self.name)
+            + ", Input artifact kind: "
+            + str(self.kind)
+            + ", Input artifact description: "
+            + str(self.description)
+        )
 
     def __eq__(self, other):
         if not isinstance(other, InputArtifact):
             return False
-        return self.name == other.name and self.kind == other.kind and self.description == other.description and \
-            self.labels == other.labels
+        return (
+            self.name == other.name
+            and self.kind == other.kind
+            and self.description == other.description
+            and self.labels == other.labels
+        )
 
-    def __init__(self, name: str, kind: str = None, description: str = None, labels: List[Label] = None):
+    def __init__(
+        self,
+        name: str,
+        kind: str = None,
+        description: str = None,
+        labels: List[Label] = None,
+    ):
         self.name: str = name
         self.kind: str = kind
         self.description: str = description
@@ -41,6 +57,8 @@ class InputArtifact:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.input_artifact.InputArtifact`
         """
-        if input_artifact_dict.get('labels'):
-            input_artifact_dict['labels'] = [Label.from_dict(l) for l in input_artifact_dict['labels']]
+        if input_artifact_dict.get("labels"):
+            input_artifact_dict["labels"] = [
+                Label.from_dict(l) for l in input_artifact_dict["labels"]
+            ]
         return InputArtifact(**input_artifact_dict)

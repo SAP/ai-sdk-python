@@ -14,6 +14,7 @@ class DataMaskingProviderName(str, Enum):
     Values: SAP_DATA_PRIVACY_INTEGRATION: Refers to the SAP Data Privacy Integration service, which offers
     anonymization and pseudonymization capabilities for sensitive data.
     """
+
     SAP_DATA_PRIVACY_INTEGRATION = "sap_data_privacy_integration"
 
 
@@ -27,6 +28,7 @@ class DataMaskingProvider(JSONSerializable, ABC):
     Inherited by:
         - SAPDataPrivacyIntegration
     """
+
     pass
 
 
@@ -44,12 +46,14 @@ class DataMasking(JSONSerializable):
 
         :param providers: A list of data masking providers.
         :type providers: List[DataMaskingProvider]
-        :raises ValueError: If more than one provider is specified, as multiple providers 
+        :raises ValueError: If more than one provider is specified, as multiple providers
             are not supported in the current version.
         """
 
         if len(providers) > 1:
-            raise ValueError("Multiple data masking providers are not supported in the current version.")
+            raise ValueError(
+                "Multiple data masking providers are not supported in the current version."
+            )
 
         self.providers = providers
 

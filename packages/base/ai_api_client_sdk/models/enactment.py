@@ -36,10 +36,24 @@ class Enactment:
     :type completion_time: datetime, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, id: str, configuration_id: str, configuration_name, scenario_id: str, status: Status,
-                 target_status: TargetStatus, created_at: datetime, modified_at: datetime, status_message: str = None,
-                 status_details: Dict[str, Any] = None, submission_time: datetime = None, start_time: datetime = None,
-                 completion_time: datetime = None, **kwargs):
+
+    def __init__(
+        self,
+        id: str,
+        configuration_id: str,
+        configuration_name,
+        scenario_id: str,
+        status: Status,
+        target_status: TargetStatus,
+        created_at: datetime,
+        modified_at: datetime,
+        status_message: str = None,
+        status_details: Dict[str, Any] = None,
+        submission_time: datetime = None,
+        start_time: datetime = None,
+        completion_time: datetime = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.configuration_id: str = configuration_id
         self.configuration_name: str = configuration_name

@@ -3,8 +3,12 @@
 from typing import Optional
 
 from langchain_google_genai import ChatGoogleGenerativeAI as ChatGoogleGenerativeAI_
-from langchain_google_genai import GoogleGenerativeAIEmbeddings as GoogleGenerativeAIEmbeddings_
-from langchain_google_genai.chat_models import _ClientCleanup  # private upstream name, since 4.3.7
+from langchain_google_genai import (
+    GoogleGenerativeAIEmbeddings as GoogleGenerativeAIEmbeddings_,
+)
+from langchain_google_genai.chat_models import (
+    _ClientCleanup,
+)  # private upstream name, since 4.3.7
 from pydantic import model_validator, ConfigDict
 
 from gen_ai_hub.proxy.core.base import BaseProxyClient
@@ -16,18 +20,18 @@ from gen_ai_hub.proxy.native.google_genai.clients import Client as GenAIHubNativ
 class _BaseGoogleGenerativeAI:
     """Base class for Google Generative AI models with common functionality."""
 
-    model_config = ConfigDict(extra='allow')
+    model_config = ConfigDict(extra="allow")
 
     def __init__(
-            self,
-            model: str = "",
-            proxy_model_name: str = "",
-            model_id: str = "",
-            deployment_id: str = "",
-            config_id: str = "",
-            config_name: str = "",
-            proxy_client: Optional[BaseProxyClient] = None,
-            **kwargs,
+        self,
+        model: str = "",
+        proxy_model_name: str = "",
+        model_id: str = "",
+        deployment_id: str = "",
+        config_id: str = "",
+        config_name: str = "",
+        proxy_client: Optional[BaseProxyClient] = None,
+        **kwargs,
     ):
         """
         Parameters:
@@ -58,15 +62,15 @@ class _BaseGoogleGenerativeAI:
         raise NotImplementedError("Subclasses must implement _init_parent")
 
     def _setup_client_and_kwargs(
-            self,
-            model: str,
-            proxy_model_name: str,
-            model_id: str,
-            deployment_id: str,
-            config_id: str,
-            config_name: str,
-            proxy_client: Optional[BaseProxyClient],
-            kwargs: dict,
+        self,
+        model: str,
+        proxy_model_name: str,
+        model_id: str,
+        deployment_id: str,
+        config_id: str,
+        config_name: str,
+        proxy_client: Optional[BaseProxyClient],
+        kwargs: dict,
     ) -> tuple[str, dict]:
         if model_id != "":
             raise ValueError(
@@ -82,7 +86,7 @@ class _BaseGoogleGenerativeAI:
             proxy_client=proxy_client,
             deployment_id=deployment_id,
             config_id=config_id,
-            config_name=config_name
+            config_name=config_name,
         )
 
         kwargs["client"] = native_client
@@ -128,19 +132,22 @@ class ChatGoogleGenerativeAI(_BaseGoogleGenerativeAI, ChatGoogleGenerativeAI_):
         return self
 
 
-class GoogleGenerativeAIEmbeddings(_BaseGoogleGenerativeAI, GoogleGenerativeAIEmbeddings_):
+class GoogleGenerativeAIEmbeddings(
+    _BaseGoogleGenerativeAI, GoogleGenerativeAIEmbeddings_
+):
     """Drop-in replacement for langchain_google_genai.GoogleGenerativeAIEmbeddings."""
 
     def _init_parent(self, **kwargs):
         GoogleGenerativeAIEmbeddings_.__init__(self, **kwargs)
 
+
 def init_chat_model(
-        proxy_client: BaseProxyClient,
-        deployment: Deployment,
-        temperature: float = 0.0,
-        max_tokens: int = 256,
-        top_k: Optional[int] = None,
-        top_p: float = 1.0,
+    proxy_client: BaseProxyClient,
+    deployment: Deployment,
+    temperature: float = 0.0,
+    max_tokens: int = 256,
+    top_k: Optional[int] = None,
+    top_p: float = 1.0,
 ):
     """Initialize a ChatGoogleGenerativeAI model with the given parameters.
 
@@ -169,11 +176,12 @@ def init_chat_model(
         top_p=top_p,
     )
 
+
 def init_embedding_model(proxy_client: BaseProxyClient, deployment: Deployment):
     return GoogleGenerativeAIEmbeddings(
         model=deployment.model_name,
         deployment_id=deployment.deployment_id,
         proxy_client=proxy_client,
-        config_id=getattr(deployment, 'config_id', ''),
-        config_name=getattr(deployment, 'config_name', ''),
+        config_id=getattr(deployment, "config_id", ""),
+        config_name=getattr(deployment, "config_name", ""),
     )

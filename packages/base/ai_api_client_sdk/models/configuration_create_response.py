@@ -7,6 +7,7 @@ class ConfigurationCreateResponse(BasicResponse):
     """The ConfigurationCreateResponse object defines the response of the configuration create request. Refer to
     :class:`ai_api_client_sdk.models.base_models.BasicResponse`, for the object definition
     """
+
     @staticmethod
     def from_dict(response_dict: Dict[str, Any]):
         """Returns a :class:`ai_api_client_sdk.models.configuration_create_response.ConfigurationCreateResponse` object,

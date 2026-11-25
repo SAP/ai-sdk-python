@@ -13,6 +13,7 @@ Response fields (from SAP AI Core orchestration docs):
   prompt_tokens_details.cache_creation_token_details.ephemeral_5m_input_tokens
   prompt_tokens_details.cache_creation_token_details.ephemeral_1h_input_tokens
 """
+
 import unittest
 
 from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
@@ -20,7 +21,10 @@ from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig, Modul
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
 from gen_ai_hub.orchestration_v2.models.multimodal_items import TextPart
-from gen_ai_hub.orchestration_v2.models.template import Template, PromptTemplatingModuleConfig
+from gen_ai_hub.orchestration_v2.models.template import (
+    Template,
+    PromptTemplatingModuleConfig,
+)
 from gen_ai_hub.orchestration_v2.service import OrchestrationService
 from integration_tests.orchestration_v2.test_base import OrchestrationServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503
@@ -54,12 +58,12 @@ _LONG_SYSTEM_PROMPT = (
         "after the empire's fall. The Colosseum, completed in 80 AD, could seat "
         "50,000 to 80,000 spectators and hosted gladiatorial contests, animal "
         "hunts, and public executions for four centuries. "
-    ) * 4  # repeat to comfortably exceed 1024 tokens
+    )
+    * 4  # repeat to comfortably exceed 1024 tokens
 )
 
 _LLM = LLMModelDetails(
-    name="anthropic--claude-4.5-sonnet",
-    params={"max_tokens": 64, "temperature": 0.0},
+    name="anthropic--claude-4.5-sonnet", params={"max_tokens": 64, "temperature": 0.0}
 )
 
 
@@ -67,8 +71,7 @@ def _config(messages, tools=None):
     return OrchestrationConfig(
         modules=ModuleConfig(
             prompt_templating=PromptTemplatingModuleConfig(
-                prompt=Template(template=messages, tools=tools),
-                model=_LLM,
+                prompt=Template(template=messages, tools=tools), model=_LLM
             )
         )
     )
@@ -94,16 +97,28 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
         cache entry is already warm from a previous run. Either proves the
         cache_control breakpoint was accepted by the server.
         """
-        config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type="ephemeral"))]),
-            UserMessage(content="In one word: what language did Romans speak?"),
-        ])
+        config = _config(
+            [
+                SystemMessage(
+                    content=[
+                        TextPart(
+                            text=_LONG_SYSTEM_PROMPT,
+                            cache_control=CacheControl(type="ephemeral"),
+                        )
+                    ]
+                ),
+                UserMessage(content="In one word: what language did Romans speak?"),
+            ]
+        )
         response = self.service.run(config=config)
         details = response.final_result.usage.prompt_tokens_details
         self.assertIsNotNone(details)
-        cache_active = (details.cache_creation_tokens or 0) + (details.cached_tokens or 0)
+        cache_active = (details.cache_creation_tokens or 0) + (
+            details.cached_tokens or 0
+        )
         self.assertGreater(
-            cache_active, 0,
+            cache_active,
+            0,
             f"Expected cache activity (cache_creation_tokens or cached_tokens > 0), "
             f"got: {details}",
         )
@@ -115,16 +130,26 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
     @retry_on_429_or_503(max_retries=3, initial_delay=2.0, backoff_factor=2.0)
     def test_cache_hit_on_repeated_call(self):
         """Second call with the same cache breakpoint produces cached_tokens > 0."""
-        config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type="ephemeral"))]),
-            UserMessage(content="In one word: what language did Romans speak?"),
-        ])
-        self.service.run(config=config)   # populate cache
+        config = _config(
+            [
+                SystemMessage(
+                    content=[
+                        TextPart(
+                            text=_LONG_SYSTEM_PROMPT,
+                            cache_control=CacheControl(type="ephemeral"),
+                        )
+                    ]
+                ),
+                UserMessage(content="In one word: what language did Romans speak?"),
+            ]
+        )
+        self.service.run(config=config)  # populate cache
         response = self.service.run(config=config)
         details = response.final_result.usage.prompt_tokens_details
         self.assertIsNotNone(details)
         self.assertGreater(
-            details.cached_tokens, 0,
+            details.cached_tokens,
+            0,
             "Expected cached_tokens > 0 on second call (cache hit).",
         )
 
@@ -136,10 +161,19 @@ class TestPromptCachingLive(OrchestrationServiceTestBase):
     def test_explicit_ttl_1h_via_text_part(self):
         """Attaching CacheControl(type='ephemeral', ttl='1h') directly to a TextPart returns
         cache_creation_token_details with ephemeral_1h_input_tokens."""
-        config = _config([
-            SystemMessage(content=[TextPart(text=_LONG_SYSTEM_PROMPT, cache_control=CacheControl(type='ephemeral', ttl='1h'))]),
-            UserMessage(content="Name the last Western Roman emperor."),
-        ])
+        config = _config(
+            [
+                SystemMessage(
+                    content=[
+                        TextPart(
+                            text=_LONG_SYSTEM_PROMPT,
+                            cache_control=CacheControl(type="ephemeral", ttl="1h"),
+                        )
+                    ]
+                ),
+                UserMessage(content="Name the last Western Roman emperor."),
+            ]
+        )
         response = self.service.run(config=config)
         details = response.final_result.usage.prompt_tokens_details
         self.assertIsNotNone(details)

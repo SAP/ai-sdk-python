@@ -8,6 +8,7 @@ class MetricCustomInfo(NameValue):
     application or complex metrics in JSON format, as a name-value pair. Refer to
     :class:`ai_api_client_sdk.models.base_models.NameValue`, for the object definition
     """
+
     @staticmethod
     def from_dict(metric_custom_info_dict: Dict[str, str]):
         """Returns a :class:`ai_api_client_sdk.models.metric_custom_info.MetricCustomInfo` object, created from the

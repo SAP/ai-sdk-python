@@ -1,7 +1,10 @@
 from enum import Enum
 from typing import List
 
-from gen_ai_hub.orchestration.models.data_masking import DataMaskingProvider, DataMaskingProviderName
+from gen_ai_hub.orchestration.models.data_masking import (
+    DataMaskingProvider,
+    DataMaskingProviderName,
+)
 
 
 class MaskingMethod(str, Enum):
@@ -16,6 +19,7 @@ class MaskingMethod(str, Enum):
 
         PSEUDONYMIZATION: Replaces sensitive data with reversible placeholders (e.g., MASKED_ENTITY_ID).
     """
+
     ANONYMIZATION = "anonymization"
     """Irreversibly replaces sensitive data with placeholders (e.g., MASKED_ENTITY). """
     PSEUDONYMIZATION = "pseudonymization"
@@ -143,11 +147,11 @@ class SAPDataPrivacyIntegration(DataMaskingProvider):
     """
 
     def __init__(
-            self,
-            method: MaskingMethod,
-            entities: List[ProfileEntity],
-            allowlist: List[str] = None,
-            mask_grounding_input: bool = False,
+        self,
+        method: MaskingMethod,
+        entities: List[ProfileEntity],
+        allowlist: List[str] = None,
+        mask_grounding_input: bool = False,
     ):
         """Initializes the SAPDataPrivacyIntegration data masking provider.
 
@@ -174,14 +178,8 @@ class SAPDataPrivacyIntegration(DataMaskingProvider):
         result = {
             "type": DataMaskingProviderName.SAP_DATA_PRIVACY_INTEGRATION,
             "method": self.method,
-            "entities": [
-                {
-                    "type": entity
-                } for entity in self.entities
-            ],
-            "mask_grounding_input": {
-                "enabled": self.mask_grounding_input
-            }
+            "entities": [{"type": entity} for entity in self.entities],
+            "mask_grounding_input": {"enabled": self.mask_grounding_input},
         }
 
         if self.allowlist:

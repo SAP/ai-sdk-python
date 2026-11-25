@@ -12,7 +12,10 @@ from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 from gen_ai_hub.orchestration_v2.models.document_grounding import GroundingModuleConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.streaming import GlobalStreamOptions
-from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig, Template
+from gen_ai_hub.orchestration_v2.models.template import (
+    PromptTemplatingModuleConfig,
+    Template,
+)
 from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration_v2.models.translation import TranslationModuleConfig
 
@@ -50,13 +53,14 @@ class ModuleConfig(BaseModel):
 class OrchestrationConfig(BaseModel):
     """
     Configuration for the Orchestration Service's content generation process.
-    
+
     Args:
         modules: Either a single ModuleConfig or a list of ModuleConfigs. When a list is provided,
         the orchestration service will try each configuration in order until one succeeds.
 
         stream: Optional streaming configuration.
     """
+
     modules: ModuleConfig | Annotated[List[ModuleConfig], Field(min_length=1)]
     stream: Optional[GlobalStreamOptions] = None
 
@@ -74,6 +78,7 @@ class PartialPromptTemplatingModuleConfig(BaseModel):
         model: Optional model override. Unlike the non-partial config, model is optional
             here so that only the prompt can be overridden without repeating the model config.
     """
+
     prompt: Optional[Template | TemplateRef] = None
     model: Optional[LLMModelDetails] = None
 
@@ -95,6 +100,7 @@ class PartialModuleConfigs(BaseModel):
 
         translation: Optional translation module override.
     """
+
     prompt_templating: Optional[PartialPromptTemplatingModuleConfig] = None
     filtering: Optional[FilteringModuleConfig] = None
     masking: Optional[MaskingModuleConfig] = None
@@ -113,6 +119,7 @@ class PartialOrchestrationConfig(BaseModel):
 
         stream: Optional streaming configuration to override.
     """
+
     modules: Optional[PartialModuleConfigs] = None
     stream: Optional[GlobalStreamOptions] = None
 
@@ -123,7 +130,9 @@ class CompletionRequestConfigurationReferenceByIdConfigRef(BaseModel):
     Args:
         id (str): The unique identifier for the configuration.
     """
+
     id: str
+
 
 class CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(BaseModel):
     """
@@ -136,14 +145,24 @@ class CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(Base
 
         version(str): Version of config
     """
+
     scenario: str
     name: str
     version: str
 
-OrchestrationConfigReference = (CompletionRequestConfigurationReferenceByIdConfigRef |
-                                CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef)
 
-__all__ = ["ModuleConfig", "OrchestrationConfig", "OrchestrationConfigReference",
-           "PartialPromptTemplatingModuleConfig", "PartialModuleConfigs", "PartialOrchestrationConfig",
-           "CompletionRequestConfigurationReferenceByIdConfigRef",
-           "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef"]
+OrchestrationConfigReference = (
+    CompletionRequestConfigurationReferenceByIdConfigRef
+    | CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef
+)
+
+__all__ = [
+    "ModuleConfig",
+    "OrchestrationConfig",
+    "OrchestrationConfigReference",
+    "PartialPromptTemplatingModuleConfig",
+    "PartialModuleConfigs",
+    "PartialOrchestrationConfig",
+    "CompletionRequestConfigurationReferenceByIdConfigRef",
+    "CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef",
+]

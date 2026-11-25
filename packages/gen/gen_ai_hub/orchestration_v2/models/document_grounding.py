@@ -14,6 +14,7 @@ class GroundingType(str, Enum):
     """
     Enumerates supported grounding types.
     """
+
     DOCUMENT_GROUNDING_SERVICE = "document_grounding_service"
 
 
@@ -21,6 +22,7 @@ class DataRepositoryType(str, Enum):
     """
     Enumerates data repository types.
     """
+
     VECTOR = "vector"  # DataRepository with vector embeddings
     URL = "help.sap.com"  # website supporting elastic search
 
@@ -40,7 +42,8 @@ class DocumentMetadataKeyValueListPairs(KeyValueListPair):
 
         select_mode: Select mode for search filters.
     """
-    select_mode: Optional[List[Literal['ignoreIfKeyAbsent']]] = None
+
+    select_mode: Optional[List[Literal["ignoreIfKeyAbsent"]]] = None
 
 
 class GroundingSearchConfig(BaseModel):
@@ -54,10 +57,11 @@ class GroundingSearchConfig(BaseModel):
         - Maximum number of documents to be returned. Cannot be used with 'maxChunkCount'.
         If maxDocumentCount is given, then only one chunk per document is returned.
     """
+
     max_chunk_count: Optional[int] = Field(default=None, gt=0)
     max_document_count: Optional[int] = Field(default=None, gt=0)
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def validate_max_chunk_count_and_max_document_count(self):
         if self.max_chunk_count and self.max_document_count:
             raise ValueError("Cannot specify both maxChunkCount and maxDocumentCount.")
@@ -66,7 +70,7 @@ class GroundingSearchConfig(BaseModel):
 
 class DocumentGroundingFilter(BaseModel):
     """Module for configuring document grounding filters.
-    
+
     Args:
         id: The unique identifier for the grounding filter.
 
@@ -99,9 +103,10 @@ class DocumentGroundingFilter(BaseModel):
 
 class DocumentGroundingPlaceholders(BaseModel):
     """
-        input: The list of input parameters used for grounding input questions (minItems: 1).
-        output: Parameter name used for grounding output.
+    input: The list of input parameters used for grounding input questions (minItems: 1).
+    output: Parameter name used for grounding output.
     """
+
     input: List[str] = Field(min_length=1)
     output: str
 
@@ -116,6 +121,7 @@ class DocumentGroundingConfig(BaseModel):
 
         metadata_params: Parameter name used for specifying metadata parameters.
     """
+
     filters: Optional[List[DocumentGroundingFilter]] = None
     placeholders: DocumentGroundingPlaceholders
     metadata_params: Optional[list[str]] = None
@@ -133,5 +139,14 @@ class GroundingModuleConfig(BaseModel):
     type: GroundingType = GroundingType.DOCUMENT_GROUNDING_SERVICE
     config: DocumentGroundingConfig
 
-__all__ = ["GroundingType", "DataRepositoryType", "DocumentGroundingFilter", "DocumentGroundingPlaceholders",
-           "DocumentGroundingConfig", "GroundingModuleConfig", "KeyValueListPair", "DocumentMetadataKeyValueListPairs"]
+
+__all__ = [
+    "GroundingType",
+    "DataRepositoryType",
+    "DocumentGroundingFilter",
+    "DocumentGroundingPlaceholders",
+    "DocumentGroundingConfig",
+    "GroundingModuleConfig",
+    "KeyValueListPair",
+    "DocumentMetadataKeyValueListPairs",
+]

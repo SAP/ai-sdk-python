@@ -54,7 +54,6 @@ def get_or_create_configuration(client):
 
 
 class OrchestrationServiceTestBase(unittest.TestCase):
-
     def setUp(self):
         self.api_url = get_shared_api_url()
         self.assertIsNotNone(self.api_url)

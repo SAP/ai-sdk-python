@@ -11,6 +11,7 @@ Supported repository types:
 
 API Reference: https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Retrieval
 """
+
 import humps
 from typing import Optional
 
@@ -79,8 +80,12 @@ class RetrievalAPIClient:
         if count is not None:
             params["$count"] = count
 
-        response = self.rest_client.get(path=f"{self.path}/dataRepositories", params=params)
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = self.rest_client.get(
+            path=f"{self.path}/dataRepositories", params=params
+        )
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return DataRepositories(**response)
 
     def get_data_repository_by_id(self, repository_id: str) -> DataRepository:
@@ -92,8 +97,12 @@ class RetrievalAPIClient:
         :rtype: DataRepository
         """
 
-        response = self.rest_client.get(path=f"{self.path}/dataRepositories/{repository_id}")
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = self.rest_client.get(
+            path=f"{self.path}/dataRepositories/{repository_id}"
+        )
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return DataRepository(**response)
 
     # --- Search ---
@@ -108,9 +117,10 @@ class RetrievalAPIClient:
         """
 
         response = self.rest_client.post(
-            path=f"{self.path}/search",
-            body=search_input.model_dump(exclude_none=True),
+            path=f"{self.path}/search", body=search_input.model_dump(exclude_none=True)
         )
 
-        response = humps.camelize(response) # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return RetrievalSearchResults(**response)

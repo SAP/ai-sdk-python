@@ -58,15 +58,14 @@ Each resource client has these functions (if supported for that resource) to sen
 Example:
 
 ```python
-
 from ai_api_client_sdk.ai_api_v2_client import AIAPIV2Client
 
 ai_api_v2_client = AIAPIV2Client(
-    base_url="<BASE_URL>", 
-    auth_url="<AUTH_URL>", 
+    base_url="<BASE_URL>",
+    auth_url="<AUTH_URL>",
     client_id="<CLIENT_ID>",
-    client_secret="<CLIENT_SECRET>", 
-    resource_group="<RESOURCE_GROUP_ID>"
+    client_secret="<CLIENT_SECRET>",
+    resource_group="<RESOURCE_GROUP_ID>",
 )
 
 scenario = ai_api_v2_client.scenario.get(scenario_id="<SCENARIO_ID>")

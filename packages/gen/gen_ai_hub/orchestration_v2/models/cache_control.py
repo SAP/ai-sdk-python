@@ -1,4 +1,5 @@
 """Cache control for prompt caching on supported models."""
+
 from typing import Any, Dict, Literal, Optional
 
 from pydantic import model_serializer
@@ -15,7 +16,7 @@ class CacheControl(BaseModel):
 
     Attach ``CacheControl`` directly to a content block (``TextPart``, ``ImagePart``) or
     to a ``ChatCompletionTool``.
-    
+
     Args:
         type: ``"ephemeral"``
         ttl: Cache duration. ``"5m"`` (default) or ``"1h"``.

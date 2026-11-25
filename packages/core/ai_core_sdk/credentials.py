@@ -8,11 +8,19 @@ import pathlib
 from dataclasses import dataclass
 
 from ai_core_sdk.helpers import get_home
-from ai_core_sdk.helpers.constants import (AI_CORE_PREFIX, AUTH_ENDPOINT_SUFFIX, ENV_VAR_AICORE_CONFIG_FILE, ENV_VAR_AICORE_PROFILE,
-                                           ENV_VAR_AICORE_SERVICE_KEY, VCAP_AICORE_SERVICE_NAME, ENV_VAR_VCAP_SERVICES)
+from ai_core_sdk.helpers.constants import (
+    AI_CORE_PREFIX,
+    AUTH_ENDPOINT_SUFFIX,
+    ENV_VAR_AICORE_CONFIG_FILE,
+    ENV_VAR_AICORE_PROFILE,
+    ENV_VAR_AICORE_SERVICE_KEY,
+    VCAP_AICORE_SERVICE_NAME,
+    ENV_VAR_VCAP_SERVICES,
+)
 from ai_core_sdk.helpers.logging import get_logger
 
 logger = get_logger()
+
 
 def get_nested_value(data_dict, keys: List[str]):
     """
@@ -27,12 +35,14 @@ def get_nested_value(data_dict, keys: List[str]):
         current_value = current_value[key]
     return current_value
 
+
 def _get_nested_value_safe(data: Dict, keys) -> Optional[Any]:
     try:
         return get_nested_value(data, keys)
     except KeyError:
         logger.debug("Key path %s not found in service key.", keys)
         return None
+
 
 @dataclass
 class VCAPEnvironment:
@@ -41,12 +51,14 @@ class VCAPEnvironment:
     @classmethod
     def from_env(cls, env_var: Optional[str] = None):
         env_var = env_var or ENV_VAR_VCAP_SERVICES
-        env = json.loads(os.environ.get(env_var, '{}'))
+        env = json.loads(os.environ.get(env_var, "{}"))
         return cls.from_dict(env)
 
     @classmethod
     def from_dict(cls, env: Dict[str, Any]):
-        services = [Service(service) for services in env.values() for service in services]
+        services = [
+            Service(service) for services in env.values() for service in services
+        ]
         return cls(services=services)
 
     def __getitem__(self, name) -> Service:
@@ -80,24 +92,23 @@ NoDefault = _NoDefault()
 
 
 class Service:
-
     def __init__(self, env: Dict[str, Any]):
         self._env = env
 
     @property
     def label(self) -> Optional[str]:
-        return self._env.get('label')
+        return self._env.get("label")
 
     @property
     def name(self) -> Optional[str]:
-        return self._env.get('name')
+        return self._env.get("name")
 
     def __getitem__(self, key):
         return self.get(key)
 
     def get(self, key, default=NoDefault):
         if isinstance(key, str):
-            key_splitted = key.split('.')
+            key_splitted = key.split(".")
         else:
             key_splitted = key
         try:
@@ -126,27 +137,46 @@ class Source:
 
 
 CORE_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = [
-    CredentialsValue(name='client_id', vcap_key=('credentials', 'clientid')),
-    CredentialsValue(name='client_secret', vcap_key=('credentials', 'clientsecret')),
-    CredentialsValue(name='auth_url',
-                     vcap_key=('credentials', 'url'),
-                     transform_fn=lambda url: url.rstrip('/') +
-                                              ('' if url.endswith(AUTH_ENDPOINT_SUFFIX) else AUTH_ENDPOINT_SUFFIX)),
-    CredentialsValue(name='base_url',
-                     vcap_key=('credentials', 'serviceurls', 'AI_API_URL'),
-                     transform_fn=lambda url: url.rstrip('/') + ('' if url.endswith('/v2') else '/v2')),
-    CredentialsValue(name='resource_group'),
-    CredentialsValue(name='cert_url', vcap_key=('credentials', 'certurl'),
-                     transform_fn=lambda url: url.rstrip('/') +
-                                              ('' if url.endswith(AUTH_ENDPOINT_SUFFIX) else AUTH_ENDPOINT_SUFFIX)),
+    CredentialsValue(name="client_id", vcap_key=("credentials", "clientid")),
+    CredentialsValue(name="client_secret", vcap_key=("credentials", "clientsecret")),
+    CredentialsValue(
+        name="auth_url",
+        vcap_key=("credentials", "url"),
+        transform_fn=lambda url: (
+            url.rstrip("/")
+            + ("" if url.endswith(AUTH_ENDPOINT_SUFFIX) else AUTH_ENDPOINT_SUFFIX)
+        ),
+    ),
+    CredentialsValue(
+        name="base_url",
+        vcap_key=("credentials", "serviceurls", "AI_API_URL"),
+        transform_fn=lambda url: (
+            url.rstrip("/") + ("" if url.endswith("/v2") else "/v2")
+        ),
+    ),
+    CredentialsValue(name="resource_group"),
+    CredentialsValue(
+        name="cert_url",
+        vcap_key=("credentials", "certurl"),
+        transform_fn=lambda url: (
+            url.rstrip("/")
+            + ("" if url.endswith(AUTH_ENDPOINT_SUFFIX) else AUTH_ENDPOINT_SUFFIX)
+        ),
+    ),
     # Even though the certificate and key in VCAP_SERVICES are not file paths, the names are defined this way in order
     # to keep it compatible with the config names. It'll be handled in fetch_credentials function.
-    CredentialsValue(name='cert_file_path'),
-    CredentialsValue(name='key_file_path'),
-    CredentialsValue(name='cert_str', vcap_key=('credentials', 'certificate'),
-                     transform_fn=lambda cert_str: cert_str.replace('\\n', '\n')),
-    CredentialsValue(name='key_str', vcap_key=('credentials', 'key'),
-                     transform_fn=lambda key_str: key_str.replace('\\n', '\n'))
+    CredentialsValue(name="cert_file_path"),
+    CredentialsValue(name="key_file_path"),
+    CredentialsValue(
+        name="cert_str",
+        vcap_key=("credentials", "certificate"),
+        transform_fn=lambda cert_str: cert_str.replace("\\n", "\n"),
+    ),
+    CredentialsValue(
+        name="key_str",
+        vcap_key=("credentials", "key"),
+        transform_fn=lambda key_str: key_str.replace("\\n", "\n"),
+    ),
 ]
 
 
@@ -154,29 +184,43 @@ def init_conf(profile: str = None):
     # Read configuration from ${AICORE_HOME}/config_<profile>.json.
     home = pathlib.Path(get_home())
     profile = profile or os.environ.get(ENV_VAR_AICORE_PROFILE)
-    profile_config_file = f'config_{profile}.json'
-    direct_config_file = pathlib.Path(os.getenv(ENV_VAR_AICORE_CONFIG_FILE)) if os.getenv(ENV_VAR_AICORE_CONFIG_FILE) else None
-    path_to_config = (direct_config_file or
-                      (home / ('config.json' if profile in ('default', '', None) else profile_config_file)))
+    profile_config_file = f"config_{profile}.json"
+    direct_config_file = (
+        pathlib.Path(os.getenv(ENV_VAR_AICORE_CONFIG_FILE))
+        if os.getenv(ENV_VAR_AICORE_CONFIG_FILE)
+        else None
+    )
+    path_to_config = direct_config_file or (
+        home
+        / ("config.json" if profile in ("default", "", None) else profile_config_file)
+    )
     config = {}
     if path_to_config.exists():
-        logger.debug('Config file path %s', path_to_config)
+        logger.debug("Config file path %s", path_to_config)
         try:
-            with path_to_config.open(encoding='utf-8') as f:
+            with path_to_config.open(encoding="utf-8") as f:
                 return json.load(f)
         except json.decoder.JSONDecodeError:
-            raise KeyError(f'{path_to_config} is not a valid json file. Please fix or remove it!')
+            raise KeyError(
+                f"{path_to_config} is not a valid json file. Please fix or remove it!"
+            )
         except PermissionError as e:
-            logger.warning("Permission denied when trying to read config file '%s'. File ignored.", path_to_config)
+            logger.warning(
+                "Permission denied when trying to read config file '%s'. File ignored.",
+                path_to_config,
+            )
             return config
     elif profile:
-        raise FileNotFoundError(f"Unable to locate profile config file '{profile_config_file}' "
-                                f"in AICORE_HOME '{home}')")
+        raise FileNotFoundError(
+            f"Unable to locate profile config file '{profile_config_file}' "
+            f"in AICORE_HOME '{home}')"
+        )
     return config
 
 
-def extract_credentials(source: Source, credential_values: List[CredentialsValue], exclude: List[str] = None) \
-        -> Dict[str, str]:
+def extract_credentials(
+    source: Source, credential_values: List[CredentialsValue], exclude: List[str] = None
+) -> Dict[str, str]:
     """Extract all credentials from a source."""
     exclude = exclude or []
     credentials = {}
@@ -188,10 +232,14 @@ def extract_credentials(source: Source, credential_values: List[CredentialsValue
     return credentials
 
 
-def resolve_credentials(sources: List[Source], credential_values: List[CredentialsValue]) -> Dict[str, str]:
+def resolve_credentials(
+    sources: List[Source], credential_values: List[CredentialsValue]
+) -> Dict[str, str]:
     """Extract credentials from the first source that has any defined."""
     for source in sources:
-        if credentials := extract_credentials(source, exclude=['resource_group'], credential_values=credential_values):
+        if credentials := extract_credentials(
+            source, exclude=["resource_group"], credential_values=credential_values
+        ):
             logger.debug(f"Using credentials from: {source.name}")
             return credentials
     raise ValueError("No credentials found in any source")
@@ -199,7 +247,7 @@ def resolve_credentials(sources: List[Source], credential_values: List[Credentia
 
 def resolve_resource_group(sources: List[Source]) -> Optional[str]:
     """Find resource_group from the first source that defines it."""
-    rg_cred = CredentialsValue(name='resource_group')
+    rg_cred = CredentialsValue(name="resource_group")
     for source in sources:
         if value := source.get(rg_cred):
             logger.debug("Using resource_group '%s' from: %s", value, source.name)
@@ -210,12 +258,12 @@ def resolve_resource_group(sources: List[Source]) -> Optional[str]:
 
 def validate_credentials(credentials: Dict[str, str]) -> None:
     """Validate that we have a complete authentication method."""
-    required_base = {'client_id', 'auth_url', 'base_url'}
+    required_base = {"client_id", "auth_url", "base_url"}
 
     # Check which auth method we have
-    has_client_secret = 'client_secret' in credentials
-    has_cert_files = 'cert_file_path' in credentials and 'key_file_path' in credentials
-    has_cert_strings = 'cert_str' in credentials and 'key_str' in credentials
+    has_client_secret = "client_secret" in credentials
+    has_cert_files = "cert_file_path" in credentials and "key_file_path" in credentials
+    has_cert_strings = "cert_str" in credentials and "key_str" in credentials
 
     # Must have exactly one auth method
     auth_methods = sum([has_client_secret, has_cert_files, has_cert_strings])
@@ -245,6 +293,7 @@ def validate_credentials(credentials: Dict[str, str]) -> None:
 def _str_or_none(value) -> Optional[str]:
     return str(value) if value else None
 
+
 def _load_service_key() -> Dict[str, Any]:
     """Read and parse AICORE_SERVICE_KEY from the environment.
 
@@ -260,6 +309,7 @@ def _load_service_key() -> Dict[str, Any]:
         raise ValueError(
             f"{ENV_VAR_AICORE_SERVICE_KEY} is set but contains invalid JSON: {exc}"
         ) from exc
+
 
 def _load_vcap_service_key() -> Optional[Dict[str, Any]]:
     """Read the AI Core service credentials from the ``VCAP_SERVICES`` environment variable.
@@ -277,8 +327,13 @@ def _load_vcap_service_key() -> Optional[Dict[str, Any]]:
         vcap_service = None
     return vcap_service
 
-def fetch_credentials(profile: str = None, credential_values: List[CredentialsValue] = CORE_CREDENTIAL_VALUES,
-                      validate: bool = True, **kwargs) -> Dict[str, str]:
+
+def fetch_credentials(
+    profile: str = None,
+    credential_values: List[CredentialsValue] = CORE_CREDENTIAL_VALUES,
+    validate: bool = True,
+    **kwargs,
+) -> Dict[str, str]:
     """
     Fetch credentials from a single source based on precedence.
 
@@ -295,30 +350,47 @@ def fetch_credentials(profile: str = None, credential_values: List[CredentialsVa
     # `cv.vcap_key` describes the full path inside a VCAP_SERVICES entry, starting with
     # `credentials` (e.g. `('credentials', 'clientid')`)
     sources = [
-        Source("kwargs",
-               lambda cv: _str_or_none(kwargs.get(cv.name))),
+        Source("kwargs", lambda cv: _str_or_none(kwargs.get(cv.name))),
         # A service key is already the inner credentials object, so the leading `credentials` segment is stripped.
-        Source("service key",
-               lambda cv, service_key = _load_service_key(): _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:])) if cv.vcap_key else None),
-        Source("environment variables",
-               lambda cv: _str_or_none(os.environ.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
-        Source("config file",
-               lambda cv: _str_or_none(config.get(f'{AI_CORE_PREFIX}_{cv.name.upper()}'))),
-        Source("VCAP service",
-               lambda cv, vcap_service = _load_vcap_service_key(): _str_or_none(vcap_service.get(cv.vcap_key, None) if vcap_service and cv.vcap_key else None)),
+        Source(
+            "service key",
+            lambda cv, service_key=_load_service_key(): (
+                _str_or_none(_get_nested_value_safe(service_key, cv.vcap_key[1:]))
+                if cv.vcap_key
+                else None
+            ),
+        ),
+        Source(
+            "environment variables",
+            lambda cv: _str_or_none(
+                os.environ.get(f"{AI_CORE_PREFIX}_{cv.name.upper()}")
+            ),
+        ),
+        Source(
+            "config file",
+            lambda cv: _str_or_none(config.get(f"{AI_CORE_PREFIX}_{cv.name.upper()}")),
+        ),
+        Source(
+            "VCAP service",
+            lambda cv, vcap_service=_load_vcap_service_key(): _str_or_none(
+                vcap_service.get(cv.vcap_key, None)
+                if vcap_service and cv.vcap_key
+                else None
+            ),
+        ),
     ]
 
     credentials = resolve_credentials(sources, credential_values)
 
     # Use cert_url as auth_url if present (VCAP provides cert_url for certificate auth)
-    if 'cert_url' in credentials:
-        credentials['auth_url'] = credentials.pop('cert_url')
+    if "cert_url" in credentials:
+        credentials["auth_url"] = credentials.pop("cert_url")
 
     if validate:
         validate_credentials(credentials)
 
     resource_group = resolve_resource_group(sources)
     if resource_group:
-        credentials['resource_group'] = resource_group
+        credentials["resource_group"] = resource_group
 
     return credentials

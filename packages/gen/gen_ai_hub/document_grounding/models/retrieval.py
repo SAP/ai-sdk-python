@@ -13,11 +13,13 @@ Model categories:
 The Retrieval API supports semantic search combined with metadata filtering
 for precise content retrieval across multiple repository types.
 """
+
 from typing import List, Optional, Union, Literal
 from pydantic import BaseModel, Field
 
 
 # --- Common Key/Value models ---
+
 
 class RetrievalKeyValueListPair(BaseModel):
     key: str
@@ -28,7 +30,6 @@ class RetrievalDocumentKeyValueListPair(RetrievalKeyValueListPair):
     matchMode: Optional[str]
 
 
-
 class RetrievalSearchDocumentKeyValueListPair(BaseModel):
     key: str
     value: List[str]
@@ -36,6 +37,7 @@ class RetrievalSearchDocumentKeyValueListPair(BaseModel):
 
 
 # --- Retrieval Chunk and Document models ---
+
 
 class RetrievalChunk(BaseModel):
     id: str
@@ -45,16 +47,15 @@ class RetrievalChunk(BaseModel):
 
 class RetrievalDocument(BaseModel):
     id: str
-    metadata: Optional[List[RetrievalDocumentKeyValueListPair]] = Field(default_factory=list)
+    metadata: Optional[List[RetrievalDocumentKeyValueListPair]] = Field(
+        default_factory=list
+    )
     chunks: List[RetrievalChunk]
 
 
 # --- Data Repository models ---
 
-DataRepositoryType = Union[
-    Literal["vector", "help.sap.com"],
-    str
-]
+DataRepositoryType = Union[Literal["vector", "help.sap.com"], str]
 
 
 class DataRepository(BaseModel):
@@ -73,6 +74,7 @@ class DataRepositoryWithDocuments(BaseModel):
 
 # --- Retrieval Filter and Configuration models ---
 
+
 class RetrievalSearchConfiguration(BaseModel):
     maxChunkCount: Optional[int] = None
     maxDocumentCount: Optional[int] = None
@@ -80,15 +82,24 @@ class RetrievalSearchConfiguration(BaseModel):
 
 class RetrievalSearchFilter(BaseModel):
     id: str
-    dataRepositoryType:  DataRepositoryType
-    searchConfiguration: Optional[RetrievalSearchConfiguration] = Field(default_factory=RetrievalSearchConfiguration)
+    dataRepositoryType: DataRepositoryType
+    searchConfiguration: Optional[RetrievalSearchConfiguration] = Field(
+        default_factory=RetrievalSearchConfiguration
+    )
     dataRepositories: Optional[List[str]] = Field(default_factory=list)
-    dataRepositoryMetadata: Optional[List[RetrievalKeyValueListPair]] = Field(default_factory=list)
-    documentMetadata: Optional[List[RetrievalSearchDocumentKeyValueListPair]] = Field(default_factory=list)
-    chunkMetadata: Optional[List[RetrievalKeyValueListPair]] = Field(default_factory=list)
+    dataRepositoryMetadata: Optional[List[RetrievalKeyValueListPair]] = Field(
+        default_factory=list
+    )
+    documentMetadata: Optional[List[RetrievalSearchDocumentKeyValueListPair]] = Field(
+        default_factory=list
+    )
+    chunkMetadata: Optional[List[RetrievalKeyValueListPair]] = Field(
+        default_factory=list
+    )
 
 
 # --- Retrieval Search Input and Results ---
+
 
 class RetrievalSearchInput(BaseModel):
     query: str
@@ -114,12 +125,14 @@ class RetrievalPerFilterSearchResultWithError(BaseModel):
 
 
 class RetrievalSearchResults(BaseModel):
-    results: List[Union[RetrievalPerFilterSearchResult, RetrievalPerFilterSearchResultWithError]]
+    results: List[
+        Union[RetrievalPerFilterSearchResult, RetrievalPerFilterSearchResultWithError]
+    ]
 
 
 # --- List & Single Repository responses ---
 
+
 class DataRepositories(BaseModel):
     count: Optional[int] = None
     resources: List[DataRepository]
-

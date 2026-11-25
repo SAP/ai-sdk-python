@@ -79,7 +79,9 @@ def create_documents(collection_id: str):
                     chunks=[
                         TextOnlyBaseChunk(
                             content="SAP BTP provides cloud-native platform services for building enterprise applications.",
-                            metadata=[VectorKeyValueListPair(key="language", value=["en"])],
+                            metadata=[
+                                VectorKeyValueListPair(key="language", value=["en"])
+                            ],
                         )
                     ],
                     metadata=[VectorKeyValueListPair(key="topic", value=["BTP"])],
@@ -88,7 +90,9 @@ def create_documents(collection_id: str):
                     chunks=[
                         TextOnlyBaseChunk(
                             content="HANA Vector Store enables semantic search over large document collections using embeddings.",
-                            metadata=[VectorKeyValueListPair(key="language", value=["en"])],
+                            metadata=[
+                                VectorKeyValueListPair(key="language", value=["en"])
+                            ],
                         )
                     ],
                     metadata=[VectorKeyValueListPair(key="topic", value=["HANA"])],

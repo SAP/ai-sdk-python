@@ -86,7 +86,9 @@ class BatchListResponse(ResponseBaseModel):
     """
 
     count: Optional[int] = Field(None, description="Total number of batch jobs")
-    resources: Optional[list[BatchSummary]] = Field(None, description="List of batch job summaries")
+    resources: Optional[list[BatchSummary]] = Field(
+        None, description="List of batch job summaries"
+    )
 
 
 class BatchStatusDetail(ResponseBaseModel):
@@ -104,8 +106,12 @@ class BatchStatusDetail(ResponseBaseModel):
 
     current_status: Optional[str] = Field(None, description="Current job status")
     target_status: Optional[str] = Field(None, description="Target terminal status")
-    updated_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last status update")
-    message: Optional[str] = Field(None, description="Optional human-readable status message")
+    updated_at: Optional[str] = Field(
+        None, description="ISO 8601 timestamp of last status update"
+    )
+    message: Optional[str] = Field(
+        None, description="Optional human-readable status message"
+    )
 
 
 class BatchInputDetail(ResponseBaseModel):
@@ -156,9 +162,13 @@ class BatchDetailResponse(ResponseBaseModel):
     provider: Optional[str] = Field(None, description="LLM provider name")
     created_at: Optional[str] = Field(None, description="ISO 8601 creation timestamp")
     input: Optional[BatchInputDetail] = Field(None, description="Input configuration")
-    output: Optional[BatchOutputDetail] = Field(None, description="Output configuration")
+    output: Optional[BatchOutputDetail] = Field(
+        None, description="Output configuration"
+    )
     spec: Optional[dict] = Field(None, description="Batch job specification")
-    status: Optional[BatchStatusDetail] = Field(None, description="Current status details")
+    status: Optional[BatchStatusDetail] = Field(
+        None, description="Current status details"
+    )
 
 
 class BatchStatusResponse(ResponseBaseModel):
@@ -176,8 +186,12 @@ class BatchStatusResponse(ResponseBaseModel):
 
     current_status: Optional[str] = Field(None, description="Current job status")
     target_status: Optional[str] = Field(None, description="Target terminal status")
-    updated_at: Optional[str] = Field(None, description="ISO 8601 timestamp of last status update")
-    message: Optional[str] = Field(None, description="Optional human-readable status message")
+    updated_at: Optional[str] = Field(
+        None, description="ISO 8601 timestamp of last status update"
+    )
+    message: Optional[str] = Field(
+        None, description="Optional human-readable status message"
+    )
 
 
 class BatchCancelResponse(ResponseBaseModel):
@@ -196,7 +210,9 @@ class BatchCancelResponse(ResponseBaseModel):
 
     id: Optional[str] = Field(None, description="Unique identifier of the batch job")
     created_at: Optional[str] = Field(None, description="ISO 8601 creation timestamp")
-    message: Optional[str] = Field(None, description="Human-readable confirmation message")
+    message: Optional[str] = Field(
+        None, description="Human-readable confirmation message"
+    )
 
 
 class BatchDeleteResponse(ResponseBaseModel):
@@ -215,7 +231,9 @@ class BatchDeleteResponse(ResponseBaseModel):
 
     id: Optional[str] = Field(None, description="Unique identifier of the batch job")
     created_at: Optional[str] = Field(None, description="ISO 8601 creation timestamp")
-    message: Optional[str] = Field(None, description="Human-readable confirmation message")
+    message: Optional[str] = Field(
+        None, description="Human-readable confirmation message"
+    )
 
 
 class ErrorResponse(ResponseBaseModel):

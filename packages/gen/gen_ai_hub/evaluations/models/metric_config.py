@@ -20,6 +20,7 @@ class MetricRef:
         self.version = version
         self.id = id
 
+
 class MetricConfig:
     """
     Defines the metric config of the evaluation flow
@@ -29,12 +30,9 @@ class MetricConfig:
         variable_mapping(Optional[dict]): Any variable maping associated with the metric
     """
 
-    def __init__(
-        self,
-        reference: MetricRef,
-        variable_mapping: dict = None,
-    ):
+    def __init__(self, reference: MetricRef, variable_mapping: dict = None):
         self.reference = reference
         self.variable_mapping = variable_mapping
+
 
 __all__ = ["MetricRef", "MetricConfig"]

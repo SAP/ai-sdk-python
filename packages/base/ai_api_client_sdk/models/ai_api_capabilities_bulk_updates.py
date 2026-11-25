@@ -10,6 +10,7 @@ class AIAPICapabilitiesBulkUpdates:
     :type executions: bool, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, executions: bool = False, deployments: bool = False, **kwargs):
         self.executions: bool = executions
         self.deployments: bool = deployments

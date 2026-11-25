@@ -26,9 +26,7 @@ class TestArtifactSource(unittest.TestCase):
         )
 
         src = ArtifactSource(
-            file_type="csv",
-            artifact=artifact_obj,
-            path="folder/data.csv",
+            file_type="csv", artifact=artifact_obj, path="folder/data.csv"
         )
 
         self.assertIs(src.artifact, artifact_obj)
@@ -39,9 +37,7 @@ class TestArtifactSource(unittest.TestCase):
         artifact_id = "xyz789"
 
         src = ArtifactSource(
-            file_type="json",
-            artifact=artifact_id,
-            path="data/sample.json",
+            file_type="json", artifact=artifact_id, path="data/sample.json"
         )
 
         self.assertEqual(src.artifact, artifact_id)
@@ -51,28 +47,19 @@ class TestArtifactSource(unittest.TestCase):
     def test_artifact_source_without_path(self):
         artifact_id = "id-no-path"
 
-        src = ArtifactSource(
-            file_type="jsonl",
-            artifact=artifact_id,
-            path=None,
-        )
+        src = ArtifactSource(file_type="jsonl", artifact=artifact_id, path=None)
 
         self.assertEqual(src.artifact, artifact_id)
         self.assertIsNone(src.path)
         self.assertEqual(src.file_type, "jsonl")
 
     def test_artifact_source_invalid_file_type_is_accepted(self):
-        src = ArtifactSource(
-            file_type="txt",
-            artifact="abc",
-            path="data/file.txt",
-        )
+        src = ArtifactSource(file_type="txt", artifact="abc", path="data/file.txt")
 
         self.assertEqual(src.file_type, "txt")
 
 
 class TestDataset(unittest.TestCase):
-
     def test_dataset_with_path_string_json(self):
         ds = Dataset("data/sample.json")
         self.assertEqual(ds.file_type, "json")
@@ -91,9 +78,7 @@ class TestDataset(unittest.TestCase):
 
     def test_dataset_with_artifact_source_uses_file_type(self):
         artifact_src = ArtifactSource(
-            file_type="csv",
-            artifact="abc-123",
-            path="dataset/data.csv",
+            file_type="csv", artifact="abc-123", path="dataset/data.csv"
         )
 
         ds = Dataset(artifact_src)
@@ -103,7 +88,6 @@ class TestDataset(unittest.TestCase):
 
 
 class TestEvaluationConfig(unittest.TestCase):
-
     def setUp(self):
         self.dataset = Dataset("data/sample.json")
         self.metrics = [MetricConfig(reference=MetricRef(name="bert-score"))]
@@ -115,7 +99,7 @@ class TestEvaluationConfig(unittest.TestCase):
             dataset_config=self.dataset,
             metrics=self.metrics,
             llm=llm,
-            template="Write a caption about {{?topic}}"
+            template="Write a caption about {{?topic}}",
         )
 
         self.assertIs(cfg.llm, llm)
@@ -127,10 +111,7 @@ class TestEvaluationConfig(unittest.TestCase):
         t_ref = TemplateRef(template_ref=TemplateRefByID(id="abc123"))
 
         cfg = EvaluationConfig(
-            dataset_config=self.dataset,
-            metrics=self.metrics,
-            llm=llm,
-            template=t_ref
+            dataset_config=self.dataset, metrics=self.metrics, llm=llm, template=t_ref
         )
 
         self.assertIs(cfg.llm, llm)
@@ -139,8 +120,7 @@ class TestEvaluationConfig(unittest.TestCase):
 
     def test_initialization_with_llm_and_template_spec(self):
         template_spec = PromptTemplateSpec(
-            template=[{"role": "user", "content": "Explain {{?concept}}"}],
-            defaults={}
+            template=[{"role": "user", "content": "Explain {{?concept}}"}], defaults={}
         )
 
         cfg = EvaluationConfig(
@@ -148,7 +128,7 @@ class TestEvaluationConfig(unittest.TestCase):
             metrics=self.metrics,
             llm=LLM(name="gpt-test"),
             template=template_spec,
-            template_variable_mapping={"concept": "topic"}
+            template_variable_mapping={"concept": "topic"},
         )
 
         self.assertIs(cfg.template, template_spec)
@@ -158,12 +138,11 @@ class TestEvaluationConfig(unittest.TestCase):
         cfg = EvaluationConfig(
             dataset_config=self.dataset,
             metrics=self.metrics,
-            orchestration_registry_reference="a1b2c3d4-1234-5678-9999-abcdefabcdef"
+            orchestration_registry_reference="a1b2c3d4-1234-5678-9999-abcdefabcdef",
         )
 
         self.assertEqual(
-            cfg.orchestration_registry_reference,
-            "a1b2c3d4-1234-5678-9999-abcdefabcdef"
+            cfg.orchestration_registry_reference, "a1b2c3d4-1234-5678-9999-abcdefabcdef"
         )
         self.assertIsNone(cfg.llm)
         self.assertIsNone(cfg.template)
@@ -176,7 +155,7 @@ class TestEvaluationConfig(unittest.TestCase):
             test_row_count=50,
             repetitions=3,
             tags={"team": "ai-core"},
-            debug_mode=True
+            debug_mode=True,
         )
 
         self.assertEqual(cfg.test_row_count, 50)

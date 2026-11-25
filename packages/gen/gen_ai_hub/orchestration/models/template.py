@@ -5,7 +5,7 @@ from gen_ai_hub.orchestration.models.message import Message
 from gen_ai_hub.orchestration.models.response_format import (
     ResponseFormatType,
     ResponseFormatJsonSchema,
-    ResponseFormatFactory
+    ResponseFormatFactory,
 )
 from gen_ai_hub.orchestration.models.tools import ChatCompletionTool
 
@@ -24,6 +24,7 @@ class TemplateValue(NamedTuple):
     value: Union[str, int, float]
     """The actual value to be used in substitution."""
 
+
 class Template(JSONSerializable):
     """
     Represents a configurable template for generating prompts or conversations.
@@ -34,11 +35,13 @@ class Template(JSONSerializable):
         messages: List[Message],
         defaults: Optional[List[TemplateValue]] = None,
         tools: Optional[List[Union[dict, ChatCompletionTool]]] = None,
-        response_format: Optional[Union[
-            ResponseFormatType.TEXT,
-            ResponseFormatType.JSON_OBJECT,
-            ResponseFormatJsonSchema
-        ]] = None,
+        response_format: Optional[
+            Union[
+                ResponseFormatType.TEXT,
+                ResponseFormatType.JSON_OBJECT,
+                ResponseFormatJsonSchema,
+            ]
+        ] = None,
     ):
         """Initializes a Template instance.
 
@@ -49,7 +52,7 @@ class Template(JSONSerializable):
         :param tools: list of tool definitions, defaults to None
         :type tools: Optional[List[Union[dict, ChatCompletionTool]]], optional
         :param response_format: response format that the model output should adhere to, defaults to None
-        :type response_format: Optional[Union[ ResponseFormatType.TEXT, 
+        :type response_format: Optional[Union[ ResponseFormatType.TEXT,
             ResponseFormatType.JSON_OBJECT, ResponseFormatJsonSchema ]], optional
         """
         self.messages = messages

@@ -12,6 +12,7 @@ class DockerRegistrySecretQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[DockerRegistrySecret], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -26,5 +27,7 @@ class DockerRegistrySecretQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.docker_registry_secret_query_response.DockerRegistrySecretQueryResponse`
         """
-        response_dict['resources'] = [DockerRegistrySecret.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            DockerRegistrySecret.from_dict(r) for r in response_dict["resources"]
+        ]
         return DockerRegistrySecretQueryResponse(**response_dict)

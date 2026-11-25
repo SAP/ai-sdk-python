@@ -18,8 +18,16 @@ class Version:
     :type description: str, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, id: str, scenario_id: str, created_at: datetime, modified_at: datetime, description: str = None,
-                 **kwargs):
+
+    def __init__(
+        self,
+        id: str,
+        scenario_id: str,
+        created_at: datetime,
+        modified_at: datetime,
+        description: str = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.scenario_id: str = scenario_id
         self.description: str = description
@@ -39,6 +47,6 @@ class Version:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.version.Version`
         """
-        version_dict['created_at'] = parse_datetime(version_dict['created_at'])
-        version_dict['modified_at'] = parse_datetime(version_dict['modified_at'])
+        version_dict["created_at"] = parse_datetime(version_dict["created_at"])
+        version_dict["modified_at"] = parse_datetime(version_dict["modified_at"])
         return Version(**version_dict)

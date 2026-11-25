@@ -1,19 +1,21 @@
 import unittest
 
 from gen_ai_hub.orchestration.models.data_masking import DataMasking
-from gen_ai_hub.orchestration.models.sap_data_privacy_integration import SAPDataPrivacyIntegration, MaskingMethod, \
-    ProfileEntity
+from gen_ai_hub.orchestration.models.sap_data_privacy_integration import (
+    SAPDataPrivacyIntegration,
+    MaskingMethod,
+    ProfileEntity,
+)
 
 
 class TestDataMasking(unittest.TestCase):
-
     def test_sap_data_privacy_integration(self):
         data_masking = DataMasking(
             providers=[
                 SAPDataPrivacyIntegration(
                     method=MaskingMethod.PSEUDONYMIZATION,
                     entities=[ProfileEntity.EMAIL],
-                    allowlist=["SAP"]
+                    allowlist=["SAP"],
                 )
             ]
         )
@@ -23,15 +25,9 @@ class TestDataMasking(unittest.TestCase):
                 {
                     "type": "sap_data_privacy_integration",
                     "method": "pseudonymization",
-                    "entities": [
-                        {
-                            "type": "profile-email"
-                        }
-                    ],
+                    "entities": [{"type": "profile-email"}],
                     "allowlist": ["SAP"],
-                    "mask_grounding_input": {
-                        "enabled": False
-                    }
+                    "mask_grounding_input": {"enabled": False},
                 }
             ]
         }

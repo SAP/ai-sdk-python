@@ -28,18 +28,24 @@ AICORE_RESOURCE_GROUP = "AICORE_RESOURCE_GROUP"
 class BatchServiceTestBase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.proxy_client: GenAIHubProxyClient = get_proxy_client('gen-ai-hub')
+        cls.proxy_client: GenAIHubProxyClient = get_proxy_client("gen-ai-hub")
         cls.service = BatchService(proxy_client=cls.proxy_client)
-        cls.secret_name = 'batch-service-oss'
+        cls.secret_name = "batch-service-oss"
         cls.input_uri = f"ai://{cls.secret_name}/batch_service_test_data/requests.jsonl"
         cls.output_uri = f"ai://{cls.secret_name}/batch_service_test_data/output/"
         cls.provider = "azure-openai"
         cls.model = "gpt-4.1"
         cls.create_object_store_secret()
 
-    def wait_for_batch_to_be_deletable(self, batch_id: str, timeout=300, polling_interval=5):
+    def wait_for_batch_to_be_deletable(
+        self, batch_id: str, timeout=300, polling_interval=5
+    ):
         status = None
-        deletable_statuses = [BatchStatus.COMPLETED, BatchStatus.FAILED, BatchStatus.CANCELLED]
+        deletable_statuses = [
+            BatchStatus.COMPLETED,
+            BatchStatus.FAILED,
+            BatchStatus.CANCELLED,
+        ]
         while status not in deletable_statuses and timeout != 0:
             sleep(polling_interval)
             response = self.service.get_status(batch_id=batch_id)
@@ -65,7 +71,7 @@ class BatchServiceTestBase(unittest.TestCase):
             )
         except AIAPIServerException as e:
             if e.status_code == 409:
-                if 'already exists with different data' in e.error_message:
+                if "already exists with different data" in e.error_message:
                     cls.proxy_client.ai_core_client.object_store_secrets.modify(
                         name=cls.secret_name,
                         type="S3",
@@ -82,4 +88,3 @@ class BatchServiceTestBase(unittest.TestCase):
                 raise Exception(
                     f"Error while creating the Object Store secret. Request failed with error of {e}"
                 ) from e
-

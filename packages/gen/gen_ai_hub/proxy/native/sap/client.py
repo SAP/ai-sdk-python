@@ -7,6 +7,7 @@ from gen_ai_hub.proxy.native.sap.models import RPTResponse, RPTException, RPTReq
 
 PREDICTION_SUFFIX = "/predict"
 
+
 def _handle_http_error(error, response: httpx.Response):
 
     if not response.content:
@@ -16,10 +17,7 @@ def _handle_http_error(error, response: httpx.Response):
         error_detail = response.json().get("detail", None)
     except ValueError as exc:
         raise error from exc
-    raise RPTException(
-            status=error_status,
-            detail=error_detail,
-        ) from error
+    raise RPTException(status=error_status, detail=error_detail) from error
 
 
 class RPTClient:
@@ -39,9 +37,9 @@ class RPTClient:
     """
 
     def __init__(
-            self,
-            proxy_client: Optional[GenAIHubProxyClient] = None,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        proxy_client: Optional[GenAIHubProxyClient] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ):
         self.proxy_client = proxy_client or get_proxy_client(proxy_version="gen-ai-hub")
         self.timeout = timeout
@@ -62,10 +60,10 @@ class RPTClient:
         return request_timeout
 
     def _execute_request(
-            self,
-            body: RPTRequest,
-            api_url: str,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        body: RPTRequest,
+        api_url: str,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> RPTResponse:
         """
         Executes an HTTP POST request to a prediction API endpoint with the given
@@ -96,7 +94,7 @@ class RPTClient:
             api_url + PREDICTION_SUFFIX,
             headers=self.proxy_client.request_header,
             json=body.model_dump(),
-            timeout=self._determine_timeout(timeout)
+            timeout=self._determine_timeout(timeout),
         )
         try:
             response.raise_for_status()
@@ -107,10 +105,10 @@ class RPTClient:
         return RPTResponse(**data)
 
     async def _a_execute_request(
-            self,
-            body: RPTRequest,
-            api_url: str,
-            timeout: Union[int, float, httpx.Timeout, None] = None,
+        self,
+        body: RPTRequest,
+        api_url: str,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
     ) -> RPTResponse:
         """
         Asynchronously executes an HTTP POST request to a prediction API endpoint
@@ -141,7 +139,7 @@ class RPTClient:
             api_url + PREDICTION_SUFFIX,
             headers=self.proxy_client.request_header,
             json=body.model_dump(),
-            timeout=self._determine_timeout(timeout)
+            timeout=self._determine_timeout(timeout),
         )
         try:
             response.raise_for_status()
@@ -151,7 +149,12 @@ class RPTClient:
         data = response.json()
         return RPTResponse(**data)
 
-    def _get_url(self, model_name: Optional[str] = None, model_version: Optional[str] = None, **kwargs) -> str:
+    def _get_url(
+        self,
+        model_name: Optional[str] = None,
+        model_version: Optional[str] = None,
+        **kwargs,
+    ) -> str:
         """
         Builds a URL for the selected deployment based on the provided model
         name and/or deployment ID.
@@ -190,20 +193,31 @@ class RPTClient:
             return RPTRequest(**body)
         return body
 
-    def _validate_parameters(self, model_name: Optional[str] = None, model_version: Optional[str] = None,
-                             deployment_url: Optional[str] = None, **kwargs):
+    def _validate_parameters(
+        self,
+        model_name: Optional[str] = None,
+        model_version: Optional[str] = None,
+        deployment_url: Optional[str] = None,
+        **kwargs,
+    ):
         if not model_name and not deployment_url and not kwargs:
-            raise ValueError("Deployment URL or model_name or other deployment parameters must be provided.")
+            raise ValueError(
+                "Deployment URL or model_name or other deployment parameters must be provided."
+            )
         if model_version and not model_name:
-            raise ValueError("model_version can be provided only if model_name is provided.")
+            raise ValueError(
+                "model_version can be provided only if model_name is provided."
+            )
 
-    def predict(self,
-                body: Union[dict, RPTRequest],
-                deployment_url: Optional[str] = None,
-                model_name: Optional[str] = None,
-                model_version: Optional[str] = None,
-                timeout: Union[int, float, httpx.Timeout, None] = None,
-                **kwargs) -> RPTResponse:
+    def predict(
+        self,
+        body: Union[dict, RPTRequest],
+        deployment_url: Optional[str] = None,
+        model_name: Optional[str] = None,
+        model_version: Optional[str] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
+        **kwargs,
+    ) -> RPTResponse:
         """
         Executes a prediction request by sending the provided data and deployment parameters.
 
@@ -235,18 +249,23 @@ class RPTClient:
         """
         body = self._validate_request_body(body)
         self._validate_parameters(model_name, model_version, deployment_url, **kwargs)
-        return self._execute_request(body=body,
-                                     api_url = deployment_url if deployment_url else self._get_url(
-                                         model_name, model_version, **kwargs),
-                                     timeout=timeout)
+        return self._execute_request(
+            body=body,
+            api_url=deployment_url
+            if deployment_url
+            else self._get_url(model_name, model_version, **kwargs),
+            timeout=timeout,
+        )
 
-    async def apredict(self,
-                       body: Union[dict, RPTRequest],
-                       deployment_url: Optional[str] = None,
-                       model_name: Optional[str] = None,
-                       model_version: Optional[str] = None,
-                       timeout: Union[int, float, httpx.Timeout, None] = None,
-                       **kwargs) -> RPTResponse:
+    async def apredict(
+        self,
+        body: Union[dict, RPTRequest],
+        deployment_url: Optional[str] = None,
+        model_name: Optional[str] = None,
+        model_version: Optional[str] = None,
+        timeout: Union[int, float, httpx.Timeout, None] = None,
+        **kwargs,
+    ) -> RPTResponse:
         """
         Asynchronously executes a prediction request by sending the provided data and deployment parameters.
 
@@ -280,7 +299,10 @@ class RPTClient:
         """
         body = self._validate_request_body(body)
         self._validate_parameters(model_name, model_version, deployment_url, **kwargs)
-        return await self._a_execute_request(body=body,
-                                             api_url = deployment_url if deployment_url else self._get_url(
-                                                 model_name, model_version, **kwargs),
-                                             timeout=timeout)
+        return await self._a_execute_request(
+            body=body,
+            api_url=deployment_url
+            if deployment_url
+            else self._get_url(model_name, model_version, **kwargs),
+            timeout=timeout,
+        )

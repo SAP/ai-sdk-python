@@ -3,7 +3,9 @@ from typing import List
 from ai_api_client_sdk.models.base_models import BasicResponse
 from ai_api_client_sdk.models.label import Label
 from ai_api_client_sdk.models.resource_group import ResourceGroup
-from ai_api_client_sdk.models.resource_group_query_response import ResourceGroupQueryResponse
+from ai_api_client_sdk.models.resource_group_query_response import (
+    ResourceGroupQueryResponse,
+)
 from ai_api_client_sdk.resource_clients.base_client import BaseClient
 
 
@@ -12,9 +14,12 @@ class ResourceGroupsClient(BaseClient):
     It implements the base class
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
-    __PATH = '/admin/resourceGroups'
 
-    def create(self, resource_group_id: str, labels: List[Label] = None) -> ResourceGroup:
+    __PATH = "/admin/resourceGroups"
+
+    def create(
+        self, resource_group_id: str, labels: List[Label] = None
+    ) -> ResourceGroup:
         """Creates resource group for a given tenant.
 
         :param resource_group_id: the id of the resource group and the length must be between 3 and 10 characters.
@@ -30,14 +35,12 @@ class ResourceGroupsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_core_sdk.models.resource_group.ResourceGroup`
         """
-        body = {
-            'resourceGroupId': resource_group_id,
-        }
+        body = {"resourceGroupId": resource_group_id}
 
         if labels:
-            body['labels'] = [l.to_dict() for l in labels]
+            body["labels"] = [l.to_dict() for l in labels]
 
-        response_dict = self.rest_client.post(path=f'{self.__PATH}', body=body)
+        response_dict = self.rest_client.post(path=f"{self.__PATH}", body=body)
         return ResourceGroup.from_dict(response_dict)
 
     def delete(self, resource_group_id: str) -> BasicResponse:
@@ -58,7 +61,9 @@ class ResourceGroupsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'{self.__PATH}/{resource_group_id}')
+        response_dict = self.rest_client.delete(
+            path=f"{self.__PATH}/{resource_group_id}"
+        )
         return BasicResponse.from_dict(response_dict)
 
     def get(self, resource_group_id: str) -> ResourceGroup:
@@ -77,7 +82,7 @@ class ResourceGroupsClient(BaseClient):
         :return: An object representing the resource group from the server
         :rtype: class:`ai_core_sdk.models.resource_group.ResourceGroup`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{resource_group_id}')
+        response_dict = self.rest_client.get(path=f"{self.__PATH}/{resource_group_id}")
         return ResourceGroup.from_dict(response_dict)
 
     def modify(self, resource_group_id: str, labels: List[Label]) -> None:
@@ -98,13 +103,13 @@ class ResourceGroupsClient(BaseClient):
         :return: An object representing the response from the server
         """
 
-        body = {
-            'labels': [l.to_dict() for l in labels]
-        }
+        body = {"labels": [l.to_dict() for l in labels]}
 
-        self.rest_client.patch(path=f'{self.__PATH}/{resource_group_id}', body=body)
+        self.rest_client.patch(path=f"{self.__PATH}/{resource_group_id}", body=body)
 
-    def query(self, search: str = None, search_case_insensitive: bool = None) -> ResourceGroupQueryResponse:
+    def query(
+        self, search: str = None, search_case_insensitive: bool = None
+    ) -> ResourceGroupQueryResponse:
         """Get all resource groups.
 
         :param search: Generic search term to be looked for in various attributes of resource groups, defaults to None
@@ -120,6 +125,8 @@ class ResourceGroupsClient(BaseClient):
         :return: A list of resource groups for a given tenant.
         :rtype: class:`ai_core_sdk.models.resource_group_query_response.ResourceGroupQueryResponse`
         """
-        params = self._form_query_params(search=search, search_case_insensitive=search_case_insensitive)
-        response_dict = self.rest_client.get(path=f'{self.__PATH}', params=params)
+        params = self._form_query_params(
+            search=search, search_case_insensitive=search_case_insensitive
+        )
+        response_dict = self.rest_client.get(path=f"{self.__PATH}", params=params)
         return ResourceGroupQueryResponse.from_dict(response_dict)

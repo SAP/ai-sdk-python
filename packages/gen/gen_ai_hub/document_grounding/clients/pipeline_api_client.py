@@ -12,6 +12,7 @@ Supported data repositories:
 
 API Reference: https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Pipelines
 """
+
 import humps
 import requests
 from typing import Optional
@@ -37,7 +38,8 @@ from ..models.pipeline import (
 
 # Constants
 PATH_DOCUMENT_GROUNDING = "/lm/document-grounding/pipelines"
-PATH_DOCUMENT_GROUNDING_PIPELINES = PATH_DOCUMENT_GROUNDING # PATH_DOCUMENT_GROUNDING is kept for backward compatibility
+PATH_DOCUMENT_GROUNDING_PIPELINES = PATH_DOCUMENT_GROUNDING  # PATH_DOCUMENT_GROUNDING is kept for backward compatibility
+
 
 class PipelineAPIClient:
     """The Pipelines API creates and manages vector stores based on documents from user data repositories:
@@ -46,27 +48,24 @@ class PipelineAPIClient:
 
     - Fetches documents from a supported data source
 
-    - Preprocesses and chunks the document content, and generates semantic embeddings. 
+    - Preprocesses and chunks the document content, and generates semantic embeddings.
       Semantic embeddings are multidimensional representations of textual information.
-    
+
     - Stores semantic embeddings into the HANA Vector Store
 
-    
+
     The Pipeline API is compatible with the following data repositories:
-    
+
     - Microsoft SharePoint
-    
+
     - AWS S3
-    
+
     - SFTP
-    
+
     See https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Pipelines
     """
 
-    def __init__(
-            self,
-            proxy_client: Optional[GenAIHubProxyClient] = None,
-    ):
+    def __init__(self, proxy_client: Optional[GenAIHubProxyClient] = None):
         """Initializes the PipelineAPIClient
 
         :param proxy_client: proxy client to use for requests, defaults to None
@@ -77,7 +76,9 @@ class PipelineAPIClient:
         self.rest_client = GenAIHubRestClient(self.proxy_client)
         self.path = PATH_DOCUMENT_GROUNDING
 
-    def create_pipeline(self, pipeline_request: CreatePipelineRequest) -> PipelineIdResponse:
+    def create_pipeline(
+        self, pipeline_request: CreatePipelineRequest
+    ) -> PipelineIdResponse:
         """Create a document vectorization pipeline
 
         :param pipeline_request: The object containing the pipeline configuration.
@@ -86,12 +87,20 @@ class PipelineAPIClient:
         :rtype: PipelineIdResponse
         """
 
-        response = self.rest_client.post(path=self.path, body=pipeline_request.model_dump(exclude_none=True))
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = self.rest_client.post(
+            path=self.path, body=pipeline_request.model_dump(exclude_none=True)
+        )
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return PipelineIdResponse(**response)
 
-    def get_pipelines(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) \
-            -> GetPipelinesResponse:
+    def get_pipelines(
+        self,
+        top: Optional[int] = None,
+        skip: Optional[int] = None,
+        count: Optional[bool] = None,
+    ) -> GetPipelinesResponse:
         """Get all pipelines.
 
         :return: Get all pipelines
@@ -100,11 +109,11 @@ class PipelineAPIClient:
 
         params = {}
         if top is not None:
-            params['$top'] = top
+            params["$top"] = top
         if skip is not None:
-            params['$skip'] = skip
+            params["$skip"] = skip
         if count is not None:
-            params['$count'] = count
+            params["$count"] = count
         response = self.rest_client.get(path=self.path, params=params)
         return GetPipelinesResponse(**response)
 
@@ -130,7 +139,9 @@ class PipelineAPIClient:
         """
 
         response = self.rest_client.delete(path=f"{self.path}/{pipeline_id}")
-        if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
+        if (
+            response == ""
+        ):  # rest_client (ai api sdk) returns empty string for 204 No Content
             response = requests.Response()
             response.status_code = 204
         return response
@@ -145,7 +156,9 @@ class PipelineAPIClient:
         """
 
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/status")
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return GetPipelineStatusResponse(**response)
 
     def search_pipelines(self, body: SearchPipelineRequest) -> SearchPipelinesResponse:
@@ -157,7 +170,9 @@ class PipelineAPIClient:
         :rtype: SearchPipelinesResponse
         """
 
-        response = self.rest_client.post(path=f"{self.path}/search", body=body.model_dump(exclude_none=True))
+        response = self.rest_client.post(
+            path=f"{self.path}/search", body=body.model_dump(exclude_none=True)
+        )
         response = humps.camelize(response)
         return SearchPipelinesResponse(**response)
 
@@ -195,11 +210,15 @@ class PipelineAPIClient:
             params["$skip"] = skip
         if count is not None:
             params["$count"] = count
-        response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/executions", params=params)
+        response = self.rest_client.get(
+            path=f"{self.path}/{pipeline_id}/executions", params=params
+        )
         response = humps.camelize(response)
         return GetPipelineExecutionsResponse(**response)
 
-    def get_pipeline_execution_by_id(self, pipeline_id: str, execution_id: str) -> PipelineExecution:
+    def get_pipeline_execution_by_id(
+        self, pipeline_id: str, execution_id: str
+    ) -> PipelineExecution:
         """Get Pipeline Execution by ID
 
         :param pipeline_id: Pipeline ID
@@ -210,7 +229,9 @@ class PipelineAPIClient:
         :rtype: PipelineExecution
         """
 
-        response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/executions/{execution_id}")
+        response = self.rest_client.get(
+            path=f"{self.path}/{pipeline_id}/executions/{execution_id}"
+        )
         response = humps.camelize(response)
         return PipelineExecution(**response)
 
@@ -253,8 +274,9 @@ class PipelineAPIClient:
         response = humps.camelize(response)
         return DocumentsStatusResponse(**response)
 
-    def get_execution_document_by_id(self, pipeline_id: str, execution_id: str, document_id: str) -> \
-            Document:
+    def get_execution_document_by_id(
+        self, pipeline_id: str, execution_id: str, document_id: str
+    ) -> Document:
         """Get Document by ID for a Pipeline Execution
 
         :return: Document for the Pipeline Execution
@@ -295,11 +317,15 @@ class PipelineAPIClient:
             params["$skip"] = skip
         if count is not None:
             params["$count"] = count
-        response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/documents", params=params)
+        response = self.rest_client.get(
+            path=f"{self.path}/{pipeline_id}/documents", params=params
+        )
         response = humps.camelize(response)
         return DocumentsStatusResponse(**response)
 
-    def get_pipeline_document_by_id(self, pipeline_id: str, document_id: str) -> Document:
+    def get_pipeline_document_by_id(
+        self, pipeline_id: str, document_id: str
+    ) -> Document:
         """Get Document by ID for a Pipeline
 
         :param pipeline_id: Pipeline ID
@@ -310,7 +336,9 @@ class PipelineAPIClient:
         :rtype: Document
         """
 
-        response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/documents/{document_id}")
+        response = self.rest_client.get(
+            path=f"{self.path}/{pipeline_id}/documents/{document_id}"
+        )
         response = humps.camelize(response)
         return Document(**response)
 
@@ -323,8 +351,12 @@ class PipelineAPIClient:
         :rtype: requests.Response
         """
 
-        response = self.rest_client.post(path=f"{self.path}/trigger", body=request.model_dump(exclude_none=True))
-        if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
+        response = self.rest_client.post(
+            path=f"{self.path}/trigger", body=request.model_dump(exclude_none=True)
+        )
+        if (
+            response == ""
+        ):  # rest_client (ai api sdk) returns empty string for 204 No Content
             response = requests.Response()
             response.status_code = 202
         return response

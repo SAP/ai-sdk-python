@@ -29,14 +29,13 @@ from tests.mock import (
     batch_delete_mocker,
     batch_not_found_mocker,
     batch_create_error_mocker,
-    get_mocked_ai_core_client
+    get_mocked_ai_core_client,
 )
 
 
 class TestBatchService(unittest.TestCase):
-
     def setUp(self):
-        self.proxy_client = get_mocked_ai_core_client(client_id='test')
+        self.proxy_client = get_mocked_ai_core_client(client_id="test")
         self.client = BatchService(proxy_client=self.proxy_client)
 
     def test_create_returns_create_response(self):
@@ -76,8 +75,10 @@ class TestBatchService(unittest.TestCase):
         self.assertEqual(payload["spec"]["model"], "gpt-4.1-mini")
 
     def test_with_resource_group_header(self):
-        test_resource_group = 'test-resource-group'
-        client = BatchService(proxy_client=self.proxy_client, resource_group=test_resource_group)
+        test_resource_group = "test-resource-group"
+        client = BatchService(
+            proxy_client=self.proxy_client, resource_group=test_resource_group
+        )
         captured_headers = {}
 
         def capture_post(url, **kwargs):
@@ -96,7 +97,7 @@ class TestBatchService(unittest.TestCase):
         self.assertEqual(captured_headers.get("AI-Resource-Group"), test_resource_group)
 
     def test_create_raises_batch_service_error_on_400(self):
-        
+
         with batch_create_error_mocker():
             with self.assertRaises(BatchServiceError) as ctx:
                 self.client.create(
@@ -110,7 +111,7 @@ class TestBatchService(unittest.TestCase):
         self.assertIn("not found", ctx.exception.message.lower())
 
     def test_list_returns_list_response(self):
-        
+
         with batch_list_mocker():
             resp = self.client.list()
         self.assertIsInstance(resp, BatchListResponse)
@@ -119,7 +120,7 @@ class TestBatchService(unittest.TestCase):
         self.assertEqual(resp.resources[0].id, BATCH_ID)
 
     def test_get_returns_detail_response(self):
-        
+
         with batch_get_mocker():
             resp = self.client.get(BATCH_ID)
         self.assertIsInstance(resp, BatchDetailResponse)
@@ -128,7 +129,7 @@ class TestBatchService(unittest.TestCase):
         self.assertEqual(resp.input.uri, "ai://my-store/input/batch-input.jsonl")
 
     def test_get_raises_on_404(self):
-        
+
         with batch_not_found_mocker():
             with self.assertRaises(BatchServiceError) as ctx:
                 self.client.get(BATCH_ID)
@@ -136,7 +137,7 @@ class TestBatchService(unittest.TestCase):
         self.assertIn("not found", ctx.exception.message.lower())
 
     def test_get_status_returns_status_response(self):
-        
+
         with batch_status_mocker():
             resp = self.client.get_status(BATCH_ID)
         self.assertIsInstance(resp, BatchStatusResponse)
@@ -145,7 +146,7 @@ class TestBatchService(unittest.TestCase):
         self.assertIsNone(resp.message)
 
     def test_cancel_returns_cancel_response(self):
-        
+
         with batch_cancel_mocker():
             resp = self.client.cancel(BATCH_ID)
         self.assertIsInstance(resp, BatchCancelResponse)
@@ -153,7 +154,7 @@ class TestBatchService(unittest.TestCase):
         self.assertIn("cancellation", resp.message.lower())
 
     def test_delete_returns_delete_response(self):
-        
+
         with batch_delete_mocker():
             resp = self.client.delete(BATCH_ID)
         self.assertIsInstance(resp, BatchDeleteResponse)
@@ -161,7 +162,7 @@ class TestBatchService(unittest.TestCase):
         self.assertIn("deleted", resp.message.lower())
 
     def test_timeout_priority_no_timeout_set(self):
-        
+
         captured = {}
 
         def capture_post(url, **kwargs):
@@ -169,7 +170,13 @@ class TestBatchService(unittest.TestCase):
             return Response(202, json=CREATE_RESPONSE)
 
         with patch.object(self.client.client, "post", side_effect=capture_post):
-            self.client.create(type="llm-native", input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
+            self.client.create(
+                type="llm-native",
+                input_uri="ai://x",
+                output_uri="ai://y",
+                provider="p",
+                model="m",
+            )
 
         self.assertEqual(captured["timeout"], httpx.USE_CLIENT_DEFAULT)
 
@@ -182,7 +189,13 @@ class TestBatchService(unittest.TestCase):
             return Response(202, json=CREATE_RESPONSE)
 
         with patch.object(client.client, "post", side_effect=capture_post):
-            client.create(type="llm-native", input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
+            client.create(
+                type="llm-native",
+                input_uri="ai://x",
+                output_uri="ai://y",
+                provider="p",
+                model="m",
+            )
 
         self.assertEqual(captured["timeout"], 99.0)
 
@@ -195,22 +208,35 @@ class TestBatchService(unittest.TestCase):
             return Response(202, json=CREATE_RESPONSE)
 
         with patch.object(client.client, "post", side_effect=capture_post):
-            client.create(type="llm-native", input_uri="ai://x", output_uri="ai://y", provider="p", model="m", timeout=77.0)
+            client.create(
+                type="llm-native",
+                input_uri="ai://x",
+                output_uri="ai://y",
+                provider="p",
+                model="m",
+                timeout=77.0,
+            )
 
         self.assertEqual(captured["timeout"], 77.0)
 
     def test_http_client_is_reused_across_requests(self):
-        
+
         original_client = self.client.client
         with batch_create_mocker():
-            self.client.create(type="llm-native", input_uri="ai://x", output_uri="ai://y", provider="p", model="m")
+            self.client.create(
+                type="llm-native",
+                input_uri="ai://x",
+                output_uri="ai://y",
+                provider="p",
+                model="m",
+            )
         with batch_list_mocker():
             self.client.list()
         self.assertIs(self.client.client, original_client)
         self.assertFalse(original_client.is_closed)
 
     def test_close_http_connection(self):
-        
+
         client_ref = self.client.client
         self.client.close_http_connection()
         self.assertTrue(client_ref.is_closed)

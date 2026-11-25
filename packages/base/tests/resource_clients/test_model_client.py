@@ -41,7 +41,7 @@ class TestModelClient(ResourceClientTestBase):
                 "accessType": "public",
                 "provider": "MistralAI",
                 "allowedScenarios": [
-                    {"scenarioId": "scenario1", "executableId": "exec1"},
+                    {"scenarioId": "scenario1", "executableId": "exec1"}
                 ],
             }
         )
@@ -64,8 +64,7 @@ class TestModelClient(ResourceClientTestBase):
         ec = ModelClient(rest_client_mock)
         eqr = ec.query()
         rest_client_mock.get.assert_called_with(
-            path="/scenarios/foundation-models/models",
-            resource_group=None,
+            path="/scenarios/foundation-models/models", resource_group=None
         )
         self.assert_object_lists(
             copy.deepcopy(model_dicts),

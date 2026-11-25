@@ -17,23 +17,19 @@ class BaseDeployment(BaseModel, ABC):
     :return: the abstract base class for deployments.
     :rtype: BaseDeployment
     """
-    model_config = ConfigDict(
-        protected_namespaces=()
-    )
+
+    model_config = ConfigDict(protected_namespaces=())
 
     @abstractmethod
-    def additional_request_body_kwargs(self) -> Dict[str, Any]:
-        ...
+    def additional_request_body_kwargs(self) -> Dict[str, Any]: ...
 
     @property
     @abstractmethod
-    def prediction_url(self) -> Tuple[str]:
-        ...
+    def prediction_url(self) -> Tuple[str]: ...
 
     @classmethod
     @abstractmethod
-    def get_model_identification_kwargs(cls) -> Tuple[str]:
-        ...
+    def get_model_identification_kwargs(cls) -> Tuple[str]: ...
 
     @classmethod
     def get_main_model_identification_kwargs(cls) -> str:
@@ -48,6 +44,7 @@ class InstanceCacheMeta(type):
     :return: the metaclass that caches instances.
     :rtype: InstanceCacheMeta
     """
+
     _instances = {}
 
     def clear_cache(cls):
@@ -70,9 +67,8 @@ class CombinedMeta(InstanceCacheMeta, ModelMetaclass):
 
 class BaseProxyClient(ABC, BaseModel, metaclass=CombinedMeta):
     """Abstract base class for all proxy clients."""
-    model_config = ConfigDict(
-        protected_namespaces=()
-    )
+
+    model_config = ConfigDict(protected_namespaces=())
 
     @classmethod
     def refresh_instance_cache(cls):
@@ -81,19 +77,15 @@ class BaseProxyClient(ABC, BaseModel, metaclass=CombinedMeta):
 
     @property
     @abstractmethod
-    def request_header(self) -> Dict[str, Any]:
-        ...
+    def request_header(self) -> Dict[str, Any]: ...
 
     @property
     @abstractmethod
-    def deployments(self) -> Dict[str, Any]:
-        ...
+    def deployments(self) -> Dict[str, Any]: ...
 
     @property
     @abstractmethod
-    def deployment_class(self) -> Type[BaseDeployment]:
-        ...
+    def deployment_class(self) -> Type[BaseDeployment]: ...
 
     @abstractmethod
-    def select_deployment(self, **kwargs) -> BaseDeployment:
-        ...
+    def select_deployment(self, **kwargs) -> BaseDeployment: ...

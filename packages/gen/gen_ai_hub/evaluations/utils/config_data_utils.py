@@ -18,9 +18,7 @@ from gen_ai_hub.evaluations.utils.aicore_utils import (
     fetch_orchestration_config_from_registry,
     generate_random_id,
 )
-from gen_ai_hub.evaluations.utils.file_utils import (
-    load_config_file,
-)
+from gen_ai_hub.evaluations.utils.file_utils import load_config_file
 from gen_ai_hub.evaluations.utils.gen_utils import resolve_orchestration_config_v2
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubProxyClient
 from gen_ai_hub.prompt_registry.client import PromptTemplateClient
@@ -85,7 +83,11 @@ def _get_prompt_template_uuid_by_metadata(
     """Fetch template using metadata parameters and return uuid"""
     try:
         # Convert TemplateRef to dict (using model_dump for Pydantic v2)
-        template_ref_dict = template_ref.model_dump() if hasattr(template_ref, 'model_dump') else template_ref.to_dict()
+        template_ref_dict = (
+            template_ref.model_dump()
+            if hasattr(template_ref, "model_dump")
+            else template_ref.to_dict()
+        )
         template_ref_data = template_ref_dict["template_ref"]
         response = prompt_template_client.get_prompt_templates(
             scenario=template_ref_data["scenario"],
@@ -154,7 +156,8 @@ def get_orch_config_data(
                 )
 
             elif all(
-                hasattr(template_ref_inner, key) for key in PROMPT_TEMPLATE_METADATA_FIELDS
+                hasattr(template_ref_inner, key)
+                for key in PROMPT_TEMPLATE_METADATA_FIELDS
             ):
                 prompt_template_uuid = _get_prompt_template_uuid_by_metadata(
                     prompt_template_client, template_info, error_collector

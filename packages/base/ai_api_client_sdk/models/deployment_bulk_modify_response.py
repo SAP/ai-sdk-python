@@ -8,13 +8,18 @@ class DeploymentBulkModifyResponse:
     :param deployments: Response to the bulk modify request of deployments
     :type deployments: List[Union[BasicResponse, BulkModifyErrorResponse]]
     """
-    def __init__(self, deployments: List[Union[BasicResponse, BulkModifyErrorResponse]], **kwargs):
-        self.deployments: List[Union[BasicResponse, BulkModifyErrorResponse]] = deployments
-      
+
+    def __init__(
+        self, deployments: List[Union[BasicResponse, BulkModifyErrorResponse]], **kwargs
+    ):
+        self.deployments: List[Union[BasicResponse, BulkModifyErrorResponse]] = (
+            deployments
+        )
+
     def __str__(self):
-        dbmr_str = ''
+        dbmr_str = ""
         for d in self.deployments:
-            dbmr_str += f'{d.__str__()}\n'
+            dbmr_str += f"{d.__str__()}\n"
         return dbmr_str
 
     @staticmethod
@@ -27,9 +32,11 @@ class DeploymentBulkModifyResponse:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.Deployment_Bulk_Modify_Response.DeploymentBulkModifyResponse`
         """
-        response_dict['deployments'] = [
-            BulkModifyErrorResponse.from_dict(d) if 'error' in d else BasicResponse.from_dict(d)
-            for d in response_dict['deployments']
+        response_dict["deployments"] = [
+            BulkModifyErrorResponse.from_dict(d)
+            if "error" in d
+            else BasicResponse.from_dict(d)
+            for d in response_dict["deployments"]
         ]
 
         return DeploymentBulkModifyResponse(**response_dict)

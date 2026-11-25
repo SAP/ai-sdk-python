@@ -30,13 +30,13 @@ def create_valid_event(token="test"):
                         "index": 0,
                         "delta": {"content": token, "role": "assistant"},
                         "finish_reason": None,
-                        "logprobs": None
+                        "logprobs": None,
                     }
                 ],
-                "system_fingerprint": None
+                "system_fingerprint": None,
             },
             "templating": None,
-            "output_unmasking": None
+            "output_unmasking": None,
         },
         "final_result": {
             "id": "test-id",
@@ -48,11 +48,11 @@ def create_valid_event(token="test"):
                     "index": 0,
                     "delta": {"content": token, "role": "assistant"},
                     "finish_reason": None,
-                    "logprobs": None
+                    "logprobs": None,
                 }
             ],
-            "system_fingerprint": None
-        }
+            "system_fingerprint": None,
+        },
     }
 
 
@@ -69,16 +69,13 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         event1 = create_valid_event("test1")
         event2 = create_valid_event("test2")
 
-        chunks = [
-            f"data: {json.dumps(event1)}\n",
-            f"data: {json.dumps(event2)}\n",
-        ]
+        chunks = [f"data: {json.dumps(event1)}\n", f"data: {json.dumps(event2)}\n"]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -107,7 +104,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -115,30 +112,34 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].request_id, "test-request-id")
-        self.assertEqual(results[0].intermediate_results.llm.choices[0].delta.content, "split test")
+        self.assertEqual(
+            results[0].intermediate_results.llm.choices[0].delta.content, "split test"
+        )
 
     async def test_multiple_events_in_single_chunk(self):
         """Test that multiple events in a single chunk are processed correctly."""
         event1 = create_valid_event("first")
         event2 = create_valid_event("second")
 
-        chunks = [
-            f"data: {json.dumps(event1)}\ndata: {json.dumps(event2)}\n",
-        ]
+        chunks = [f"data: {json.dumps(event1)}\ndata: {json.dumps(event2)}\n"]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
             results.append(result)
 
         self.assertEqual(len(results), 2)
-        self.assertEqual(results[0].intermediate_results.llm.choices[0].delta.content, "first")
-        self.assertEqual(results[1].intermediate_results.llm.choices[0].delta.content, "second")
+        self.assertEqual(
+            results[0].intermediate_results.llm.choices[0].delta.content, "first"
+        )
+        self.assertEqual(
+            results[1].intermediate_results.llm.choices[0].delta.content, "second"
+        )
 
     async def test_final_message_stops_iteration(self):
         """Test that [DONE] message stops iteration."""
@@ -154,7 +155,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -162,24 +163,21 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
 
         # Should only have one result before [DONE]
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].intermediate_results.llm.choices[0].delta.content, "before done")
+        self.assertEqual(
+            results[0].intermediate_results.llm.choices[0].delta.content, "before done"
+        )
 
     async def test_empty_lines_ignored(self):
         """Test that empty lines are ignored."""
         event = create_valid_event("test")
 
-        chunks = [
-            "\n",
-            f"data: {json.dumps(event)}\n",
-            "\n",
-            "\n",
-        ]
+        chunks = ["\n", f"data: {json.dumps(event)}\n", "\n", "\n"]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -202,7 +200,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -216,15 +214,13 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         event = create_valid_event("final")
 
         # Last chunk has no newline
-        chunks = [
-            f"data: {json.dumps(event)}",
-        ]
+        chunks = [f"data: {json.dumps(event)}"]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -232,7 +228,9 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].request_id, "test-request-id")
-        self.assertEqual(results[0].intermediate_results.llm.choices[0].delta.content, "final")
+        self.assertEqual(
+            results[0].intermediate_results.llm.choices[0].delta.content, "final"
+        )
 
     async def test_very_small_chunks(self):
         """Test handling of very small chunks (simulating slow network)."""
@@ -240,13 +238,13 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         event_str = f"data: {json.dumps(event)}\n"
 
         # Split into very small chunks (2 characters each)
-        chunks = [event_str[i:i + 2] for i in range(0, len(event_str), 2)]
+        chunks = [event_str[i : i + 2] for i in range(0, len(event_str), 2)]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -262,7 +260,9 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
 
         # Split the JSON across multiple chunks
         chunk_size = 20
-        parts = [event_str[i:i + chunk_size] for i in range(0, len(event_str), chunk_size)]
+        parts = [
+            event_str[i : i + chunk_size] for i in range(0, len(event_str), chunk_size)
+        ]
 
         chunks = [f"data: {parts[0]}"]
         for part in parts[1:-1]:
@@ -273,7 +273,7 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
         results = []
         async for result in client._internal_iterator():
@@ -281,7 +281,9 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0].request_id, "test-request-id")
-        self.assertEqual(results[0].intermediate_results.llm.choices[0].delta.content, "Hello")
+        self.assertEqual(
+            results[0].intermediate_results.llm.choices[0].delta.content, "Hello"
+        )
 
     async def test_error_event_with_list_payload_raises_orchestration_error(self):
 
@@ -302,20 +304,20 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             ]
         }
 
-        chunks = [
-            f"data: {json.dumps(error_event)}\n",
-        ]
+        chunks = [f"data: {json.dumps(error_event)}\n"]
 
         mock_response = Mock(spec=Response)
         mock_response.aiter_text = Mock(return_value=self._async_generator(chunks))
 
         client = AsyncSSEClient(mock_response, self.event_prefix, self.final_message)
-        mock_response.headers = {'content-type': 'application/json'}
+        mock_response.headers = {"content-type": "application/json"}
         client._response = mock_response
 
         with self.assertRaises(OrchestrationErrorList) as ctx:
             async for _ in client._internal_iterator():
-                self.fail("Iterator must not yield results when error event is received")
+                self.fail(
+                    "Iterator must not yield results when error event is received"
+                )
 
         exc = ctx.exception
 
@@ -330,5 +332,5 @@ class TestSSEClientBuffering(unittest.IsolatedAsyncioTestCase):
             yield item
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

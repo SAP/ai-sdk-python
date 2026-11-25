@@ -13,11 +13,7 @@ class BatchServiceError(Exception):
     """
 
     def __init__(
-        self,
-        request_id: str,
-        message: str,
-        status_code: int,
-        headers: httpx.Headers,
+        self, request_id: str, message: str, status_code: int, headers: httpx.Headers
     ):
         self.request_id = request_id
         self.message = message

@@ -6,7 +6,12 @@ import unittest
 
 from pydantic import ValidationError
 
-from gen_ai_hub.batch_service.models.request import BatchCreateRequest, BatchInput, BatchOutput, BatchSpec
+from gen_ai_hub.batch_service.models.request import (
+    BatchCreateRequest,
+    BatchInput,
+    BatchOutput,
+    BatchSpec,
+)
 from gen_ai_hub.batch_service.models.response import (
     BatchCreateResponse,
     BatchSummary,
@@ -20,7 +25,6 @@ from gen_ai_hub.batch_service.models.response import (
 
 
 class TestBatchCreateRequest(unittest.TestCase):
-
     def _make_request(self, **overrides):
         defaults = dict(
             type="llm-native",
@@ -91,10 +95,20 @@ class TestBatchCreateRequest(unittest.TestCase):
         data = {
             "count": 2,
             "resources": [
-                {"id": "id1", "type": "llm-native", "provider": "azure-openai",
-                 "created_at": "2026-04-30T10:00:00Z", "status": "COMPLETED"},
-                {"id": "id2", "type": "llm-native", "provider": "azure-openai",
-                 "created_at": "2026-04-30T11:00:00Z", "status": "RUNNING"},
+                {
+                    "id": "id1",
+                    "type": "llm-native",
+                    "provider": "azure-openai",
+                    "created_at": "2026-04-30T10:00:00Z",
+                    "status": "COMPLETED",
+                },
+                {
+                    "id": "id2",
+                    "type": "llm-native",
+                    "provider": "azure-openai",
+                    "created_at": "2026-04-30T11:00:00Z",
+                    "status": "RUNNING",
+                },
             ],
         }
         resp = BatchListResponse(**data)

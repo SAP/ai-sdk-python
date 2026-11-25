@@ -12,9 +12,7 @@ from gen_ai_hub.evaluations.constants import (
     PROMPT_KEY,
     MODEL_KEY,
 )
-from gen_ai_hub.evaluations.utils.gen_utils import (
-    list_prompt_variables,
-)
+from gen_ai_hub.evaluations.utils.gen_utils import list_prompt_variables
 from gen_ai_hub.evaluations.exceptions.error_codes import ErrorCode
 from gen_ai_hub.evaluations.helpers.collector import ValidationCollector
 from gen_ai_hub.orchestration_v2.models.config import OrchestrationConfig
@@ -570,4 +568,3 @@ def to_comparable(x) -> dict | Any:
     if hasattr(x, "__dict__"):  # Custom classes like TemplateRef
         return vars(x)
     return x  # primitives like string
-

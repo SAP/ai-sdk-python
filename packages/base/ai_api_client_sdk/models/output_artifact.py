@@ -14,21 +14,38 @@ class OutputArtifact:
     :param labels: labels for artifact
     :type labels: List[class:`ai_api_client_sdk.models.label.Label`]
     """
-    def __init__(self, name: str, kind: str = None, description: str = None, labels: List[Label] = None):
+
+    def __init__(
+        self,
+        name: str,
+        kind: str = None,
+        description: str = None,
+        labels: List[Label] = None,
+    ):
         self.name: str = name
         self.kind: str = kind
         self.description: str = description
         self.labels: List[Label] = labels
 
     def __str__(self):
-        return "Output artifact name: " + str(self.name) + ", Output artifact kind: " + str(self.kind) + \
-               ", Output artifact description: " + str(self.description)
+        return (
+            "Output artifact name: "
+            + str(self.name)
+            + ", Output artifact kind: "
+            + str(self.kind)
+            + ", Output artifact description: "
+            + str(self.description)
+        )
 
     def __eq__(self, other):
         if not isinstance(other, OutputArtifact):
             return False
-        return self.name == other.name and self.kind == other.kind and self.description == other.description and \
-            self.labels == other.labels
+        return (
+            self.name == other.name
+            and self.kind == other.kind
+            and self.description == other.description
+            and self.labels == other.labels
+        )
 
     @staticmethod
     def from_dict(output_artifact_dict: Dict[str, Any]):
@@ -40,6 +57,8 @@ class OutputArtifact:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.output_artifact.OutputArtifact`
         """
-        if output_artifact_dict.get('labels'):
-            output_artifact_dict['labels'] = [Label.from_dict(l) for l in output_artifact_dict['labels']]
+        if output_artifact_dict.get("labels"):
+            output_artifact_dict["labels"] = [
+                Label.from_dict(l) for l in output_artifact_dict["labels"]
+            ]
         return OutputArtifact(**output_artifact_dict)

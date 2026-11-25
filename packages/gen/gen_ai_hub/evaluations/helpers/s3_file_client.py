@@ -114,7 +114,9 @@ class S3FileClient:
                 return []
 
             data = json.loads(content)
-            logger.info(f"Successfully read JSON file from s3://{self.bucket_name}/{s3_key}")
+            logger.info(
+                f"Successfully read JSON file from s3://{self.bucket_name}/{s3_key}"
+            )
             return data
 
         except json.JSONDecodeError as e:
@@ -226,7 +228,9 @@ class S3FileClient:
                 dtype=str,
             )
 
-            logger.info(f"Successfully read CSV file from s3://{self.bucket_name}/{s3_key}")
+            logger.info(
+                f"Successfully read CSV file from s3://{self.bucket_name}/{s3_key}"
+            )
             return df.to_dict("records")
 
         except csv.Error as e:
@@ -270,10 +274,7 @@ class S3FileClient:
         """
         try:
             json_string = json.dumps(
-                data,
-                ensure_ascii=False,
-                separators=(",", ":"),
-                default=str,
+                data, ensure_ascii=False, separators=(",", ":"), default=str
             )
 
             default_params = {
@@ -383,7 +384,9 @@ class S3FileClient:
             )
             return False
 
-    def get_sqlitedb_tables_data_from_s3(self, s3_key: str, tables_list: List[str]) -> Dict[str, List[Dict]]:
+    def get_sqlitedb_tables_data_from_s3(
+        self, s3_key: str, tables_list: List[str]
+    ) -> Dict[str, List[Dict]]:
         """Download SQLite DB from S3, load given tables into memory, return dict of lists.
 
         :param s3_key: S3 object key for the SQLite database file
@@ -397,7 +400,9 @@ class S3FileClient:
         data_store = {}
 
         s3_key = s3_key.lstrip("/")
-        logger.debug(f"Fetching SQLite tables {tables_list} from s3://{self.bucket_name}/{s3_key}")
+        logger.debug(
+            f"Fetching SQLite tables {tables_list} from s3://{self.bucket_name}/{s3_key}"
+        )
 
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
             self.s3_client.download_fileobj(self.bucket_name, s3_key, tmp)

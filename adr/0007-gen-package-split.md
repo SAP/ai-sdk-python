@@ -44,6 +44,7 @@ Simple user example:
 
     ```python
     from gen_ai_hub.proxy.native.openai import chat
+
     chat.completions.create(model_name="gpt-5.4-nano", messages=[...])
     ```
 
@@ -69,6 +70,7 @@ Simple user example:
 
     ```python
     from gen_ai_hub.proxy.native.openai import chat
+
     chat.completions.create(model_name="gpt-5.4-nano", messages=[...])
     ```
 
@@ -95,5 +97,6 @@ Simple user example:
 
     ```python
     from sap_ai_sdk_openai import chat
+
     chat.completions.create(model_name="gpt-5.4-nano", messages=[...])
     ```

@@ -58,7 +58,9 @@ class ModelVersion:
         self.cost: Optional[Dict[str, str]] = cost
         self.suggested_replacements: Optional[List[str]] = suggested_replacements
         self.streaming_supported: Optional[bool] = streaming_supported
-        self.orchestration_capabilities: Optional[List[str]] = orchestration_capabilities
+        self.orchestration_capabilities: Optional[List[str]] = (
+            orchestration_capabilities
+        )
 
     def __eq__(self, other):
         if not isinstance(other, ModelVersion):

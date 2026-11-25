@@ -29,17 +29,14 @@ def python_type_to_json_type(py_type):
     # List/array
     if origin in (list, typing.List):
         item_type = args[0] if args else str
-        return {
-            "type": "array",
-            "items": python_type_to_json_type(item_type)
-        }
+        return {"type": "array", "items": python_type_to_json_type(item_type)}
 
     # Dict/object
     if origin in (dict, typing.Dict):
         value_type = args[1] if len(args) > 1 else str
         return {
             "type": "object",
-            "additionalProperties": python_type_to_json_type(value_type)
+            "additionalProperties": python_type_to_json_type(value_type),
         }
 
     # Union/Optional
@@ -56,10 +53,12 @@ def python_type_to_json_type(py_type):
     # Fallback
     return {"type": "string"}
 
+
 class ChatCompletionTool(JSONSerializable):
     """
     Base class for all chat completion tools.
     """
+
     def __init__(self, type_: str):
         """Initializes a ChatCompletionTool instance.
 
@@ -74,15 +73,14 @@ class ChatCompletionTool(JSONSerializable):
         :return: A dictionary representation of the ChatCompletionTool instance.
         :rtype: Dict[str, Any]
         """
-        return {
-            "type": self.type,
-        }
+        return {"type": self.type}
 
 
 class FunctionTool(ChatCompletionTool):
     """
     Represents a function tool for OpenAI-like function calling.
     """
+
     def __init__(
         self,
         name: str,
@@ -144,7 +142,9 @@ class FunctionTool(ChatCompletionTool):
         if self.strict:
             for key in kwargs.keys():
                 if key not in self.parameters["properties"]:
-                    raise ValueError(f"Unexpected argument '{key}' for function '{self.name}'")
+                    raise ValueError(
+                        f"Unexpected argument '{key}' for function '{self.name}'"
+                    )
 
         return self.function(**kwargs)
 
@@ -161,17 +161,15 @@ class FunctionTool(ChatCompletionTool):
         if self.strict:
             for key in kwargs.keys():
                 if key not in self.parameters["properties"]:
-                    raise ValueError(f"Unexpected argument '{key}' for function '{self.name}'")
+                    raise ValueError(
+                        f"Unexpected argument '{key}' for function '{self.name}'"
+                    )
 
         return await self.function(**kwargs)
 
-
     @staticmethod
     def from_function(
-            func: Callable,
-            *,
-            description: Optional[str] = None,
-            strict: bool = False
+        func: Callable, *, description: Optional[str] = None, strict: bool = False
     ) -> "FunctionTool":
         """Create a FunctionTool from a Python function.
 
@@ -203,10 +201,11 @@ class FunctionTool(ChatCompletionTool):
             "type": "object",
             "properties": param_schema,
             "required": [
-                name for name, param in sig.parameters.items()
+                name
+                for name, param in sig.parameters.items()
                 if param.default is inspect.Parameter.empty
             ],
-            "additionalProperties": False
+            "additionalProperties": False,
         }
 
         return FunctionTool(
@@ -219,12 +218,15 @@ class FunctionTool(ChatCompletionTool):
 
 
 def function_tool(
-        func: Optional[Callable] = None, *, description: Optional[str] = None, strict: bool = False
+    func: Optional[Callable] = None,
+    *,
+    description: Optional[str] = None,
+    strict: bool = False,
 ) -> Callable[[Callable], FunctionTool] | FunctionTool:
     """Create a decorator that converts a function into a FunctionTool.
-    
+
     Usage:
-        
+
     @function_tool
 
     def my_func(...): ...
@@ -251,7 +253,9 @@ def function_tool(
         :return: A FunctionTool instance.
         :rtype: FunctionTool
         """
-        return FunctionTool.from_function(func=func_, description=description, strict=strict)
+        return FunctionTool.from_function(
+            func=func_, description=description, strict=strict
+        )
 
     if func is not None and callable(func):
         # Used as @function_tool

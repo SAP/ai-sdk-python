@@ -74,51 +74,113 @@ class AIAPIV2Client:
     """
 
     @staticmethod
-    def _create_token_creator_if_does_not_exist(token_creator, auth_url, client_id, client_secret, cert_str, key_str,
-                                                cert_file_path, key_file_path):
+    def _create_token_creator_if_does_not_exist(
+        token_creator,
+        auth_url,
+        client_id,
+        client_secret,
+        cert_str,
+        key_str,
+        cert_file_path,
+        key_file_path,
+    ):
         if token_creator:
-            if not _is_all_none(auth_url, client_id, client_secret, cert_str, key_str, cert_file_path, key_file_path):
-                raise AIAPIAuthenticatorException(error_message=AUTH_PARAM_ERROR_MESSAGE)
+            if not _is_all_none(
+                auth_url,
+                client_id,
+                client_secret,
+                cert_str,
+                key_str,
+                cert_file_path,
+                key_file_path,
+            ):
+                raise AIAPIAuthenticatorException(
+                    error_message=AUTH_PARAM_ERROR_MESSAGE
+                )
             return token_creator
         try:
-            return Authenticator(auth_url=auth_url, client_id=client_id, client_secret=client_secret, cert_str=cert_str,
-                                 key_str=key_str, cert_file_path=cert_file_path, key_file_path=key_file_path).get_token
+            return Authenticator(
+                auth_url=auth_url,
+                client_id=client_id,
+                client_secret=client_secret,
+                cert_str=cert_str,
+                key_str=key_str,
+                cert_file_path=cert_file_path,
+                key_file_path=key_file_path,
+            ).get_token
         except TypeError as te:
-            if any(x in te.__str__() for x in ['auth_url', 'client_id']):
-                raise AIAPIAuthenticatorException(error_message=AUTH_PARAM_ERROR_MESSAGE)
+            if any(x in te.__str__() for x in ["auth_url", "client_id"]):
+                raise AIAPIAuthenticatorException(
+                    error_message=AUTH_PARAM_ERROR_MESSAGE
+                )
             raise te
         except AIAPIAuthenticatorException:
             raise AIAPIAuthenticatorException(error_message=AUTH_PARAM_ERROR_MESSAGE)
 
-    def __init__(self, base_url: str, auth_url: str = None, client_id: str = None, client_secret: str = None,
-                 cert_str: str = None, key_str: str = None, cert_file_path: str = None, key_file_path: str = None,
-                 token_creator: Callable[[], str] = None, resource_group: str = None,
-                 connect_timeout=Timeouts.CONNECT_TIMEOUT.value,
-                 num_request_retries=Timeouts.NUM_REQUEST_RETRIES.value,
-                 **kwargs):
-        read_timeout = kwargs.get('read_timeout', Timeouts.READ_TIMEOUT.value)
-        client_type = kwargs.get('client_type', 'AI API Python SDK')
+    def __init__(
+        self,
+        base_url: str,
+        auth_url: str = None,
+        client_id: str = None,
+        client_secret: str = None,
+        cert_str: str = None,
+        key_str: str = None,
+        cert_file_path: str = None,
+        key_file_path: str = None,
+        token_creator: Callable[[], str] = None,
+        resource_group: str = None,
+        connect_timeout=Timeouts.CONNECT_TIMEOUT.value,
+        num_request_retries=Timeouts.NUM_REQUEST_RETRIES.value,
+        **kwargs,
+    ):
+        read_timeout = kwargs.get("read_timeout", Timeouts.READ_TIMEOUT.value)
+        client_type = kwargs.get("client_type", "AI API Python SDK")
 
         self.base_url: str = base_url
-        if os.environ.get(SKIP_AUTH_ENV_VAR, '').lower() != 'true':
+        if os.environ.get(SKIP_AUTH_ENV_VAR, "").lower() != "true":
             token_creator = self._create_token_creator_if_does_not_exist(
-                token_creator=token_creator, auth_url=auth_url, client_id=client_id, client_secret=client_secret,
-                cert_str=cert_str, key_str=key_str, cert_file_path=cert_file_path, key_file_path=key_file_path)
-        self.rest_client: RestClient = RestClient(base_url=base_url, get_token=token_creator,
-                                                  resource_group=resource_group, read_timeout=read_timeout,
-                                                  connect_timeout=connect_timeout,
-                                                  num_request_retries=num_request_retries,
-                                                  client_type=client_type)
+                token_creator=token_creator,
+                auth_url=auth_url,
+                client_id=client_id,
+                client_secret=client_secret,
+                cert_str=cert_str,
+                key_str=key_str,
+                cert_file_path=cert_file_path,
+                key_file_path=key_file_path,
+            )
+        self.rest_client: RestClient = RestClient(
+            base_url=base_url,
+            get_token=token_creator,
+            resource_group=resource_group,
+            read_timeout=read_timeout,
+            connect_timeout=connect_timeout,
+            num_request_retries=num_request_retries,
+            client_type=client_type,
+        )
         self.artifact: ArtifactClient = ArtifactClient(rest_client=self.rest_client)
-        self.configuration: ConfigurationClient = ConfigurationClient(rest_client=self.rest_client)
-        self.deployment: DeploymentClient = DeploymentClient(rest_client=self.rest_client)
-        self.executable: ExecutableClient = ExecutableClient(rest_client=self.rest_client)
+        self.configuration: ConfigurationClient = ConfigurationClient(
+            rest_client=self.rest_client
+        )
+        self.deployment: DeploymentClient = DeploymentClient(
+            rest_client=self.rest_client
+        )
+        self.executable: ExecutableClient = ExecutableClient(
+            rest_client=self.rest_client
+        )
         self.execution: ExecutionClient = ExecutionClient(rest_client=self.rest_client)
-        self.execution_schedule: ExecutionScheduleClient = ExecutionScheduleClient(rest_client=self.rest_client)
+        self.execution_schedule: ExecutionScheduleClient = ExecutionScheduleClient(
+            rest_client=self.rest_client
+        )
         self.healthz: HealthzClient = HealthzClient(rest_client=self.rest_client)
         self.metrics: MetricsClient = MetricsClient(rest_client=self.rest_client)
         self.model: ModelClient = ModelClient(rest_client=self.rest_client)
         self.scenario: ScenarioClient = ScenarioClient(rest_client=self.rest_client)
         self.meta: MetaClient = MetaClient(rest_client=self.rest_client)
-        admin_rest_client = RestClient(base_url=base_url[:-3], get_token=token_creator, resource_group=resource_group)
-        self.resource_groups: ResourceGroupsClient = ResourceGroupsClient(rest_client=admin_rest_client)
+        admin_rest_client = RestClient(
+            base_url=base_url[:-3],
+            get_token=token_creator,
+            resource_group=resource_group,
+        )
+        self.resource_groups: ResourceGroupsClient = ResourceGroupsClient(
+            rest_client=admin_rest_client
+        )

@@ -39,17 +39,29 @@ __all__ = [
 # Extends the core credential values with evaluation-specific ones.
 # Currently supporting only the AWS creds, would need to extend to other hyperscalers in future.
 EVAL_CREDENTIAL_VALUES: Final[List[CredentialsValue]] = CORE_CREDENTIAL_VALUES + [
-    CredentialsValue(name='aws_access_key_id', vcap_key=('credentials', 'aws_access_key_id')),
-    CredentialsValue(name='aws_secret_access_key', vcap_key=('credentials', 'aws_secret_access_key')),
-    CredentialsValue(name='orchestration_url', vcap_key=('credentials', 'orchestration_url')),
-    CredentialsValue(name='input_object_store_secret_name', vcap_key=('credentials', 'input_object_store_secret_name')),
+    CredentialsValue(
+        name="aws_access_key_id", vcap_key=("credentials", "aws_access_key_id")
+    ),
+    CredentialsValue(
+        name="aws_secret_access_key", vcap_key=("credentials", "aws_secret_access_key")
+    ),
+    CredentialsValue(
+        name="orchestration_url", vcap_key=("credentials", "orchestration_url")
+    ),
+    CredentialsValue(
+        name="input_object_store_secret_name",
+        vcap_key=("credentials", "input_object_store_secret_name"),
+    ),
 ]
 
 CREDENTIAL_VALUES: Final[List[CredentialsValue]] = EVAL_CREDENTIAL_VALUES
 
+
 def extract_credentials(source: Source, exclude: List[str] = None) -> Dict[str, str]:
     """Extract all evaluation credentials from a source."""
-    return _do_extract_credentials(source, credential_values=EVAL_CREDENTIAL_VALUES, exclude=exclude)
+    return _do_extract_credentials(
+        source, credential_values=EVAL_CREDENTIAL_VALUES, exclude=exclude
+    )
 
 
 def resolve_credentials(sources: List[Source]) -> Dict[str, str]:
@@ -64,4 +76,6 @@ def fetch_credentials(profile: str = None, **kwargs) -> Dict[str, str]:
     Precedence order: kwargs > AICORE_SERVICE_KEY > environment variables > config file > VCAP service
     (see ai_core_sdk.credentials.fetch_credentials for the full behavior).
     """
-    return _do_fetch_credentials(profile=profile, credential_values=EVAL_CREDENTIAL_VALUES, **kwargs)
+    return _do_fetch_credentials(
+        profile=profile, credential_values=EVAL_CREDENTIAL_VALUES, **kwargs
+    )

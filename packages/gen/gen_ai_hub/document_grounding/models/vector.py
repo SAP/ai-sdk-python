@@ -13,11 +13,13 @@ Model categories:
 The Vector API enables semantic search across document collections using
 vector embeddings for similarity-based retrieval.
 """
+
 from typing import List, Optional, Annotated, Literal
 from pydantic import BaseModel, Field
 
 
 # --- Models for Vector API ---
+
 
 # --- Common key-value metadata pair ---
 class VectorKeyValueListPair(BaseModel):
@@ -88,6 +90,7 @@ class DocumentsResponse(BaseModel):
 
 # --- Collection Status Models ---
 
+
 class CollectionCreatedResponse(BaseModel):
     collectionURL: str = Field(alias="collectionUrl")
     status: Literal["CREATED"] = "CREATED"
@@ -104,14 +107,13 @@ class CollectionPendingResponse(BaseModel):
 
 
 CollectionCreationStatusResponse = Annotated[
-    CollectionCreatedResponse | CollectionPendingResponse,
-    Field(discriminator="status")
+    CollectionCreatedResponse | CollectionPendingResponse, Field(discriminator="status")
 ]
 
 CollectionDeletionStatusResponse = Annotated[
-    CollectionDeletedResponse | CollectionPendingResponse,
-    Field(discriminator="status")
+    CollectionDeletedResponse | CollectionPendingResponse, Field(discriminator="status")
 ]
+
 
 # --- Vector Search Models ---
 class VectorSearchConfiguration(BaseModel):

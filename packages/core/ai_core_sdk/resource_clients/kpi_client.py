@@ -7,7 +7,8 @@ class KpiClient(BaseClient):
     endpoint of the server. It implements the base class
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
-    __PATH = '/analytics/kpis'
+
+    __PATH = "/analytics/kpis"
 
     def query(self) -> Kpi:
         """Retrieves the number of executions, artifacts, and deployments
@@ -22,5 +23,5 @@ class KpiClient(BaseClient):
         :return: The retrieved KPI data
         :rtype: class:`ai_core_sdk.models.kpi.Kpi`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}')
+        response_dict = self.rest_client.get(path=f"{self.__PATH}")
         return Kpi.from_dict(response_dict)

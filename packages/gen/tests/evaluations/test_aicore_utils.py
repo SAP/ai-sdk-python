@@ -50,15 +50,15 @@ DUMMY_ORCH_CONFIG = {
         "prompt_templating": {
             "prompt": {
                 "template": [{"content": "Hello {{?name}}", "role": "user"}],
-                "defaults": {"name": ""}
+                "defaults": {"name": ""},
             },
             "model": {
                 "name": "gpt-4o",
                 "version": "latest",
                 "params": {},
                 "timeout": 100,
-                "max_retries": 1
-            }
+                "max_retries": 1,
+            },
         }
     }
 }
@@ -68,7 +68,7 @@ DUMMY_METRIC_TEMPLATES = [
         "id": "metric-1",
         "name": "test_metric",
         "version": "1.0.0",
-        "spec": {"outputType": "numerical"}
+        "spec": {"outputType": "numerical"},
     }
 ]
 
@@ -109,8 +109,13 @@ class TestGetAllConfigurations(unittest.TestCase):
         self.mock_ai_core_client.deployment.get = MagicMock()
 
     def test_get_all_configurations_success(self):
-        self.mock_ai_core_client.configuration.query.return_value.resources = ["cfg1", "cfg2"]
-        out = get_all_configurations(self.mock_ai_core_client, resource_group="rg", scenario_id="s")
+        self.mock_ai_core_client.configuration.query.return_value.resources = [
+            "cfg1",
+            "cfg2",
+        ]
+        out = get_all_configurations(
+            self.mock_ai_core_client, resource_group="rg", scenario_id="s"
+        )
         self.assertEqual(out, ["cfg1", "cfg2"])
 
     def test_get_all_configurations_raises_value_error(self):
@@ -126,13 +131,17 @@ class TestGetRunningDeploymentsByConfigurationId(unittest.TestCase):
 
     def test_get_running_deployments_by_configuration_id_success(self):
         self.mock_ai_core_client.deployment.query.return_value.resources = ["d1"]
-        out = get_running_deployments_by_configuration_id(self.mock_ai_core_client, "cfg", "rg")
+        out = get_running_deployments_by_configuration_id(
+            self.mock_ai_core_client, "cfg", "rg"
+        )
         self.assertEqual(out, ["d1"])
 
     def test_get_running_deployments_by_configuration_id_raises(self):
         self.mock_ai_core_client.deployment.query.side_effect = Exception("err")
         with self.assertRaises(ValueError):
-            get_running_deployments_by_configuration_id(self.mock_ai_core_client, "cfg", "rg")
+            get_running_deployments_by_configuration_id(
+                self.mock_ai_core_client, "cfg", "rg"
+            )
 
 
 class TestWaitForTargetStatus(unittest.TestCase):
@@ -176,12 +185,16 @@ class TestCreateDeploymentByConfigurationId(unittest.TestCase):
         deployment_response.id = "dep-1"
         self.mock_ai_core_client.deployment.create.return_value = deployment_response
 
-        running_resp = MagicMock(status=getattr(Status, "RUNNING", "RUNNING"), deployment_url="http://dep")
+        running_resp = MagicMock(
+            status=getattr(Status, "RUNNING", "RUNNING"), deployment_url="http://dep"
+        )
         self.mock_ai_core_client.deployment.get.return_value = running_resp
 
         mock_wait.return_value = "http://dep"
 
-        url = create_deployment_by_configuration_id(self.mock_ai_core_client, "cfg", "rg")
+        url = create_deployment_by_configuration_id(
+            self.mock_ai_core_client, "cfg", "rg"
+        )
         self.assertEqual(url, "http://dep")
         self.mock_ai_core_client.deployment.create.assert_called_once()
 
@@ -197,17 +210,23 @@ class TestCreateLlmOrchestrationDeploymentUrl(unittest.TestCase):
         self.mock_ai_core_client.configuration = MagicMock()
 
     @patch(f"{MODULE_PATH}.create_deployment_by_configuration_id")
-    def test_create_llm_orchestration_deployment_url_happy(self, mock_create_deployment):
+    def test_create_llm_orchestration_deployment_url_happy(
+        self, mock_create_deployment
+    ):
         self.mock_ai_core_client.configuration.create.return_value.id = "cfg-1"
         mock_create_deployment.return_value = "http://deployed"
 
-        url = create_llm_orchestration_deployment_url(self.mock_ai_core_client, resource_group="rg")
+        url = create_llm_orchestration_deployment_url(
+            self.mock_ai_core_client, resource_group="rg"
+        )
         self.assertEqual(url, "http://deployed")
 
     def test_create_llm_orchestration_deployment_url_raises(self):
         self.mock_ai_core_client.configuration.create.side_effect = Exception("fail")
         with self.assertRaises(RuntimeError):
-            create_llm_orchestration_deployment_url(self.mock_ai_core_client, resource_group="rg")
+            create_llm_orchestration_deployment_url(
+                self.mock_ai_core_client, resource_group="rg"
+            )
 
 
 class TestReadDataFromArtifact(unittest.TestCase):
@@ -220,7 +239,9 @@ class TestReadDataFromArtifact(unittest.TestCase):
         mock_boto.read_csv.return_value = [["a", "b"]]
         mock_s3_client.return_value = mock_boto
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="k", aws_secret_access_key="s")
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="k", aws_secret_access_key="s"
+        )
         meta = {AWS_OSS_BUCKET_URL_KEY: "bucket", AWS_OSS_REGION_URL_KEY: "r"}
         out = read_data_from_artifact(aws_creds, meta, "key", CSV, self.collector)
         self.assertEqual(out, [["a", "b"]])
@@ -232,7 +253,9 @@ class TestReadDataFromArtifact(unittest.TestCase):
         mock_boto.read_jsonl.return_value = [{"x": 1}]
         mock_s3_client.return_value = mock_boto
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="k", aws_secret_access_key="s")
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="k", aws_secret_access_key="s"
+        )
         meta = {AWS_OSS_BUCKET_URL_KEY: "bucket", AWS_OSS_REGION_URL_KEY: "r"}
         out = read_data_from_artifact(aws_creds, meta, "key", "jsonl", self.collector)
         self.assertEqual(out, [{"x": 1}])
@@ -244,7 +267,9 @@ class TestBuildS3FileKey(unittest.TestCase):
         meta = {AWS_PATH_KEY: "prefix"}
         rel = "artifact/path"
         src = MagicMock(path="inner/file.csv")
-        self.assertEqual(build_s3_file_key(meta, rel, src), "prefix/artifact/path/inner/file.csv")
+        self.assertEqual(
+            build_s3_file_key(meta, rel, src), "prefix/artifact/path/inner/file.csv"
+        )
 
     def test_build_s3_file_key_minimal(self):
         meta = {}
@@ -271,9 +296,15 @@ class TestResolveArtifactPath(unittest.TestCase):
         mock_fetch_secret.return_value = mock_secret
         mock_read_data.return_value = [{"ok": 1}]
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="a", aws_secret_access_key="b")
-        src = ArtifactSource(artifact="artifact-id", path="inner/file.csv", file_type="csv")
-        result = resolve_artifact_path(src, self.mock_ai_core_client, aws_creds, "rg", self.collector)
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="a", aws_secret_access_key="b"
+        )
+        src = ArtifactSource(
+            artifact="artifact-id", path="inner/file.csv", file_type="csv"
+        )
+        result = resolve_artifact_path(
+            src, self.mock_ai_core_client, aws_creds, "rg", self.collector
+        )
         self.assertEqual(result, [{"ok": 1}])
 
     @patch(f"{MODULE_PATH}.fetch_object_store_secret_by_name")
@@ -283,9 +314,13 @@ class TestResolveArtifactPath(unittest.TestCase):
         self.mock_ai_core_client.artifact.get.return_value = artifact
         mock_fetch_secret.return_value = None
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="a", aws_secret_access_key="b")
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="a", aws_secret_access_key="b"
+        )
         src = ArtifactSource(artifact="id", path=None, file_type="csv")
-        out = resolve_artifact_path(src, self.mock_ai_core_client, aws_creds, "rg", self.collector)
+        out = resolve_artifact_path(
+            src, self.mock_ai_core_client, aws_creds, "rg", self.collector
+        )
         self.assertEqual(out, [])
 
 
@@ -338,7 +373,7 @@ class TestCallOrchestrationServiceWithV2Config(unittest.TestCase):
             "modules": {
                 "prompt_templating": {
                     "model": {"name": "gpt-4", "version": "1.0", "params": {}},
-                    "prompt": {"template": [{"role": "user", "content": "test"}]}
+                    "prompt": {"template": [{"role": "user", "content": "test"}]},
                 }
             }
         }
@@ -377,7 +412,7 @@ class TestCallOrchestrationServiceWithV2Config(unittest.TestCase):
             "modules": {
                 "prompt_templating": {
                     "model": {"name": "gpt-4", "version": "1.0", "params": {}},
-                    "prompt": {"template": [{"role": "user", "content": "test"}]}
+                    "prompt": {"template": [{"role": "user", "content": "test"}]},
                 }
             }
         }
@@ -395,13 +430,12 @@ class TestCallOrchestrationServiceWithV2Config(unittest.TestCase):
                 "http://or",
                 "rg",
                 self.collector,
-                proxy_client=mock_proxy_client
+                proxy_client=mock_proxy_client,
             )
 
             # Verify OrchestrationService was called with the proxy_client
             mock_service_class.assert_called_once_with(
-                api_url="http://or",
-                proxy_client=mock_proxy_client
+                api_url="http://or", proxy_client=mock_proxy_client
             )
             self.assertFalse(self.collector.errors)
 
@@ -412,7 +446,7 @@ class TestCallOrchestrationServiceWithV2Config(unittest.TestCase):
             "modules": {
                 "prompt_templating": {
                     "model": {"name": "gpt-4", "version": "1.0", "params": {}},
-                    "prompt": {"template": [{"role": "user", "content": "test"}]}
+                    "prompt": {"template": [{"role": "user", "content": "test"}]},
                 }
             }
         }
@@ -428,13 +462,12 @@ class TestCallOrchestrationServiceWithV2Config(unittest.TestCase):
                 "http://or",
                 "rg",
                 self.collector,
-                proxy_client=None
+                proxy_client=None,
             )
 
             # Verify OrchestrationService was called with proxy_client=None
             mock_service_class.assert_called_once_with(
-                api_url="http://or",
-                proxy_client=None
+                api_url="http://or", proxy_client=None
             )
             self.assertFalse(self.collector.errors)
 
@@ -449,7 +482,9 @@ class TestUploadFileToAwsS3(unittest.TestCase):
         mock_boto.upload_csv.return_value = "ok"
         mock_s3_client.return_value = mock_boto
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="a", aws_secret_access_key="b")
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="a", aws_secret_access_key="b"
+        )
         meta = {AWS_OSS_BUCKET_URL_KEY: "b"}
         out = upload_file_to_aws_s3(aws_creds, meta, [["r"]], "k", CSV, self.collector)
         self.assertEqual(out, "ok")
@@ -459,8 +494,12 @@ class TestUploadFileToAwsS3(unittest.TestCase):
         mock_boto = MagicMock()
         mock_boto.upload_jsonl.return_value = "ok"
         mock_s3_client.return_value = mock_boto
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="a", aws_secret_access_key="b")
-        out = upload_file_to_aws_s3(aws_creds, {}, {"k": "v"}, "k", "jsonl", self.collector)
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="a", aws_secret_access_key="b"
+        )
+        out = upload_file_to_aws_s3(
+            aws_creds, {}, {"k": "v"}, "k", "jsonl", self.collector
+        )
         self.assertEqual(out, "ok")
 
 
@@ -471,7 +510,9 @@ class TestUploadEvaluationDatasetData(unittest.TestCase):
 
     @patch(f"{MODULE_PATH}.upload_file_to_aws_s3")
     @patch(f"{MODULE_PATH}.fetch_object_store_secret_by_name")
-    def test_upload_evaluation_dataset_data_success(self, mock_fetch_secret, mock_upload):
+    def test_upload_evaluation_dataset_data_success(
+        self, mock_fetch_secret, mock_upload
+    ):
         mock_secret = MagicMock()
         mock_secret.metadata = {AWS_PATH_KEY: "prefix"}
         mock_fetch_secret.return_value = mock_secret
@@ -491,8 +532,7 @@ class TestUploadEvaluationDatasetData(unittest.TestCase):
         )
 
         aws_creds = _AWSObjectStoreData(
-            aws_access_key_id="a",
-            aws_secret_access_key="b",
+            aws_access_key_id="a", aws_secret_access_key="b"
         )
 
         folder, path = upload_evaluation_dataset_data(
@@ -510,7 +550,9 @@ class TestUploadEvaluationDatasetData(unittest.TestCase):
 
     @patch(f"{MODULE_PATH}.upload_file_to_aws_s3")
     @patch(f"{MODULE_PATH}.fetch_object_store_secret_by_name")
-    def test_upload_evaluation_dataset_data_upload_failure(self, mock_fetch_secret, mock_upload):
+    def test_upload_evaluation_dataset_data_upload_failure(
+        self, mock_fetch_secret, mock_upload
+    ):
         mock_secret = MagicMock()
         mock_secret.metadata = {}
         mock_fetch_secret.return_value = mock_secret
@@ -526,12 +568,19 @@ class TestUploadEvaluationDatasetData(unittest.TestCase):
             repetitions=1,
             debug_mode=True,
             orch_config_data=DUMMY_ORCH_CONFIG,
-            metric_templates=DUMMY_METRIC_TEMPLATES
+            metric_templates=DUMMY_METRIC_TEMPLATES,
         )
 
-        aws_creds = _AWSObjectStoreData(aws_access_key_id="a", aws_secret_access_key="b")
+        aws_creds = _AWSObjectStoreData(
+            aws_access_key_id="a", aws_secret_access_key="b"
+        )
         folder, path = upload_evaluation_dataset_data(
-            eval_data, aws_creds, "secret-name", self.mock_ai_core_client, "rg", self.collector
+            eval_data,
+            aws_creds,
+            "secret-name",
+            self.mock_ai_core_client,
+            "rg",
+            self.collector,
         )
 
         self.assertEqual(path, "")
@@ -545,12 +594,16 @@ class TestRegisterAicoreArtifact(unittest.TestCase):
 
     def test_register_aicore_artifact_success(self):
         self.mock_ai_core_client.artifact.create.return_value.id = "art-1"
-        res = register_aicore_artifact("folder", self.mock_ai_core_client, "rg", "secret", self.collector)
+        res = register_aicore_artifact(
+            "folder", self.mock_ai_core_client, "rg", "secret", self.collector
+        )
         self.assertEqual(res, "art-1")
 
     def test_register_aicore_artifact_failure(self):
         self.mock_ai_core_client.artifact.create.side_effect = Exception("no")
-        res = register_aicore_artifact("folder", self.mock_ai_core_client, "rg", "secret", self.collector)
+        res = register_aicore_artifact(
+            "folder", self.mock_ai_core_client, "rg", "secret", self.collector
+        )
         self.assertEqual(res, "")
 
 
@@ -571,7 +624,7 @@ class TestRegisterAicoreConfiguration(unittest.TestCase):
             repetitions=1,
             debug_mode=True,
             orch_config_data=DUMMY_ORCH_CONFIG,
-            metric_templates=DUMMY_METRIC_TEMPLATES
+            metric_templates=DUMMY_METRIC_TEMPLATES,
         )
 
         self.mock_ai_core_client.configuration.create.return_value.id = "cfg-1"
@@ -603,7 +656,7 @@ class TestRegisterAicoreConfiguration(unittest.TestCase):
             repetitions=1,
             debug_mode=False,
             orch_config_data=DUMMY_ORCH_CONFIG,
-            metric_templates=DUMMY_METRIC_TEMPLATES
+            metric_templates=DUMMY_METRIC_TEMPLATES,
         )
 
         self.mock_ai_core_client.configuration.create.return_value.id = "cfg-2"
@@ -637,7 +690,7 @@ class TestRegisterAicoreConfiguration(unittest.TestCase):
             repetitions=1,
             debug_mode=True,
             orch_config_data=DUMMY_ORCH_CONFIG,
-            metric_templates=DUMMY_METRIC_TEMPLATES
+            metric_templates=DUMMY_METRIC_TEMPLATES,
         )
 
         res = register_aicore_configuration(
@@ -665,12 +718,16 @@ class TestRegisterAicoreExecution(unittest.TestCase):
 
     def test_register_aicore_execution_success(self):
         self.mock_ai_core_client.execution.create.return_value.id = "exec-1"
-        exec_id = register_aicore_execution(self.mock_ai_core_client, "cfg", "rg", self.collector)
+        exec_id = register_aicore_execution(
+            self.mock_ai_core_client, "cfg", "rg", self.collector
+        )
         self.assertEqual(exec_id, "exec-1")
 
     def test_register_aicore_execution_failure(self):
         self.mock_ai_core_client.execution.create.side_effect = Exception("err")
-        res = register_aicore_execution(self.mock_ai_core_client, "cfg", "rg", self.collector)
+        res = register_aicore_execution(
+            self.mock_ai_core_client, "cfg", "rg", self.collector
+        )
         self.assertIsNone(res)
 
 
@@ -698,12 +755,16 @@ class TestFetchOrchestrationConfigFromRegistry(unittest.TestCase):
 
     def test_fetch_orchestration_config_from_registry_ok(self):
         self.mock_ai_core_client.rest_client.get.return_value = {"spec": {"one": 1}}
-        out = fetch_orchestration_config_from_registry("ref-1", self.mock_ai_core_client, self.collector)
+        out = fetch_orchestration_config_from_registry(
+            "ref-1", self.mock_ai_core_client, self.collector
+        )
         self.assertEqual(out, {"one": 1})
 
     def test_fetch_orchestration_config_from_registry_error(self):
         self.mock_ai_core_client.rest_client.get.side_effect = Exception("bad")
-        out = fetch_orchestration_config_from_registry("ref-1", self.mock_ai_core_client, self.collector)
+        out = fetch_orchestration_config_from_registry(
+            "ref-1", self.mock_ai_core_client, self.collector
+        )
         self.assertIsNone(out)
 
 
@@ -715,16 +776,22 @@ class TestResolveMetricIdentifiers(unittest.TestCase):
     @patch(f"{MODULE_PATH}.get_custom_metric_by_id")
     @patch(f"{MODULE_PATH}.get_metric_version_history")
     @patch(f"{MODULE_PATH}.get_metric_template_info_from_server")
-    def test_resolve_metric_identifiers_all_paths(self, mock_sys, mock_hist, mock_by_id):
+    def test_resolve_metric_identifiers_all_paths(
+        self, mock_sys, mock_hist, mock_by_id
+    ):
         mc_id = MetricConfig(reference=MetricRef(id="id-1"))
         mc_hist = MetricConfig(reference=MetricRef(scenario="s", name="n", version="v"))
-        mc_sys = MetricConfig(reference=MetricRef(name=list(SYSTEM_DEFINED_METRIC_MAPPING.values())[0]))
+        mc_sys = MetricConfig(
+            reference=MetricRef(name=list(SYSTEM_DEFINED_METRIC_MAPPING.values())[0])
+        )
 
         mock_by_id.return_value = {"id": "id-1"}
         mock_hist.return_value = {"id": "hist-1"}
         mock_sys.return_value = {"id": "sys-1"}
 
-        out = resolve_metric_identifiers([mc_id, mc_hist, mc_sys], self.mock_ai_core_client, "rg", self.collector)
+        out = resolve_metric_identifiers(
+            [mc_id, mc_hist, mc_sys], self.mock_ai_core_client, "rg", self.collector
+        )
         self.assertIsInstance(out, list)
         self.assertEqual({o["id"] for o in out}, {"id-1", "hist-1", "sys-1"})
 

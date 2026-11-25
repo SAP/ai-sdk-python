@@ -12,10 +12,16 @@ class ApplicationsClient(BaseClient):
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    __PATH = '/admin/applications'
+    __PATH = "/admin/applications"
 
-    def create(self, revision: str, path: str, application_name: str = None, repository_name: str = None,
-               repository_url: str = None) -> BasicResponse:
+    def create(
+        self,
+        revision: str,
+        path: str,
+        application_name: str = None,
+        repository_name: str = None,
+        repository_url: str = None,
+    ) -> BasicResponse:
         """Creates an application.
 
         :param revision: revision to synchronize
@@ -39,15 +45,19 @@ class ApplicationsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        if (repository_url and repository_name) or (not repository_name and not repository_url):
-            raise AICoreInvalidInputException('Either repository_url or repository_name must be provided, not both')
-        body = {'revision': revision, 'path': path}
+        if (repository_url and repository_name) or (
+            not repository_name and not repository_url
+        ):
+            raise AICoreInvalidInputException(
+                "Either repository_url or repository_name must be provided, not both"
+            )
+        body = {"revision": revision, "path": path}
         if repository_name:
-            body['repository_name'] = repository_name
+            body["repository_name"] = repository_name
         elif repository_url:
-            body['repository_url'] = repository_url
+            body["repository_url"] = repository_url
         if application_name:
-            body['application_name'] = application_name
+            body["application_name"] = application_name
         response_dict = self.rest_client.post(path=self.__PATH, body=body)
         return BasicResponse.from_dict(response_dict)
 
@@ -69,7 +79,9 @@ class ApplicationsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'{self.__PATH}/{application_name}')
+        response_dict = self.rest_client.delete(
+            path=f"{self.__PATH}/{application_name}"
+        )
         return BasicResponse.from_dict(response_dict)
 
     def get(self, application_name: str) -> Application:
@@ -88,7 +100,7 @@ class ApplicationsClient(BaseClient):
         :return: The retrieved application
         :rtype: class:`ai_core_sdk.models.application.Application`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{application_name}')
+        response_dict = self.rest_client.get(path=f"{self.__PATH}/{application_name}")
         return Application.from_dict(response_dict)
 
     def get_status(self, application_name: str) -> ApplicationStatus:
@@ -107,10 +119,14 @@ class ApplicationsClient(BaseClient):
         :return: The retrieved application status
         :rtype: class:`ai_core_sdk.models.application_status.ApplicationStatus`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{application_name}/status')
+        response_dict = self.rest_client.get(
+            path=f"{self.__PATH}/{application_name}/status"
+        )
         return ApplicationStatus.from_dict(response_dict)
 
-    def modify(self, application_name: str, repository_url: str, path: str, revision: str) -> BasicResponse:
+    def modify(
+        self, application_name: str, repository_url: str, path: str, revision: str
+    ) -> BasicResponse:
         """Modifies the application
 
         :param application_name: name of the application to be modified
@@ -132,8 +148,10 @@ class ApplicationsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        body = {'path': path, 'revision': revision, 'repository_url': repository_url}
-        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{application_name}', body=body)
+        body = {"path": path, "revision": revision, "repository_url": repository_url}
+        response_dict = self.rest_client.patch(
+            path=f"{self.__PATH}/{application_name}", body=body
+        )
         return BasicResponse.from_dict(response_dict)
 
     def query(self) -> ApplicationQueryResponse:
@@ -169,5 +187,7 @@ class ApplicationsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.post(path=f'{self.__PATH}/{application_name}/refresh')
+        response_dict = self.rest_client.post(
+            path=f"{self.__PATH}/{application_name}/refresh"
+        )
         return BasicResponse.from_dict(response_dict)
