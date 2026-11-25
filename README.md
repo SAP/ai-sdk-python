@@ -5,7 +5,7 @@
 
 SAP Cloud SDK for AI is the official Software Development Kit (SDK) for SAP AI Core, SAP Generative AI Hub, and Orchestration Service.
 
-The SDK formerly known as generative AI Hub SDK was rebranded.
+This repository contains three packages, formerly known as the AI API Client SDK (`sap-ai-sdk-base`), AI Core SDK (`sap-ai-sdk-core`), and Generative AI Hub SDK (`sap-ai-sdk-gen`).
 
 ## Installation
 
@@ -27,32 +27,65 @@ Install selected extras:
 pip install "sap-ai-sdk-gen[google,amazon]"
 ```
 
-For detailed configuration and usage examples, see [README_sphynx.md](README_sphynx.md).
-
 ## Development
 
-Main SDK modules are under [gen_ai_hub](gen_ai_hub).
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management and provides a Makefile for common tasks.
 
-Integration tests are split into two groups:
+### Setup
 
-1. Standard integration tests.
-2. Bedrock integration tests marked with the pytest marker bedrock.
-
-Run tests with:
+Install all packages and extras:
 
 ```bash
-pytest tests -v
-pytest integration_tests -m "not bedrock" -v
-pytest integration_tests -m bedrock -v
+make install
 ```
 
-You can also use the Makefile targets for acceptance test runs.
+### Code Quality
+
+```bash
+make format          # auto-format code with Ruff
+make format-check    # check formatting without modifying files
+make lint            # run Pylint (errors only) across all packages
+make license-check   # list third-party license information
+```
+
+### Testing
+
+Run unit tests for all packages:
+
+```bash
+make test
+```
+
+Run integration tests for all packages:
+
+```bash
+make test-integration
+```
+
+Run tests for a single package (`base`, `core`, or `gen`):
+
+```bash
+make test-pkg pkg=core
+make test-pkg-integration pkg=core
+```
+
+### Sample Code Server
+
+Start the local sample-code server (requires a `sample-code/.env` file):
+
+```bash
+make sample-code-server
+```
 
 ## Documentation
 
-Documentation sources are in [docs](docs), and generated API docs are included there as well.
+For user-facing documentation, see the [AI SDK docs](https://github.com/SAP/ai-sdk/tree/main/docs-python).
 
-For local documentation workflows and SDK configuration details, see [README_sphynx.md](README_sphynx.md).
+To generate API reference docs locally:
+
+```bash
+make docs
+```
 
 ## Support, Feedback, Contributing
 
