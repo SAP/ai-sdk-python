@@ -3,7 +3,7 @@
     "review": {
       "auto_generate_review": true,
       "auto_run_on_draft_pr": false,
-      "auto_exclude_authors": ["renovate", "dependabot"],
+      "auto_exclude_authors": ["app/renovate", "app/dependabot"],
       "excluded_paths": ["*generated/**"]
     }
   }
