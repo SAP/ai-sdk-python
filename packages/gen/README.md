@@ -18,69 +18,80 @@ The class names have not changed i.e., you can continue to use existing code.
 
 ## Development
 
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management. All common tasks are available as Makefile targets from the **repository root**.
+
+### Setup
+
+```bash
+make install
+```
+
+### Main Modules
+
 The main modules are located in the subfolder [proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy):
 
-- [core](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/gen_ai_hub_proxy)
+- [core](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/core)
 - [gen_ai_hub_proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/gen_ai_hub_proxy)
 - [langchain](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/langchain)
 - [native](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/native)
 
+### Code Quality
+
+```bash
+make format          # auto-format code with Ruff
+make format-check    # check formatting without modifying files
+make lint            # run Pylint (errors only) across all packages
+make license-check   # list third-party license information
+```
+
 ### Docstring Convention
-In this project, we use the `reStructuredText` format for all Python docstrings, following the guidelines outlined in [PEP 257](https://peps.python.org/pep-0257/) and the [Sphinx documentation style guide](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html).
-This ensures consistency and compatibility with other SDKs in the same namespace.
 
-Please follow these conventions when contributing to the codebase.
+We use the `reStructuredText` format for all Python docstrings, following [PEP 257](https://peps.python.org/pep-0257/) and the [Sphinx documentation style guide](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html). This ensures consistency and compatibility with other SDKs in the same namespace.
 
-## Renovate Setup
+## Testing
 
-Renovate is set up for this repository. For further information, you can take a look at the [official website](https://www.mend.io/mend-renovate/).
+Run unit tests for this package:
 
-## Integration Tests
+```bash
+make test-pkg pkg=gen
+```
 
-This project utilizes integration tests to verify the system’s behavior across its various components. The tests are split into two primary groups:
+Run all unit tests across every package:
 
-1. **Main Integration Tests:** Most of the integration tests are executed against the main cluster, ensuring that the major functionalities and interactions in the system behave as expected.
+```bash
+make test
+```
 
-2. **Bedrock Integration Tests:** A targeted subset of integration tests, known as the Bedrock tests, are executed in a separate cluster US10 (prod). These tests focus specifically on the Bedrock portions of the system and are annotated with `@pytest.mark.bedrock` within the test classes. This separation allows for targeted testing of Bedrock-specific features without interference from the broader system functionalities.
+### Integration Tests
 
-### Running Bedrock Tests
+Integration tests verify system behavior across components. They are split into two groups:
 
-To facilitate the execution of the Bedrock integration tests, the `Makefile` includes the command `run-acceptance-test-us10`. This command specifically triggers the execution of the Bedrock tests, enabling the CI system to verify the Bedrock integrations in isolation (separate step).
+1. **Main Integration Tests**: executed against the main cluster.
+2. **Bedrock Integration Tests**: a targeted subset annotated with `@pytest.mark.bedrock`, executed in a separate cluster (US10 prod).
 
-The mechanism of splitting the tests into distinct clusters and utilizing specialized commands for targeted testing helps in achieving more organized, efficient, and effective testing processes.
-
-Additional details regarding custom test stages and configuration specific to the cumulus can be found in the `customTestStages` section of the `config.yaml` in the `.pipeline` folder.
+```bash
+make test-pkg-integration pkg=gen   # this package only
+make test-integration                # all packages
+```
 
 ## Documentation
 
-### Overview
+For user-facing documentation, see the [AI SDK Python Documentation](https://sap.github.io/ai-sdk/docs/python/overview).
 
-Our project includes an extensive internal documentation to assist developers and users in understanding the architecture, usage, and development of the project. The documentation is built automatically via our continuous integration workflows using [Sphinx](http://www.sphinx-doc.org/), a robust documentation framework that converts [reStructuredText](http://docutils.sourceforge.net/rst.html) files into various output formats.
+### Building Locally
 
-### Building Documentation Locally
+Generate API reference docs from the repository root:
 
-If you wish to build the documentation on your local machine, follow these steps:
+```bash
+make docs
+```
 
-1. Navigate to the docs/ directory of the project.
-2. Make sure you have Sphinx installed. If not, install it using `pip install sphinx` or `pip install -r requirements.txt`
-3. Build the documentation by running `make preview_html`. This command will generate HTML output for the documentation and allow you to preview it in a web browser.
+This runs Sphinx to produce HTML output in `api-docs/`.
 
-### Automated Documentation Builds with GitHub Actions
+### Automated Builds
 
-Our project leverages GitHub Actions to automate the documentation building process. The workflow is defined in `.github/workflows/documentation.yml`. It is triggered each time a pull request (PR) is merged into the `main` branch. Here's a rough sequence of the automated process:
-
-1. GitHub Actions selects several important files within the project required for generating the documentation.
-2. Using the Sphinx framework, GitHub Actions compiles these files into HTML format.
-3. Upon successful build, the compiled documentation is pushed to the `gh-pages` branch of the repository.
-
-### Documentation Location
-
-Once the documentation is built by GitHub Actions, it is hosted and available for viewing at the GitHub Pages site. You can access the latest version of the internal documentation at the following URL:
-
-[SAP Cloud SDK for AI (Python) - generative](https://sap.github.io/ai-sdk/docs/python/overview)
-
-Note that the content on this site reflects the most recent documentation build from the `gh-pages` branch.
+The GitHub Actions workflow (`.github/workflows/documentation.yml`) rebuilds and publishes docs to the `gh-pages` branch whenever a new tag is pushed.
 
 ## Kudos
 
-Kudos to the authors (especially Mathis Börner). 
+Kudos to the authors (especially Mathis Börner).

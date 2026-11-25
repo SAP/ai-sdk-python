@@ -29,22 +29,53 @@ pip install "sap-ai-sdk-gen[google,amazon]"
 
 ## Development
 
-The main SDK modules are located under [`gen_ai_hub`](packages/gen/gen_ai_hub).
+This project uses [uv](https://docs.astral.sh/uv/) for dependency management and provides a Makefile for common tasks.
 
-Integration tests are split into two groups:
+### Setup
 
-1. Standard integration tests.
-2. Bedrock integration tests marked with the pytest marker bedrock.
-
-Run tests with:
+Install all packages and extras:
 
 ```bash
-pytest tests -v
-pytest integration_tests -m "not bedrock" -v
-pytest integration_tests -m bedrock -v
+make install
 ```
 
-You can also use the Makefile targets for acceptance test runs.
+### Code Quality
+
+```bash
+make format          # auto-format code with Ruff
+make format-check    # check formatting without modifying files
+make lint            # run Pylint (errors only) across all packages
+make license-check   # list third-party license information
+```
+
+### Testing
+
+Run unit tests for all packages:
+
+```bash
+make test
+```
+
+Run integration tests for all packages:
+
+```bash
+make test-integration
+```
+
+Run tests for a single package (`base`, `core`, or `gen`):
+
+```bash
+make test-pkg pkg=core
+make test-pkg-integration pkg=core
+```
+
+### Sample Code Server
+
+Start the local sample-code server (requires a `sample-code/.env` file):
+
+```bash
+make sample-code-server
+```
 
 ## Documentation
 
