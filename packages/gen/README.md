@@ -90,7 +90,7 @@ This runs Sphinx to produce HTML output in `api-docs/`.
 
 ### Automated Builds
 
-The GitHub Actions workflow (`.github/workflows/documentation.yml`) rebuilds and publishes docs to the `gh-pages` branch whenever a new tag is pushed.
+The GitHub Actions workflow (`.github/workflows/documentation.yml`) rebuilds and publishes docs to the `gh-pages` branch whenever a new tag matching `gen-v*` is pushed.
 
 ## Kudos
 
