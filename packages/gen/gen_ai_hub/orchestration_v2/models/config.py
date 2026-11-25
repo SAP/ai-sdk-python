@@ -6,7 +6,7 @@ from typing import Annotated, List, Optional
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.content_filtering import FilteringModuleConfig
 from gen_ai_hub.orchestration_v2.models.data_masking import MaskingModuleConfig
 from gen_ai_hub.orchestration_v2.models.document_grounding import GroundingModuleConfig
@@ -17,7 +17,7 @@ from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration_v2.models.translation import TranslationModuleConfig
 
 
-class ModuleConfig(BaseModel):
+class ModuleConfig(SdkBaseModel):
     """
     Configuration for the Orchestration Service's content generation process.
 
@@ -47,7 +47,7 @@ class ModuleConfig(BaseModel):
     translation: Optional[TranslationModuleConfig] = None
 
 
-class OrchestrationConfig(BaseModel):
+class OrchestrationConfig(SdkBaseModel):
     """
     Configuration for the Orchestration Service's content generation process.
     
@@ -61,7 +61,7 @@ class OrchestrationConfig(BaseModel):
     stream: Optional[GlobalStreamOptions] = None
 
 
-class PartialPromptTemplatingModuleConfig(BaseModel):
+class PartialPromptTemplatingModuleConfig(SdkBaseModel):
     """
     Partial prompt templating configuration for use with config_ref overrides.
 
@@ -78,7 +78,7 @@ class PartialPromptTemplatingModuleConfig(BaseModel):
     model: Optional[LLMModelDetails] = None
 
 
-class PartialModuleConfigs(BaseModel):
+class PartialModuleConfigs(SdkBaseModel):
     """
     Partial module configuration for use with config_ref overrides.
 
@@ -102,7 +102,7 @@ class PartialModuleConfigs(BaseModel):
     translation: Optional[TranslationModuleConfig] = None
 
 
-class PartialOrchestrationConfig(BaseModel):
+class PartialOrchestrationConfig(SdkBaseModel):
     """
     Partial orchestration configuration used to override a referenced config (config_ref).
 
@@ -117,7 +117,7 @@ class PartialOrchestrationConfig(BaseModel):
     stream: Optional[GlobalStreamOptions] = None
 
 
-class CompletionRequestConfigurationReferenceByIdConfigRef(BaseModel):
+class CompletionRequestConfigurationReferenceByIdConfigRef(SdkBaseModel):
     """Represents a reference to an orchestration config identified by a unique ID.
 
     Args:
@@ -125,7 +125,7 @@ class CompletionRequestConfigurationReferenceByIdConfigRef(BaseModel):
     """
     id: str
 
-class CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(BaseModel):
+class CompletionRequestConfigurationReferenceByNameScenarioVersionConfigRef(SdkBaseModel):
     """
     Represents a reference to aan orchestration config identified by name, scenario, and version.
 

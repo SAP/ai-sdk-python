@@ -4,6 +4,7 @@ import httpx
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.proxy.native.sap.models import RPTResponse, RPTException, RPTRequest
+from gen_ai_hub._base_model import validate_response
 
 PREDICTION_SUFFIX = "/predict"
 
@@ -104,7 +105,7 @@ class RPTClient:
             _handle_http_error(error, response)
 
         data = response.json()
-        return RPTResponse(**data)
+        return validate_response(RPTResponse, data)
 
     async def _a_execute_request(
             self,
@@ -149,7 +150,7 @@ class RPTClient:
             _handle_http_error(error, response)
 
         data = response.json()
-        return RPTResponse(**data)
+        return validate_response(RPTResponse, data)
 
     def _get_url(self, model_name: Optional[str] = None, model_version: Optional[str] = None, **kwargs) -> str:
         """

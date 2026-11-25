@@ -19,6 +19,7 @@ from typing import Optional
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubRestClient
+from gen_ai_hub._base_model import validate_response
 
 from ..models.pipeline import (
     CreatePipelineRequest,
@@ -88,7 +89,7 @@ class PipelineAPIClient:
 
         response = self.rest_client.post(path=self.path, body=pipeline_request.model_dump(exclude_none=True))
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return PipelineIdResponse(**response)
+        return validate_response(PipelineIdResponse, response)
 
     def get_pipelines(self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None) \
             -> GetPipelinesResponse:
@@ -106,7 +107,7 @@ class PipelineAPIClient:
         if count is not None:
             params['$count'] = count
         response = self.rest_client.get(path=self.path, params=params)
-        return GetPipelinesResponse(**response)
+        return validate_response(GetPipelinesResponse, response)
 
     def get_pipeline_by_id(self, pipeline_id: str) -> BasePipelineResponse:
         """Get details of a pipeline by pipeline id.
@@ -118,7 +119,7 @@ class PipelineAPIClient:
         """
 
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}")
-        return BasePipelineResponse(**response)
+        return validate_response(BasePipelineResponse, response)
 
     def delete_pipeline_by_id(self, pipeline_id: str) -> requests.Response:
         """Delete a pipeline by pipeline id
@@ -146,7 +147,7 @@ class PipelineAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/status")
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return GetPipelineStatusResponse(**response)
+        return validate_response(GetPipelineStatusResponse, response)
 
     def search_pipelines(self, body: SearchPipelineRequest) -> SearchPipelinesResponse:
         """Pipeline Search by Metadata
@@ -159,7 +160,7 @@ class PipelineAPIClient:
 
         response = self.rest_client.post(path=f"{self.path}/search", body=body.model_dump(exclude_none=True))
         response = humps.camelize(response)
-        return SearchPipelinesResponse(**response)
+        return validate_response(SearchPipelinesResponse, response)
 
     # pylint: disable=unused-import
     def get_pipeline_executions(
@@ -197,7 +198,7 @@ class PipelineAPIClient:
             params["$count"] = count
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/executions", params=params)
         response = humps.camelize(response)
-        return GetPipelineExecutionsResponse(**response)
+        return validate_response(GetPipelineExecutionsResponse, response)
 
     def get_pipeline_execution_by_id(self, pipeline_id: str, execution_id: str) -> PipelineExecution:
         """Get Pipeline Execution by ID
@@ -212,7 +213,7 @@ class PipelineAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/executions/{execution_id}")
         response = humps.camelize(response)
-        return PipelineExecution(**response)
+        return validate_response(PipelineExecution, response)
 
     # pylint: disable=too-many-arguments
     def get_execution_documents(
@@ -251,7 +252,7 @@ class PipelineAPIClient:
             params=params,
         )
         response = humps.camelize(response)
-        return DocumentsStatusResponse(**response)
+        return validate_response(DocumentsStatusResponse, response)
 
     def get_execution_document_by_id(self, pipeline_id: str, execution_id: str, document_id: str) -> \
             Document:
@@ -265,7 +266,7 @@ class PipelineAPIClient:
             path=f"{self.path}/{pipeline_id}/executions/{execution_id}/documents/{document_id}"
         )
         response = humps.camelize(response)
-        return Document(**response)
+        return validate_response(Document, response)
 
     def get_pipeline_documents(
         self,
@@ -297,7 +298,7 @@ class PipelineAPIClient:
             params["$count"] = count
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/documents", params=params)
         response = humps.camelize(response)
-        return DocumentsStatusResponse(**response)
+        return validate_response(DocumentsStatusResponse, response)
 
     def get_pipeline_document_by_id(self, pipeline_id: str, document_id: str) -> Document:
         """Get Document by ID for a Pipeline
@@ -312,7 +313,7 @@ class PipelineAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/{pipeline_id}/documents/{document_id}")
         response = humps.camelize(response)
-        return Document(**response)
+        return validate_response(Document, response)
 
     def trigger_pipeline(self, request: ManualPipelineTrigger) -> requests.Response:
         """Trigger Pipeline Manually

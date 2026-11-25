@@ -115,11 +115,8 @@ class RPTRequestModels(unittest.TestCase):
                     "name": "COSTCENTER",
                     "prediction_placeholder": "[PREDICT]",
                     "task_type": "classification",
-                    "top_k": None
                 }
             ],
-            "explanations": None,
-            "context_mode": None
         }
         prediction_config = PredictionConfig(target_columns=[
             TargetColumn(name="COSTCENTER", prediction_placeholder="[PREDICT]", task_type="classification")

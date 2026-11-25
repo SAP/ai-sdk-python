@@ -17,6 +17,7 @@ from typing import Optional
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubRestClient
+from gen_ai_hub._base_model import validate_response
 
 from ..models.retrieval import (
     DataRepositories,
@@ -81,7 +82,7 @@ class RetrievalAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/dataRepositories", params=params)
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return DataRepositories(**response)
+        return validate_response(DataRepositories, response)
 
     def get_data_repository_by_id(self, repository_id: str) -> DataRepository:
         """Get a single data repository by its unique ID.
@@ -94,7 +95,7 @@ class RetrievalAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/dataRepositories/{repository_id}")
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return DataRepository(**response)
+        return validate_response(DataRepository, response)
 
     # --- Search ---
 
@@ -113,4 +114,4 @@ class RetrievalAPIClient:
         )
 
         response = humps.camelize(response) # rest_client (ai api sdk) returns snake_case responses
-        return RetrievalSearchResults(**response)
+        return validate_response(RetrievalSearchResults, response)

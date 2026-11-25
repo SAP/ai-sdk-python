@@ -82,11 +82,6 @@ class TestBatchCreateRequest(unittest.TestCase):
         self.assertEqual(resp.status, "PENDING")
         self.assertEqual(resp.message, "Batch job scheduled")
 
-    def test_batch_create_response_allows_extra_fields(self):
-        data = {"id": "abc", "status": "PENDING", "future_field": "value"}
-        resp = BatchCreateResponse(**data)
-        self.assertEqual(resp.id, "abc")
-
     def test_batch_list_response(self):
         data = {
             "count": 2,

@@ -1,12 +1,12 @@
 from typing import List, Optional
 from pydantic import model_validator
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.config import (OrchestrationConfig, OrchestrationConfigReference,
                                                        PartialOrchestrationConfig)
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
 
-class CompletionPostRequest(BaseModel):
+class CompletionPostRequest(SdkBaseModel):
     """
     Represents a request for the orchestration process, including configuration,
     template values, and message history.

@@ -14,6 +14,7 @@ import httpx
 
 from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError, OrchestrationErrorList
 from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResponse
+from gen_ai_hub._base_model import validate_response
 
 
 def _parse_event_data(event_data: str, final_message: str,
@@ -61,7 +62,7 @@ def _parse_event_data(event_data: str, final_message: str,
                 if isinstance(e, dict)
             ]
             raise OrchestrationErrorList(errors=errors)
-    return StreamCompletionPostResponse(**event, headers=headers)
+    return validate_response(StreamCompletionPostResponse, event | {"headers": headers})
 
 
 class SSEClient:

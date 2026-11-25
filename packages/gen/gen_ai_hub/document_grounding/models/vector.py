@@ -14,53 +14,54 @@ The Vector API enables semantic search across document collections using
 vector embeddings for similarity-based retrieval.
 """
 from typing import List, Optional, Annotated, Literal
-from pydantic import BaseModel, Field
+from pydantic import Field
 
+from gen_ai_hub._base_model import SdkBaseModel
 
 # --- Models for Vector API ---
 
 # --- Common key-value metadata pair ---
-class VectorKeyValueListPair(BaseModel):
+class VectorKeyValueListPair(SdkBaseModel):
     key: str
     value: List[str]
 
 
 # --- Embedding Config ---
-class EmbeddingConfig(BaseModel):
+class EmbeddingConfig(SdkBaseModel):
     modelName: Optional[str] = Field(default="text-embedding-3-large")
 
 
 # --- Collection Models ---
-class CollectionCreateRequest(BaseModel):
+class CollectionCreateRequest(SdkBaseModel):
     title: Optional[str] = None
     embeddingConfig: EmbeddingConfig
     metadata: Optional[List[VectorKeyValueListPair]] = []
 
 
-class Collection(BaseModel):
+class Collection(SdkBaseModel):
     id: str
     title: Optional[str] = None
     embeddingConfig: EmbeddingConfig
     metadata: Optional[List[VectorKeyValueListPair]] = []
 
 
-class CollectionsListResponse(BaseModel):
+class CollectionsListResponse(SdkBaseModel):
     count: Optional[int] = None
     resources: List[Collection]
 
 
 # --- Chunk and Document Models ---
-class TextOnlyBaseChunk(BaseModel):
+class TextOnlyBaseChunk(SdkBaseModel):
     content: str
     metadata: Optional[List[VectorKeyValueListPair]] = []
 
 
-class BaseDocument(BaseModel):
+class BaseDocument(SdkBaseModel):
     chunks: List[TextOnlyBaseChunk]
     metadata: List[VectorKeyValueListPair]
 
 
-class DocumentWithoutChunks(BaseModel):
+class DocumentWithoutChunks(SdkBaseModel):
     id: str
     metadata: List[VectorKeyValueListPair]
 
@@ -69,36 +70,36 @@ class Document(BaseDocument):
     id: str
 
 
-class DocumentsCreateRequest(BaseModel):
+class DocumentsCreateRequest(SdkBaseModel):
     documents: List[BaseDocument]
 
 
-class DocumentsUpdateRequest(BaseModel):
+class DocumentsUpdateRequest(SdkBaseModel):
     documents: List[Document]
 
 
-class DocumentsListResponse(BaseModel):
+class DocumentsListResponse(SdkBaseModel):
     documents: List[DocumentWithoutChunks]
 
 
-class DocumentsResponse(BaseModel):
+class DocumentsResponse(SdkBaseModel):
     count: Optional[int] = None
     resources: List[DocumentWithoutChunks]
 
 
 # --- Collection Status Models ---
 
-class CollectionCreatedResponse(BaseModel):
+class CollectionCreatedResponse(SdkBaseModel):
     collectionURL: str = Field(alias="collectionUrl")
     status: Literal["CREATED"] = "CREATED"
 
 
-class CollectionDeletedResponse(BaseModel):
+class CollectionDeletedResponse(SdkBaseModel):
     collectionURL: str = Field(alias="collectionUrl")
     status: Literal["DELETED"] = "DELETED"
 
 
-class CollectionPendingResponse(BaseModel):
+class CollectionPendingResponse(SdkBaseModel):
     Location: str = Field(alias="location")
     status: Literal["PENDING"] = "PENDING"
 
@@ -114,18 +115,18 @@ CollectionDeletionStatusResponse = Annotated[
 ]
 
 # --- Vector Search Models ---
-class VectorSearchConfiguration(BaseModel):
+class VectorSearchConfiguration(SdkBaseModel):
     maxChunkCount: Optional[int] = None
     maxDocumentCount: Optional[int] = None
 
 
-class VectorSearchDocumentKeyValueListPair(BaseModel):
+class VectorSearchDocumentKeyValueListPair(SdkBaseModel):
     key: str
     value: List[str]
     selectMode: Optional[List[str]] = None
 
 
-class VectorSearchFilter(BaseModel):
+class VectorSearchFilter(SdkBaseModel):
     id: str
     collectionIds: List[str]
     configuration: VectorSearchConfiguration
@@ -134,35 +135,35 @@ class VectorSearchFilter(BaseModel):
     chunkMetadata: Optional[List[VectorKeyValueListPair]] = []
 
 
-class TextSearchRequest(BaseModel):
+class TextSearchRequest(SdkBaseModel):
     query: str
     filters: List[VectorSearchFilter]
 
 
 # --- Vector Search Results ---
-class VectorChunk(BaseModel):
+class VectorChunk(SdkBaseModel):
     id: str
     content: str
     metadata: Optional[List[VectorKeyValueListPair]] = []
 
 
-class DocumentOutput(BaseModel):
+class DocumentOutput(SdkBaseModel):
     id: str
     metadata: Optional[List[VectorKeyValueListPair]] = []
     chunks: List[VectorChunk]
 
 
-class DocumentsChunk(BaseModel):
+class DocumentsChunk(SdkBaseModel):
     id: str
     title: str
     metadata: Optional[List[VectorKeyValueListPair]] = []
     documents: List[DocumentOutput]
 
 
-class VectorPerFilterSearchResult(BaseModel):
+class VectorPerFilterSearchResult(SdkBaseModel):
     filterId: str
     results: List[DocumentsChunk]
 
 
-class VectorSearchResults(BaseModel):
+class VectorSearchResults(SdkBaseModel):
     results: List[VectorPerFilterSearchResult]

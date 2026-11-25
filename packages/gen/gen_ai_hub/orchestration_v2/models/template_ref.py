@@ -2,10 +2,10 @@
 Module for template reference models.
 """
 from typing import Literal, Optional
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class TemplateRefByID(BaseModel):
+class TemplateRefByID(SdkBaseModel):
     """
     Represents a prompt template reference for generating prompts or conversations.
     Args:
@@ -19,7 +19,7 @@ class TemplateRefByID(BaseModel):
     scope: Optional[Literal["resource_group", "tenant"]] = "tenant"
 
 
-class TemplateRefByScenarioNameVersion(BaseModel):
+class TemplateRefByScenarioNameVersion(SdkBaseModel):
     """
         Represents a prompt template reference for generating prompts or conversations.
         Args:
@@ -40,7 +40,7 @@ class TemplateRefByScenarioNameVersion(BaseModel):
     scope: Optional[Literal["resource_group", "tenant"]] = "tenant"
 
 
-class TemplateRef(BaseModel):
+class TemplateRef(SdkBaseModel):
     template_ref: TemplateRefByID | TemplateRefByScenarioNameVersion
 
 __all__ = ["TemplateRef", "TemplateRefByID", "TemplateRefByScenarioNameVersion"]

@@ -5,7 +5,7 @@ Azure Content Filter Model
 from enum import Enum
 from typing import Union, Literal, Optional
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class AzureThreshold(int, Enum):
@@ -29,7 +29,7 @@ class AzureThreshold(int, Enum):
     ALLOW_ALL = 6
 
 
-class AzureContentFilter(BaseModel):
+class AzureContentFilter(SdkBaseModel):
     """
     Specific filter configuration for Azure Content Safety.
 

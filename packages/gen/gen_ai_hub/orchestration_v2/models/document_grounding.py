@@ -7,7 +7,7 @@ from typing import List, Literal, Optional, Union
 
 from pydantic import Field, model_validator, ValidationError
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class GroundingType(str, Enum):
@@ -25,7 +25,7 @@ class DataRepositoryType(str, Enum):
     URL = "help.sap.com"  # website supporting elastic search
 
 
-class KeyValueListPair(BaseModel):
+class KeyValueListPair(SdkBaseModel):
     key: str
     value: List[str]
 
@@ -43,7 +43,7 @@ class DocumentMetadataKeyValueListPairs(KeyValueListPair):
     select_mode: Optional[List[Literal['ignoreIfKeyAbsent']]] = None
 
 
-class GroundingSearchConfig(BaseModel):
+class GroundingSearchConfig(SdkBaseModel):
     """Search configuration for the data repository.
 
     Args:
@@ -64,7 +64,7 @@ class GroundingSearchConfig(BaseModel):
         return self
 
 
-class DocumentGroundingFilter(BaseModel):
+class DocumentGroundingFilter(SdkBaseModel):
     """Module for configuring document grounding filters.
     
     Args:
@@ -97,7 +97,7 @@ class DocumentGroundingFilter(BaseModel):
     chunk_metadata: Optional[List[KeyValueListPair]] = None
 
 
-class DocumentGroundingPlaceholders(BaseModel):
+class DocumentGroundingPlaceholders(SdkBaseModel):
     """
         input: The list of input parameters used for grounding input questions (minItems: 1).
         output: Parameter name used for grounding output.
@@ -106,7 +106,7 @@ class DocumentGroundingPlaceholders(BaseModel):
     output: str
 
 
-class DocumentGroundingConfig(BaseModel):
+class DocumentGroundingConfig(SdkBaseModel):
     """defines the detailed configuration for the Grounding module.
 
     Args:
@@ -121,7 +121,7 @@ class DocumentGroundingConfig(BaseModel):
     metadata_params: Optional[list[str]] = None
 
 
-class GroundingModuleConfig(BaseModel):
+class GroundingModuleConfig(SdkBaseModel):
     """Module for managing and applying grounding aka RAG configurations.
 
     Args:

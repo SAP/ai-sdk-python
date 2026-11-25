@@ -5,12 +5,12 @@ Response models for orchestration v2
 from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
-from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ReasoningBlock, ResponseChatMessage
 
 
 
-class CacheCreationTokenDetails(ResponseBaseModel):
+class CacheCreationTokenDetails(SdkBaseModel):
     """
     Per-TTL breakdown of tokens written to the prompt cache.
 
@@ -24,7 +24,7 @@ class CacheCreationTokenDetails(ResponseBaseModel):
     ephemeral_1h_input_tokens: Optional[int] = None
 
 
-class PromptTokensDetails(ResponseBaseModel):
+class PromptTokensDetails(SdkBaseModel):
     """
     Represents the details of prompt tokens used in a specific operation.
 
@@ -40,7 +40,7 @@ class PromptTokensDetails(ResponseBaseModel):
     cache_creation_tokens: Optional[int] = None
     cache_creation_token_details: Optional[CacheCreationTokenDetails] = None
 
-class CompletionTokensDetails(ResponseBaseModel):
+class CompletionTokensDetails(SdkBaseModel):
     """
     Breakdown of tokens used in a completion.
 
@@ -59,7 +59,7 @@ class CompletionTokensDetails(ResponseBaseModel):
     reasoning_tokens: Optional[int] = None
     rejected_prediction_tokens: Optional[int] = None
 
-class TokenUsage(ResponseBaseModel):
+class TokenUsage(SdkBaseModel):
     """
     Usage of tokens in the response
     """
@@ -70,7 +70,7 @@ class TokenUsage(ResponseBaseModel):
     completion_tokens_details: Optional[CompletionTokensDetails] = None
 
 
-class GenericModuleResult(ResponseBaseModel):
+class GenericModuleResult(SdkBaseModel):
     """
     Generic module result
     Args:
@@ -82,7 +82,7 @@ class GenericModuleResult(ResponseBaseModel):
     data: Optional[Any] = None
 
 
-class TopLogprob(ResponseBaseModel):
+class TopLogprob(SdkBaseModel):
     """
     Represents one of the most likely tokens and its log probability
     at a given token position.
@@ -99,7 +99,7 @@ class TopLogprob(ResponseBaseModel):
     bytes: Optional[List[int]] = None
 
 
-class ChatCompletionTokenLogprob(ResponseBaseModel):
+class ChatCompletionTokenLogprob(SdkBaseModel):
     """
     Represents a token in the message content along with its
     log probability and alternative top log probabilities.
@@ -120,7 +120,7 @@ class ChatCompletionTokenLogprob(ResponseBaseModel):
     top_logprobs: Optional[List[TopLogprob]] = None
 
 
-class ChoiceLogprobs(ResponseBaseModel):
+class ChoiceLogprobs(SdkBaseModel):
     """
     Log probabilities for the choice.
     """
@@ -128,7 +128,7 @@ class ChoiceLogprobs(ResponseBaseModel):
     refusal: Optional[List[ChatCompletionTokenLogprob]] = None
 
 
-class LLMChoice(ResponseBaseModel):
+class LLMChoice(SdkBaseModel):
     """
     Args:
         index: Index of the choice
@@ -180,7 +180,7 @@ class StreamFunctionObject(FunctionCall):
     arguments: Optional[str] = None
 
 
-class StreamToolCall(ResponseBaseModel):
+class StreamToolCall(SdkBaseModel):
     type_: Literal["function"] = Field(default="function",
                                        alias="type",
                                        description="The type of the tool. Currently, only function is supported.")
@@ -189,7 +189,7 @@ class StreamToolCall(ResponseBaseModel):
     function: Optional[StreamFunctionObject] = None
 
 
-class StreamDelta(ResponseBaseModel):
+class StreamDelta(SdkBaseModel):
     role: Optional[str] = None
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
@@ -197,7 +197,7 @@ class StreamDelta(ResponseBaseModel):
     reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
-class StreamLLMChoice(ResponseBaseModel):
+class StreamLLMChoice(SdkBaseModel):
     index: int
     delta: StreamDelta
     logprobs: Optional[ChoiceLogprobs] = None
@@ -205,7 +205,7 @@ class StreamLLMChoice(ResponseBaseModel):
     provider_specific_fields: Optional[dict[str, Any]] = None
 
 
-class Citation(ResponseBaseModel):
+class Citation(SdkBaseModel):
     """
     Represents a citation with related metadata.
 
@@ -225,7 +225,7 @@ class Citation(ResponseBaseModel):
     end_index: Optional[int] = None
 
 
-class LLMModuleResult(ResponseBaseModel):
+class LLMModuleResult(SdkBaseModel):
     """
     Output from LLM. Follows the OpenAI spec.
 
@@ -261,7 +261,7 @@ class StreamLLMModuleResult(LLMModuleResult):
     usage: Optional[TokenUsage] = None
 
 
-class ModuleResults(ResponseBaseModel):
+class ModuleResults(SdkBaseModel):
     """Represents the results of each module used in a processing pipeline.
 
     Attributes:
@@ -301,7 +301,7 @@ class StreamModuleResults(ModuleResults):
     output_unmasking: Optional[List[StreamLLMChoice]] = None
 
 
-class SAPAPIError(ResponseBaseModel):
+class SAPAPIError(SdkBaseModel):
     """
     Represents an error returned from an SAP API.
 
@@ -328,7 +328,7 @@ class SAPAPIError(ResponseBaseModel):
     intermediate_results: Optional[ModuleResults] = None
     headers: Optional[dict[str, str]] = None
 
-class SAPAPIErrorStreaming(ResponseBaseModel):
+class SAPAPIErrorStreaming(SdkBaseModel):
     """
         Represents an error returned from an SAP API.
 
@@ -355,7 +355,7 @@ class SAPAPIErrorStreaming(ResponseBaseModel):
     intermediate_results: Optional[StreamModuleResults] = None
     headers: Optional[dict[str, str]] = None
 
-class CompletionPostResponse(ResponseBaseModel):
+class CompletionPostResponse(SdkBaseModel):
     """
     Represents the response for a completion post request.
 
@@ -379,17 +379,17 @@ class CompletionPostResponse(ResponseBaseModel):
     headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
 
 
-class StreamCompletionPostResponse(ResponseBaseModel):
+class StreamCompletionPostResponse(SdkBaseModel):
     request_id: str
     intermediate_results: Optional[StreamModuleResults]
     final_result: Optional[StreamLLMModuleResult]
     intermediate_failures: Optional[List[SAPAPIError]] = None
     headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
 
-class ErrorResponse(ResponseBaseModel):
+class ErrorResponse(SdkBaseModel):
     error: Union[SAPAPIError, list[SAPAPIError]]
 
-class ErrorResponseStreaming(ResponseBaseModel):
+class ErrorResponseStreaming(SdkBaseModel):
     error: Union[SAPAPIErrorStreaming, list[SAPAPIErrorStreaming]]
 
 class OrchestrationResponseWithRetries(CompletionPostResponse):

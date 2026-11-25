@@ -20,7 +20,7 @@ from typing import Optional
 from gen_ai_hub import GenAIHubProxyClient
 from gen_ai_hub.proxy import get_proxy_client
 from gen_ai_hub.proxy.gen_ai_hub_proxy.client import GenAIHubRestClient
-from pydantic import TypeAdapter
+from gen_ai_hub._base_model import validate_response, validate_response_as
 
 from ..models.vector import (
     CollectionCreateRequest,
@@ -84,7 +84,7 @@ class VectorAPIClient:
             params["$count"] = count
         response = self.rest_client.get(path=f"{self.path}/collections", params=params)
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return CollectionsListResponse(**response)
+        return validate_response(CollectionsListResponse, response)
 
     def create_collection(self, collection_request: CollectionCreateRequest) -> requests.Response:
         """Create a new collection.
@@ -115,7 +115,7 @@ class VectorAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}")
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return Collection(**response)
+        return validate_response(Collection, response)
 
     def delete_collection(self, collection_id: str) -> requests.Response:
         """Delete collection by ID.
@@ -162,7 +162,7 @@ class VectorAPIClient:
             params=params
         )
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return DocumentsResponse(**response)
+        return validate_response(DocumentsResponse, response)
 
     def create_documents(self, collection_id: str, request: DocumentsCreateRequest) -> DocumentsListResponse:
         """Create documents in a collection.
@@ -180,7 +180,7 @@ class VectorAPIClient:
             body=request.model_dump(exclude_none=True)
         )
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return DocumentsListResponse(**response)
+        return validate_response(DocumentsListResponse, response)
 
     def update_documents(self, collection_id: str, request: DocumentsUpdateRequest) -> DocumentsListResponse:
         """Update documents in a collection.
@@ -198,7 +198,7 @@ class VectorAPIClient:
             body=request.model_dump(exclude_none=True)
         )
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return DocumentsListResponse(**response)
+        return validate_response(DocumentsListResponse, response)
 
     def get_document_by_id(self, collection_id: str, document_id: str) -> Document:
         """Get a document by ID from a collection.
@@ -215,7 +215,7 @@ class VectorAPIClient:
             path=f"{self.path}/collections/{collection_id}/documents/{document_id}"
         )
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return Document(**response)
+        return validate_response(Document, response)
 
     def delete_document(self, collection_id: str, document_id: str) -> requests.Response:
         """Delete a document from a collection.
@@ -249,8 +249,7 @@ class VectorAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}/creationStatus")
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        adapter = TypeAdapter(CollectionCreationStatusResponse)
-        return adapter.validate_python(response)
+        return validate_response_as(CollectionCreationStatusResponse, response)
 
     def get_collection_deletion_status(self, collection_id: str) -> CollectionDeletionStatusResponse:
         """Get deletion status for a collection.
@@ -263,8 +262,7 @@ class VectorAPIClient:
 
         response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}/deletionStatus")
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        adapter = TypeAdapter(CollectionDeletionStatusResponse)
-        return adapter.validate_python(response)
+        return validate_response_as(CollectionDeletionStatusResponse, response)
 
     # --- Search ---
 
@@ -282,4 +280,4 @@ class VectorAPIClient:
             body=request.model_dump(exclude_none=True)
         )
         response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
-        return VectorSearchResults(**response)
+        return validate_response(VectorSearchResults, response)

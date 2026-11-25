@@ -6,10 +6,10 @@ from typing import List, Optional
 
 from pydantic import model_validator
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class GlobalStreamOptions(BaseModel):
+class GlobalStreamOptions(SdkBaseModel):
     """
     Represents options for streaming content generation.
     Args:

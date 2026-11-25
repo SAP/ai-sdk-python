@@ -4,7 +4,7 @@ Defines data models for prompt templating in the orchestration module.
 
 from typing import List, Optional
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import ChatMessage
 from gen_ai_hub.orchestration_v2.models.response_format import (
@@ -16,7 +16,7 @@ from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration_v2.models.tools import FunctionTool
 
 
-class Template(BaseModel):
+class Template(SdkBaseModel):
     """
     Represents a configurable template for generating prompts or conversations.
 
@@ -35,7 +35,7 @@ class Template(BaseModel):
     tools: Optional[List[dict | FunctionTool]] = None
 
 
-class PromptTemplatingModuleConfig(BaseModel):
+class PromptTemplatingModuleConfig(SdkBaseModel):
     """
     Configuration for the prompt templating module.
 

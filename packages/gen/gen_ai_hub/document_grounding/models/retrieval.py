@@ -14,12 +14,13 @@ The Retrieval API supports semantic search combined with metadata filtering
 for precise content retrieval across multiple repository types.
 """
 from typing import List, Optional, Union, Literal
-from pydantic import BaseModel, Field
+from pydantic import Field
 
+from gen_ai_hub._base_model import SdkBaseModel
 
 # --- Common Key/Value models ---
 
-class RetrievalKeyValueListPair(BaseModel):
+class RetrievalKeyValueListPair(SdkBaseModel):
     key: str
     value: List[str]
 
@@ -29,7 +30,7 @@ class RetrievalDocumentKeyValueListPair(RetrievalKeyValueListPair):
 
 
 
-class RetrievalSearchDocumentKeyValueListPair(BaseModel):
+class RetrievalSearchDocumentKeyValueListPair(SdkBaseModel):
     key: str
     value: List[str]
     selectMode: Optional[List[str]] = None
@@ -37,13 +38,13 @@ class RetrievalSearchDocumentKeyValueListPair(BaseModel):
 
 # --- Retrieval Chunk and Document models ---
 
-class RetrievalChunk(BaseModel):
+class RetrievalChunk(SdkBaseModel):
     id: str
     content: str
     metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default_factory=list)
 
 
-class RetrievalDocument(BaseModel):
+class RetrievalDocument(SdkBaseModel):
     id: str
     metadata: Optional[List[RetrievalDocumentKeyValueListPair]] = Field(default_factory=list)
     chunks: List[RetrievalChunk]
@@ -57,14 +58,14 @@ DataRepositoryType = Union[
 ]
 
 
-class DataRepository(BaseModel):
+class DataRepository(SdkBaseModel):
     id: str
     title: str
     type: DataRepositoryType
     metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default_factory=list)
 
 
-class DataRepositoryWithDocuments(BaseModel):
+class DataRepositoryWithDocuments(SdkBaseModel):
     id: str
     title: str
     metadata: Optional[List[RetrievalKeyValueListPair]] = Field(default_factory=list)
@@ -73,12 +74,12 @@ class DataRepositoryWithDocuments(BaseModel):
 
 # --- Retrieval Filter and Configuration models ---
 
-class RetrievalSearchConfiguration(BaseModel):
+class RetrievalSearchConfiguration(SdkBaseModel):
     maxChunkCount: Optional[int] = None
     maxDocumentCount: Optional[int] = None
 
 
-class RetrievalSearchFilter(BaseModel):
+class RetrievalSearchFilter(SdkBaseModel):
     id: str
     dataRepositoryType:  DataRepositoryType
     searchConfiguration: Optional[RetrievalSearchConfiguration] = Field(default_factory=RetrievalSearchConfiguration)
@@ -90,36 +91,36 @@ class RetrievalSearchFilter(BaseModel):
 
 # --- Retrieval Search Input and Results ---
 
-class RetrievalSearchInput(BaseModel):
+class RetrievalSearchInput(SdkBaseModel):
     query: str
     filters: List[RetrievalSearchFilter]
 
 
-class RetrievalDataRepositorySearchResult(BaseModel):
+class RetrievalDataRepositorySearchResult(SdkBaseModel):
     dataRepository: DataRepositoryWithDocuments
 
 
-class RetrievalPerFilterSearchResult(BaseModel):
+class RetrievalPerFilterSearchResult(SdkBaseModel):
     filterId: str
     results: List[RetrievalDataRepositorySearchResult] = Field(default_factory=list)
 
 
-class RetrievalPerFilterSearchResultError(BaseModel):
+class RetrievalPerFilterSearchResultError(SdkBaseModel):
     message: str
 
 
-class RetrievalPerFilterSearchResultWithError(BaseModel):
+class RetrievalPerFilterSearchResultWithError(SdkBaseModel):
     filterId: str
     error: RetrievalPerFilterSearchResultError
 
 
-class RetrievalSearchResults(BaseModel):
+class RetrievalSearchResults(SdkBaseModel):
     results: List[Union[RetrievalPerFilterSearchResult, RetrievalPerFilterSearchResultWithError]]
 
 
 # --- List & Single Repository responses ---
 
-class DataRepositories(BaseModel):
+class DataRepositories(SdkBaseModel):
     count: Optional[int] = None
     resources: List[DataRepository]
 

@@ -6,10 +6,10 @@ from typing import Optional, Dict
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class LLMModelDetails(BaseModel):
+class LLMModelDetails(SdkBaseModel):
     """
     The model and parameters to be used for the prompt templating.
     This is the model that will be used to generate the response.

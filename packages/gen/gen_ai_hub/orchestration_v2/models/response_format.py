@@ -8,7 +8,7 @@ from typing import Optional
 
 from pydantic import Field, field_validator
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class ResponseFormatType(str, Enum):
@@ -29,21 +29,21 @@ class ResponseFormatType(str, Enum):
     JSON_SCHEMA = "json_schema"
 
 
-class ResponseFormatText(BaseModel):
+class ResponseFormatText(SdkBaseModel):
     """
     Response format that the model output should adhere to. 
     """
     type_: ResponseFormatType = Field(default=ResponseFormatType.TEXT, alias="type")
 
 
-class ResponseFormatJsonObject(BaseModel):
+class ResponseFormatJsonObject(SdkBaseModel):
     """
     Response format JSON Object that the model output should adhere to.
     """
     type_: ResponseFormatType = Field(default=ResponseFormatType.JSON_OBJECT, alias="type")
 
 
-class JSONResponseSchema(BaseModel):
+class JSONResponseSchema(SdkBaseModel):
     """
         Response format JSON Schema that the model output should adhere to.
 
@@ -86,7 +86,7 @@ class JSONResponseSchema(BaseModel):
         return name
 
 
-class ResponseFormatJsonSchema(BaseModel):
+class ResponseFormatJsonSchema(SdkBaseModel):
     type_: ResponseFormatType = Field(default=ResponseFormatType.JSON_SCHEMA, alias="type")
     json_schema: JSONResponseSchema
 

@@ -7,7 +7,7 @@ from typing import Optional, Literal, Union
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class TranslationType(str, Enum):
@@ -15,7 +15,7 @@ class TranslationType(str, Enum):
     SAP_DOCUMENT_TRANSLATION = "sap_document_translation"
 
 
-class TranslationConfig(BaseModel):
+class TranslationConfig(SdkBaseModel):
     """
     Configuration for sap_document_translation translation provider.
 
@@ -29,7 +29,7 @@ class TranslationConfig(BaseModel):
     target_language: str
 
 
-class SAPDocumentTranslation(BaseModel):
+class SAPDocumentTranslation(SdkBaseModel):
     """
     Configuration for translation module.
 
@@ -42,7 +42,7 @@ class SAPDocumentTranslation(BaseModel):
     config: TranslationConfig
 
 
-class SAPDocumentTranslationApplyToSelector(BaseModel):
+class SAPDocumentTranslationApplyToSelector(SdkBaseModel):
     """
     This selector allows you to define the scope of translation, such as specific placeholders or
     messages with specific roles.
@@ -97,7 +97,7 @@ class SAPDocumentTranslationOutput(SAPDocumentTranslation):
     """
     config: Union[OutputTranslationConfig, TranslationConfig]
 
-class TranslationModuleConfig(BaseModel):
+class TranslationModuleConfig(SdkBaseModel):
     """
     Configuration for translation module
 

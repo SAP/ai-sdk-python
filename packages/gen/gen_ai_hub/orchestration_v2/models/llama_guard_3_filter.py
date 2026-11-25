@@ -2,10 +2,10 @@
 Llama Guard 3 Content Filter Model
 """
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class LlamaGuard38bFilter(BaseModel):
+class LlamaGuard38bFilter(SdkBaseModel):
     """
     Specific implementation of ContentFilter for Llama Guard 3. Llama Guard 3 is a 
     Llama-3.1-8B pretrained model, fine-tuned for content safety classification.

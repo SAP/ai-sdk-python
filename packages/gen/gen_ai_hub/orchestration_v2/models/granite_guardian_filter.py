@@ -4,10 +4,10 @@ Granite Guardian 4.1 Content Filter Model
 
 from typing import Optional
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
-class GraniteGuardian41Categories(BaseModel):
+class GraniteGuardian41Categories(SdkBaseModel):
     """
     Granite Guardian 4.1 content criteria to evaluate.
 
@@ -39,7 +39,7 @@ class GraniteGuardian41Categories(BaseModel):
     unethical_behavior: bool = False
 
 
-class GraniteGuardian41Filter(BaseModel):
+class GraniteGuardian41Filter(SdkBaseModel):
     """
     Configuration for the IBM Granite Guardian 4.1 filter provider.
 

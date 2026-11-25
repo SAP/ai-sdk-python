@@ -8,7 +8,7 @@ from typing import Optional, Union, List
 
 from pydantic import Field, model_validator
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 
 
 class DataMaskingProviderName(str, Enum):
@@ -126,7 +126,7 @@ class ProfileEntity(str, Enum):
     ETHNICITY = "profile-ethnicity"
 
 
-class DPIMethodConstant(BaseModel):
+class DPIMethodConstant(SdkBaseModel):
     """
     Replaces the entity with the specified value followed by an incrementing number
     """
@@ -134,14 +134,14 @@ class DPIMethodConstant(BaseModel):
     value: str
 
 
-class DPIMethodFabricatedData(BaseModel):
+class DPIMethodFabricatedData(SdkBaseModel):
     """
     Replaces the entity with a randomly generated value appropriate to its type.
     """
     method: str = "fabricated_data"
 
 
-class DPICustomEntity(BaseModel):
+class DPICustomEntity(SdkBaseModel):
     """
     regex: Regular expression to match the entity
     replacement_strategy: Replacement strategy to be used for the entity
@@ -150,7 +150,7 @@ class DPICustomEntity(BaseModel):
     replacement_strategy: DPIMethodConstant
 
 
-class DPIStandardEntity(BaseModel):
+class DPIStandardEntity(SdkBaseModel):
     """
     type: Standard entity type to be masked
     replacement_strategy: Replacement strategy to be used for the entity
@@ -159,7 +159,7 @@ class DPIStandardEntity(BaseModel):
     replacement_strategy: Optional[Union[DPIMethodConstant, DPIMethodFabricatedData]] = None
 
 
-class MaskGroundingInput(BaseModel):
+class MaskGroundingInput(SdkBaseModel):
     """
     Controls whether the input to the grounding module will be masked with the configuration
     supplied in the masking module
@@ -182,7 +182,7 @@ class MaskFileInputMethod(str, Enum):
     SKIP = "skip"
 
 
-class MaskingProviderConfig(BaseModel):
+class MaskingProviderConfig(SdkBaseModel):
     """
     SAP Data Privacy Integration provider for data masking.
 
@@ -208,7 +208,7 @@ class MaskingProviderConfig(BaseModel):
     mask_grounding_input: Optional[MaskGroundingInput] = None
     mask_file_input_method: Optional[MaskFileInputMethod] = None
 
-class MaskingModuleConfig(BaseModel):
+class MaskingModuleConfig(SdkBaseModel):
     """
     Configuration for the data masking module.
 

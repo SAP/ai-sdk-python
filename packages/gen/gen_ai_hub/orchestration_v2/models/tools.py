@@ -10,7 +10,7 @@ from typing import Literal, Optional
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
@@ -66,7 +66,7 @@ def python_type_to_json_type(py_type):
     return {"type": "string"}
 
 
-class ChatCompletionTool(BaseModel):
+class ChatCompletionTool(SdkBaseModel):
     """A tool the model may call, identified by type ``"function"``.
 
     Args:
@@ -77,7 +77,7 @@ class ChatCompletionTool(BaseModel):
     cache_control: Optional[CacheControl] = None
 
 
-class FunctionObject(BaseModel):
+class FunctionObject(SdkBaseModel):
     """A function definition used inside a ``FunctionTool``.
 
     Args:

@@ -9,7 +9,7 @@ from pydantic import Field
 
 from gen_ai_hub.orchestration_v2.models.azure_content_filter import (AzureContentSafetyInput, AzureContentSafetyOutput,
                                                                      AzureContentFilter)
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub._base_model import SdkBaseModel
 from gen_ai_hub.orchestration_v2.models.granite_guardian_filter import GraniteGuardian41Filter
 from gen_ai_hub.orchestration_v2.models.llama_guard_3_filter import LlamaGuard38bFilter
 
@@ -33,7 +33,7 @@ class ContentFilterProvider(str, Enum):
     LLAMA_GUARD_3_8B = "llama_guard_3_8b"
     GRANITE_GUARDIAN_4_1 = "granite_guardian_4_1"
 
-class ContentFilter(BaseModel):
+class ContentFilter(SdkBaseModel):
     """
     Base class for content filtering configurations.
 
@@ -65,7 +65,7 @@ class AzureContentSafetyOutputFilterConfig(ContentFilter):
     type_: ContentFilterProvider = Field(default=ContentFilterProvider.AZURE, alias="type")
     config: Optional[AzureContentSafetyOutput] = None
 
-class FilteringStreamOptions(BaseModel):
+class FilteringStreamOptions(SdkBaseModel):
     """
     overlap: Number of characters that should be additionally sent to content filtering services
     from previous chunks as additional context.
