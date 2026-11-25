@@ -19,8 +19,16 @@ class EnactmentGetStatusResponse:
     :param status_details: A dict, which gives detailed information about the status of the enactment, defaults to None
     :type status_details: Dict[str, Any], optional
     """
-    def __init__(self, id: str, configuration_id: str, status: Status,
-                 created_at: datetime, modified_at: datetime, status_details: Dict[str, Any] = None):
+
+    def __init__(
+        self,
+        id: str,
+        configuration_id: str,
+        status: Status,
+        created_at: datetime,
+        modified_at: datetime,
+        status_details: Dict[str, Any] = None,
+    ):
         self.id: str = id
         self.configuration_id: str = configuration_id
         self.status: Status = status

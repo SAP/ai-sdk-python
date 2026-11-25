@@ -4,7 +4,6 @@ from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 
 
 class TestLLModelDetails(unittest.TestCase):
-
     def test_llm_with_no_parameters(self):
         llm = LLMModelDetails(name="gpt-4o-mini")
         json_data = llm.model_dump()
@@ -17,14 +16,16 @@ class TestLLModelDetails(unittest.TestCase):
         self.assertEqual(json_data["params"], params)
 
     def test_llm_json_serialization(self):
-        llm = LLMModelDetails(name="gpt-4o-mini", version="v1", params={"temperature": 0.7})
+        llm = LLMModelDetails(
+            name="gpt-4o-mini", version="v1", params={"temperature": 0.7}
+        )
         expected_dict = {
             "name": "gpt-4o-mini",
             "version": "v1",
             "params": {"temperature": 0.7},
             "max_retries": 2,
             "timeout": 600,
-            "drop_unsupported_params": True
+            "drop_unsupported_params": True,
         }
         json_data = llm.model_dump()
         self.assertEqual(json_data, expected_dict)

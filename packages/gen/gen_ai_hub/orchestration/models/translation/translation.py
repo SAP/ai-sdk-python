@@ -4,6 +4,7 @@ from enum import Enum
 
 class TranslationType(str, Enum):
     """Enumerates supported translation types."""
+
     SAP_DOCUMENT_TRANSLATION = "sap_document_translation"
 
 
@@ -18,7 +19,7 @@ class InputTranslationConfig(JSONSerializable):
         :param target_language: the target language code (e.g., 'en-US' for US English).
         :type target_language: str
         """
-  
+
         self.source_language = source_language
         self.target_language = target_language
 
@@ -31,7 +32,7 @@ class InputTranslationConfig(JSONSerializable):
 
         return {
             "source_language": self.source_language,
-            "target_language": self.target_language
+            "target_language": self.target_language,
         }
 
 
@@ -62,10 +63,7 @@ class InputTranslationModule(JSONSerializable):
         :return: dictionary representation of the module.
         :rtype: dict
         """
-        return {
-            "type": self.type,
-            "config": self.config.to_dict()
-        }
+        return {"type": self.type, "config": self.config.to_dict()}
 
 
 class OutputTranslationConfig(JSONSerializable):
@@ -96,7 +94,7 @@ class OutputTranslationConfig(JSONSerializable):
 
         return {
             "target_language": self.target_language,
-            "source_language": self.source_language
+            "source_language": self.source_language,
         }
 
 
@@ -121,17 +119,17 @@ class OutputTranslationModule(JSONSerializable):
         :rtype: dict
         """
 
-        return {
-            "type": self.type,
-            "config": self.config.to_dict()
-        }
+        return {"type": self.type, "config": self.config.to_dict()}
 
 
 class Translation:
     """Translation module for managing input and output translations."""
 
-    def __init__(self, input_translation: InputTranslationModule = None,
-                 output_translation: OutputTranslationModule = None):
+    def __init__(
+        self,
+        input_translation: InputTranslationModule = None,
+        output_translation: OutputTranslationModule = None,
+    ):
         """Initializes the Translation module with optional input and output translation configurations.
 
         :param input_translation: the configuration for input translation, defaults to None

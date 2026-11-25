@@ -7,35 +7,49 @@ from typing import List, Optional, Union
 from pydantic import model_validator, Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
-from gen_ai_hub.orchestration_v2.models.content_filter import (AzureContentSafetyOutputFilterConfig,
-AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
-FilteringStreamOptions, ContentFilter)
+from gen_ai_hub.orchestration_v2.models.content_filter import (
+    AzureContentSafetyOutputFilterConfig,
+    AzureContentSafetyInputFilterConfig,
+    LlamaGuard38bFilterConfig,
+    GraniteGuardian41FilterConfig,
+    FilteringStreamOptions,
+    ContentFilter,
+)
 
 
 class InputFiltering(BaseModel):
     """Module for managing and applying input content filters.
 
-        Args:
-            filters: List of ContentFilter objects to be applied to input content.
+    Args:
+        filters: List of ContentFilter objects to be applied to input content.
     """
+
     filters: List[
-        Union[AzureContentSafetyInputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
-              ContentFilter]
+        Union[
+            AzureContentSafetyInputFilterConfig,
+            LlamaGuard38bFilterConfig,
+            GraniteGuardian41FilterConfig,
+            ContentFilter,
+        ]
     ] = Field(min_length=1)
 
 
 class OutputFiltering(BaseModel):
     """Module for managing and applying output content filters.
 
-        Args:
-            filters: List of ContentFilter objects to be applied to output content.
+    Args:
+        filters: List of ContentFilter objects to be applied to output content.
 
-            stream_options: Module-specific streaming options.
+        stream_options: Module-specific streaming options.
     """
 
     filters: List[
-        Union[AzureContentSafetyOutputFilterConfig, LlamaGuard38bFilterConfig, GraniteGuardian41FilterConfig,
-              ContentFilter]
+        Union[
+            AzureContentSafetyOutputFilterConfig,
+            LlamaGuard38bFilterConfig,
+            GraniteGuardian41FilterConfig,
+            ContentFilter,
+        ]
     ] = Field(min_length=1)
     stream_options: Optional[FilteringStreamOptions] = None
 
@@ -57,8 +71,10 @@ class FilteringModuleConfig(BaseModel):
         """
         Ensure at least one of input or output filtering is provided.
         """
-        assert values.input is not None or values.output is not None, \
+        assert values.input is not None or values.output is not None, (
             "FilteringModuleConfig must have at least one property: input or output."
+        )
         return values
+
 
 __all__ = ["InputFiltering", "OutputFiltering", "FilteringModuleConfig"]

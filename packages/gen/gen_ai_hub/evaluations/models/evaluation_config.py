@@ -3,9 +3,7 @@ from gen_ai_hub.evaluations.models.dataset_config import Dataset
 from gen_ai_hub.evaluations.models.metric_config import MetricConfig
 
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
-from gen_ai_hub.orchestration_v2.models.template_ref import (
-    TemplateRef,
-)
+from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateSpec
 
 
@@ -121,5 +119,6 @@ class EvaluationConfig:
         self.tags = tags
         self.repetitions = repetitions
         self.debug_mode = debug_mode
+
 
 __all__ = ["EvaluationConfig"]

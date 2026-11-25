@@ -20,8 +20,17 @@ class ResourceGroup:
     :param status_message: The status_message of this ResourceGroup.
     :type status_message: str
     """
-    def __init__(self, resource_group_id: str = None, tenant_id: str = None, zone_id: str = None,
-                 labels: List[Label] = None, status: ResourceGroupStatus = None, status_message: str = None, **kwargs):
+
+    def __init__(
+        self,
+        resource_group_id: str = None,
+        tenant_id: str = None,
+        zone_id: str = None,
+        labels: List[Label] = None,
+        status: ResourceGroupStatus = None,
+        status_message: str = None,
+        **kwargs,
+    ):
         self.resource_group_id: str = resource_group_id
         self.tenant_id: str = tenant_id
         self.zone_id: str = zone_id
@@ -42,9 +51,12 @@ class ResourceGroup:
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.resource_group.ResourceGroup`
         """
-        if 'resource_group_status' in resource_group_dict:
-            resource_group_dict['resource_group_status'] = \
-                ResourceGroupStatus(resource_group_dict['resource_group_status'])
-        if 'labels' in resource_group_dict:
-            resource_group_dict['labels'] = [Label.from_dict(l) for l in resource_group_dict['labels']]
+        if "resource_group_status" in resource_group_dict:
+            resource_group_dict["resource_group_status"] = ResourceGroupStatus(
+                resource_group_dict["resource_group_status"]
+            )
+        if "labels" in resource_group_dict:
+            resource_group_dict["labels"] = [
+                Label.from_dict(l) for l in resource_group_dict["labels"]
+            ]
         return ResourceGroup(**resource_group_dict)

@@ -38,12 +38,13 @@ def invoke_chain():
         The model response as a string.
     """
     llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    prompt_template = ChatPromptTemplate.from_messages([
-        ("system", "Answer the following in {language}:"),
-        ("user", "{text}"),
-    ])
+    prompt_template = ChatPromptTemplate.from_messages(
+        [("system", "Answer the following in {language}:"), ("user", "{text}")]
+    )
     chain = prompt_template | llm | StrOutputParser()
-    return chain.invoke({"language": "german", "text": "What is the capital of Germany?"})
+    return chain.invoke(
+        {"language": "german", "text": "What is the capital of Germany?"}
+    )
 
 
 def invoke_with_structured_output_json_schema():
@@ -54,11 +55,18 @@ def invoke_with_structured_output_json_schema():
         SampleSchema instance with content and language fields.
     """
     llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    structured_llm = llm.with_structured_output(method="json_schema", schema=SampleSchema, strict=True)
-    prompt_template = ChatPromptTemplate.from_messages([
-        ("system", "Answer the following question. Respond with the answer text and the language you answered in."),
-        ("user", "{text}"),
-    ])
+    structured_llm = llm.with_structured_output(
+        method="json_schema", schema=SampleSchema, strict=True
+    )
+    prompt_template = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "Answer the following question. Respond with the answer text and the language you answered in.",
+            ),
+            ("user", "{text}"),
+        ]
+    )
     chain = prompt_template | structured_llm
     return chain.invoke({"text": "What is the capital of France?"})
 
@@ -71,6 +79,7 @@ def invoke_tool_chain():
     Returns:
         The final model response as a string after tool execution.
     """
+
     @tool
     def add(a: int, b: int) -> int:
         """Add two numbers."""
@@ -86,7 +95,9 @@ def invoke_tool_chain():
     for tool_call in response.tool_calls:
         if tool_call["name"] == "add":
             result = add.invoke(tool_call["args"])
-            messages.append(ToolMessage(content=str(result), tool_call_id=tool_call["id"]))
+            messages.append(
+                ToolMessage(content=str(result), tool_call_id=tool_call["id"])
+            )
 
     final_response = llm_with_tools.invoke(messages)
     parser = StrOutputParser()
@@ -116,10 +127,15 @@ def invoke_rag_chain():
     retriever = vectorstore.as_retriever()
 
     llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", "Answer the question using only the context below.\n\nContext:\n{context}"),
-        ("user", "{question}"),
-    ])
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "Answer the question using only the context below.\n\nContext:\n{context}",
+            ),
+            ("user", "{question}"),
+        ]
+    )
 
     def format_docs(docs):
         return "\n".join(doc.page_content for doc in docs)
@@ -142,7 +158,11 @@ def stream_chain() -> StreamingResponse:
         StreamingResponse yielding text chunks.
     """
     llm = ChatOpenAI(proxy_model_name="gpt-5.4-nano")
-    messages = [HumanMessage(content="Write a 1000 word explanation about SAP AI SDK and its capabilities")]
+    messages = [
+        HumanMessage(
+            content="Write a 1000 word explanation about SAP AI SDK and its capabilities"
+        )
+    ]
 
     async def generate():
         async for chunk in llm.astream(messages):
@@ -150,4 +170,3 @@ def stream_chain() -> StreamingResponse:
                 yield chunk.content
 
     return StreamingResponse(generate(), media_type="text/plain")
-

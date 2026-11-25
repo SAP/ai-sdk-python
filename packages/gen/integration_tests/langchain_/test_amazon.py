@@ -12,10 +12,19 @@ from langchain_core.messages import AIMessage, HumanMessage, AIMessageChunk
 from parameterized import parameterized
 from pydantic import BaseModel
 
-from gen_ai_hub.proxy.langchain.amazon import BedrockEmbeddings, ChatBedrock, ChatBedrockConverse
-from integration_tests.constants import (AMAZON_TITAN_EMBEDDING_TEST_MODEL, CLAUDE_4_5_SONNET_TEST_MODEL,
-                                         AMAZON_NOVA_MICRO_TEST_MODEL, CLAUDE_4_5_HAIKU_TEST_MODEL)
+from gen_ai_hub.proxy.langchain.amazon import (
+    BedrockEmbeddings,
+    ChatBedrock,
+    ChatBedrockConverse,
+)
+from integration_tests.constants import (
+    AMAZON_TITAN_EMBEDDING_TEST_MODEL,
+    CLAUDE_4_5_SONNET_TEST_MODEL,
+    AMAZON_NOVA_MICRO_TEST_MODEL,
+    CLAUDE_4_5_HAIKU_TEST_MODEL,
+)
 from integration_tests.setup_aicore import TestCaseBedrockSetupMixin
+
 
 @pytest.mark.bedrock
 class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):
@@ -40,7 +49,9 @@ class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):
             example_ai = AIMessagePromptTemplate.from_template("Ahoy!")
             human_template = "{text}"
 
-            human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+            human_message_prompt = HumanMessagePromptTemplate.from_template(
+                human_template
+            )
             chat_prompt = ChatPromptTemplate.from_messages(
                 [system_message_prompt, example_human, example_ai, human_message_prompt]
             )
@@ -64,7 +75,9 @@ class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):
             example_ai = AIMessagePromptTemplate.from_template("Ahoy!")
             human_template = "{text}"
 
-            human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+            human_message_prompt = HumanMessagePromptTemplate.from_template(
+                human_template
+            )
             chat_prompt = ChatPromptTemplate.from_messages(
                 [system_message_prompt, example_human, example_ai, human_message_prompt]
             )
@@ -73,27 +86,31 @@ class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):
             response = chain.invoke("I love programming")
             self.assertIsInstance(response["text"], str)
 
-
-
-    @parameterized.expand(
-        [
-            CLAUDE_4_5_SONNET_TEST_MODEL,
-            CLAUDE_4_5_HAIKU_TEST_MODEL,
-        ]
-    )
-    def test_stream(self, model= CLAUDE_4_5_SONNET_TEST_MODEL):
+    @parameterized.expand([CLAUDE_4_5_SONNET_TEST_MODEL, CLAUDE_4_5_HAIKU_TEST_MODEL])
+    def test_stream(self, model=CLAUDE_4_5_SONNET_TEST_MODEL):
         with self.subTest(model=model):
             chat_model = ChatBedrock(
                 model_name=model,
                 model_kwargs={"temperature": 0.0},
                 proxy_client=self.proxy_client,
-                streaming=True
+                streaming=True,
             )
 
-            chunks = [chunk for chunk in chat_model.stream([HumanMessage(content="Why is the sky blue?")])]
+            chunks = [
+                chunk
+                for chunk in chat_model.stream(
+                    [HumanMessage(content="Why is the sky blue?")]
+                )
+            ]
             self.assertTrue(all(isinstance(chunk, AIMessageChunk) for chunk in chunks))
-            if "anthropic" in model:  # Token by token streaming is only supported for anthropic models
-                self.assertGreater(len(chunks), 1, "Only one chunk received - stream seems to be buffered.")
+            if (
+                "anthropic" in model
+            ):  # Token by token streaming is only supported for anthropic models
+                self.assertGreater(
+                    len(chunks),
+                    1,
+                    "Only one chunk received - stream seems to be buffered.",
+                )
 
     def test_embed_query(self):
         embedding_model = BedrockEmbeddings(
@@ -129,7 +146,6 @@ class TestAmazonLLM(TestCaseBedrockSetupMixin, unittest.TestCase):
 
 @pytest.mark.bedrock
 class TestAmazonLLMAsync(TestCaseBedrockSetupMixin, unittest.IsolatedAsyncioTestCase):
-
     async def test_chat_model(self, model=CLAUDE_4_5_SONNET_TEST_MODEL):
         chat_model = ChatBedrock(
             model_name=model,
@@ -155,13 +171,20 @@ class TestAmazonLLMAsync(TestCaseBedrockSetupMixin, unittest.IsolatedAsyncioTest
 
     async def test_async_chat_streaming(self, model=CLAUDE_4_5_SONNET_TEST_MODEL):
         from langchain_classic.schema import HumanMessage
+
         chat_model = ChatBedrock(
             model_name=model,
             model_kwargs={"temperature": 0.0},
             proxy_client=self.proxy_client,
-            streaming=True
+            streaming=True,
         )
-        chunks = [chunk async for chunk
-                  in chat_model.astream([HumanMessage(content='Write me a song about sparkling water.')])]
+        chunks = [
+            chunk
+            async for chunk in chat_model.astream(
+                [HumanMessage(content="Write me a song about sparkling water.")]
+            )
+        ]
         self.assertTrue(all(isinstance(chunk, AIMessageChunk) for chunk in chunks))
-        self.assertGreater(len(chunks), 1, "Only one chunk received - stream seems to be buffered.")
+        self.assertGreater(
+            len(chunks), 1, "Only one chunk received - stream seems to be buffered."
+        )

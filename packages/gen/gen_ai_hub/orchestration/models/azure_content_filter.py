@@ -1,7 +1,10 @@
 from enum import Enum
 from typing import Union, Literal
 
-from gen_ai_hub.orchestration.models.content_filter import ContentFilter, ContentFilterProvider
+from gen_ai_hub.orchestration.models.content_filter import (
+    ContentFilter,
+    ContentFilterProvider,
+)
 
 
 class AzureThreshold(int, Enum):
@@ -38,12 +41,12 @@ class AzureContentFilter(ContentFilter):
     """
 
     def __init__(
-            self,
-            hate: Union[AzureThreshold, Literal[0, 2, 4, 6]],
-            sexual: Union[AzureThreshold, Literal[0, 2, 4, 6]],
-            violence: Union[AzureThreshold, Literal[0, 2, 4, 6]],
-            self_harm: Union[AzureThreshold, Literal[0, 2, 4, 6]],
-            **kwargs
+        self,
+        hate: Union[AzureThreshold, Literal[0, 2, 4, 6]],
+        sexual: Union[AzureThreshold, Literal[0, 2, 4, 6]],
+        violence: Union[AzureThreshold, Literal[0, 2, 4, 6]],
+        self_harm: Union[AzureThreshold, Literal[0, 2, 4, 6]],
+        **kwargs,
     ):
         """Initializes the AzureContentFilter with specified thresholds for different content categories.
 
@@ -58,9 +61,19 @@ class AzureContentFilter(ContentFilter):
         """
 
         hate = hate if isinstance(hate, AzureThreshold) else AzureThreshold(hate)
-        sexual = sexual if isinstance(sexual, AzureThreshold) else AzureThreshold(sexual)
-        violence = violence if isinstance(violence, AzureThreshold) else AzureThreshold(violence)
-        self_harm = self_harm if isinstance(self_harm, AzureThreshold) else AzureThreshold(self_harm)
+        sexual = (
+            sexual if isinstance(sexual, AzureThreshold) else AzureThreshold(sexual)
+        )
+        violence = (
+            violence
+            if isinstance(violence, AzureThreshold)
+            else AzureThreshold(violence)
+        )
+        self_harm = (
+            self_harm
+            if isinstance(self_harm, AzureThreshold)
+            else AzureThreshold(self_harm)
+        )
 
         super().__init__(
             provider=ContentFilterProvider.AZURE,
@@ -69,6 +82,6 @@ class AzureContentFilter(ContentFilter):
                 "Sexual": sexual,
                 "Violence": violence,
                 "SelfHarm": self_harm,
-                **kwargs
+                **kwargs,
             },
         )

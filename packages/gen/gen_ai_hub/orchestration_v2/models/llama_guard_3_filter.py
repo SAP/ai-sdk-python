@@ -7,7 +7,7 @@ from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 
 class LlamaGuard38bFilter(BaseModel):
     """
-    Specific implementation of ContentFilter for Llama Guard 3. Llama Guard 3 is a 
+    Specific implementation of ContentFilter for Llama Guard 3. Llama Guard 3 is a
     Llama-3.1-8B pretrained model, fine-tuned for content safety classification.
 
     Args:
@@ -54,5 +54,6 @@ class LlamaGuard38bFilter(BaseModel):
     sexual_content: bool = False
     elections: bool = False
     code_interpreter_abuse: bool = False
+
 
 __all__ = ["LlamaGuard38bFilter"]

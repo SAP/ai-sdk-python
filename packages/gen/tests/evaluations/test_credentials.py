@@ -153,8 +153,9 @@ class TestService(unittest.TestCase):
 
 class TestInitConf(unittest.TestCase):
     def test_init_conf_no_profile_no_config_file(self):
-        with patch("pathlib.Path.exists", return_value=False), patch.dict(
-            os.environ, {}, clear=True
+        with (
+            patch("pathlib.Path.exists", return_value=False),
+            patch.dict(os.environ, {}, clear=True),
         ):
             result = init_conf()
             self.assertEqual(result, {})
@@ -193,18 +194,24 @@ class TestInitConf(unittest.TestCase):
         with patch("pathlib.Path.exists", return_value=False):
             with self.assertRaises(FileNotFoundError) as context:
                 init_conf(profile="nonexistent")
-            self.assertIn("Unable to locate profile config file", str(context.exception))
+            self.assertIn(
+                "Unable to locate profile config file", str(context.exception)
+            )
 
 
 class TestExtractCredentials(unittest.TestCase):
     def test_extract_credentials_success(self):
-        source = Source("test", lambda cv: "test-value" if cv.name == "client_id" else None)
+        source = Source(
+            "test", lambda cv: "test-value" if cv.name == "client_id" else None
+        )
         credentials = extract_credentials(source)
         self.assertIn("client_id", credentials)
         self.assertEqual(credentials["client_id"], "test-value")
 
     def test_extract_credentials_with_transform(self):
-        source = Source("test", lambda cv: "https://test.com" if cv.name == "auth_url" else None)
+        source = Source(
+            "test", lambda cv: "https://test.com" if cv.name == "auth_url" else None
+        )
         credentials = extract_credentials(source)
         # Should have auth_url with transform applied
         if "auth_url" in credentials:
@@ -218,7 +225,9 @@ class TestExtractCredentials(unittest.TestCase):
 
 class TestResolveCredentials(unittest.TestCase):
     def test_resolve_credentials_from_first_source(self):
-        source1 = Source("kwargs", lambda cv: "value1" if cv.name == "client_id" else None)
+        source1 = Source(
+            "kwargs", lambda cv: "value1" if cv.name == "client_id" else None
+        )
         source2 = Source("env", lambda cv: "value2")
 
         credentials = resolve_credentials([source1, source2])
@@ -234,7 +243,9 @@ class TestResolveCredentials(unittest.TestCase):
 
 class TestResolveResourceGroup(unittest.TestCase):
     def test_resolve_resource_group_found(self):
-        source = Source("test", lambda cv: "test-rg" if cv.name == "resource_group" else None)
+        source = Source(
+            "test", lambda cv: "test-rg" if cv.name == "resource_group" else None
+        )
 
         result = resolve_resource_group([source])
         self.assertEqual(result, "test-rg")
@@ -292,9 +303,7 @@ class TestValidateCredentials(unittest.TestCase):
         self.assertIn("Multiple authentication methods found", str(context.exception))
 
     def test_validate_credentials_missing_base_fields_raises(self):
-        credentials = {
-            "client_secret": "secret",
-        }
+        credentials = {"client_secret": "secret"}
         with self.assertRaises(ValueError) as context:
             validate_credentials(credentials)
         self.assertIn("Missing required credentials", str(context.exception))
@@ -312,32 +321,36 @@ class TestFetchCredentials(unittest.TestCase):
         self.assertEqual(result["client_secret"], "test-secret")
 
     def test_fetch_credentials_from_env(self):
-        with patch.dict(
-            os.environ,
-            {
-                "AICORE_CLIENT_ID": "env-client",
-                "AICORE_CLIENT_SECRET": "env-secret",
-                "AICORE_AUTH_URL": "https://auth.com/oauth/token",
-                "AICORE_BASE_URL": "https://api.com/v2",
-            },
-        ), patch("ai_core_sdk.credentials.init_conf", return_value={}):
+        with (
+            patch.dict(
+                os.environ,
+                {
+                    "AICORE_CLIENT_ID": "env-client",
+                    "AICORE_CLIENT_SECRET": "env-secret",
+                    "AICORE_AUTH_URL": "https://auth.com/oauth/token",
+                    "AICORE_BASE_URL": "https://api.com/v2",
+                },
+            ),
+            patch("ai_core_sdk.credentials.init_conf", return_value={}),
+        ):
             result = fetch_credentials()
             self.assertEqual(result["client_id"], "env-client")
             self.assertEqual(result["client_secret"], "env-secret")
 
     def test_fetch_credentials_cert_url_becomes_auth_url(self):
-        with patch(
-            "ai_core_sdk.credentials.init_conf", return_value={}
-        ), patch.dict(
-            os.environ,
-            {
-                "AICORE_CLIENT_ID": "test-id",
-                "AICORE_CERT_URL": "https://cert.com/oauth/token",
-                "AICORE_BASE_URL": "https://api.com/v2",
-                "AICORE_CERT_STR": "cert-content",
-                "AICORE_KEY_STR": "key-content",
-            },
-            clear=True,
+        with (
+            patch("ai_core_sdk.credentials.init_conf", return_value={}),
+            patch.dict(
+                os.environ,
+                {
+                    "AICORE_CLIENT_ID": "test-id",
+                    "AICORE_CERT_URL": "https://cert.com/oauth/token",
+                    "AICORE_BASE_URL": "https://api.com/v2",
+                    "AICORE_CERT_STR": "cert-content",
+                    "AICORE_KEY_STR": "key-content",
+                },
+                clear=True,
+            ),
         ):
             result = fetch_credentials()
             self.assertIn("auth_url", result)

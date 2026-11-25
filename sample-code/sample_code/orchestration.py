@@ -385,7 +385,9 @@ def input_filtering():
                 LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
                 # 'harm' catch-all category enabled
                 GraniteGuardian41FilterConfig(
-                    config=GraniteGuardian41Filter(categories=GraniteGuardian41Categories(harm=True))
+                    config=GraniteGuardian41Filter(
+                        categories=GraniteGuardian41Categories(harm=True)
+                    )
                 ),
             ]
         )
@@ -531,14 +533,19 @@ def reasoning_content():
                         )
                     ]
                 ),
-                model=LLMModelDetails(name="gemini-3.5-flash", params={ "reasoning_effort": "high" }),
+                model=LLMModelDetails(
+                    name="gemini-3.5-flash", params={"reasoning_effort": "high"}
+                ),
             )
         )
     )
     service = OrchestrationService(config=config)
     result = service.run()
     service.close_http_connection()
-    return {"result": result.final_result.choices[0].message.content, "reasoning_content": result.final_result.choices[0].message.reasoning_content}
+    return {
+        "result": result.final_result.choices[0].message.content,
+        "reasoning_content": result.final_result.choices[0].message.reasoning_content,
+    }
 
 
 def reasoning_content_stream():
@@ -558,7 +565,9 @@ def reasoning_content_stream():
                         )
                     ]
                 ),
-                model=LLMModelDetails(name="gemini-3.5-flash", params={ "reasoning_effort": "high" }),
+                model=LLMModelDetails(
+                    name="gemini-3.5-flash", params={"reasoning_effort": "high"}
+                ),
             )
         ),
         stream=GlobalStreamOptions(enabled=True),
@@ -570,7 +579,9 @@ def reasoning_content_stream():
         stream = service.stream()
         for chunk in stream:
             if chunk.final_result:
-                reasoning_content_chunk = chunk.final_result.choices[0].delta.reasoning_content
+                reasoning_content_chunk = chunk.final_result.choices[
+                    0
+                ].delta.reasoning_content
                 if reasoning_content_chunk:
                     yield "".join([block.content for block in reasoning_content_chunk])
         service.close_http_connection()

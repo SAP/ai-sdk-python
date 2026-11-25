@@ -10,7 +10,7 @@ from gen_ai_hub.orchestration_v2.models.message import ChatMessage
 from gen_ai_hub.orchestration_v2.models.response_format import (
     ResponseFormatText,
     ResponseFormatJsonObject,
-    ResponseFormatJsonSchema
+    ResponseFormatJsonSchema,
 )
 from gen_ai_hub.orchestration_v2.models.template_ref import TemplateRef
 from gen_ai_hub.orchestration_v2.models.tools import FunctionTool
@@ -29,9 +29,12 @@ class Template(BaseModel):
 
         response_format: A response format that the model output should adhere to.
     """
+
     template: List[ChatMessage]
     defaults: Optional[dict] = None
-    response_format: Optional[ResponseFormatText | ResponseFormatJsonObject | ResponseFormatJsonSchema] = None
+    response_format: Optional[
+        ResponseFormatText | ResponseFormatJsonObject | ResponseFormatJsonSchema
+    ] = None
     tools: Optional[List[dict | FunctionTool]] = None
 
 
@@ -45,7 +48,9 @@ class PromptTemplatingModuleConfig(BaseModel):
 
         model: The LLM model and parameters to use for generation.
     """
+
     prompt: Optional[Template | TemplateRef] = None
     model: LLMModelDetails
+
 
 __all__ = ["Template", "PromptTemplatingModuleConfig"]

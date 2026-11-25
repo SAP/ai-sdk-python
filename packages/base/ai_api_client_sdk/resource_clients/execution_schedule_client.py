@@ -4,8 +4,12 @@ from ai_api_client_sdk.exception import AIAPIInvalidInputException
 from ai_api_client_sdk.helpers.datetime_parser import DATETIME_FORMAT
 from ai_api_client_sdk.models.base_models import BasicResponse
 from ai_api_client_sdk.models.execution_schedule import ExecutionSchedule
-from ai_api_client_sdk.models.execution_schedule_create_response import ExecutionScheduleCreateResponse
-from ai_api_client_sdk.models.execution_schedule_query_response import ExecutionScheduleQueryResponse
+from ai_api_client_sdk.models.execution_schedule_create_response import (
+    ExecutionScheduleCreateResponse,
+)
+from ai_api_client_sdk.models.execution_schedule_query_response import (
+    ExecutionScheduleQueryResponse,
+)
 from ai_api_client_sdk.models.status import ScheduleStatus
 from ai_api_client_sdk.resource_clients.base_client import BaseClient
 
@@ -15,8 +19,15 @@ class ExecutionScheduleClient(BaseClient):
     the server. It implements the base class :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    def create(self, name: str, cron: str, configuration_id: str, start: datetime = None, end: datetime = None,
-               resource_group: str = None) -> ExecutionScheduleCreateResponse:
+    def create(
+        self,
+        name: str,
+        cron: str,
+        configuration_id: str,
+        start: datetime = None,
+        end: datetime = None,
+        resource_group: str = None,
+    ) -> ExecutionScheduleCreateResponse:
         """Creates an execution schedule.
 
         :param name: Name of the execution schedule
@@ -42,20 +53,20 @@ class ExecutionScheduleClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.execution_schedule_create_response.ExecutionScheduleCreateResponse`
         """
-        body = {
-            "name": name,
-            "cron": cron,
-            "configuration_id": configuration_id,
-        }
+        body = {"name": name, "cron": cron, "configuration_id": configuration_id}
         if start:
-            body['start'] = start.strftime(DATETIME_FORMAT)
+            body["start"] = start.strftime(DATETIME_FORMAT)
         if end:
-            body['end'] = end.strftime(DATETIME_FORMAT)
-        response_dict = self.rest_client.post(path='/executionSchedules', body=body, resource_group=resource_group)
+            body["end"] = end.strftime(DATETIME_FORMAT)
+        response_dict = self.rest_client.post(
+            path="/executionSchedules", body=body, resource_group=resource_group
+        )
 
         return ExecutionScheduleCreateResponse.from_dict(response_dict)
 
-    def delete(self, execution_schedule_id: str, resource_group: str = None) -> BasicResponse:
+    def delete(
+        self, execution_schedule_id: str, resource_group: str = None
+    ) -> BasicResponse:
         """Deletes the execution schedule.
 
         :param execution_schedule_id: ID of the execution schedule to be deleted
@@ -77,11 +88,15 @@ class ExecutionScheduleClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'/executionSchedules/{execution_schedule_id}',
-                                                resource_group=resource_group)
+        response_dict = self.rest_client.delete(
+            path=f"/executionSchedules/{execution_schedule_id}",
+            resource_group=resource_group,
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def get(self, execution_schedule_id: str, resource_group: str = None) -> ExecutionSchedule:
+    def get(
+        self, execution_schedule_id: str, resource_group: str = None
+    ) -> ExecutionSchedule:
         """Retrieves the execution schedule from the server.
 
         :param execution_schedule_id: ID of the execution schedule to be retrieved
@@ -101,12 +116,22 @@ class ExecutionScheduleClient(BaseClient):
         :return: The retrieved execution
         :rtype: class:`ai_api_client_sdk.models.execution.Execution`
         """
-        execution_schedule_dict = self.rest_client.get(path=f'/executionSchedules/{execution_schedule_id}',
-                                                       resource_group=resource_group)
+        execution_schedule_dict = self.rest_client.get(
+            path=f"/executionSchedules/{execution_schedule_id}",
+            resource_group=resource_group,
+        )
         return ExecutionSchedule.from_dict(execution_schedule_dict)
 
-    def modify(self, execution_schedule_id: str, cron: str = None, start: datetime = None, end: datetime = None,
-               configurationId: str = None, status: ScheduleStatus = None, resource_group: str = None) -> BasicResponse:
+    def modify(
+        self,
+        execution_schedule_id: str,
+        cron: str = None,
+        start: datetime = None,
+        end: datetime = None,
+        configurationId: str = None,
+        status: ScheduleStatus = None,
+        resource_group: str = None,
+    ) -> BasicResponse:
         """Modifies the execution schedule.
 
         :param execution_schedule_id: ID of the execution to be modified
@@ -138,25 +163,34 @@ class ExecutionScheduleClient(BaseClient):
         """
         body = {}
         if cron:
-            body['cron'] = cron
+            body["cron"] = cron
         if start:
-            body['start'] = start.strftime(DATETIME_FORMAT)
+            body["start"] = start.strftime(DATETIME_FORMAT)
         if end:
-            body['end'] = end.strftime(DATETIME_FORMAT)
+            body["end"] = end.strftime(DATETIME_FORMAT)
         if configurationId:
-            body['configurationId'] = configurationId
+            body["configurationId"] = configurationId
         if status:
-            body['status'] = status.value
+            body["status"] = status.value
 
         if not body:
-            raise AIAPIInvalidInputException('The Request Body cannot be empty.')
+            raise AIAPIInvalidInputException("The Request Body cannot be empty.")
 
-        response_dict = self.rest_client.patch(path=f'/executionSchedules/{execution_schedule_id}', body=body,
-                                               resource_group=resource_group)
+        response_dict = self.rest_client.patch(
+            path=f"/executionSchedules/{execution_schedule_id}",
+            body=body,
+            resource_group=resource_group,
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def query(self, configuration_id: str = None, status: ScheduleStatus = None, top: int = None,
-              skip: int = None, resource_group: str = None) -> ExecutionScheduleQueryResponse:
+    def query(
+        self,
+        configuration_id: str = None,
+        status: ScheduleStatus = None,
+        top: int = None,
+        skip: int = None,
+        resource_group: str = None,
+    ) -> ExecutionScheduleQueryResponse:
         """Queries the execution schedules.
 
         :param configuration_id: ID of the configuration, the executions should be configured by, defaults to None
@@ -180,14 +214,23 @@ class ExecutionScheduleClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.execution_query_response.ExecutionQueryResponse`
         """
-        params = self._form_query_params(configuration_id=configuration_id,
-                                         status=status.value if status else None,
-                                         top=top, skip=skip)
-        response_dict = self.rest_client.get(path='/executionSchedules', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            configuration_id=configuration_id,
+            status=status.value if status else None,
+            top=top,
+            skip=skip,
+        )
+        response_dict = self.rest_client.get(
+            path="/executionSchedules", params=params, resource_group=resource_group
+        )
         return ExecutionScheduleQueryResponse.from_dict(response_dict)
 
-    def count(self, configuration_id: str = None, status: ScheduleStatus = None,
-              resource_group: str = None) -> int:
+    def count(
+        self,
+        configuration_id: str = None,
+        status: ScheduleStatus = None,
+        resource_group: str = None,
+    ) -> int:
         """Counts the number of executions schedules.
 
         :param configuration_id: ID of the configuration, the executions should be configured by, defaults to None
@@ -207,6 +250,11 @@ class ExecutionScheduleClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: int
         """
-        params = self._form_query_params(configuration_id=configuration_id,
-                                         status=status.value if status else None)
-        return self.rest_client.get(path='/executionSchedules/$count', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            configuration_id=configuration_id, status=status.value if status else None
+        )
+        return self.rest_client.get(
+            path="/executionSchedules/$count",
+            params=params,
+            resource_group=resource_group,
+        )

@@ -10,8 +10,13 @@ class MetricsClient(BaseClient):
     implements the base class :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    def query(self, filter: str = None, execution_ids: List[str] = None, select: List[str] = None, resource_group: str = None) -> \
-            MetricsQueryResponse:
+    def query(
+        self,
+        filter: str = None,
+        execution_ids: List[str] = None,
+        select: List[str] = None,
+        resource_group: str = None,
+    ) -> MetricsQueryResponse:
         """Queries the metrics.
 
         :param filter: Deprecated. Use parameter execution_ids instead. A filter expression that filters the metric
@@ -19,7 +24,7 @@ class MetricsClient(BaseClient):
         :type filter: str, optional
         :param execution_ids: IDs of the executions, of which the metrics should be retrieved, defaults to None
         :type execution_ids: List[str], optional
-        :param select: Values of select can be metrics,tags,customInfo or any of the combinations of these or *. 
+        :param select: Values of select can be metrics,tags,customInfo or any of the combinations of these or *.
             Can be used to select(project) only the resources specified
         :type select: List[str], optional
         :param resource_group: Resource Group which the request should be sent on behalf. Either this or a default
@@ -35,12 +40,20 @@ class MetricsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.metrics_query_response.MetricsQueryResponse`
         """
-        params = self._form_query_params(filter=filter, execution_ids=execution_ids, select=select)
-        if params and 'filter' in params:  # pylint: disable=unsupported-membership-test
-            warnings.warn('Parameter filter is deprecated. Use parameter execution_ids instead.', DeprecationWarning, stacklevel=2)
-            params['$filter'] = params['filter']  # pylint: disable=unsupported-assignment-operation,unsubscriptable-object
-            del params['filter']  # pylint: disable=unsupported-delete-operation
-        response_dict = self.rest_client.get(path='/metrics', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            filter=filter, execution_ids=execution_ids, select=select
+        )
+        if params and "filter" in params:  # pylint: disable=unsupported-membership-test
+            warnings.warn(
+                "Parameter filter is deprecated. Use parameter execution_ids instead.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            params["$filter"] = params["filter"]  # pylint: disable=unsupported-assignment-operation,unsubscriptable-object
+            del params["filter"]  # pylint: disable=unsupported-delete-operation
+        response_dict = self.rest_client.get(
+            path="/metrics", params=params, resource_group=resource_group
+        )
         return MetricsQueryResponse.from_dict(response_dict)
 
     def delete(self, execution_id: str, resource_group: str = None) -> None:
@@ -62,4 +75,6 @@ class MetricsClient(BaseClient):
             server
         """
         params = self._form_query_params(execution_id=execution_id)
-        self.rest_client.delete(path='/metrics', params=params, resource_group=resource_group)
+        self.rest_client.delete(
+            path="/metrics", params=params, resource_group=resource_group
+        )

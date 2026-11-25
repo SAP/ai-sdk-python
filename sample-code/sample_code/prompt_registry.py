@@ -1,9 +1,19 @@
-from gen_ai_hub.prompt_registry.client import OrchestrationConfigClient, PromptTemplateClient
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplate, PromptTemplateSpec
+from gen_ai_hub.prompt_registry.client import (
+    OrchestrationConfigClient,
+    PromptTemplateClient,
+)
+from gen_ai_hub.prompt_registry.models.prompt_template import (
+    PromptTemplate,
+    PromptTemplateSpec,
+)
 from gen_ai_hub.orchestration_v2.models.config import ModuleConfig, OrchestrationConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails
 from gen_ai_hub.orchestration_v2.models.message import SystemMessage, UserMessage
-from gen_ai_hub.orchestration_v2.models.template import PromptTemplatingModuleConfig, Template
+from gen_ai_hub.orchestration_v2.models.template import (
+    PromptTemplatingModuleConfig,
+    Template,
+)
+
 
 def create_prompt_template():
     """
@@ -55,7 +65,9 @@ def get_prompt_templates():
         List of matching prompt templates.
     """
     client = PromptTemplateClient()
-    return client.get_prompt_templates(scenario="my-scenario", name="my-template", version="1.0.0")
+    return client.get_prompt_templates(
+        scenario="my-scenario", name="my-template", version="1.0.0"
+    )
 
 
 def delete_prompt_template(template_id: str):

@@ -2,7 +2,9 @@ from ai_core_sdk.helpers import form_top_skip_params
 from ai_core_sdk.models import BasicResponse
 from ai_core_sdk.models.base_models import Message
 from ai_core_sdk.models.docker_registry_secret import DockerRegistrySecret
-from ai_core_sdk.models.docker_registry_secret_query_response import DockerRegistrySecretQueryResponse
+from ai_core_sdk.models.docker_registry_secret_query_response import (
+    DockerRegistrySecretQueryResponse,
+)
 from ai_core_sdk.resource_clients import BaseClient
 
 
@@ -11,7 +13,8 @@ class DockerRegistrySecretsClient(BaseClient):
     endpoints of the server. It implements the base class
     :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
-    __PATH = '/admin/dockerRegistrySecrets'
+
+    __PATH = "/admin/dockerRegistrySecrets"
 
     def create(self, name: str, data: dict) -> Message:
         """Creates a docker secret based on the configuration in the request body.
@@ -29,8 +32,8 @@ class DockerRegistrySecretsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_core_sdk.models.base_models.Message`
         """
-        body = {'name': name, 'data': data}
-        response_dict = self.rest_client.post(path=f'{self.__PATH}', body=body)
+        body = {"name": name, "data": data}
+        response_dict = self.rest_client.post(path=f"{self.__PATH}", body=body)
         return Message.from_dict(response_dict)
 
     def delete(self, name: str) -> BasicResponse:
@@ -51,7 +54,7 @@ class DockerRegistrySecretsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'{self.__PATH}/{name}')
+        response_dict = self.rest_client.delete(path=f"{self.__PATH}/{name}")
         return BasicResponse.from_dict(response_dict)
 
     def get(self, name: str) -> DockerRegistrySecret:
@@ -70,7 +73,7 @@ class DockerRegistrySecretsClient(BaseClient):
         :return: The retrieved metadata of the docker registry secret
         :rtype: class:`ai_core_sdk.models.docker_registry_secret.DockerRegistrySecret`
         """
-        response_dict = self.rest_client.get(path=f'{self.__PATH}/{name}')
+        response_dict = self.rest_client.get(path=f"{self.__PATH}/{name}")
         return DockerRegistrySecret.from_dict(response_dict)
 
     def modify(self, name: str, data: dict) -> BasicResponse:
@@ -91,12 +94,16 @@ class DockerRegistrySecretsClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        body = {'data': data}
-        headers = {'Content-Type': 'application/merge-patch+json'}
-        response_dict = self.rest_client.patch(path=f'{self.__PATH}/{name}', body=body, headers=headers)
+        body = {"data": data}
+        headers = {"Content-Type": "application/merge-patch+json"}
+        response_dict = self.rest_client.patch(
+            path=f"{self.__PATH}/{name}", body=body, headers=headers
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def query(self, top: int = None, skip: int = None) -> DockerRegistrySecretQueryResponse:
+    def query(
+        self, top: int = None, skip: int = None
+    ) -> DockerRegistrySecretQueryResponse:
         """Gets a list of metadata of docker registry secrets.
 
         :param top: Number of docker registry secrets to be retrieved, defaults to None
@@ -114,5 +121,5 @@ class DockerRegistrySecretsClient(BaseClient):
         :rtype: class:`ai_core_sdk.models.docker_registry_secret_query_response.DockerRegistrySecretQueryResponse`
         """
         params = form_top_skip_params(top, skip)
-        response_dict = self.rest_client.get(path=f'{self.__PATH}', params=params)
+        response_dict = self.rest_client.get(path=f"{self.__PATH}", params=params)
         return DockerRegistrySecretQueryResponse.from_dict(response_dict)

@@ -14,7 +14,14 @@ class ApplicationResourceSyncStatus:
     :type message: str, optional
     """
 
-    def __init__(self, name: str = None, kind: str = None, status: str = None, message: str = None, **kwargs):
+    def __init__(
+        self,
+        name: str = None,
+        kind: str = None,
+        status: str = None,
+        message: str = None,
+        **kwargs,
+    ):
         self.name: str = name
         self.kind: str = kind
         self.status: str = status
@@ -31,4 +38,3 @@ class ApplicationResourceSyncStatus:
         :rtype: class:`ai_core_sdk.models.application_resource_sync_status.ApplicationResourceSyncStatus`
         """
         return ApplicationResourceSyncStatus(**app_res_sync_status_dict)
-

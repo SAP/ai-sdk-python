@@ -32,10 +32,14 @@ class ScenarioClient(BaseClient):
         :return: The retrieved scenario
         :rtype: class:`ai_api_client_sdk.models.scenario.Scenario`
         """
-        scenario_dict = self.rest_client.get(path=f'/scenarios/{scenario_id}', resource_group=resource_group)
+        scenario_dict = self.rest_client.get(
+            path=f"/scenarios/{scenario_id}", resource_group=resource_group
+        )
         return Scenario.from_dict(scenario_dict)
 
-    def query(self, only_llm_scenarios: bool = False, resource_group: str = None) -> ScenarioQueryResponse:
+    def query(
+        self, only_llm_scenarios: bool = False, resource_group: str = None
+    ) -> ScenarioQueryResponse:
         """Queries the scenarios.
 
         :param only_llm_scenarios: indicates whether to query for LLM scenarios only, defaults to False
@@ -51,7 +55,9 @@ class ScenarioClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.scenario_query_response.ScenarioQueryResponse`
         """
-        response_dict = self.rest_client.get(path='/scenarios', resource_group=resource_group)
+        response_dict = self.rest_client.get(
+            path="/scenarios", resource_group=resource_group
+        )
         if only_llm_scenarios:
             response_dict = filter_for_llm_scenarios(response_dict)
         return ScenarioQueryResponse.from_dict(response_dict)
@@ -74,8 +80,12 @@ class ScenarioClient(BaseClient):
         """
         return self.query(only_llm_scenarios=True)
 
-    def query_versions(self, scenario_id: str, label_selector: List[str] = None, resource_group: str = None) -> \
-            VersionQueryResponse:
+    def query_versions(
+        self,
+        scenario_id: str,
+        label_selector: List[str] = None,
+        resource_group: str = None,
+    ) -> VersionQueryResponse:
         """Queries the versions.
 
         :param scenario_id: ID of the scenario, the versions should belong to
@@ -97,6 +107,9 @@ class ScenarioClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.scenario_query_response.ScenarioQueryResponse`
         """
         params = self._form_query_params(label_selector=label_selector)
-        response_dict = self.rest_client.get(path=f'/scenarios/{scenario_id}/versions', params=params,
-                                             resource_group=resource_group)
+        response_dict = self.rest_client.get(
+            path=f"/scenarios/{scenario_id}/versions",
+            params=params,
+            resource_group=resource_group,
+        )
         return VersionQueryResponse.from_dict(response_dict)

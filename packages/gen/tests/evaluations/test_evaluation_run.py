@@ -25,7 +25,6 @@ from gen_ai_hub.evaluations.constants import (
 
 
 class TestRunContext(unittest.TestCase):
-
     def test_run_context_init(self):
         mock_client = MagicMock()
         mock_credentials = MagicMock()
@@ -52,7 +51,6 @@ class TestRunContext(unittest.TestCase):
 
 
 class TestEvaluationRun(unittest.TestCase):
-
     def setUp(self):
         self.mock_ai_core_client = MagicMock()
         self.mock_ai_core_client.execution = MagicMock()
@@ -61,8 +59,7 @@ class TestEvaluationRun(unittest.TestCase):
         self.mock_ai_core_client.rest_client = MagicMock()
 
         self.mock_object_store_credentials = _AWSObjectStoreData(
-            aws_access_key_id="test-key",
-            aws_secret_access_key="test-secret",
+            aws_access_key_id="test-key", aws_secret_access_key="test-secret"
         )
 
         self.evaluation_run = EvaluationRun(
@@ -99,9 +96,7 @@ class TestEvaluationRun(unittest.TestCase):
         result = self.evaluation_run._execution_status_fetcher()
 
         self.mock_ai_core_client.execution.get.assert_called_once_with(
-            execution_id="exec-456",
-            resource_group="rg-test",
-            select="status",
+            execution_id="exec-456", resource_group="rg-test", select="status"
         )
         self.assertIs(result, mock_response)
 
@@ -124,13 +119,17 @@ class TestEvaluationRun(unittest.TestCase):
     def test_get_current_status_success(self):
         mock_response = MagicMock()
         mock_response.status = Status.RUNNING
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         status = self.evaluation_run.get_current_status()
         self.assertEqual(status, Status.RUNNING)
 
     def test_get_current_status_exception(self):
-        self.evaluation_run._execution_status_fetcher = MagicMock(side_effect=Exception("API Error"))
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            side_effect=Exception("API Error")
+        )
 
         with self.assertRaises(ValueError):
             self.evaluation_run.get_current_status()
@@ -139,7 +138,9 @@ class TestEvaluationRun(unittest.TestCase):
         mock_response = MagicMock()
         mock_response.status = Status.DEAD
         mock_response.status_details = None
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         result = self.evaluation_run.get_debug_info()
 
@@ -170,7 +171,9 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_completed_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.COMPLETED
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         result = self.evaluation_run.results()
 
@@ -180,7 +183,9 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_running_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.RUNNING
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         with self.assertRaises(ValueError):
             self.evaluation_run.results()
@@ -188,7 +193,9 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_other_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.DEAD
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         with self.assertRaises(ValueError):
             self.evaluation_run.results()
@@ -213,7 +220,9 @@ class TestEvaluationRun(unittest.TestCase):
             AWS_OSS_REGION_URL_KEY: "us-east-1",
         }
 
-        self.mock_ai_core_client.object_store_secrets.get.return_value = mock_secret_response
+        self.mock_ai_core_client.object_store_secrets.get.return_value = (
+            mock_secret_response
+        )
 
         mock_s3_client = MagicMock()
         mock_s3_client.get_sqlitedb_tables_data_from_s3.return_value = {
@@ -225,15 +234,13 @@ class TestEvaluationRun(unittest.TestCase):
         result = self.evaluation_run.load_results_tables()
 
         self.mock_ai_core_client.object_store_secrets.get.assert_called_once_with(
-            name=DEFAULT_KEY,
-            resource_group="rg-test",
+            name=DEFAULT_KEY, resource_group="rg-test"
         )
 
         expected_key = f"prefix/path/exec-456/tmp/{RESULTS_FILE_KEY}"
 
         mock_s3_client.get_sqlitedb_tables_data_from_s3.assert_called_once_with(
-            expected_key,
-            [COMPLETIONS_TABLE_KEY, METRICS_TABLE_KEY],
+            expected_key, [COMPLETIONS_TABLE_KEY, METRICS_TABLE_KEY]
         )
 
         self.assertIn(COMPLETIONS_TABLE_KEY, result)
@@ -241,7 +248,9 @@ class TestEvaluationRun(unittest.TestCase):
 
     def test_load_results_tables_exception(self):
         self.evaluation_run._run_context.cached_results_data = None
-        self.mock_ai_core_client.object_store_secrets.get.side_effect = Exception("S3 Error")
+        self.mock_ai_core_client.object_store_secrets.get.side_effect = Exception(
+            "S3 Error"
+        )
 
         with self.assertRaises(RuntimeError):
             self.evaluation_run.load_results_tables()
@@ -249,7 +258,9 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_completed_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.COMPLETED
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         result = self.evaluation_run.results()
 
@@ -259,7 +270,9 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_running_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.RUNNING
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         with self.assertRaises(ValueError):
             self.evaluation_run.results()
@@ -267,15 +280,15 @@ class TestEvaluationRun(unittest.TestCase):
     def test_results_with_other_status(self):
         mock_response = MagicMock()
         mock_response.status = Status.DEAD
-        self.evaluation_run._execution_status_fetcher = MagicMock(return_value=mock_response)
+        self.evaluation_run._execution_status_fetcher = MagicMock(
+            return_value=mock_response
+        )
 
         with self.assertRaises(ValueError):
             self.evaluation_run.results()
 
 
-
 class TestConfigurePandasDisplay(unittest.TestCase):
-
     @patch("pandas.set_option")
     def test_configure_pandas_display(self, mock_set_option):
         configure_pandas_display()
@@ -291,18 +304,18 @@ class TestConfigurePandasDisplay(unittest.TestCase):
 
 
 class TestResults(unittest.TestCase):
-
     def setUp(self):
         self.mock_ai_core_client = MagicMock()
         self.mock_ai_core_client.execution = MagicMock()
         self.mock_ai_core_client.object_store_secrets = MagicMock()
         self.mock_ai_core_client.base_url = "https://api.example.com"
         self.mock_ai_core_client.rest_client = MagicMock()
-        self.mock_ai_core_client.rest_client.get_token = MagicMock(return_value="mock-token")
+        self.mock_ai_core_client.rest_client.get_token = MagicMock(
+            return_value="mock-token"
+        )
 
         self.mock_object_store_credentials = _AWSObjectStoreData(
-            aws_access_key_id="test-key",
-            aws_secret_access_key="test-secret",
+            aws_access_key_id="test-key", aws_secret_access_key="test-secret"
         )
 
         self.evaluation_run = EvaluationRun(
@@ -320,7 +333,9 @@ class TestResults(unittest.TestCase):
         )
 
         # Patch Tracking before creating Results
-        self.tracking_patcher = patch("gen_ai_hub.evaluations.models.evaluation_run.Tracking")
+        self.tracking_patcher = patch(
+            "gen_ai_hub.evaluations.models.evaluation_run.Tracking"
+        )
         self.mock_tracking_class = self.tracking_patcher.start()
         self.mock_tracking_instance = MagicMock()
         self.mock_tracking_class.return_value = self.mock_tracking_instance
@@ -350,10 +365,7 @@ class TestResults(unittest.TestCase):
         )
 
     def test_ensure_loaded(self):
-        test_data = {
-            COMPLETIONS_TABLE_KEY: [{"id": 1}],
-            METRICS_TABLE_KEY: [{"id": 2}],
-        }
+        test_data = {COMPLETIONS_TABLE_KEY: [{"id": 1}], METRICS_TABLE_KEY: [{"id": 2}]}
 
         self.evaluation_run.load_results_tables = MagicMock(return_value=test_data)
         self.evaluation_run.set_cached_results_data = MagicMock()
@@ -406,7 +418,9 @@ class TestResults(unittest.TestCase):
 
         self.assertIsInstance(df, pd.DataFrame)
         self.assertEqual(len(df), 2)
-        self.assertTrue(all(row["run_id"] == run_id_hex for row in df.to_dict("records")))
+        self.assertTrue(
+            all(row["run_id"] == run_id_hex for row in df.to_dict("records"))
+        )
 
     def test_completions_exception(self):
         self.evaluation_run.load_results_tables = MagicMock(
@@ -436,7 +450,9 @@ class TestResults(unittest.TestCase):
 
         self.assertIsInstance(df, pd.DataFrame)
         self.assertEqual(len(df), 2)
-        self.assertTrue(all(row["run_id"] == run_id_hex for row in df.to_dict("records")))
+        self.assertTrue(
+            all(row["run_id"] == run_id_hex for row in df.to_dict("records"))
+        )
 
     def test_metrics_exception(self):
         self.evaluation_run.load_results_tables = MagicMock(
@@ -451,7 +467,9 @@ class TestResults(unittest.TestCase):
         run_id_hex = run_id_uuid.hex
         self.evaluation_run.id = str(run_id_uuid)
 
-        self.mock_tracking_instance.query.return_value = {"aggregations": {"metric1": 0.9}}
+        self.mock_tracking_instance.query.return_value = {
+            "aggregations": {"metric1": 0.9}
+        }
 
         result = self.results.aggregations()
 

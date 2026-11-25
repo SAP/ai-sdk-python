@@ -23,4 +23,6 @@ if not match:
 
 # Keep the generated header line, replace only the body with the published notes.
 header = match.split("\n", 1)[0]
-open(path, "w").write(content.replace(f"## {match}", f"## {header}\n\n{body.strip()}\n\n"))
+open(path, "w").write(
+    content.replace(f"## {match}", f"## {header}\n\n{body.strip()}\n\n")
+)

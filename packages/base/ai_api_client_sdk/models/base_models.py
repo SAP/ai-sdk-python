@@ -20,7 +20,7 @@ class KeyValue:
         self.value: str = value
 
     def to_dict(self):
-        return {'key': self.key, 'value': self.value}
+        return {"key": self.key, "value": self.value}
 
     def __eq__(self, other):
         if not isinstance(other, KeyValue):
@@ -87,8 +87,12 @@ class QueryResponse:
         self.count: int = count
 
     def __str__(self):
-        return "Resources: [" + ", ".join(["{" + str(r) + "}" for r in self.resources]) + \
-               "], Count: " + str(self.count)
+        return (
+            "Resources: ["
+            + ", ".join(["{" + str(r) + "}" for r in self.resources])
+            + "], Count: "
+            + str(self.count)
+        )
 
 
 class BasicResponse:
@@ -129,15 +133,23 @@ class BasicErrorResponse:
     :param message: Error message from the server
     :type message: str
     :param request_id: Request ID
-    :type request_id: str  
+    :type request_id: str
     :param target: target
     :type target: str, optional
     :param details: Error details
-    :type details: Dict, optional   
+    :type details: Dict, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, code: str, message: str, request_id: str, target: str, details: Dict = None, **kwargs):
+    def __init__(
+        self,
+        code: str,
+        message: str,
+        request_id: str,
+        target: str,
+        details: Dict = None,
+        **kwargs,
+    ):
         self.code: str = code
         self.message: str = message
         self.request_id: str = request_id
@@ -149,7 +161,7 @@ class BasicErrorResponse:
 
     @staticmethod
     def from_dict(ber_dict: Dict[str, str]):
-        """Returns a :class:`ai_api_client_sdk.models.base_models.BasicErrorResponse` object, created from the values 
+        """Returns a :class:`ai_api_client_sdk.models.base_models.BasicErrorResponse` object, created from the values
         provided as parameter
 
         :param ber_dict: Dict which includes the necessary values to create the object
@@ -157,7 +169,7 @@ class BasicErrorResponse:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicErrorResponse`
         """
-        return BasicErrorResponse(**ber_dict)        
+        return BasicErrorResponse(**ber_dict)
 
 
 class BasicModifyRequest:
@@ -166,22 +178,23 @@ class BasicModifyRequest:
     :type id: str
     :param target_status: Target Status of the resource
     :type target_status: class:`ai_api_client_sdk.models.target_status.TargetStatus`
-    :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server         
+    :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, id: str, target_status: TargetStatus, **kwargs):
         self.id: str = id
         self.target_status: TargetStatus = target_status
 
     def to_dict(self):
-        return {'id': self.id, 'target_status': self.target_status.value}
+        return {"id": self.id, "target_status": self.target_status.value}
 
     def __str__(self):
-        return f'Id: {self.id}, Target Status: {self.target_status.value}'
+        return f"Id: {self.id}, Target Status: {self.target_status.value}"
 
 
 class BulkModifyErrorResponse:
-    """The BulkModifyErrorResponse object defines the error response from the server
-    """
+    """The BulkModifyErrorResponse object defines the error response from the server"""
+
     def __init__(self, id: str, error: BasicErrorResponse, **kwargs):
         """Creates an error object for a bulk modification call
 
@@ -189,7 +202,7 @@ class BulkModifyErrorResponse:
         :type id: str
         :param error: Error object response from the server
         :type error: BasicErrorResponse
-        :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server           
+        :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
         """
         self.id = id
         self.error = error
@@ -203,20 +216,20 @@ class BulkModifyErrorResponse:
         Returns:
             Returns a class:`ai_api_client_sdk.models.base_models.BulkModifyErrorResponse` object
         """
-        error_dict['error'] = BasicErrorResponse.from_dict(error_dict['error'])
+        error_dict["error"] = BasicErrorResponse.from_dict(error_dict["error"])
         return BulkModifyErrorResponse(**error_dict)
 
     def __str__(self):
-        return f'Id: {self.id}, Error: {self.error.__str__()}'
+        return f"Id: {self.id}, Error: {self.error.__str__()}"
 
 
 class Order(Enum):
-    ASC = 'asc'
-    DESC = 'desc'
+    ASC = "asc"
+    DESC = "desc"
 
 
 class Operation(AEnum):
-    CREATE = 'CREATE'
-    UPDATE = 'UPDATE'
-    DELETE = 'DELETE'
-    CASCADE_UPDATE = 'CASCADE-UPDATE'
+    CREATE = "CREATE"
+    UPDATE = "UPDATE"
+    DELETE = "DELETE"
+    CASCADE_UPDATE = "CASCADE-UPDATE"

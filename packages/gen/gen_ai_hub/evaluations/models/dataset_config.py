@@ -1,9 +1,7 @@
 from pathlib import Path
 from typing import Union, Optional
 from gen_ai_hub.evaluations.models.artifact_source import ArtifactSource
-from gen_ai_hub.evaluations.constants import (
-    SUFFIX_TO_FILE_TYPE,
-)
+from gen_ai_hub.evaluations.constants import SUFFIX_TO_FILE_TYPE
 
 
 class Dataset:
@@ -76,5 +74,6 @@ class Dataset:
         suffix = Path(path_str).suffix.lower()
 
         return SUFFIX_TO_FILE_TYPE.get(suffix, None)
+
 
 __all__ = ["Dataset"]

@@ -22,10 +22,9 @@ def converse():
             ],
         }
     ]
-    response = bedrock.converse(
-        messages=conversation,
-    )
+    response = bedrock.converse(messages=conversation)
     return {"result": response["output"]["message"]["content"][0]["text"]}
+
 
 def converse_stream():
     """
@@ -47,14 +46,13 @@ def converse_stream():
     ]
 
     def stream():
-        response = bedrock.converse_stream(
-            messages=conversation,
-        )
+        response = bedrock.converse_stream(messages=conversation)
         for chunk in response["stream"]:
             if "contentBlockDelta" in chunk:
                 yield chunk["contentBlockDelta"]["delta"]["text"]
 
     return StreamingResponse(stream(), media_type="text/plain")
+
 
 def embedding():
     """
@@ -64,7 +62,11 @@ def embedding():
         JSON object containing the embedding.
     """
     bedrock = Session().client(model_name="amazon--titan-embed-text")
-    body = json.dumps({"inputText": "Please recommend books with a theme similar to the movie 'Inception'."})
+    body = json.dumps(
+        {
+            "inputText": "Please recommend books with a theme similar to the movie 'Inception'."
+        }
+    )
     response = bedrock.invoke_model(body=body)
     response_body = json.loads(response.get("body").read())
     return response_body

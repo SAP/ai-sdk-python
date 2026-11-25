@@ -14,13 +14,20 @@ from typing import Any, ClassVar, Dict, List, Optional, Tuple, Type, Union
 
 from ai_api_client_sdk.models.status import Status
 from ai_core_sdk.ai_core_v2_client import AICoreV2Client
-from pydantic import BaseModel, PrivateAttr, model_validator, Field, ConfigDict, ValidationError
+from pydantic import (
+    BaseModel,
+    PrivateAttr,
+    model_validator,
+    Field,
+    ConfigDict,
+    ValidationError,
+)
 
 from gen_ai_hub.proxy.core.base import BaseDeployment, BaseProxyClient
 from gen_ai_hub.proxy.core.proxy_clients import proxy_clients
 from gen_ai_hub.proxy.core.utils import warn_once
 
-_temporary_headers_addition = ContextVar('temporary_headers_addition', default={})
+_temporary_headers_addition = ContextVar("temporary_headers_addition", default={})
 
 
 class GenAIHubRestClient:
@@ -33,7 +40,7 @@ class GenAIHubRestClient:
     :param proxy_client: The GenAIHubProxyClient instance to get the rest_client and headers from.
     """
 
-    def __init__(self, proxy_client: 'GenAIHubProxyClient'):
+    def __init__(self, proxy_client: "GenAIHubProxyClient"):
         """Initialize the GenAIHubRestClient.
 
         :param proxy_client: The GenAIHubProxyClient instance to get the rest_client and headers from.
@@ -56,9 +63,9 @@ class GenAIHubRestClient:
             return kwargs  # No additional headers to inject
 
         headers = dict(additional)
-        if kwargs.get('headers'):
-            headers.update(kwargs['headers'])  # Explicit headers take precedence
-        kwargs['headers'] = headers
+        if kwargs.get("headers"):
+            headers.update(kwargs["headers"])  # Explicit headers take precedence
+        kwargs["headers"] = headers
         return kwargs
 
     def get(self, path: str, **kwargs):
@@ -115,6 +122,7 @@ def temporary_headers_addition(headers: Dict[str, str]):
 
 class Deployment(BaseDeployment):
     """Deployment class represents a deployment of a foundational model in the GenAI Hub."""
+
     url: str
     config_id: str
     config_name: str
@@ -154,27 +162,32 @@ class Deployment(BaseDeployment):
         :return: Tuple of model identification keywords.
         :rtype: Tuple[str]
         """
-        return ('model_name', 'model_version', 'config_id', 'config_name', 'deployment_id')
+        return (
+            "model_name",
+            "model_version",
+            "config_id",
+            "config_name",
+            "deployment_id",
+        )
 
     @property
     def prediction_url(self):
         if self.model_name.startswith("cohere"):
-            return self.url.rstrip('/?') + '/chat' if self.url else ''
+            return self.url.rstrip("/?") + "/chat" if self.url else ""
         return None
 
 
 class FoundationalModelScenario(BaseModel):
     """Represents a foundational model scenario in the GenAI Hub."""
-    model_config = ConfigDict(
-        protected_namespaces=()
-    )
+
+    model_config = ConfigDict(protected_namespaces=())
 
     scenario_id: str
     config_names: Optional[Union[List[str], str]] = None
-    model_name_parameter: str = 'model_name'
+    model_name_parameter: str = "model_name"
     prediction_url_suffix: Optional[str] = None
 
-    @model_validator(mode='before')
+    @model_validator(mode="before")
     @classmethod
     def adjust(cls, data: Any) -> Any:
         """Adjust input data before model initialization.
@@ -185,14 +198,14 @@ class FoundationalModelScenario(BaseModel):
         :rtype: Any
         """
         if isinstance(data, dict):
-            config_names = data.get('config_names', None)
+            config_names = data.get("config_names", None)
             if isinstance(config_names, str):
-                data['config_names'] = [config_names]
+                data["config_names"] = [config_names]
             elif config_names is None:
-                data['config_names'] = ['*']
-            prediction_url_suffix = data.get('prediction_url_suffix', None)
+                data["config_names"] = ["*"]
+            prediction_url_suffix = data.get("prediction_url_suffix", None)
             if prediction_url_suffix is not None:
-                data['prediction_url_suffix'] = '/' + prediction_url_suffix.lstrip('/')
+                data["prediction_url_suffix"] = "/" + prediction_url_suffix.lstrip("/")
         return data
 
 
@@ -213,14 +226,15 @@ def _deployment_matches(deployment: BaseDeployment, **search_key_value: Dict[str
 
 
 class InvalidDeploymentBehavior(str, Enum):
-    warn = 'warn'
-    raise_error = 'raise_error'
-    ignore = 'ignore'
+    warn = "warn"
+    raise_error = "raise_error"
+    ignore = "ignore"
 
 
-@proxy_clients.register('gen-ai-hub')
-class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
+@proxy_clients.register("gen-ai-hub")
+class GenAIHubProxyClient(BaseProxyClient, extra="allow"):
     """GenAIHubProxyClient is a proxy client for interacting with the GenAI Hub."""
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     base_url: Optional[str] = None
@@ -230,20 +244,26 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
     resource_group: Optional[str] = None
     ai_core_client: Optional[AICoreV2Client] = None
 
-    AI_CLIENT_TYPE_VAL: ClassVar[str] = 'GenAI Hub SDK (Python)' 
+    AI_CLIENT_TYPE_VAL: ClassVar[str] = "GenAI Hub SDK (Python)"
 
     # class attributes
     foundational_model_scenarios: ClassVar[List[FoundationalModelScenario]] = [
-        FoundationalModelScenario(scenario_id='foundation-models', config_names='*', model_name_parameter='model_name'),
+        FoundationalModelScenario(
+            scenario_id="foundation-models",
+            config_names="*",
+            model_name_parameter="model_name",
+        )
     ]
     default_values: ClassVar[Dict[str, Any]] = {}
-    on_invalid_deployments: ClassVar[InvalidDeploymentBehavior] = InvalidDeploymentBehavior.warn
+    on_invalid_deployments: ClassVar[InvalidDeploymentBehavior] = (
+        InvalidDeploymentBehavior.warn
+    )
 
     # private_attributes
     _headers_addition: Dict[str, str] = PrivateAttr(default={})
     _deployments: List[Deployment] = PrivateAttr(default_factory=list)
 
-    @model_validator(mode='before')
+    @model_validator(mode="before")
     @classmethod
     def init_client(cls, data: Any) -> Any:
         """Initialize the client with the provided data.
@@ -254,18 +274,23 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         :rtype: Any
         """
         if isinstance(data, dict):
-            if data.get('ai_core_client', None) is not None:
+            if data.get("ai_core_client", None) is not None:
                 return data
             kwargs = {}
-            for name in ['base_url', 'auth_url', 'client_id', 'client_secret', 'resource_group']:
+            for name in [
+                "base_url",
+                "auth_url",
+                "client_id",
+                "client_secret",
+                "resource_group",
+            ]:
                 value = data.get(name, cls.default_values.get(name, None))
                 if value is not None:
                     kwargs[name] = value
             # Set AI-Client-Type header specific to generated AI Hub SDK.
             # Is overwritten by environment variable AI_CLIENT_TYPE if set.
-            kwargs['client_type'] = cls.AI_CLIENT_TYPE_VAL
-            data['ai_core_client'] = AICoreV2Client.from_env(**kwargs)
-
+            kwargs["client_type"] = cls.AI_CLIENT_TYPE_VAL
+            data["ai_core_client"] = AICoreV2Client.from_env(**kwargs)
 
         return data
 
@@ -283,14 +308,20 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         return Deployment
 
     def _get_matched_deployments(self, **search_key_value):
-        return [deployment for deployment in self.deployments if _deployment_matches(deployment, **search_key_value)]
+        return [
+            deployment
+            for deployment in self.deployments
+            if _deployment_matches(deployment, **search_key_value)
+        ]
 
     def select_deployment(self, raise_on_multiple: bool = False, **search_key_value):
         if not search_key_value:
-            raise ValueError('No key-value pairs provided for model discovery')
+            raise ValueError("No key-value pairs provided for model discovery")
 
         if "model_version" in search_key_value and "model_name" not in search_key_value:
-            raise ValueError('If a model version is specified for search, the model name must also be provided.')
+            raise ValueError(
+                "If a model version is specified for search, the model name must also be provided."
+            )
 
         matched_deployments = self._get_matched_deployments(**search_key_value)
         if len(matched_deployments) == 0:
@@ -308,9 +339,12 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
                 )
             return matched_deployments[0]
         else:
-            raise ValueError('No deployment found with: ' + ', '.join(
-                [f'deployment.{k} == {v}' for k, v in search_key_value.items()]
-            ))
+            raise ValueError(
+                "No deployment found with: "
+                + ", ".join(
+                    [f"deployment.{k} == {v}" for k, v in search_key_value.items()]
+                )
+            )
 
     # public methods
     def get_additional_headers(self) -> Dict[str, str]:
@@ -339,8 +373,8 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         """
         headers = deepcopy(self.ai_core_client.rest_client.headers)
         headers.update(self.get_additional_headers())
-        if os.environ.get('SKIP_AUTHORIZATION', '').lower() != 'true':
-            headers.update({'Authorization': self.get_ai_core_token()})
+        if os.environ.get("SKIP_AUTHORIZATION", "").lower() != "true":
+            headers.update({"Authorization": self.get_ai_core_token()})
 
         return headers
 
@@ -359,27 +393,35 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
             details = deployment.details["resources"]["backend_details"]["model"]
             additional_parameters = {
                 "model_name": details["name"],
-                "model_version": details["version"]
+                "model_version": details["version"],
             }
         except KeyError:
-            additional_parameters = config_parameters(scenario_info.model_name_parameter, self.ai_core_client, deployment)
-        return Deployment(url=deployment.deployment_url,
-                          deployment_id=deployment.id,
-                          created_at=deployment.created_at,
-                          config_id=deployment.configuration_id,
-                          config_name=deployment.configuration_name,
-                          custom_prediction_suffix=scenario_info.prediction_url_suffix,
-                          **additional_parameters)
+            additional_parameters = config_parameters(
+                scenario_info.model_name_parameter, self.ai_core_client, deployment
+            )
+        return Deployment(
+            url=deployment.deployment_url,
+            deployment_id=deployment.id,
+            created_at=deployment.created_at,
+            config_id=deployment.configuration_id,
+            config_name=deployment.configuration_name,
+            custom_prediction_suffix=scenario_info.prediction_url_suffix,
+            **additional_parameters,
+        )
 
     def _handle_deployment_error(self, deployment, scenario_info, err):
-        if self.on_invalid_deployments in [InvalidDeploymentBehavior.raise_error,
-                                           InvalidDeploymentBehavior.warn]:
-            msg = f'Failed to get all relevant information for deployment {deployment.id} ' + \
-                  f'[scenario: {scenario_info.scenario_id}; config: {deployment.configuration_name}]! ' + \
-                  'If this deployment is an LLM deployment make sure to set the model_name_parameter ' + \
-                  'when registring the foundation model scenario or use a more rigorous ' + \
-                  'config name filter. If the deployment is in the default foundation model scenario ' + \
-                  'consider using a different scenario for you deployments.'
+        if self.on_invalid_deployments in [
+            InvalidDeploymentBehavior.raise_error,
+            InvalidDeploymentBehavior.warn,
+        ]:
+            msg = (
+                f"Failed to get all relevant information for deployment {deployment.id} "
+                + f"[scenario: {scenario_info.scenario_id}; config: {deployment.configuration_name}]! "
+                + "If this deployment is an LLM deployment make sure to set the model_name_parameter "
+                + "when registring the foundation model scenario or use a more rigorous "
+                + "config name filter. If the deployment is in the default foundation model scenario "
+                + "consider using a different scenario for you deployments."
+            )
             if self.on_invalid_deployments == InvalidDeploymentBehavior.raise_error:
                 raise RuntimeError(msg) from err
             else:
@@ -387,11 +429,15 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         elif self.on_invalid_deployments == InvalidDeploymentBehavior.ignore:
             pass
         else:
-            raise ValueError(f'Invalid value for on_invalid_deployments: {self.on_invalid_deployments}')
+            raise ValueError(
+                f"Invalid value for on_invalid_deployments: {self.on_invalid_deployments}"
+            )
 
     def _get_scenario_deployments(self, scenario_info: FoundationalModelScenario):
         deployments = {}
-        query = self.ai_core_client.deployment.query(status=Status.RUNNING, scenario_id=scenario_info.scenario_id)
+        query = self.ai_core_client.deployment.query(
+            status=Status.RUNNING, scenario_id=scenario_info.scenario_id
+        )
 
         resources_to_process = [
             deployment
@@ -429,15 +475,19 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         for scenario_info in self.foundational_model_scenarios:
             deployment_set.update(self._get_scenario_deployments(scenario_info))
         self._deployments = [*deployment_set.values()]
-        self._deployments = sorted(self._deployments, key=lambda d: d.created_at, reverse=True)
+        self._deployments = sorted(
+            self._deployments, key=lambda d: d.created_at, reverse=True
+        )
         return self._deployments
 
     @classmethod
-    def add_foundation_model_scenario(cls,
-                                      scenario_id,
-                                      config_names: Optional[List[str]] = None,
-                                      prediction_url_suffix: Optional[str] = None,
-                                      model_name_parameter: str = 'model_name'):
+    def add_foundation_model_scenario(
+        cls,
+        scenario_id,
+        config_names: Optional[List[str]] = None,
+        prediction_url_suffix: Optional[str] = None,
+        model_name_parameter: str = "model_name",
+    ):
         """Add a foundational model scenario to the client.
 
         :param scenario_id: the scenario ID.
@@ -450,10 +500,13 @@ class GenAIHubProxyClient(BaseProxyClient, extra='allow'):
         :type model_name_parameter: str, optional
         """
         cls.foundational_model_scenarios.append(
-            FoundationalModelScenario(scenario_id=scenario_id,
-                                      config_names=config_names,
-                                      model_name_parameter=model_name_parameter,
-                                      prediction_url_suffix=prediction_url_suffix))
+            FoundationalModelScenario(
+                scenario_id=scenario_id,
+                config_names=config_names,
+                model_name_parameter=model_name_parameter,
+                prediction_url_suffix=prediction_url_suffix,
+            )
+        )
         for client in cls._instances.values():
             client._deployments = []
 
@@ -490,8 +543,8 @@ def camel_to_snake(name):
     :return: String converted to snake_case.
     :rtype: str
     """
-    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
 def config_parameters(model_name_parameter, ai_core_client, deployment):
@@ -508,7 +561,10 @@ def config_parameters(model_name_parameter, ai_core_client, deployment):
     """
     model_parameters = {}
     config = ai_core_client.configuration.get(deployment.configuration_id)
-    model_parameters['executable_id'] = config.executable_id
+    model_parameters["executable_id"] = config.executable_id
     for param in config.parameter_bindings:
         model_parameters[camel_to_snake(param.key)] = param.value
-    return {'model_name': model_parameters.pop(model_name_parameter, None), 'additonal_parameters': model_parameters}
+    return {
+        "model_name": model_parameters.pop(model_name_parameter, None),
+        "additonal_parameters": model_parameters,
+    }

@@ -5,16 +5,23 @@ from enum import Enum
 from typing import Union, Optional, List
 
 from gen_ai_hub.orchestration.models.base import JSONSerializable
-from gen_ai_hub.orchestration.models.multimodal_items import ContentPart, ImageItem, TextPart, ImageUrl, ImagePart
+from gen_ai_hub.orchestration.models.multimodal_items import (
+    ContentPart,
+    ImageItem,
+    TextPart,
+    ImageUrl,
+    ImagePart,
+)
+
 
 @dataclass
 class FunctionCall:
     """
     The function that the model called.
     """
+
     name: Optional[str] = field(
-        default=None,
-        metadata={"description": "The name of the function to call."}
+        default=None, metadata={"description": "The name of the function to call."}
     )
     arguments: Optional[str] = field(
         default=None,
@@ -26,7 +33,7 @@ class FunctionCall:
                 "defined by your function schema. Validate the arguments in "
                 "your code before calling your function."
             )
-        }
+        },
     )
 
     def parse_arguments(self) -> dict:
@@ -46,6 +53,7 @@ class MessageToolCall:
     """
     Represents a tool call within a message, specifically a function call.
     """
+
     id: str = field(metadata={"description": "The ID of the tool call."})
     type: typing.Literal["function"] = field(
         metadata={
@@ -70,7 +78,7 @@ class MessageToolCall:
             "function": {
                 "name": self.function.name,
                 "arguments": self.function.arguments,
-            }
+            },
         }
 
 
@@ -101,6 +109,7 @@ class Role(str, Enum):
     TOOL = "tool"
     DEVELOPER = "developer"
 
+
 @dataclass
 class Message(JSONSerializable):
     """
@@ -115,7 +124,7 @@ class Message(JSONSerializable):
         content: The message content, which may be plain text or a sequence of text and images.
     """
 
-    role: Union[Role, str] 
+    role: Union[Role, str]
     content: Union[str, List[ContentPart]]
     refusal: Optional[str] = None
     tool_calls: Optional[List[MessageToolCall]] = None
@@ -128,7 +137,9 @@ class Message(JSONSerializable):
         """
         base = {
             "role": self.role,
-            "content": self.content if isinstance(self.content, str) else [item.to_dict() for item in self.content],
+            "content": self.content
+            if isinstance(self.content, str)
+            else [item.to_dict() for item in self.content],
         }
 
         if self.refusal is not None:
@@ -179,9 +190,13 @@ class UserMessage(Message):
                 if isinstance(item, str):
                     mapped_content.append(TextPart(text=item))
                 elif isinstance(item, ImageItem):
-                    mapped_content.append(ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail)))
+                    mapped_content.append(
+                        ImagePart(image_url=ImageUrl(url=item.url, detail=item.detail))
+                    )
                 else:
-                    raise TypeError("User message content list must contain only str or ImageItem")
+                    raise TypeError(
+                        "User message content list must contain only str or ImageItem"
+                    )
 
         super().__init__(role=Role.USER, content=mapped_content)
 
@@ -194,10 +209,10 @@ class AssistantMessage(Message):
     """
 
     def __init__(
-            self,
-            content: str,
-            refusal: Optional[str] = None,
-            tool_calls: Optional[List[MessageToolCall]] = None,
+        self,
+        content: str,
+        refusal: Optional[str] = None,
+        tool_calls: Optional[List[MessageToolCall]] = None,
     ):
         """Initializes an AssistantMessage instance.
 
@@ -208,7 +223,9 @@ class AssistantMessage(Message):
         :param tool_calls: A list of tool call objects, defaults to None
         :type tool_calls: Optional[List[MessageToolCall]], optional
         """
-        super().__init__(role=Role.ASSISTANT, content=content, refusal=refusal, tool_calls=tool_calls)
+        super().__init__(
+            role=Role.ASSISTANT, content=content, refusal=refusal, tool_calls=tool_calls
+        )
 
 
 class ToolMessage(Message):
@@ -217,6 +234,7 @@ class ToolMessage(Message):
     :param Message: The text content of the tool message.
     :type Message: str
     """
+
     def __init__(self, content: str, tool_call_id: str):
         """Initializes a ToolMessage instance.
 

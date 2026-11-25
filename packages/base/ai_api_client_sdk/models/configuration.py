@@ -30,20 +30,36 @@ class Configuration:
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, id: str, name: str, scenario_id: str, executable_id: str, created_at: datetime,
-                 parameter_bindings: List[ParameterBinding] = None,
-                 input_artifact_bindings: List[InputArtifactBinding] = None, scenario: Scenario = None, **kwargs):
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        scenario_id: str,
+        executable_id: str,
+        created_at: datetime,
+        parameter_bindings: List[ParameterBinding] = None,
+        input_artifact_bindings: List[InputArtifactBinding] = None,
+        scenario: Scenario = None,
+        **kwargs,
+    ):
         self.id: str = id
         self.name: str = name
         self.scenario_id: str = scenario_id
         self.executable_id: str = executable_id
         self.parameter_bindings: List[ParameterBinding] = parameter_bindings
-        self.input_artifact_bindings: List[InputArtifactBinding] = input_artifact_bindings
+        self.input_artifact_bindings: List[InputArtifactBinding] = (
+            input_artifact_bindings
+        )
         self.created_at: datetime = created_at
         self.scenario: Scenario = scenario
 
     def __str__(self):
-        return "Configuration id: " + str(self.id) + ", Configuration name: " + str(self.name)
+        return (
+            "Configuration id: "
+            + str(self.id)
+            + ", Configuration name: "
+            + str(self.name)
+        )
 
     @staticmethod
     def from_dict(configuration_dict: Dict[str, Any]):
@@ -55,13 +71,21 @@ class Configuration:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.configuration.Configuration`
         """
-        configuration_dict['created_at'] = parse_datetime(configuration_dict['created_at'])
-        if configuration_dict.get('parameter_bindings'):
-            configuration_dict['parameter_bindings'] = \
-                [ParameterBinding.from_dict(pb) for pb in configuration_dict['parameter_bindings']]
-        if configuration_dict.get('input_artifact_bindings'):
-            configuration_dict['input_artifact_bindings'] = \
-                [InputArtifactBinding.from_dict(iab) for iab in configuration_dict['input_artifact_bindings']]
-        if configuration_dict.get('scenario'):
-            configuration_dict['scenario'] = Scenario.from_dict(configuration_dict['scenario'])
+        configuration_dict["created_at"] = parse_datetime(
+            configuration_dict["created_at"]
+        )
+        if configuration_dict.get("parameter_bindings"):
+            configuration_dict["parameter_bindings"] = [
+                ParameterBinding.from_dict(pb)
+                for pb in configuration_dict["parameter_bindings"]
+            ]
+        if configuration_dict.get("input_artifact_bindings"):
+            configuration_dict["input_artifact_bindings"] = [
+                InputArtifactBinding.from_dict(iab)
+                for iab in configuration_dict["input_artifact_bindings"]
+            ]
+        if configuration_dict.get("scenario"):
+            configuration_dict["scenario"] = Scenario.from_dict(
+                configuration_dict["scenario"]
+            )
         return Configuration(**configuration_dict)

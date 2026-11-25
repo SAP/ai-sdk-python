@@ -28,9 +28,7 @@ def generate_stream():
     """
     proxy_client = get_proxy_client("gen-ai-hub")
 
-    client = Client(
-        proxy_client=proxy_client,
-    )
+    client = Client(proxy_client=proxy_client)
 
     def stream():
         stream = client.models.generate_content_stream(
@@ -58,9 +56,7 @@ def tool_call():
 
     proxy_client = get_proxy_client("gen-ai-hub")
 
-    client = Client(
-        proxy_client=proxy_client,
-    )
+    client = Client(proxy_client=proxy_client)
     response = client.models.generate_content(
         model="gemini-3.5-flash",
         contents="What is 769 + 348?",

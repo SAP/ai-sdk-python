@@ -12,12 +12,16 @@ from typing import Iterable, Iterator, AsyncIterator
 
 import httpx
 
-from gen_ai_hub.orchestration_v2.exceptions import OrchestrationError, OrchestrationErrorList
+from gen_ai_hub.orchestration_v2.exceptions import (
+    OrchestrationError,
+    OrchestrationErrorList,
+)
 from gen_ai_hub.orchestration_v2.models.response import StreamCompletionPostResponse
 
 
-def _parse_event_data(event_data: str, final_message: str,
-                      headers: dict) -> "StreamCompletionPostResponse":
+def _parse_event_data(
+    event_data: str, final_message: str, headers: dict
+) -> "StreamCompletionPostResponse":
     """
     Parses the event data JSON string into a StreamCompletionPostResponse object.
 
@@ -73,7 +77,9 @@ class SSEClient:
     For performance reasons the underlying HTTP stream is reused for subsequent calls.
     """
 
-    def __init__(self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"):
+    def __init__(
+        self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"
+    ):
         """Initializes the SSEClient.
 
         :param response_cm: An httpx.Response context manager for the streaming response.
@@ -168,9 +174,10 @@ class SSEClient:
             if not line or not line.startswith(self.event_prefix):
                 continue
 
-            event_data = line[len(self.event_prefix):]
-            result = _parse_event_data(event_data, self.final_message,
-                                       headers=dict(self._response.headers))
+            event_data = line[len(self.event_prefix) :]
+            result = _parse_event_data(
+                event_data, self.final_message, headers=dict(self._response.headers)
+            )
             if result is None:
                 # Final message encountered; close the stream.
                 self.__exit__(None, None, None)
@@ -186,7 +193,9 @@ class AsyncSSEClient:
     that the stream is properly opened and closed. It also checks for HTTP errors upon entering the stream.
     """
 
-    def __init__(self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"):
+    def __init__(
+        self, response_cm, prefix: str = "data: ", final_message: str = "[DONE]"
+    ):
         """Initializes the AsyncSSEClient.
 
         :param response_cm: An asynchronous context manager for the HTTP streaming response.
@@ -246,9 +255,10 @@ class AsyncSSEClient:
         line = line.strip()
         if not line or not line.startswith(self.event_prefix):
             return None
-        event_data = line[len(self.event_prefix):]
-        return _parse_event_data(event_data, self.final_message,
-                                 headers=dict(self._response.headers))
+        event_data = line[len(self.event_prefix) :]
+        return _parse_event_data(
+            event_data, self.final_message, headers=dict(self._response.headers)
+        )
 
     async def _internal_iterator(self) -> AsyncIterator:
         """
@@ -261,7 +271,9 @@ class AsyncSSEClient:
                 line, buffer = buffer.split("\n", 1)
                 result = self._process_line(line)
                 if result is None:
-                    if line.strip() == self.final_message or line.strip().endswith(self.final_message):
+                    if line.strip() == self.final_message or line.strip().endswith(
+                        self.final_message
+                    ):
                         return
                     continue
                 yield result

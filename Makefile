@@ -20,6 +20,12 @@ docs:
 		packages/gen/gen_ai_hub/evaluations/helpers
 	uv run sphinx-build -b html docs/sphinx api-docs/
 
+format:
+	uv run ruff format
+
+format-check:
+	uv run ruff format --check
+
 lint:
 	uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub --errors-only --output-format=colorized
 

@@ -21,6 +21,9 @@ jobs:
     steps:
       - uses: SAP/ai-sdk-python/.github/actions/setup@main
 
+      - name: Check formatting
+        run: uv run ruff format --check --output-format=github
+
       - name: Run pylint
         run: |
           uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub \

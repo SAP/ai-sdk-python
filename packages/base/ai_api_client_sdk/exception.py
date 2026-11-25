@@ -1,8 +1,10 @@
 class AIAPIClientSDKException(Exception):
     """Base Exception class for AI API Client SDK exceptions"""
 
-    def __init__(self, description: str, status_code: int = None, error_message: str = None):
-        msg = f'{description}: {error_message}' if error_message else description
+    def __init__(
+        self, description: str, status_code: int = None, error_message: str = None
+    ):
+        msg = f"{description}: {error_message}" if error_message else description
         super().__init__(msg)
         self.description = description
         self.status_code = status_code
@@ -11,6 +13,7 @@ class AIAPIClientSDKException(Exception):
 
 class AIAPIInvalidInputException(AIAPIClientSDKException):
     """Exception type raised, when the provided input is invalid"""
+
     def __init__(self, description: str):
         super().__init__(description=description)
 
@@ -19,8 +22,11 @@ class AIAPIAuthenticatorException(AIAPIClientSDKException):
     """Exception type that is raised by the :class:`ai_api_client_sdk.helpers.authenticator.Authenticator`"""
 
     def __init__(self, status_code: int = None, error_message: str = None):
-        super().__init__(description='Could not retrieve Authorization token', status_code=status_code,
-                         error_message=error_message)
+        super().__init__(
+            description="Could not retrieve Authorization token",
+            status_code=status_code,
+            error_message=error_message,
+        )
 
 
 class AIAPIAuthenticatorInvalidRequestException(AIAPIAuthenticatorException):
@@ -89,8 +95,15 @@ class AIAPIServerException(Exception):
     :type details: dict, optional
     """
 
-    def __init__(self, description: str, status_code: int, error_message: str, error_code: str = None,
-                 request_id: str = None, details: dict = None):
+    def __init__(
+        self,
+        description: str,
+        status_code: int,
+        error_message: str,
+        error_code: str = None,
+        request_id: str = None,
+        details: dict = None,
+    ):
         super().__init__()
         self.description = description
         self.status_code = status_code
@@ -100,8 +113,10 @@ class AIAPIServerException(Exception):
         self.details = details
 
     def __str__(self):
-        debug_msg = f'{self.description}: {self.error_message} \n ' \
-                    f'Status Code: {self.status_code}, Request ID:{self.request_id}'
+        debug_msg = (
+            f"{self.description}: {self.error_message} \n "
+            f"Status Code: {self.status_code}, Request ID:{self.request_id}"
+        )
         return debug_msg
 
 
@@ -111,10 +126,22 @@ class AIAPIAuthorizationException(AIAPIServerException):
     for object definition
     """
 
-    def __init__(self, description: str, error_message: str, error_code: str = None, request_id: str = None,
-                 details: dict = None):
-        super().__init__(description=description, status_code=401, error_code=error_code, error_message=error_message,
-                         request_id=request_id, details=details)
+    def __init__(
+        self,
+        description: str,
+        error_message: str,
+        error_code: str = None,
+        request_id: str = None,
+        details: dict = None,
+    ):
+        super().__init__(
+            description=description,
+            status_code=401,
+            error_code=error_code,
+            error_message=error_message,
+            request_id=request_id,
+            details=details,
+        )
 
 
 class AIAPIInvalidRequestException(AIAPIServerException):
@@ -123,9 +150,22 @@ class AIAPIInvalidRequestException(AIAPIServerException):
     for object definition
     """
 
-    def __init__(self, description: str, error_code: str, error_message: str, request_id: str, details: dict = None):
-        super().__init__(description=description, status_code=400, error_code=error_code, error_message=error_message,
-                         request_id=request_id, details=details)
+    def __init__(
+        self,
+        description: str,
+        error_code: str,
+        error_message: str,
+        request_id: str,
+        details: dict = None,
+    ):
+        super().__init__(
+            description=description,
+            status_code=400,
+            error_code=error_code,
+            error_message=error_message,
+            request_id=request_id,
+            details=details,
+        )
 
 
 class AIAPINotFoundException(AIAPIServerException):
@@ -134,9 +174,22 @@ class AIAPINotFoundException(AIAPIServerException):
     for object definition
     """
 
-    def __init__(self, description: str, error_code: str, error_message: str, request_id: str, details: dict = None):
-        super().__init__(description=description, status_code=404, error_code=error_code, error_message=error_message,
-                         request_id=request_id, details=details)
+    def __init__(
+        self,
+        description: str,
+        error_code: str,
+        error_message: str,
+        request_id: str,
+        details: dict = None,
+    ):
+        super().__init__(
+            description=description,
+            status_code=404,
+            error_code=error_code,
+            error_message=error_message,
+            request_id=request_id,
+            details=details,
+        )
 
 
 class AIAPIPreconditionFailedException(AIAPIServerException):
@@ -145,6 +198,19 @@ class AIAPIPreconditionFailedException(AIAPIServerException):
     for object definition
     """
 
-    def __init__(self, description: str, error_code: str, error_message: str, request_id: str, details: dict = None):
-        super().__init__(description=description, status_code=412, error_code=error_code, error_message=error_message,
-                         request_id=request_id, details=details)
+    def __init__(
+        self,
+        description: str,
+        error_code: str,
+        error_message: str,
+        request_id: str,
+        details: dict = None,
+    ):
+        super().__init__(
+            description=description,
+            status_code=412,
+            error_code=error_code,
+            error_message=error_message,
+            request_id=request_id,
+            details=details,
+        )

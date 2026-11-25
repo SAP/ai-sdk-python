@@ -12,6 +12,7 @@ class ObjectStoreSecretQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[ObjectStoreSecret], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -26,5 +27,7 @@ class ObjectStoreSecretQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.object_store_secret_query_response.ObjectStoreSecretQueryResponse`
         """
-        response_dict['resources'] = [ObjectStoreSecret.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            ObjectStoreSecret.from_dict(r) for r in response_dict["resources"]
+        ]
         return ObjectStoreSecretQueryResponse(**response_dict)

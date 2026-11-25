@@ -1,11 +1,19 @@
 from datetime import datetime
 from typing import List, Union
 
-from ai_api_client_sdk.models.base_models import BasicResponse, Order, BasicModifyRequest
+from ai_api_client_sdk.models.base_models import (
+    BasicResponse,
+    Order,
+    BasicModifyRequest,
+)
 from ai_api_client_sdk.models.execution import Execution
-from ai_api_client_sdk.models.execution_bulk_modify_response import ExecutionBulkModifyResponse
+from ai_api_client_sdk.models.execution_bulk_modify_response import (
+    ExecutionBulkModifyResponse,
+)
 from ai_api_client_sdk.models.execution_create_response import ExecutionCreateResponse
-from ai_api_client_sdk.models.execution_get_status_response import ExecutionGetStatusResponse
+from ai_api_client_sdk.models.execution_get_status_response import (
+    ExecutionGetStatusResponse,
+)
 from ai_api_client_sdk.models.execution_query_response import ExecutionQueryResponse
 from ai_api_client_sdk.models.log_response import LogResponse
 from ai_api_client_sdk.models.status import Status
@@ -18,7 +26,9 @@ class ExecutionClient(BaseClient):
     implements the base class :class:`ai_api_client_sdk.resource_clients.base_client.BaseClient`
     """
 
-    def create(self, configuration_id: str, resource_group: str = None) -> ExecutionCreateResponse:
+    def create(
+        self, configuration_id: str, resource_group: str = None
+    ) -> ExecutionCreateResponse:
         """Creates an execution.
 
         :param configuration_id: ID of the configuration, that should configure the execution
@@ -37,8 +47,9 @@ class ExecutionClient(BaseClient):
         :rtype: class:`ai_api_client_sdk.models.execution_create_response.ExecutionCreateResponse`
         """
         body = {"configuration_id": configuration_id}
-        response_dict = self.rest_client.post(path='/executions', body=body,
-                                              resource_group=resource_group)
+        response_dict = self.rest_client.post(
+            path="/executions", body=body, resource_group=resource_group
+        )
         return ExecutionCreateResponse.from_dict(response_dict)
 
     def delete(self, execution_id: str, resource_group: str = None) -> BasicResponse:
@@ -63,11 +74,14 @@ class ExecutionClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        response_dict = self.rest_client.delete(path=f'/executions/{execution_id}', resource_group=resource_group)
+        response_dict = self.rest_client.delete(
+            path=f"/executions/{execution_id}", resource_group=resource_group
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def get(self, execution_id: str, resource_group: str = None, select: str = None) -> \
-            Union[Execution, ExecutionGetStatusResponse]:
+    def get(
+        self, execution_id: str, resource_group: str = None, select: str = None
+    ) -> Union[Execution, ExecutionGetStatusResponse]:
         """Retrieves the execution from the server.
 
         :param execution_id: ID of the execution to be retrieved
@@ -90,16 +104,23 @@ class ExecutionClient(BaseClient):
         :rtype: class:Union[`ai_api_client_sdk.models.execution.Execution`,
             `ai_api_client_sdk.models.execution_get_status_response.ExecutionGetStatusResponse`]
         """
-        if select and 'status' in select:
-            param = self._form_query_params(select='status')
-            execution_dict = self.rest_client.get(path=f'/executions/{execution_id}', params=param,
-                                                  resource_group=resource_group)
+        if select and "status" in select:
+            param = self._form_query_params(select="status")
+            execution_dict = self.rest_client.get(
+                path=f"/executions/{execution_id}",
+                params=param,
+                resource_group=resource_group,
+            )
             return ExecutionGetStatusResponse.from_dict(execution_dict)
         else:
-            execution_dict = self.rest_client.get(path=f'/executions/{execution_id}', resource_group=resource_group)
+            execution_dict = self.rest_client.get(
+                path=f"/executions/{execution_id}", resource_group=resource_group
+            )
             return Execution.from_dict(execution_dict)
 
-    def modify(self, execution_id: str, target_status: TargetStatus, resource_group: str = None) -> BasicResponse:
+    def modify(
+        self, execution_id: str, target_status: TargetStatus, resource_group: str = None
+    ) -> BasicResponse:
         """Modifies the execution, by changing the target status.
 
         :param execution_id: ID of the execution to be modified
@@ -123,14 +144,23 @@ class ExecutionClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.base_models.BasicResponse`
         """
-        body = {'target_status': target_status.value}
-        response_dict = self.rest_client.patch(path=f'/executions/{execution_id}', body=body,
-                                               resource_group=resource_group)
+        body = {"target_status": target_status.value}
+        response_dict = self.rest_client.patch(
+            path=f"/executions/{execution_id}", body=body, resource_group=resource_group
+        )
         return BasicResponse.from_dict(response_dict)
 
-    def query(self, scenario_id: str = None, configuration_id: str = None, executable_ids: List[str] = None,
-              execution_schedule_id: str = None, status: Status = None, top: int = None, skip: int = None,
-              resource_group: str = None) -> ExecutionQueryResponse:
+    def query(
+        self,
+        scenario_id: str = None,
+        configuration_id: str = None,
+        executable_ids: List[str] = None,
+        execution_schedule_id: str = None,
+        status: Status = None,
+        top: int = None,
+        skip: int = None,
+        resource_group: str = None,
+    ) -> ExecutionQueryResponse:
         """Queries the executions.
 
         :param scenario_id: ID of the scenario the executions should belong to, defaults to None
@@ -160,15 +190,29 @@ class ExecutionClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.execution_query_response.ExecutionQueryResponse`
         """
-        params = self._form_query_params(scenario_id=scenario_id, configuration_id=configuration_id,
-                                         executable_ids=executable_ids, execution_schedule_id=execution_schedule_id,
-                                         status=status.value if status else None,
-                                         top=top, skip=skip)
-        response_dict = self.rest_client.get(path='/executions', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            configuration_id=configuration_id,
+            executable_ids=executable_ids,
+            execution_schedule_id=execution_schedule_id,
+            status=status.value if status else None,
+            top=top,
+            skip=skip,
+        )
+        response_dict = self.rest_client.get(
+            path="/executions", params=params, resource_group=resource_group
+        )
         return ExecutionQueryResponse.from_dict(response_dict)
 
-    def count(self, scenario_id: str = None, configuration_id: str = None, executable_ids: List[str] = None,
-              execution_schedule_id: str = None, status: Status = None, resource_group: str = None) -> int:
+    def count(
+        self,
+        scenario_id: str = None,
+        configuration_id: str = None,
+        executable_ids: List[str] = None,
+        execution_schedule_id: str = None,
+        status: Status = None,
+        resource_group: str = None,
+    ) -> int:
         """Counts the number of executions.
 
         :param scenario_id: ID of the scenario, the executions should belong to, defaults to None
@@ -194,13 +238,26 @@ class ExecutionClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: int
         """
-        params = self._form_query_params(scenario_id=scenario_id, configuration_id=configuration_id,
-                                         executable_ids=executable_ids, execution_schedule_id=execution_schedule_id,
-                                         status=status.value if status else None)
-        return self.rest_client.get(path='/executions/$count', params=params, resource_group=resource_group)
+        params = self._form_query_params(
+            scenario_id=scenario_id,
+            configuration_id=configuration_id,
+            executable_ids=executable_ids,
+            execution_schedule_id=execution_schedule_id,
+            status=status.value if status else None,
+        )
+        return self.rest_client.get(
+            path="/executions/$count", params=params, resource_group=resource_group
+        )
 
-    def query_logs(self, execution_id: str, top: int = None, start: datetime = None, end: datetime = None,
-                   order: Order = None, resource_group: str = None) -> LogResponse:
+    def query_logs(
+        self,
+        execution_id: str,
+        top: int = None,
+        start: datetime = None,
+        end: datetime = None,
+        order: Order = None,
+        resource_group: str = None,
+    ) -> LogResponse:
         """Queries the logs of the execution.
 
         :param execution_id: ID of the execution
@@ -228,14 +285,17 @@ class ExecutionClient(BaseClient):
         :return: Logs from the execution
         :rtype: class:`ai_api_client_sdk.models.log_response.LogResponse`
         """
-        params = self._form_query_params(
-            top=top, start=start, end=end, order=order)
-        response_dict = self.rest_client.get(path=f'/executions/{execution_id}/logs', params=params,
-                                             resource_group=resource_group)
+        params = self._form_query_params(top=top, start=start, end=end, order=order)
+        response_dict = self.rest_client.get(
+            path=f"/executions/{execution_id}/logs",
+            params=params,
+            resource_group=resource_group,
+        )
         return LogResponse.from_dict(response_dict)
 
-    def bulk_modify(self, executions: List[BasicModifyRequest],
-                    resource_group: str = None) -> ExecutionBulkModifyResponse:
+    def bulk_modify(
+        self, executions: List[BasicModifyRequest], resource_group: str = None
+    ) -> ExecutionBulkModifyResponse:
         """Modifies the executions
         :param executions: List of execution modify requests
         :type executions: List[ExecutionModifyRequest]
@@ -254,8 +314,12 @@ class ExecutionClient(BaseClient):
         :return: An object representing the response from the server
         :rtype: class:`ai_api_client_sdk.models.execution_bulk_modify_response.ExecutionBulkModifyResponse`
         """
-        body = {'executions': [bmr.to_dict() for bmr in executions]}
-        headers = {'Content-Type': 'application/merge-patch+json'}
-        response_dict = self.rest_client.patch(path='/executions', body=body, headers=headers,
-                                               resource_group=resource_group)
+        body = {"executions": [bmr.to_dict() for bmr in executions]}
+        headers = {"Content-Type": "application/merge-patch+json"}
+        response_dict = self.rest_client.patch(
+            path="/executions",
+            body=body,
+            headers=headers,
+            resource_group=resource_group,
+        )
         return ExecutionBulkModifyResponse.from_dict(response_dict)

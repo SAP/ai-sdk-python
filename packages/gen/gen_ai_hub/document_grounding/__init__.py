@@ -10,6 +10,7 @@ The package includes three main API clients:
 - VectorAPIClient: Manages vector collections and semantic search
 - RetrievalAPIClient: Performs retrieval operations across data repositories
 """
+
 from .client import PipelineAPIClient, VectorAPIClient, RetrievalAPIClient
 from .models import *
 
@@ -93,6 +94,5 @@ __all__ = [
     # Clients
     "PipelineAPIClient",
     "RetrievalAPIClient",
-    "VectorAPIClient"
-
+    "VectorAPIClient",
 ]

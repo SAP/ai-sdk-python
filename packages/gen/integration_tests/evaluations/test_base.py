@@ -2,6 +2,7 @@
 Base test class for evaluation integration tests.
 Provides common setup and utilities for evaluation client tests.
 """
+
 import unittest
 from gen_ai_hub.evaluations.client import EvaluationClient
 import os
@@ -15,7 +16,9 @@ class EvaluationClientTestBase(unittest.TestCase):
         """Set up the test class with credentials."""
         # Hardcoded credentials (will be moved to environment variables later)
         env_base_url = os.getenv("AICORE_BASE_URL")
-        cls.base_url = env_base_url.rstrip('/') + ('' if env_base_url.endswith('/v2') else '/v2')
+        cls.base_url = env_base_url.rstrip("/") + (
+            "" if env_base_url.endswith("/v2") else "/v2"
+        )
         cls.auth_url = os.getenv("AICORE_AUTH_URL")
         cls.client_id = os.getenv("AICORE_CLIENT_ID")
         cls.client_secret = os.getenv("AICORE_CLIENT_SECRET")
@@ -24,7 +27,9 @@ class EvaluationClientTestBase(unittest.TestCase):
         cls.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         cls.input_object_store_secret_name = "sdk-data"
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        cls.dataset_path = os.path.abspath(os.path.join(current_dir, 'eval-data', 'testdata', 'medicalqna_dataset.csv'))
+        cls.dataset_path = os.path.abspath(
+            os.path.join(current_dir, "eval-data", "testdata", "medicalqna_dataset.csv")
+        )
 
     def setUp(self):
         """Set up each test with a fresh evaluation client instance and object store secrets."""
@@ -40,9 +45,9 @@ class EvaluationClientTestBase(unittest.TestCase):
         )
 
         # Setup S3 credentials for object store secrets
-        AWS_S3_ENDPOINT = os.getenv('AWS_HOST')
-        AWS_BUCKET_ID = os.getenv('AWS_BUCKET_NAME')
-        AWS_REGION = os.getenv('AWS_REGION')
+        AWS_S3_ENDPOINT = os.getenv("AWS_HOST")
+        AWS_BUCKET_ID = os.getenv("AWS_BUCKET_NAME")
+        AWS_REGION = os.getenv("AWS_REGION")
 
         # default secret is needed to store output artifacts that the evaluation job creates after it is completed
         default_secret_creds = {
@@ -72,6 +77,6 @@ class EvaluationClientTestBase(unittest.TestCase):
         response = self.client.setup(
             default_secret_body=default_secret_creds,
             input_secret_body=input_secret_creds,
-            replace_existing=True
+            replace_existing=True,
         )
         self.client.orchestration_url = response.get("orchestration_url")

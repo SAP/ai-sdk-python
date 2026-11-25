@@ -1,13 +1,15 @@
 from typing import Optional
 import langcodes
 
+
 class LanguageMapper:
     """
-    Uses the langcodes library to convert language strings to normalized 
+    Uses the langcodes library to convert language strings to normalized
     ISO 639-1 strings, handling regional variants like zh-CN.
     """
+
     # exclude Bosnian and Malay
-    EXCLUDED_CODES = {'bs', 'ms'}
+    EXCLUDED_CODES = {"bs", "ms"}
 
     @classmethod
     def get_iso_code_639_1(cls, code: str) -> Optional[str]:

@@ -14,16 +14,17 @@ from click.testing import CliRunner
 
 
 AICORE_DUMMY_KEY = {
-    'serviceurls': {
-        'AI_API_URL': 'https://api.ai.internalprod.eu-central-1.aws.ml.hana.ondemand.com'
+    "serviceurls": {
+        "AI_API_URL": "https://api.ai.internalprod.eu-central-1.aws.ml.hana.ondemand.com"
     },
-    'appname': '',
-    'clientid': '!!!',
-    'clientsecret': '???',
-    'identityzone': 'xxx',
-    'identityzoneid': '',
-    'url': 'https://xxx.authentication.sap.hana.ondemand.com'
+    "appname": "",
+    "clientid": "!!!",
+    "clientsecret": "???",
+    "identityzone": "xxx",
+    "identityzoneid": "",
+    "url": "https://xxx.authentication.sap.hana.ondemand.com",
 }
+
 
 class TestAICoreCLI(TestCase):
     pass
@@ -32,37 +33,54 @@ class TestAICoreCLI(TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: temp_dir}):
                 from ai_core_sdk.cli import cli
+
                 runner = CliRunner()
                 temp_dir = pathlib.Path(temp_dir)
-                aicore_key_file = temp_dir / 'aicore-key.json'
-                with open(aicore_key_file, 'w') as stream:
+                aicore_key_file = temp_dir / "aicore-key.json"
+                with open(aicore_key_file, "w") as stream:
                     json.dump(AICORE_DUMMY_KEY, stream)
-                result = runner.invoke(cli, [f'configure', '-k', aicore_key_file, '-g', 'default'])
+                result = runner.invoke(
+                    cli, [f"configure", "-k", aicore_key_file, "-g", "default"]
+                )
                 print(result)
                 if result.exception:
                     raise result.exception
                 assert result.exit_code == 0, (result.output, result.exit_code)
-                with (pathlib.Path(get_home()) / 'config.json').open() as stream:
+                with (pathlib.Path(get_home()) / "config.json").open() as stream:
                     creds = json.load(stream)
-                assert creds['AICORE_AUTH_URL'] == f'{AICORE_DUMMY_KEY["url"]}/oauth/token'
-                assert creds['AICORE_BASE_URL'] == f'{AICORE_DUMMY_KEY["serviceurls"]["AI_API_URL"]}/v2'
-                assert creds['AICORE_CLIENT_ID'] == AICORE_DUMMY_KEY['clientid']
-                assert creds['AICORE_CLIENT_SECRET'] == AICORE_DUMMY_KEY['clientsecret']
+                assert (
+                    creds["AICORE_AUTH_URL"] == f"{AICORE_DUMMY_KEY['url']}/oauth/token"
+                )
+                assert (
+                    creds["AICORE_BASE_URL"]
+                    == f"{AICORE_DUMMY_KEY['serviceurls']['AI_API_URL']}/v2"
+                )
+                assert creds["AICORE_CLIENT_ID"] == AICORE_DUMMY_KEY["clientid"]
+                assert creds["AICORE_CLIENT_SECRET"] == AICORE_DUMMY_KEY["clientsecret"]
                 AICoreV2Client.from_env()
 
     def test_from_input(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             with patch.dict(os.environ, {ENV_VAR_AICORE_HOME_PATH: temp_dir}):
                 from ai_core_sdk.cli import cli
+
                 runner = CliRunner()
-                result = runner.invoke(cli, [f'configure', '-s', AICORE_DUMMY_KEY['clientsecret'],
-                                                                '-i', AICORE_DUMMY_KEY['clientid'],
-                                                                '-u', AICORE_DUMMY_KEY['url']],
-                                       input='https://***.ml.hana.ondemand.com'
-                                       )
+                result = runner.invoke(
+                    cli,
+                    [
+                        f"configure",
+                        "-s",
+                        AICORE_DUMMY_KEY["clientsecret"],
+                        "-i",
+                        AICORE_DUMMY_KEY["clientid"],
+                        "-u",
+                        AICORE_DUMMY_KEY["url"],
+                    ],
+                    input="https://***.ml.hana.ondemand.com",
+                )
                 print(result)
 
-        print('done')
+        print("done")
 
 
 if __name__ == "__main__":

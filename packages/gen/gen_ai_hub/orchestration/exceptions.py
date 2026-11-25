@@ -31,7 +31,7 @@ class OrchestrationError(Exception):
         :type code: int
         :param location: Specific component or step in the orchestration process where the error occurred
         :type location: str
-        :param module_results: State information and partial results from various modules at the time of the error, 
+        :param module_results: State information and partial results from various modules at the time of the error,
                                useful for debugging
         :type module_results: Dict[str, Any]
         :param retries: the number of retries attempted

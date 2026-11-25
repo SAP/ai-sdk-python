@@ -21,16 +21,15 @@ class ABCBaseModel(BaseModel, ABC):
     This enforces consistent and safe serialization behavior across all
     derived models.
     """
-    model_config = ConfigDict(
-        extra="forbid",
-        frozen=False,
-    )
+
+    model_config = ConfigDict(extra="forbid", frozen=False)
 
     def model_dump(self, **kwargs):
         """Dumps the model to a dictionary with default settings."""
         kwargs.setdefault("by_alias", True)
         kwargs.setdefault("exclude_none", True)
         return super().model_dump(**kwargs)
+
 
 class ResponseBaseModel(BaseModel):
     """
@@ -40,7 +39,4 @@ class ResponseBaseModel(BaseModel):
       since the external API might introduce new attributes in the response.
     """
 
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=False,
-    )
+    model_config = ConfigDict(extra="allow", frozen=False)

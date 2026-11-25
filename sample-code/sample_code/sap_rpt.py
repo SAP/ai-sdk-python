@@ -1,5 +1,10 @@
 from gen_ai_hub.proxy.native.sap.client import RPTClient
-from gen_ai_hub.proxy.native.sap.models import DataType, PredictionConfig, RPTRequest, TargetColumn
+from gen_ai_hub.proxy.native.sap.models import (
+    DataType,
+    PredictionConfig,
+    RPTRequest,
+    TargetColumn,
+)
 
 CLASSIFICATION_SCHEMA = {
     "PRODUCT": DataType(dtype="string"),
@@ -10,9 +15,27 @@ CLASSIFICATION_SCHEMA = {
 }
 
 CLASSIFICATION_ROWS = [
-    {"PRODUCT": "Couch", "PRICE": 999.99, "ORDERDATE": "28-11-2025", "ID": "35", "COSTCENTER": "[PREDICT]"},
-    {"PRODUCT": "Office Chair", "PRICE": 150.8, "ORDERDATE": "02-11-2025", "ID": "44", "COSTCENTER": "Office Furniture"},
-    {"PRODUCT": "Server Rack", "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "COSTCENTER": "Data Infrastructure"},
+    {
+        "PRODUCT": "Couch",
+        "PRICE": 999.99,
+        "ORDERDATE": "28-11-2025",
+        "ID": "35",
+        "COSTCENTER": "[PREDICT]",
+    },
+    {
+        "PRODUCT": "Office Chair",
+        "PRICE": 150.8,
+        "ORDERDATE": "02-11-2025",
+        "ID": "44",
+        "COSTCENTER": "Office Furniture",
+    },
+    {
+        "PRODUCT": "Server Rack",
+        "PRICE": 2200.00,
+        "ORDERDATE": "01-11-2025",
+        "ID": "104",
+        "COSTCENTER": "Data Infrastructure",
+    },
 ]
 
 CLASSIFICATION_COLUMNS = {
@@ -24,11 +47,41 @@ CLASSIFICATION_COLUMNS = {
 }
 
 REGRESSION_ROWS = [
-    {"PRODUCT": "Couch", "PRICE": 999.99, "ORDERDATE": "28-11-2025", "ID": "35", "DISCOUNT_RATE": "[PREDICT]"},
-    {"PRODUCT": "Office Chair", "PRICE": 150.80, "ORDERDATE": "02-11-2025", "ID": "44", "DISCOUNT_RATE": 0.12},
-    {"PRODUCT": "Server Rack", "PRICE": 2200.00, "ORDERDATE": "01-11-2025", "ID": "104", "DISCOUNT_RATE": 0.05},
-    {"PRODUCT": "Standing Desk", "PRICE": 640.00, "ORDERDATE": "05-11-2025", "ID": "205", "DISCOUNT_RATE": 0.10},
-    {"PRODUCT": "Monitor 27 inch", "PRICE": 289.99, "ORDERDATE": "08-11-2025", "ID": "306", "DISCOUNT_RATE": "[PREDICT]"},
+    {
+        "PRODUCT": "Couch",
+        "PRICE": 999.99,
+        "ORDERDATE": "28-11-2025",
+        "ID": "35",
+        "DISCOUNT_RATE": "[PREDICT]",
+    },
+    {
+        "PRODUCT": "Office Chair",
+        "PRICE": 150.80,
+        "ORDERDATE": "02-11-2025",
+        "ID": "44",
+        "DISCOUNT_RATE": 0.12,
+    },
+    {
+        "PRODUCT": "Server Rack",
+        "PRICE": 2200.00,
+        "ORDERDATE": "01-11-2025",
+        "ID": "104",
+        "DISCOUNT_RATE": 0.05,
+    },
+    {
+        "PRODUCT": "Standing Desk",
+        "PRICE": 640.00,
+        "ORDERDATE": "05-11-2025",
+        "ID": "205",
+        "DISCOUNT_RATE": 0.10,
+    },
+    {
+        "PRODUCT": "Monitor 27 inch",
+        "PRICE": 289.99,
+        "ORDERDATE": "08-11-2025",
+        "ID": "306",
+        "DISCOUNT_RATE": "[PREDICT]",
+    },
 ]
 
 REGRESSION_SCHEMA = {

@@ -7,6 +7,7 @@ class ExecutionScheduleCreateResponse(BasicResponse):
     """The ExecutionScheduleCreateResponse object defines the response of the execution schedule create request.
     Refer to :class:`ai_api_client_sdk.models.base_models.BasicResponse`, for the object definition
     """
+
     @staticmethod
     def from_dict(response_dict: Dict[str, Any]):
         """Returns a :class:`ai_api_client_sdk.models.execution_schedule_create_response.ExecutionScheduleCreateResponse`

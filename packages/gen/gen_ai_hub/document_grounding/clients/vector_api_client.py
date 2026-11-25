@@ -13,6 +13,7 @@ Key capabilities:
 
 API Reference: https://api.sap.com/api/DOCUMENT_GROUNDING_API/resource/Vector
 """
+
 import humps
 import requests
 from typing import Optional
@@ -30,7 +31,10 @@ from ..models.vector import (
     DocumentsUpdateRequest,
     Document,
     DocumentsResponse,
-    DocumentsListResponse, CollectionCreationStatusResponse, CollectionDeletionStatusResponse, TextSearchRequest,
+    DocumentsListResponse,
+    CollectionCreationStatusResponse,
+    CollectionDeletionStatusResponse,
+    TextSearchRequest,
     VectorSearchResults,
 )
 
@@ -61,7 +65,10 @@ class VectorAPIClient:
     # --- Collections ---
 
     def get_collections(
-            self, top: Optional[int] = None, skip: Optional[int] = None, count: Optional[bool] = None
+        self,
+        top: Optional[int] = None,
+        skip: Optional[int] = None,
+        count: Optional[bool] = None,
     ) -> CollectionsListResponse:
         """Get all collections.
 
@@ -83,10 +90,14 @@ class VectorAPIClient:
         if count is not None:
             params["$count"] = count
         response = self.rest_client.get(path=f"{self.path}/collections", params=params)
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return CollectionsListResponse(**response)
 
-    def create_collection(self, collection_request: CollectionCreateRequest) -> requests.Response:
+    def create_collection(
+        self, collection_request: CollectionCreateRequest
+    ) -> requests.Response:
         """Create a new collection.
 
         :param collection_request: The object containing the collection configuration.
@@ -97,9 +108,11 @@ class VectorAPIClient:
 
         response = self.rest_client.post(
             path=f"{self.path}/collections",
-            body=collection_request.model_dump(exclude_none=True)
+            body=collection_request.model_dump(exclude_none=True),
         )
-        if response == "":  # rest_client (ai api sdk) returns empty string for 202 No Content
+        if (
+            response == ""
+        ):  # rest_client (ai api sdk) returns empty string for 202 No Content
             response = requests.Response()
             response.status_code = 202
         return response
@@ -114,7 +127,9 @@ class VectorAPIClient:
         """
 
         response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}")
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return Collection(**response)
 
     def delete_collection(self, collection_id: str) -> requests.Response:
@@ -126,16 +141,25 @@ class VectorAPIClient:
         :rtype: requests.Response
         """
 
-        response = self.rest_client.delete(path=f"{self.path}/collections/{collection_id}")
-        if response == "":  # rest_client (ai api sdk) returns empty string for 204 No Content
+        response = self.rest_client.delete(
+            path=f"{self.path}/collections/{collection_id}"
+        )
+        if (
+            response == ""
+        ):  # rest_client (ai api sdk) returns empty string for 204 No Content
             response = requests.Response()
             response.status_code = 204
         return response
 
     # --- Documents ---
 
-    def get_documents(self, collection_id: str, top: Optional[int] = None,
-                      skip: Optional[int] = None, count: Optional[bool] = None) -> DocumentsResponse:
+    def get_documents(
+        self,
+        collection_id: str,
+        top: Optional[int] = None,
+        skip: Optional[int] = None,
+        count: Optional[bool] = None,
+    ) -> DocumentsResponse:
         """Get documents from a collection.
 
         :param collection_id: The ID of the collection to retrieve documents from.
@@ -152,19 +176,22 @@ class VectorAPIClient:
 
         params = {}
         if top is not None:
-            params['$top'] = top
+            params["$top"] = top
         if skip is not None:
-            params['$skip'] = skip
+            params["$skip"] = skip
         if count is not None:
-            params['$count'] = count
+            params["$count"] = count
         response = self.rest_client.get(
-            path=f"{self.path}/collections/{collection_id}/documents",
-            params=params
+            path=f"{self.path}/collections/{collection_id}/documents", params=params
         )
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return DocumentsResponse(**response)
 
-    def create_documents(self, collection_id: str, request: DocumentsCreateRequest) -> DocumentsListResponse:
+    def create_documents(
+        self, collection_id: str, request: DocumentsCreateRequest
+    ) -> DocumentsListResponse:
         """Create documents in a collection.
 
         :param collection_id: The ID of the collection to add documents to.
@@ -177,12 +204,16 @@ class VectorAPIClient:
 
         response = self.rest_client.post(
             path=f"{self.path}/collections/{collection_id}/documents",
-            body=request.model_dump(exclude_none=True)
+            body=request.model_dump(exclude_none=True),
         )
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return DocumentsListResponse(**response)
 
-    def update_documents(self, collection_id: str, request: DocumentsUpdateRequest) -> DocumentsListResponse:
+    def update_documents(
+        self, collection_id: str, request: DocumentsUpdateRequest
+    ) -> DocumentsListResponse:
         """Update documents in a collection.
 
         :param collection_id: The ID of the collection to update documents in.
@@ -195,9 +226,11 @@ class VectorAPIClient:
 
         response = self.rest_client.patch(
             path=f"{self.path}/collections/{collection_id}/documents",
-            body=request.model_dump(exclude_none=True)
+            body=request.model_dump(exclude_none=True),
         )
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return DocumentsListResponse(**response)
 
     def get_document_by_id(self, collection_id: str, document_id: str) -> Document:
@@ -214,10 +247,14 @@ class VectorAPIClient:
         response = self.rest_client.get(
             path=f"{self.path}/collections/{collection_id}/documents/{document_id}"
         )
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return Document(**response)
 
-    def delete_document(self, collection_id: str, document_id: str) -> requests.Response:
+    def delete_document(
+        self, collection_id: str, document_id: str
+    ) -> requests.Response:
         """Delete a document from a collection.
 
         :param collection_id: The ID of the collection to delete the document from.
@@ -238,7 +275,9 @@ class VectorAPIClient:
 
     # --- Collection statuses ---
 
-    def get_collection_creation_status(self, collection_id: str) -> CollectionCreationStatusResponse:
+    def get_collection_creation_status(
+        self, collection_id: str
+    ) -> CollectionCreationStatusResponse:
         """Get creation status for a collection.
 
         :param collection_id: The ID of the collection to retrieve the creation status for.
@@ -247,12 +286,18 @@ class VectorAPIClient:
         :rtype: CollectionCreationStatusResponse
         """
 
-        response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}/creationStatus")
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = self.rest_client.get(
+            path=f"{self.path}/collections/{collection_id}/creationStatus"
+        )
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         adapter = TypeAdapter(CollectionCreationStatusResponse)
         return adapter.validate_python(response)
 
-    def get_collection_deletion_status(self, collection_id: str) -> CollectionDeletionStatusResponse:
+    def get_collection_deletion_status(
+        self, collection_id: str
+    ) -> CollectionDeletionStatusResponse:
         """Get deletion status for a collection.
 
         :param collection_id: The ID of the collection to retrieve the deletion status for.
@@ -261,8 +306,12 @@ class VectorAPIClient:
         :rtype: CollectionDeletionStatusResponse
         """
 
-        response = self.rest_client.get(path=f"{self.path}/collections/{collection_id}/deletionStatus")
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = self.rest_client.get(
+            path=f"{self.path}/collections/{collection_id}/deletionStatus"
+        )
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         adapter = TypeAdapter(CollectionDeletionStatusResponse)
         return adapter.validate_python(response)
 
@@ -278,8 +327,9 @@ class VectorAPIClient:
         """
 
         response = self.rest_client.post(
-            path=f"{self.path}/search",
-            body=request.model_dump(exclude_none=True)
+            path=f"{self.path}/search", body=request.model_dump(exclude_none=True)
         )
-        response = humps.camelize(response)  # rest_client (ai api sdk) returns snake_case responses
+        response = humps.camelize(
+            response
+        )  # rest_client (ai api sdk) returns snake_case responses
         return VectorSearchResults(**response)

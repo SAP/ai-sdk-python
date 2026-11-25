@@ -55,7 +55,6 @@ class TestBatchServiceCreate(BatchServiceTestBase):
         self.assertIn(create_resp.status, ("PENDING", "RUNNING"))
         self.created_batch_id = create_resp.id
 
-
         detail = self.service.get(create_resp.id)
         self.assertIsInstance(detail, BatchDetailResponse)
         self.assertEqual(detail.id, create_resp.id)

@@ -17,8 +17,14 @@ class Extensions:
     :type dataset: class:`ai_api_client_sdk.models.extensions_dataset.ExtensionsDataset`, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, analytics: ExtensionsAnalytics = None, resource_groups: ExtensionsResourceGroups = None,
-                 dataset: ExtensionsDataset = None, **kwargs):
+
+    def __init__(
+        self,
+        analytics: ExtensionsAnalytics = None,
+        resource_groups: ExtensionsResourceGroups = None,
+        dataset: ExtensionsDataset = None,
+        **kwargs,
+    ):
         self.analytics: ExtensionsAnalytics = analytics
         self.resource_groups: ExtensionsResourceGroups = resource_groups
         self.dataset: ExtensionsDataset = dataset
@@ -33,12 +39,18 @@ class Extensions:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.extensions.Extensions`
         """
-        if 'analytics' in extensions_dict:
-            extensions_dict['analytics'] = ExtensionsAnalytics.from_dict(extensions_dict['analytics'])
-        if 'resource_groups' in extensions_dict:
-            extensions_dict['resource_groups'] = ExtensionsResourceGroups.from_dict(extensions_dict['resource_groups'])
-        if 'dataset' in extensions_dict:
-            extensions_dict['dataset'] = ExtensionsDataset.from_dict(extensions_dict['dataset'])
+        if "analytics" in extensions_dict:
+            extensions_dict["analytics"] = ExtensionsAnalytics.from_dict(
+                extensions_dict["analytics"]
+            )
+        if "resource_groups" in extensions_dict:
+            extensions_dict["resource_groups"] = ExtensionsResourceGroups.from_dict(
+                extensions_dict["resource_groups"]
+            )
+        if "dataset" in extensions_dict:
+            extensions_dict["dataset"] = ExtensionsDataset.from_dict(
+                extensions_dict["dataset"]
+            )
         return Extensions(**extensions_dict)
 
     def __eq__(self, other):

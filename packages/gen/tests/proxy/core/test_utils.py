@@ -5,7 +5,6 @@ from gen_ai_hub.proxy.core.utils import lru_cache_extended
 
 
 class TestLRUCacheDecorators(unittest.TestCase):
-
     def test_lru_cache_clear(self):
         @lru_cache_extended()
         def test_func(x):
@@ -111,5 +110,5 @@ class TestLRUCacheDecorators(unittest.TestCase):
         self.assertEqual(test_func.counter, 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

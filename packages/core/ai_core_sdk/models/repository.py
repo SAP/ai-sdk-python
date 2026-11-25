@@ -13,13 +13,16 @@ class Repository:
     :param status: status of the repository, defaults to None
     :type status: class:`ai_core_sdk.models.repository_status.RepositoryStatus`, optional
     """
+
     def __init__(self, name: str, url: str, status: RepositoryStatus = None, **kwargs):
         self.name: str = name
         self.url: str = url
         self.status: RepositoryStatus = status
 
     def __str__(self):
-        return "Repository name: " + str(self.name) + ", Repository url: " + str(self.url)
+        return (
+            "Repository name: " + str(self.name) + ", Repository url: " + str(self.url)
+        )
 
     @staticmethod
     def from_dict(repository_dict: Dict[str, str]):
@@ -31,6 +34,6 @@ class Repository:
         :return: An object, created from the values provided
         :rtype: class:`ai_core_sdk.models.repository.Repository`
         """
-        if 'status' in repository_dict:
-            repository_dict['status'] = RepositoryStatus(repository_dict['status'])
+        if "status" in repository_dict:
+            repository_dict["status"] = RepositoryStatus(repository_dict["status"])
         return Repository(**repository_dict)

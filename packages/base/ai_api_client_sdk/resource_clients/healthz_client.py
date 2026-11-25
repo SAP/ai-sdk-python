@@ -15,5 +15,5 @@ class HealthzClient(BaseClient):
         :return: The health status of the server
         :rtype: class:`ai_api_client_sdk.models.healthz_status.HealthzStatus`
         """
-        healthz_status_dict = self.rest_client.get(path='/healthz')
+        healthz_status_dict = self.rest_client.get(path="/healthz")
         return HealthzStatus.from_dict(healthz_status_dict)

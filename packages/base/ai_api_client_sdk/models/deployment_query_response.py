@@ -12,12 +12,13 @@ class DeploymentQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[Deployment], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
     @staticmethod
     def from_dict(response_dict: Dict[str, Any]):
-        """Returns a :class:`ai_api_client_sdk.models.deployment_query_response.DeploymentQueryResponse` object, created 
+        """Returns a :class:`ai_api_client_sdk.models.deployment_query_response.DeploymentQueryResponse` object, created
         from the values in the dict provided as parameter
 
         :param response_dict: Dict which includes the necessary values to create the object
@@ -25,5 +26,7 @@ class DeploymentQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.deployment_query_response.DeploymentQueryResponse`
         """
-        response_dict['resources'] = [Deployment.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            Deployment.from_dict(r) for r in response_dict["resources"]
+        ]
         return DeploymentQueryResponse(**response_dict)

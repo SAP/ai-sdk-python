@@ -23,14 +23,14 @@ class OrchestrationConfig(JSONSerializable):
     """
 
     def __init__(
-            self,
-            template: Union[Template, TemplateRef],
-            llm: LLM,
-            filtering: Optional[ContentFiltering] = None,
-            data_masking: Optional[DataMasking] = None,
-            grounding: Optional[GroundingModule] = None,
-            stream_options: Optional[dict] = None,
-            translation: Optional[Translation] = None,
+        self,
+        template: Union[Template, TemplateRef],
+        llm: LLM,
+        filtering: Optional[ContentFiltering] = None,
+        data_masking: Optional[DataMasking] = None,
+        grounding: Optional[GroundingModule] = None,
+        stream_options: Optional[dict] = None,
+        translation: Optional[Translation] = None,
     ):
         """Initializes the OrchestrationConfig with specified modules.
 
@@ -76,9 +76,13 @@ class OrchestrationConfig(JSONSerializable):
 
         if self.translation:
             if self.translation.input_translation:
-                configs["input_translation_module_config"] = self.translation.input_translation.to_dict()
+                configs["input_translation_module_config"] = (
+                    self.translation.input_translation.to_dict()
+                )
             if self.translation.output_translation:
-                configs["output_translation_module_config"] = self.translation.output_translation.to_dict()
+                configs["output_translation_module_config"] = (
+                    self.translation.output_translation.to_dict()
+                )
 
         return configs
 
@@ -92,7 +96,11 @@ class OrchestrationConfig(JSONSerializable):
         config = {
             "module_configurations": self._get_module_configurations(),
             **({"stream": True} if self._stream else {}),
-            **({"stream_options": self.stream_options} if self._stream and self.stream_options else {})
+            **(
+                {"stream_options": self.stream_options}
+                if self._stream and self.stream_options
+                else {}
+            ),
         }
 
         return config
