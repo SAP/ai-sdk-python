@@ -13,28 +13,28 @@ def get_random_string(l=4):
 
 
 def get_internalprod_cluster_info():
-    auth_url = os.getenv('XSUAA_AUTH_URL')
-    client_id = os.getenv('XSUAA_CLIENT_ID')
-    client_secret = os.getenv('XSUAA_CLIENT_SECRET')
-    cluster_base_url = os.getenv('CLUSTER_BASE_URL')
+    auth_url = os.getenv('AICORE_AUTH_URL')
+    client_id = os.getenv('AICORE_CLIENT_ID')
+    client_secret = os.getenv('AICORE_CLIENT_SECRET')
+    cluster_base_url = os.getenv('AICORE_BASE_URL')
     base_url = f"{cluster_base_url}/v2/lm"
     provisioning_base_url = f'{cluster_base_url}/v2/admin'
     return base_url, auth_url, client_id, client_secret, provisioning_base_url
 
 
 def get_x509_credentials():
-    x509_cert_url = os.getenv(('XSUAA_X509_CERT_URL'))
-    x509_cert = os.getenv('XSUAA_X509_CERT')
-    x509_key = os.getenv('XSUAA_X509_KEY')
+    x509_cert_url = os.getenv('AICORE_CERT_URL')
+    x509_cert = os.getenv('AICORE_CERT_STR')
+    x509_key = os.getenv('AICORE_KEY_STR')
     return x509_cert_url, x509_cert, x509_key
 
 
 def get_s3_bucket_info():
-    oss_key = os.getenv('OSS_KEY')
-    oss_bucket = os.getenv('OSS_BUCKET')
-    oss_endpoint = os.getenv('OSS_ENDPOINT')
-    oss_region = os.getenv('OSS_REGION')
-    oss_secret = os.getenv('OSS_SECRET')
+    oss_key = os.getenv('AWS_ACCESS_KEY_ID')
+    oss_bucket = os.getenv('AWS_BUCKET_NAME')
+    oss_endpoint = os.getenv('AWS_HOST')
+    oss_region = os.getenv('AWS_REGION')
+    oss_secret = os.getenv('AWS_SECRET_ACCESS_KEY')
     return oss_bucket, oss_endpoint, oss_region, oss_key, oss_secret
 
 
@@ -100,6 +100,7 @@ def provision_resource_group():
     if res.status_code // 100 != 2:
         raise Exception(
             f"Failed to create object store secret for {RESOURCE_GROUP_ID}: {res.status_code}, {res.text}")
+    print(f"oss creation: {res.json()['message']}")
 
 
 def deprovision_resource_group():

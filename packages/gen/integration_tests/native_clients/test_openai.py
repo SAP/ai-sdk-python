@@ -6,6 +6,7 @@ from ..constants import (MISTRAL_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
     OPENAI_GPT_5_MINI_TEST_MODEL, OPENAI_GPT_O4_MINI_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL,
     OPENAI_GPT_O3_MINI_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL_NANO, NVIDIA_EMBEDDING_TEST_MODEL, PERPLEXITY_TEST_MODEL,
     COHERE_COMMAND_A_TEST_MODEL, OPENAI_GPT_5_TEST_MODEL)
+from ..test_helpers import retry_on_429_or_503_class
 
 try:
     import openai
@@ -30,6 +31,7 @@ class Person(BaseModel):
 
 
 @unittest.skipIf(no_openai, 'openai not installed')
+@retry_on_429_or_503_class()
 class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
 
     def test_client_discovery(self):

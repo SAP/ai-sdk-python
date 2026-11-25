@@ -14,11 +14,12 @@ class EvaluationClientTestBase(unittest.TestCase):
     def setUpClass(cls):
         """Set up the test class with credentials."""
         # Hardcoded credentials (will be moved to environment variables later)
-        cls.base_url = os.getenv("AICORE_BASE_URL")
+        env_base_url = os.getenv("AICORE_BASE_URL")
+        cls.base_url = env_base_url.rstrip('/') + ('' if env_base_url.endswith('/v2') else '/v2')
         cls.auth_url = os.getenv("AICORE_AUTH_URL")
         cls.client_id = os.getenv("AICORE_CLIENT_ID")
         cls.client_secret = os.getenv("AICORE_CLIENT_SECRET")
-        cls.resource_group = "default"
+        cls.resource_group = os.getenv("AICORE_RESOURCE_GROUP")
         cls.aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
         cls.aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
         cls.input_object_store_secret_name = "sdk-data"
@@ -39,9 +40,9 @@ class EvaluationClientTestBase(unittest.TestCase):
         )
 
         # Setup S3 credentials for object store secrets
-        AWS_S3_ENDPOINT = "s3-eu-central-1.amazonaws.com"
-        AWS_BUCKET_ID = "hcp-e597ff51-40f5-42c9-a75a-744281742e61"
-        AWS_REGION = "eu-central-1"
+        AWS_S3_ENDPOINT = os.getenv('AWS_HOST')
+        AWS_BUCKET_ID = os.getenv('AWS_BUCKET_NAME')
+        AWS_REGION = os.getenv('AWS_REGION')
 
         # default secret is needed to store output artifacts that the evaluation job creates after it is completed
         default_secret_creds = {

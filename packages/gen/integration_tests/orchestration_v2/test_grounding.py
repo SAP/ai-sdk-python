@@ -15,6 +15,7 @@ from integration_tests.orchestration_v2.test_base import OrchestrationServiceTes
 from integration_tests.test_helpers import with_retry_on_missing_resource, retry_on_429_or_503
 
 
+@unittest.skip("Skip until grounding service in test landscape working again")
 class TestGrounding(OrchestrationServiceTestBase):
 
     def setUp(self):
@@ -87,6 +88,7 @@ class TestGrounding(OrchestrationServiceTestBase):
 
         self.assertIn("SAP AI Core", response.final_result.choices[0].message.content)
 
+    @unittest.skip("Skip until relevant test setup is fixed")
     @with_retry_on_missing_resource(max_retries=3, delay=2.0)
     def test_grounding_vector(self):
         """

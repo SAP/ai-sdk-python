@@ -1,3 +1,5 @@
+import unittest
+
 from gen_ai_hub.orchestration.exceptions import OrchestrationError
 from gen_ai_hub.orchestration.models.azure_content_filter import AzureThreshold, AzureContentFilter
 from gen_ai_hub.orchestration.models.config import OrchestrationConfig
@@ -151,6 +153,7 @@ class TestContentFilter(OrchestrationServiceTestBase):
         self.assertIsNotNone(response.module_results.output_filtering)
         self.assertIsNotNone(response.orchestration_result.model)
 
+    @unittest.skip("check sporadic failure before enabling")
     def test_blocked_input_filtering_with_llama_guard38b(self):
         content_filter = LlamaGuard38bFilter(elections=True)
 

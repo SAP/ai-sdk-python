@@ -32,7 +32,6 @@ VCAP_SERVICE_X509_DICT = {
 }
 VCAP_SERVICE_X509_ENV_VALUE = json.dumps(VCAP_SERVICE_X509_DICT, indent=4)
 
-
 class TestE2EX509(AICoreV2ClientE2ETestBase):
 
     @classmethod

@@ -8,7 +8,6 @@ from ai_api_client_sdk.models.target_status import TargetStatus
 from .ai_api_v2_client_e2e_test_base import AIAPIV2ClientE2ETestBase
 
 
-@pytest.mark.skip("Skip until deployment setup fixed for the test tenant")
 class TestE2EDeployments(AIAPIV2ClientE2ETestBase):
     def test_deployments(self):
         configuration = self.get_a_configuration(deployable=True)

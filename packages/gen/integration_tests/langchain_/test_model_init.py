@@ -7,7 +7,7 @@ from langchain_classic.prompts import PromptTemplate
 from gen_ai_hub.proxy.langchain.init_models import ModelType, init_embedding_model, init_llm, _get_init_func
 from integration_tests.constants import (OPENAI_GPT_4O_MINI_TEST_MODEL,
                                          AMAZON_TITAN_EMBEDDING_TEST_MODEL, OPENAI_EMBEDDING_TEST_MODEL,
-                                         GEMINI_2_5_FLASH_LITE_TEST_MODEL)
+                                         GEMINI_3_8_FLASH_TEST_MODEL)
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
 
 
@@ -18,7 +18,7 @@ class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
         Answer: Let's think step by step."""
         prompt = PromptTemplate(template=template, input_variables=['question'])
         question = 'What is a supernova?'
-        models=[GEMINI_2_5_FLASH_LITE_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL]  # CLAUDE_3_7_SONNET_TEST_MODEL
+        models=[GEMINI_3_8_FLASH_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL]  # CLAUDE_3_7_SONNET_TEST_MODEL
         for model in models:
             try:
                 self.proxy_client.select_deployment(model_name=model)
@@ -55,7 +55,7 @@ class TestInitModels(TestCaseAICoreSetupMixin, unittest.TestCase):
         Therefor, we delete the model entry from the catalog and test the model initialization.
         Only one model per model provider is tested.
         """
-        self._do_test_custom_models(models=[GEMINI_2_5_FLASH_LITE_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL],  # CLAUDE_3_7_SONNET_TEST_MODEL
+        self._do_test_custom_models(models=[GEMINI_3_8_FLASH_TEST_MODEL, OPENAI_GPT_4O_MINI_TEST_MODEL],  # CLAUDE_3_7_SONNET_TEST_MODEL
                                     model_type=ModelType.LLM,
                                     init_model=init_llm)
 
