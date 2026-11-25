@@ -20,6 +20,7 @@ The class names have not changed i.e., you can continue to use existing code.
 
 The main modules are located in the subfolder [proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy):
 
+- [core](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/gen_ai_hub_proxy)
 - [gen_ai_hub_proxy](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/gen_ai_hub_proxy)
 - [langchain](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/langchain)
 - [native](https://github.com/SAP/ai-sdk-python/tree/main/packages/gen/gen_ai_hub/proxy/native)
