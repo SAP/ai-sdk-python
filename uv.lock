@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -9,10 +9,10 @@ resolution-markers = [
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'win32'",
-    "python_full_version < '3.11.5' and sys_platform == 'win32'",
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version < '3.11.5' and sys_platform == 'emscripten'",
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.11.5' and sys_platform == 'win32'",
+    "python_full_version < '3.11.5' and sys_platform == 'emscripten'",
     "python_full_version < '3.11.5' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
@@ -699,15 +699,14 @@ wheels = [
 
 [[package]]
 name = "commitizen"
-version = "4.20.1"
+version = "4.16.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "argcomplete" },
     { name = "charset-normalizer" },
     { name = "colorama" },
     { name = "decli" },
-    { name = "deprecated", version = "1.3.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "deprecated", version = "3.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "deprecated" },
     { name = "jinja2" },
     { name = "packaging" },
     { name = "prompt-toolkit" },
@@ -716,9 +715,9 @@ dependencies = [
     { name = "termcolor" },
     { name = "tomlkit" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/66/fa/17c417067f178119ebf6325155a0f3ff65e67407e32b375ea08cfa8ca22c/commitizen-4.20.1.tar.gz", hash = "sha256:352833227ae3a34e5f892e94cc9499737b3d0f1ca985353340946fb470ced7bd", size = 74248, upload-time = "2026-11-24T08:11:37.792Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/de/b7ad6b48415760b3bb2e702218b9fc89ea376509ec88d04a281c33196f42/commitizen-4.16.5.tar.gz", hash = "sha256:a953394a8625ab6e3619d7e97ffc032cac8a13c5854a12010d0a9d415cdb80ca", size = 66779, upload-time = "2026-07-16T02:58:50.386Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/b1/dfceab56ee49447280770be58f427de659432dd12ebd143649ba8aaf5a98/commitizen-4.20.1-py3-none-any.whl", hash = "sha256:47412baf5614445e733a1339573977e057c94327a735dd9bb7b1046937ae0ca9", size = 92498, upload-time = "2026-11-24T08:11:36.485Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/e2/b412a27022502f5b96638f379c821e25668ae231d5501088a2773262ef4a/commitizen-4.16.5-py3-none-any.whl", hash = "sha256:cd80978a61bb3e0b18137da9e10d03edba0b9c184b9bc964dba8a31c42a7630c", size = 88932, upload-time = "2026-07-16T02:58:48.658Z" },
 ]
 
 [[package]]
@@ -967,40 +966,12 @@ wheels = [
 name = "deprecated"
 version = "1.3.1"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'win32'",
-    "python_full_version < '3.11.5' and sys_platform == 'win32'",
-    "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version < '3.11.5' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version < '3.11.5' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
 dependencies = [
     { name = "wrapt" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/49/85/12f0a49a7c4ffb70572b6c2ef13c90c88fd190debda93b23f026b25f9634/deprecated-1.3.1.tar.gz", hash = "sha256:b1b50e0ff0c1fddaa5708a2c6b0a6588bb09b892825ab2b214ac9ea9d92a5223", size = 2932523, upload-time = "2025-10-30T08:19:02.757Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/84/d0/205d54408c08b13550c733c4b85429e7ead111c7f0014309637425520a9a/deprecated-1.3.1-py2.py3-none-any.whl", hash = "sha256:597bfef186b6f60181535a29fbe44865ce137a5079f295b479886c82729d5f3f", size = 11298, upload-time = "2025-10-30T08:19:00.758Z" },
-]
-
-[[package]]
-name = "deprecated"
-version = "3.0.1"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
-dependencies = [
-    { name = "wrapt" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/61/46/f6958cdfa8a801fc845e981a8a958dba2e74a386b026a8fd5cae58423f1f/deprecated-3.0.1.tar.gz", hash = "sha256:2f5a9fecc9961e26462846cf1e57f73a612b1d0b79c27dceeed8de647beadcee", size = 1074378, upload-time = "2026-10-30T11:15:39.954Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/82/f0/07de837adfa09d592747b82fd74316e88285d2d7057551f30e4b5ef81bd8/deprecated-3.0.1-py3-none-any.whl", hash = "sha256:eda314c115e8bc0fe52b90a6869e19240ac3cedb7449adfdba5981cf9ef693e1", size = 22191, upload-time = "2026-10-30T11:15:38.08Z" },
 ]
 
 [[package]]
@@ -2351,10 +2322,10 @@ version = "2.4.6"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'win32'",
-    "python_full_version < '3.11.5' and sys_platform == 'win32'",
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version < '3.11.5' and sys_platform == 'emscripten'",
     "python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.11.5' and sys_platform == 'win32'",
+    "python_full_version < '3.11.5' and sys_platform == 'emscripten'",
     "python_full_version < '3.11.5' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/d0/ad/fed0499ce6a338d2a03ebae59cd15093910c8875328855781952abf6c2fe/numpy-2.4.6.tar.gz", hash = "sha256:f3a3570c4a2a16746ac2c31a7c7c7b0c186b95ce902e33db6f28094ed7387dda", size = 20735807, upload-time = "2026-05-18T23:37:14.07Z" }
