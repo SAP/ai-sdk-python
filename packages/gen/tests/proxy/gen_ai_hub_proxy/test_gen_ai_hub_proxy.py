@@ -113,6 +113,20 @@ class TestProxyClient(unittest.TestCase):
             with self.assertRaises(ValueError):
                 proxy_client.select_deployment(model_version="1337")
 
+    def test_models_property(self):
+        with proxy_version_context("gen-ai-hub"):
+            proxy_client = get_proxy_client(**self.proxy_kwargs)
+            mock_model = MagicMock()
+            mock_query_result = MagicMock()
+            mock_query_result.resources = [mock_model]
+            proxy_client.ai_core_client = MagicMock()
+            proxy_client.ai_core_client.model.query.return_value = mock_query_result
+
+            result = proxy_client.models
+
+            self.assertEqual(result, [mock_model])
+            proxy_client.ai_core_client.model.query.assert_called_once()
+
     def test_client_mock_discovery(self):
         proxy_client = get_mocked_ai_core_client()
         self.assertEqual(len(proxy_client.get_deployments()), 8)

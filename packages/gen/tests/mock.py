@@ -65,6 +65,14 @@ class MockProxyClient(BaseProxyClient):
     def select_deployment(self) -> MockDeployment:
         return self.deployments[0]
 
+    @property
+    def models(self) -> List:
+        return []
+
+    @property
+    def model_class(self) -> Type:
+        return dict
+
     @classmethod
     def get_home(cls):
         return pathlib.Path(

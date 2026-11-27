@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Tuple, Type
+from typing import Any, Dict, List, Tuple, Type
 
 from pydantic import BaseModel, ConfigDict
 from pydantic._internal._model_construction import ModelMetaclass
@@ -86,6 +86,14 @@ class BaseProxyClient(ABC, BaseModel, metaclass=CombinedMeta):
     @property
     @abstractmethod
     def deployment_class(self) -> Type[BaseDeployment]: ...
+
+    @property
+    @abstractmethod
+    def models(self) -> List: ...
+
+    @property
+    @abstractmethod
+    def model_class(self) -> Type: ...
 
     @abstractmethod
     def select_deployment(self, **kwargs) -> BaseDeployment: ...
