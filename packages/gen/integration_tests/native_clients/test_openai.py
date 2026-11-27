@@ -5,10 +5,9 @@ from pydantic import BaseModel
 from ..constants import (
     MISTRAL_TEST_MODEL,
     OPENAI_EMBEDDING_TEST_MODEL,
+    OPENAI_GPT_5_6_TERRA_TEST_MODEL,
     OPENAI_GPT_5_MINI_TEST_MODEL,
-    OPENAI_GPT_O4_MINI_TEST_MODEL,
     OPENAI_GPT_4O_MINI_TEST_MODEL,
-    OPENAI_GPT_O3_MINI_TEST_MODEL,
     OPENAI_GPT_5_TEST_MODEL_NANO,
     NVIDIA_EMBEDDING_TEST_MODEL,
     PERPLEXITY_TEST_MODEL,
@@ -178,21 +177,11 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         self.assertIsInstance(person, Person)
 
     @parameterized.expand(
-        [
-            OPENAI_GPT_5_MINI_TEST_MODEL,
-            OPENAI_GPT_O4_MINI_TEST_MODEL,
-            OPENAI_GPT_O3_MINI_TEST_MODEL,
-        ]
+        [OPENAI_GPT_5_MINI_TEST_MODEL, OPENAI_GPT_5_6_TERRA_TEST_MODEL]
     )
-    def test_chat_completion_streaming(self, model=OPENAI_GPT_O3_MINI_TEST_MODEL):
+    def test_chat_completion_streaming(self, model=OPENAI_GPT_5_6_TERRA_TEST_MODEL):
         messages = self._get_test_messages()
-        kwargs = {
-            "model_name": model,
-            "messages": messages,
-            "stream": True,
-            "temperature": 0,
-            "seed": 42,
-        }
+        kwargs = {"model_name": model, "messages": messages, "stream": True, "seed": 42}
         generator = OpenAI(
             proxy_client=self.proxy_client, max_retries=10
         ).chat.completions.create(**kwargs)
@@ -344,11 +333,10 @@ class OpenAITests(TestCaseAICoreSetupMixin, unittest.TestCase):
         student_1_description = "David Nguyen is a sophomore majoring in computer science at Stanford University. He is Asian American and has a 3.8 GPA. David is known for his programming skills and is an active member of the university's Robotics Club. He hopes to pursue a career in artificial intelligence after graduating."
 
         kwargs = dict(
-            model=OPENAI_GPT_O4_MINI_TEST_MODEL,
+            model=OPENAI_GPT_5_6_TERRA_TEST_MODEL,
             messages=[{"role": "user", "content": student_1_description}],
             functions=student_custom_functions,
             function_call="auto",
-            temperature=0,
             seed=42,
         )
         response = OpenAI(
@@ -422,9 +410,9 @@ class AsyncOpenAITests(TestCaseAICoreSetupMixin, unittest.IsolatedAsyncioTestCas
         ).with_raw_response.chat.completions.create(**kwargs)
         self.assertIsInstance(response, openai._legacy_response.LegacyAPIResponse)
 
-    @parameterized.expand([OPENAI_GPT_O4_MINI_TEST_MODEL, PERPLEXITY_TEST_MODEL])
+    @parameterized.expand([OPENAI_GPT_5_6_TERRA_TEST_MODEL, PERPLEXITY_TEST_MODEL])
     async def test_async_chat_completion_streaming(
-        self, model=OPENAI_GPT_O4_MINI_TEST_MODEL
+        self, model=OPENAI_GPT_5_6_TERRA_TEST_MODEL
     ):
         messages = OpenAITests._get_test_messages()
         generator = await AsyncOpenAI(
