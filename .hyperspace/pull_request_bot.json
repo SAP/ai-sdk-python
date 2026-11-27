@@ -1,10 +1,14 @@
 {
+  "$schema": "https://devops-insights-pr-bot.cfapps.eu10-004.hana.ondemand.com/schema/pull_request_bot.json",
   "features": {
+    "control_panel": false,
     "review": {
       "auto_generate_review": true,
       "auto_run_on_draft_pr": false,
-      "auto_exclude_authors": ["app/renovate", "app/dependabot"],
-      "excluded_paths": ["*generated/**"]
+      "use_custom_review_focus": false,
+      "excluded_paths": [],
+      "auto_exclude_authors": ["app/renovate", "app/dependabot"]
     }
-  }
+  },
+  "excluded_paths": []
 }
