@@ -50,7 +50,7 @@ exclude = ["*test*"]
 [tool.commitizen]
 name = "cz_customize"
 tag_format = "base-v${version}"
-ignored_tag_formats = ["*-v${version}"]
+ignored_tag_formats = ["core-v${version}", "gen-v${version}"]
 version_provider = "pep621"
 changelog_file = "RELEASE_NOTES.md"
 
