@@ -1,28 +1,20 @@
 # Release Notes
 ## gen-v7.5.0 (2026-11-26)
 
+### Features
+- Added support for IBM Granite Guardian 4.1 content filter in Orchestration Service V2
+- Added support for dropping unsupported LLM parameters in Orchestration Service V2 (`drop_unsupported_params`)
+- Added provider-specific fields to `LLMChoice` and streaming choices in Orchestration Service V2
+- Added support for config overrides via partial configurations (`config_ref`) in Orchestration Service V2
+- Made `prompt` optional in `PromptTemplatingModuleConfig` (use `messages_history` at inference time instead)
+- Added support for data masking of file inputs in Orchestration Service V2
+- Added support for file content in `UserMessage` in Orchestration Service V2
+- Added support for RPT client v1.5 and v1.6 with explainability, confidence intervals, top k predictions, deep context mode, and additional data types
 
-- fix(gen): update dependency langchain-aws to ~=1.9.0 (#199)
-- Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
-Co-authored-by: alpkom <alperen.koemuercue@sap.com>
-- fix(gen): add missing defaults in ReasoningBlock (#197)
-- * fix(gen): add missing defaults in ReasoningBlock
-- * switched to optional attributes to be closer to the spec
-- fix(gen): upgrade dependencies (#190)
-- * fix(gen): upgrade dependencies
-- * fix(gen): upgrade dependencies
-- * fix(gen): fix uv.lock
-- feat(gen): dummy commit (#192)
-- fix(gen): restore async client with langchain-google-genai >= 4.3.7 (#165)
-- The SDK's ChatGoogleGenerativeAI shadows the upstream `validate_environment`
-validator to inject the AI Core client. Since langchain-google-genai 4.3.7 that
-upstream validator also registers the client with a `_ClientCleanup` object
-which the `async_client` property and `aclose()` dereference, so every async
-call failed with AttributeError. Register the injected client in a validator
-of our own on the chat class, add a unit test covering `async_client` and
-`aclose()`, lift the `<4.3.7` pin introduced as a stopgap in #122/#129, and
-update the stale pin in README_sphynx.md.
-- Refs SAP/ai-sdk-python#152
+### Bugfixes
+- Upgraded dependencies
+- Fixed issues with langchain-google-genai AsyncClient
+- Added missing defaults to ReasoningBlock for Orchestration V2
 
 ## gen-v7.4.1 (2026-09-23)
 
