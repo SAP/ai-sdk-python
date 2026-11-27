@@ -7,9 +7,15 @@ from typing import Optional, Union
 
 from pydantic import Field
 
-from gen_ai_hub.orchestration_v2.models.azure_content_filter import (AzureContentSafetyInput, AzureContentSafetyOutput,
-                                                                     AzureContentFilter)
+from gen_ai_hub.orchestration_v2.models.azure_content_filter import (
+    AzureContentSafetyInput,
+    AzureContentSafetyOutput,
+    AzureContentFilter,
+)
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.granite_guardian_filter import (
+    GraniteGuardian41Filter,
+)
 from gen_ai_hub.orchestration_v2.models.llama_guard_3_filter import LlamaGuard38bFilter
 
 
@@ -24,10 +30,14 @@ class ContentFilterProvider(str, Enum):
         AZURE: Represents the Azure Content Safety service.
 
         LLAMA_GUARD_3_8B: Represents the Llama Guard 3 based on Llama-3.1-8B pretrained model.
+
+        GRANITE_GUARDIAN_4_1: Represents the IBM Granite Guardian 4.1 content filter.
     """
 
     AZURE = "azure_content_safety"
     LLAMA_GUARD_3_8B = "llama_guard_3_8b"
+    GRANITE_GUARDIAN_4_1 = "granite_guardian_4_1"
+
 
 class ContentFilter(BaseModel):
     """
@@ -42,27 +52,56 @@ class ContentFilter(BaseModel):
 
         config: A dictionary containing the configuration parameters for the content filter.
     """
+
     type_: ContentFilterProvider = Field(..., alias="type")
-    config: Optional[Union[AzureContentFilter, LlamaGuard38bFilter]] = None
+    config: Optional[
+        Union[AzureContentFilter, LlamaGuard38bFilter, GraniteGuardian41Filter]
+    ] = None
+
 
 class LlamaGuard38bFilterConfig(ContentFilter):
-    type_: ContentFilterProvider = Field(default=ContentFilterProvider.LLAMA_GUARD_3_8B, alias="type")
+    type_: ContentFilterProvider = Field(
+        default=ContentFilterProvider.LLAMA_GUARD_3_8B, alias="type"
+    )
     config: LlamaGuard38bFilter
 
+
+class GraniteGuardian41FilterConfig(ContentFilter):
+    type_: ContentFilterProvider = Field(
+        default=ContentFilterProvider.GRANITE_GUARDIAN_4_1, alias="type"
+    )
+    config: GraniteGuardian41Filter
+
+
 class AzureContentSafetyInputFilterConfig(ContentFilter):
-    type_: ContentFilterProvider = Field(default=ContentFilterProvider.AZURE, alias="type")
+    type_: ContentFilterProvider = Field(
+        default=ContentFilterProvider.AZURE, alias="type"
+    )
     config: Optional[AzureContentSafetyInput] = None
 
+
 class AzureContentSafetyOutputFilterConfig(ContentFilter):
-    type_: ContentFilterProvider = Field(default=ContentFilterProvider.AZURE, alias="type")
+    type_: ContentFilterProvider = Field(
+        default=ContentFilterProvider.AZURE, alias="type"
+    )
     config: Optional[AzureContentSafetyOutput] = None
+
 
 class FilteringStreamOptions(BaseModel):
     """
     overlap: Number of characters that should be additionally sent to content filtering services
     from previous chunks as additional context.
     """
+
     overlap: Optional[int] = Field(default=0, ge=0, le=10000)
 
-__all__ = ["ContentFilterProvider", "ContentFilter", "LlamaGuard38bFilterConfig", "AzureContentSafetyInputFilterConfig",
-           "AzureContentSafetyOutputFilterConfig", "FilteringStreamOptions"]
+
+__all__ = [
+    "ContentFilterProvider",
+    "ContentFilter",
+    "LlamaGuard38bFilterConfig",
+    "GraniteGuardian41FilterConfig",
+    "AzureContentSafetyInputFilterConfig",
+    "AzureContentSafetyOutputFilterConfig",
+    "FilteringStreamOptions",
+]

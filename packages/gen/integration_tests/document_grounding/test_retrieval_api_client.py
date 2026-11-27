@@ -4,7 +4,9 @@ import requests
 
 from .. import get_random_string
 from gen_ai_hub import GenAIHubProxyClient
-from gen_ai_hub.document_grounding.clients.retrieval_api_client import RetrievalAPIClient
+from gen_ai_hub.document_grounding.clients.retrieval_api_client import (
+    RetrievalAPIClient,
+)
 from gen_ai_hub.document_grounding.clients.vector_api_client import VectorAPIClient
 from gen_ai_hub.document_grounding.models.retrieval import (
     RetrievalSearchInput,
@@ -54,7 +56,9 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
         cls.retrieval_client = RetrievalAPIClient(proxy_client=cls.proxy_client)
 
         # --- Create test vector collection ---
-        cls.collection_title = f"retrieval-integration-test-collection-{get_random_string()}"
+        cls.collection_title = (
+            f"retrieval-integration-test-collection-{get_random_string()}"
+        )
         create_request = CollectionCreateRequest(
             title=cls.collection_title,
             embeddingConfig=EmbeddingConfig(modelName="text-embedding-3-large"),
@@ -74,7 +78,9 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
 
         # --- Create test document ---
         doc = BaseDocument(
-            metadata=[VectorKeyValueListPair(key="url", value=["http://retrieval-test.com"])],
+            metadata=[
+                VectorKeyValueListPair(key="url", value=["http://retrieval-test.com"])
+            ],
             chunks=[
                 TextOnlyBaseChunk(
                     content="Joule is an AI copilot that helps automate SAP workflows.",
@@ -86,9 +92,10 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
                 ),
             ],
         )
-        create_doc_resp = cls.vector_client.create_documents(cls.collection_id, DocumentsCreateRequest(documents=[doc]))
+        create_doc_resp = cls.vector_client.create_documents(
+            cls.collection_id, DocumentsCreateRequest(documents=[doc])
+        )
         cls.document_id = create_doc_resp.documents[0].id
-
 
     @classmethod
     def tearDownClass(cls):
@@ -96,7 +103,6 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
         cls.vector_client.delete_document(cls.collection_id, cls.document_id)
 
         cls.vector_client.delete_collection(cls.collection_id)
-
 
     def test_01_get_data_repositories(self):
         """Verify that the test collection appears as a repository in Retrieval API."""
@@ -129,7 +135,9 @@ class TestRetrievalAPIIntegration(unittest.TestCase):
 
     def test_02_get_data_repository_by_id(self):
         """Get repository details and verify consistency with the created collection."""
-        response = self.retrieval_client.get_data_repository_by_id(self.__class__.collection_id)
+        response = self.retrieval_client.get_data_repository_by_id(
+            self.__class__.collection_id
+        )
 
         self.assertIsInstance(response, DataRepository)
 

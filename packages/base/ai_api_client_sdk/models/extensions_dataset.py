@@ -15,7 +15,14 @@ class ExtensionsDataset:
     :type limits: class:`ai_api_client_sdk.models.dataset_limits.DatasetLimits`, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, version: str, capabilities: DatasetCapabilities = None, limits: DatasetLimits = None, **kwargs):
+
+    def __init__(
+        self,
+        version: str,
+        capabilities: DatasetCapabilities = None,
+        limits: DatasetLimits = None,
+        **kwargs,
+    ):
         self.version: str = version
         self.capabilities: DatasetCapabilities = capabilities
         self.limits: DatasetLimits = limits
@@ -30,11 +37,14 @@ class ExtensionsDataset:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.extensions_dataset.ExtensionsDataset`
         """
-        if 'capabilities' in extensions_dataset_dict:
-            extensions_dataset_dict['capabilities'] = \
-                DatasetCapabilities.from_dict(extensions_dataset_dict['capabilities'])
-        if 'limits' in extensions_dataset_dict:
-            extensions_dataset_dict['limits'] = DatasetLimits.from_dict(extensions_dataset_dict['limits'])
+        if "capabilities" in extensions_dataset_dict:
+            extensions_dataset_dict["capabilities"] = DatasetCapabilities.from_dict(
+                extensions_dataset_dict["capabilities"]
+            )
+        if "limits" in extensions_dataset_dict:
+            extensions_dataset_dict["limits"] = DatasetLimits.from_dict(
+                extensions_dataset_dict["limits"]
+            )
         return ExtensionsDataset(**extensions_dataset_dict)
 
     def __eq__(self, other):

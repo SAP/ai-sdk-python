@@ -6,7 +6,10 @@ import gen_ai_hub.evaluations.client as module
 from gen_ai_hub.evaluations.client import EvaluationClient, _has_mixed_config_types
 from gen_ai_hub.evaluations.models.evaluation_config import EvaluationConfig
 from gen_ai_hub.orchestration_v2.models.llm_model_details import LLMModelDetails as LLM
-from gen_ai_hub.prompt_registry.models.prompt_template import PromptTemplateSpec, PromptTemplate
+from gen_ai_hub.prompt_registry.models.prompt_template import (
+    PromptTemplateSpec,
+    PromptTemplate,
+)
 from gen_ai_hub.evaluations.models.dataset_config import Dataset
 from gen_ai_hub.evaluations.models.metric_config import MetricConfig, MetricRef
 from gen_ai_hub.evaluations.constants import (
@@ -33,7 +36,7 @@ class TestHasMixedConfigTypes(unittest.TestCase):
                 template=[PromptTemplate(role="user", content="test")]
             ),
             dataset_config=Dataset("test.csv"),
-            metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+            metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
         )
         self.assertFalse(_has_mixed_config_types([config]))
 
@@ -46,7 +49,7 @@ class TestHasMixedConfigTypes(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 llm=LLM(name="gpt-3.5", version="1.0"),
@@ -54,8 +57,8 @@ class TestHasMixedConfigTypes(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test2")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
         self.assertFalse(_has_mixed_config_types(configs))
 
@@ -65,13 +68,13 @@ class TestHasMixedConfigTypes(unittest.TestCase):
             EvaluationConfig(
                 orchestration_registry_reference="uuid1",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 orchestration_registry_reference="uuid2",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
         self.assertFalse(_has_mixed_config_types(configs))
 
@@ -84,25 +87,21 @@ class TestHasMixedConfigTypes(unittest.TestCase):
                     template=[PromptTemplate(role="user", content="test")]
                 ),
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
             ),
             EvaluationConfig(
                 orchestration_registry_reference="uuid1",
                 dataset_config=Dataset("test.csv"),
-                metrics=[MetricConfig(reference=MetricRef(name="metric1"))]
-            )
+                metrics=[MetricConfig(reference=MetricRef(name="metric1"))],
+            ),
         ]
         self.assertTrue(_has_mixed_config_types(configs))
 
 
 class TestEvaluationClient(unittest.TestCase):
-
     def setUp(self):
         # Prevent real get_proxy_client side-effects
-        patcher = patch(
-            "gen_ai_hub.evaluations.client.get_proxy_client",
-            autospec=True,
-        )
+        patcher = patch("gen_ai_hub.evaluations.client.get_proxy_client", autospec=True)
         self.addCleanup(patcher.stop)
         self.mock_proxy = patcher.start()
 
@@ -128,9 +127,7 @@ class TestEvaluationClient(unittest.TestCase):
         with patch("gen_ai_hub.evaluations.client.get_proxy_client"):
             with self.assertRaises(ValueError):
                 EvaluationClient(
-                    base_url="x",
-                    resource_group="rg",
-                    ai_core_client=self.fake_ai_core,
+                    base_url="x", resource_group="rg", ai_core_client=self.fake_ai_core
                 )
 
     def test_from_env_uses_fetch_credentials_and_constructs(self):
@@ -141,10 +138,11 @@ class TestEvaluationClient(unittest.TestCase):
             "aws_secret_access_key": "B",
         }
 
-        with patch.object(module, "fetch_credentials", return_value=fake_creds), \
-             patch("gen_ai_hub.evaluations.client.AICoreV2Client", autospec=True), \
-             patch("gen_ai_hub.evaluations.client.get_proxy_client"):
-
+        with (
+            patch.object(module, "fetch_credentials", return_value=fake_creds),
+            patch("gen_ai_hub.evaluations.client.AICoreV2Client", autospec=True),
+            patch("gen_ai_hub.evaluations.client.get_proxy_client"),
+        ):
             ec = EvaluationClient.from_env(profile_name="p")
 
         self.assertIsInstance(ec, EvaluationClient)
@@ -163,10 +161,7 @@ class TestEvaluationClient(unittest.TestCase):
             )
 
         with self.assertRaises(ValueError):
-            client.setup(
-                input_secret_body={"type": "aws"},
-                default_secret_body=None,
-            )
+            client.setup(input_secret_body={"type": "aws"}, default_secret_body=None)
 
     def test_setup_invalid_secret_type_raises(self):
         with patch("gen_ai_hub.evaluations.client.get_proxy_client"):
@@ -193,9 +188,7 @@ class TestEvaluationClient(unittest.TestCase):
                 ai_core_client=self.fake_ai_core,
             )
 
-        resp_exists = SimpleNamespace(
-            message=OBJECT_STORE_SECRET_EXISTS_MESSAGE
-        )
+        resp_exists = SimpleNamespace(message=OBJECT_STORE_SECRET_EXISTS_MESSAGE)
 
         with patch(
             "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
@@ -224,13 +217,9 @@ class TestEvaluationClient(unittest.TestCase):
             "gen_ai_hub.evaluations.client.get_orchestration_api_url",
             return_value="https://running",
         ):
-
             res = client.setup()
 
-        self.assertEqual(
-            res[ORCHESTRATION_URL_SETUP_KEY],
-            "https://running",
-        )
+        self.assertEqual(res[ORCHESTRATION_URL_SETUP_KEY], "https://running")
         self.assertEqual(client.orchestration_url, "https://running")
 
     def test_setup_existing_config_no_running_deployment_creates_new(self):
@@ -245,20 +234,19 @@ class TestEvaluationClient(unittest.TestCase):
 
         cfg = MagicMock(id="cfg-1")
 
-        with patch(
-            "gen_ai_hub.evaluations.client.get_orchestration_api_url",
-            side_effect=ValueError("No deployment found"),
-        ), patch(
-            "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
-            return_value="https://new-orch",
+        with (
+            patch(
+                "gen_ai_hub.evaluations.client.get_orchestration_api_url",
+                side_effect=ValueError("No deployment found"),
+            ),
+            patch(
+                "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
+                return_value="https://new-orch",
+            ),
         ):
-
             res = client.setup()
 
-        self.assertEqual(
-            res[ORCHESTRATION_URL_SETUP_KEY],
-            "https://new-orch",
-        )
+        self.assertEqual(res[ORCHESTRATION_URL_SETUP_KEY], "https://new-orch")
         self.assertEqual(client.orchestration_url, "https://new-orch")
 
     def test_repr(self):
@@ -284,10 +272,11 @@ class TestEvaluationClient(unittest.TestCase):
             "cert_url": "https://cert-url",
         }
 
-        with patch.object(module, "fetch_credentials", return_value=fake_creds), \
-             patch("gen_ai_hub.evaluations.client.AICoreV2Client", autospec=True), \
-             patch("gen_ai_hub.evaluations.client.get_proxy_client"):
-
+        with (
+            patch.object(module, "fetch_credentials", return_value=fake_creds),
+            patch("gen_ai_hub.evaluations.client.AICoreV2Client", autospec=True),
+            patch("gen_ai_hub.evaluations.client.get_proxy_client"),
+        ):
             ec = EvaluationClient.from_env(profile_name="p")
 
         self.assertIsInstance(ec, EvaluationClient)
@@ -307,16 +296,17 @@ class TestEvaluationClient(unittest.TestCase):
 
         resp_success = SimpleNamespace(message="success")
 
-        with patch(
-            "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
-            return_value=resp_success,
-        ), patch(
-            "gen_ai_hub.evaluations.client.get_orchestration_api_url",
-            return_value="https://running",
+        with (
+            patch(
+                "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
+                return_value=resp_success,
+            ),
+            patch(
+                "gen_ai_hub.evaluations.client.get_orchestration_api_url",
+                return_value="https://running",
+            ),
         ):
-            res = client.setup(
-                default_secret_body={"name": "default", "type": "S3"}
-            )
+            res = client.setup(default_secret_body={"name": "default", "type": "S3"})
 
         self.assertIn(DEFAULT_SECRET_SETUP_KEY, res)
         self.assertEqual(client.default_object_store_secret_name, "default")
@@ -349,16 +339,17 @@ class TestEvaluationClient(unittest.TestCase):
 
         resp_success = SimpleNamespace(message="created")
 
-        with patch(
-            "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
-            return_value=resp_success,
-        ), patch(
-            "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
-            return_value="https://new-deployment",
+        with (
+            patch(
+                "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
+                return_value=resp_success,
+            ),
+            patch(
+                "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
+                return_value="https://new-deployment",
+            ),
         ):
-            res = client.setup(
-                input_secret_body={"name": "in", "type": "S3"},
-            )
+            res = client.setup(input_secret_body={"name": "in", "type": "S3"})
 
         self.assertIn(INPUT_SECRET_SETUP_KEY, res)
         self.assertEqual(client.input_object_store_secret_name, "in")
@@ -378,11 +369,11 @@ class TestEvaluationClient(unittest.TestCase):
             side_effect=Exception("API Error"),
         ):
             with self.assertRaises(RuntimeError) as context:
-                client.setup(
-                    input_secret_body={"name": "in", "type": "S3"},
-                )
+                client.setup(input_secret_body={"name": "in", "type": "S3"})
 
-            self.assertIn("Creation of in object store secret failed", str(context.exception))
+            self.assertIn(
+                "Creation of in object store secret failed", str(context.exception)
+            )
 
     def test_setup_secret_exists_and_gets_replaced(self):
         with patch("gen_ai_hub.evaluations.client.get_proxy_client"):
@@ -400,18 +391,21 @@ class TestEvaluationClient(unittest.TestCase):
         # Use a list to track calls and return different results
         responses = iter([resp_exists, resp_success])
 
-        with patch(
-            "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
-            side_effect=lambda *args, **kwargs: next(responses),
-        ), patch(
-            "gen_ai_hub.evaluations.client.delete_object_store_secret"
-        ) as mock_delete, patch(
-            "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
-            return_value="https://new-deployment",
+        with (
+            patch(
+                "gen_ai_hub.evaluations.client.create_aws_object_store_secret",
+                side_effect=lambda *args, **kwargs: next(responses),
+            ),
+            patch(
+                "gen_ai_hub.evaluations.client.delete_object_store_secret"
+            ) as mock_delete,
+            patch(
+                "gen_ai_hub.evaluations.client.create_llm_orchestration_deployment_url",
+                return_value="https://new-deployment",
+            ),
         ):
             res = client.setup(
-                input_secret_body={"name": "in", "type": "S3"},
-                replace_existing=True,
+                input_secret_body={"name": "in", "type": "S3"}, replace_existing=True
             )
 
         self.assertIn(INPUT_SECRET_SETUP_KEY, res)
@@ -488,7 +482,7 @@ class TestEvaluationClient(unittest.TestCase):
             model="gpt-4",
             provider="openai",
             allowed_scenarios=[{"scenario_id": "orchestration"}],
-            versions=[SimpleNamespace(version="1.0", name="gpt-4")]
+            versions=[SimpleNamespace(version="1.0", name="gpt-4")],
         )
 
         with patch(

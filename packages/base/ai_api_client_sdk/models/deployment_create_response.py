@@ -18,7 +18,16 @@ class DeploymentCreateResponse(BasicResponse):
     :type ttl: str, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, id: str, message: str, deployment_url: str, status: Status, ttl: str = None, **kwargs):
+
+    def __init__(
+        self,
+        id: str,
+        message: str,
+        deployment_url: str,
+        status: Status,
+        ttl: str = None,
+        **kwargs,
+    ):
         super().__init__(id=id, message=message, **kwargs)
         self.deployment_url: str = deployment_url
         self.status: Status = status
@@ -34,5 +43,5 @@ class DeploymentCreateResponse(BasicResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.deployment_create_response.DeploymentCreateResponse`
         """
-        response_dict['status'] = Status(response_dict['status'])
+        response_dict["status"] = Status(response_dict["status"])
         return DeploymentCreateResponse(**response_dict)

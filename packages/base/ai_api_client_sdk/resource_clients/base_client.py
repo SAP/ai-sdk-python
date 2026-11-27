@@ -61,19 +61,19 @@ class BaseClient:
         for k, v in kwargs.items():
             if v:
                 if isinstance(v, list):
-                    v = ','.join(v)
+                    v = ",".join(v)
                 elif isinstance(v, datetime):
                     v = v.strftime(DATETIME_FORMAT)
                 elif isinstance(v, Enum):
                     v = v.value
                 params[k] = v
-        if 'search' in params:
-            params['$search'] = params['search']
-            del params['search']
-        if 'expand' in params:
-            params['$expand'] = params['expand']
-            del params['expand']
-        if 'select' in params:
-            params['$select'] = params['select']
-            del params['select']
+        if "search" in params:
+            params["$search"] = params["search"]
+            del params["search"]
+        if "expand" in params:
+            params["$expand"] = params["expand"]
+            del params["expand"]
+        if "select" in params:
+            params["$select"] = params["select"]
+            del params["select"]
         return params if len(params) > 0 else None

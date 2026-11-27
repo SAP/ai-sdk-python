@@ -13,6 +13,7 @@ class ArtifactCreateResponse(BasicResponse):
     :type url: str
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, id: str, message: str, url: str, **kwargs):
         super().__init__(id=id, message=message, **kwargs)
         self.url: str = url

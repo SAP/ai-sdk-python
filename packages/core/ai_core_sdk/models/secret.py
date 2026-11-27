@@ -4,10 +4,10 @@ from typing import Any, Dict
 class Secret:
     """The Secret object defines the secret response.
 
-        :param name: Secret name
-        :type name: str
-        :param data: Secret data dictionary, defaults to None
-        :type data: dict, optional
+    :param name: Secret name
+    :type name: str
+    :param data: Secret data dictionary, defaults to None
+    :type data: dict, optional
     """
 
     def __init__(self, name: str, data: Dict[str, str] = None, **kwargs):

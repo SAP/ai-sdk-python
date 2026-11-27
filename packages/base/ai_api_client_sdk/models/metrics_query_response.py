@@ -12,6 +12,7 @@ class MetricsQueryResponse(QueryResponse):
     :type count: int
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, resources: List[MetricResource], count: int, **kwargs):
         super().__init__(resources=resources, count=count, **kwargs)
 
@@ -25,5 +26,7 @@ class MetricsQueryResponse(QueryResponse):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.metrics_query_response.MetricsQueryResponse`
         """
-        response_dict['resources'] = [MetricResource.from_dict(r) for r in response_dict['resources']]
+        response_dict["resources"] = [
+            MetricResource.from_dict(r) for r in response_dict["resources"]
+        ]
         return MetricsQueryResponse(**response_dict)

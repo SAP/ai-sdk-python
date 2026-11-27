@@ -38,6 +38,14 @@ Recommended flow for code contributions:
 	- Any migration or compatibility impact
 5. Stay available to address review feedback and follow-up fixes.
 
+## Formatting and Linting
+
+We use Ruff for formatting and Pylint for linting.
+
+Make sure to run the Ruff formatter locally via `uv run ruff format` or `make format`.
+
+Pylint linting checks can be run locally via `uv run pylint ai_api_client_sdk ai_core_sdk gen_ai_hub --errors-only` or `make lint`.
+
 ## Contributing Code or Documentation
 
 You are welcome to contribute code in order to fix a bug or to implement a new feature that is logged as an issue.
@@ -54,15 +62,15 @@ To keep quality and reliability high, contributions should meet these criteria:
 
 * Unit tests and integration tests pass for affected areas.
 * CI checks are green for your pull request.
-* Lint checks pass without new issues.
+* Lint and formatting checks pass.
 
 ## Documentation Expectations
 
 When adding features or changing behavior:
 
-* Update user-facing package documentation in [PYPIDESCRIPTION.md](PYPIDESCRIPTION.md) where applicable.
+* Update user-facing package documentation in PYPIDESCRIPTION.md where applicable.
 * Update or add inline code documentation where necessary.
-* Update relevant documentation under [docs](docs) if the change affects usage.
+* Update relevant documentation under [AI SDK docs](https://github.com/SAP/ai-sdk/tree/main/docs-python), if the change affects usage.
 
 ## Issues and Planning
 

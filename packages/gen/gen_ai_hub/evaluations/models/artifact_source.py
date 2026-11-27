@@ -28,7 +28,7 @@ class ArtifactSource:
     def __init__(
         self,
         file_type: Literal["csv", "json", "jsonl"],
-        artifact: Union[str,Artifact], # str is id
+        artifact: Union[str, Artifact],  # str is id
         path: Optional[str] = None,
     ):
         """
@@ -40,5 +40,6 @@ class ArtifactSource:
         self.artifact = artifact
         self.path = path
         self.file_type = file_type
+
 
 __all__ = ["ArtifactSource"]

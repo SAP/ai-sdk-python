@@ -1,4 +1,37 @@
 # Release Notes
+## gen-v7.5.0 (2026-11-26)
+
+### Features
+- Added support for IBM Granite Guardian 4.1 content filter in Orchestration Service V2
+- Added support for dropping unsupported LLM parameters in Orchestration Service V2 (`drop_unsupported_params`)
+- Added provider-specific fields to `LLMChoice` and streaming choices in Orchestration Service V2
+- Added support for config overrides via partial configurations (`config_ref`) in Orchestration Service V2
+- Made `prompt` optional in `PromptTemplatingModuleConfig` (use `messages_history` at inference time instead)
+- Added support for data masking of file inputs in Orchestration Service V2
+- Added support for file content in `UserMessage` in Orchestration Service V2
+- Added support for RPT client v1.5 and v1.6 with explainability, confidence intervals, top k predictions, deep context mode, and additional data types
+
+### Bugfixes
+- Upgraded dependencies
+- Fixed issues with langchain-google-genai AsyncClient
+- Added missing defaults to ReasoningBlock for Orchestration V2
+
+## gen-v7.4.1 (2026-09-23)
+
+### Features
+- Added Support for cache_control in Orchestration Service V2
+- Added support for reasoning_content in Orchestration Service V2
+
+### Bugfixes
+- Removed langchain-community from dependencies
+- Upgraded google-genai
+- Decreased response validation strictness in order to tolerate extra fields
+
+## gen-v7.4.0 (2026-09-14)
+
+### Features
+- Added support for AI Core service key
+
 ## gen-v7.3.0 (2026-09-08)
 
 ### Features

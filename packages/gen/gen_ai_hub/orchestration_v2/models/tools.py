@@ -11,6 +11,7 @@ from typing import Literal, Optional
 from pydantic import Field
 
 from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
+from gen_ai_hub.orchestration_v2.models.cache_control import CacheControl
 
 
 def python_type_to_json_type(py_type):
@@ -37,17 +38,14 @@ def python_type_to_json_type(py_type):
     # List/array
     if origin in (list, typing.List):
         item_type = args[0] if args else str
-        return {
-            "type": "array",
-            "items": python_type_to_json_type(item_type)
-        }
+        return {"type": "array", "items": python_type_to_json_type(item_type)}
 
     # Dict/object
     if origin in (dict, typing.Dict):
         value_type = args[1] if len(args) > 1 else str
         return {
             "type": "object",
-            "additionalProperties": python_type_to_json_type(value_type)
+            "additionalProperties": python_type_to_json_type(value_type),
         }
 
     # Union/Optional
@@ -66,34 +64,27 @@ def python_type_to_json_type(py_type):
 
 
 class ChatCompletionTool(BaseModel):
-    """
-    Base class for all chat completion tools.
+    """A tool the model may call, identified by type ``"function"``.
 
     Args:
-            type (Literal["function"]): The type of the tool. Currently, only function is supported.
+        type (Literal["function"]): The type of the tool. Currently, only function is supported.
+        cache_control: Prompt-caching directive.
     """
-    type_: Literal["function"] = Field(default="function",
-                                       alias="type",
-                                       description="The type of the tool. Currently, only function is supported.")
+
+    type_: Literal["function"] = Field(default="function", alias="type")
+    cache_control: Optional[CacheControl] = None
 
 
 class FunctionObject(BaseModel):
-    """
-    Represents a function.
+    """A function definition used inside a ``FunctionTool``.
+
     Args:
-            name (str): The name of the function to be called. Must be a-z, A-Z, 0-9,
-                        or contain underscores and dashes, with a maximum length of 64.
-
-            description (str): A description of what the function does, used by the model
-                        to choose when and how to call the function.
-
-            parameters (dict): The parameters the functions accepts, described as a JSON Schema object.
-                        Omitting parameters defines a function with an empty parameter list.
-
-            strict (bool, optional): Whether to enable strict schema adherence when generating the function call.
-                        If set to true, the model will follow the exact schema defined in the parameters field.
-                        Only a subset of JSON Schema is supported when strict is true. Defaults to False.
+        name: Function name. Must match ``^[a-zA-Z0-9_-]+$``, max 64 chars.
+        description: What the function does; used by the model to decide when to call it.
+        parameters: JSON Schema object describing accepted parameters.
+        strict: When ``True``, the model follows the schema exactly. Defaults to ``False``.
     """
+
     description: Optional[str] = None
     name: str
     parameters: Optional[dict]
@@ -102,15 +93,20 @@ class FunctionObject(BaseModel):
 
 
 class FunctionTool(ChatCompletionTool):
-    """
-    Represents a function tool for OpenAI-like function calling.
+    """A callable function tool for OpenAI-style function calling.
+
+    Inherits all fields from :class:`ChatCompletionTool`:
 
     Args:
-            type (Literal["function"]): The type of the tool. Currently, only function is supported.
+        type: Always ``"function"``. Serialized via the ``type`` alias.
+        cache_control: Prompt-caching directive.
 
-            function (FunctionObject): The function to be called.
+    Additional args:
+
+        function: The function definition — name, description, parameters schema,
+            and optional strict flag. See :class:`FunctionObject`.
     """
-    type_: Literal["function"] = Field(default="function", alias="type")
+
     function: FunctionObject
 
     def execute(self, **kwargs: Any) -> Any:
@@ -123,7 +119,9 @@ class FunctionTool(ChatCompletionTool):
         if self.function.strict:
             for key in kwargs.keys():
                 if key not in self.function.parameters["properties"]:
-                    raise ValueError(f"Unexpected argument '{key}' for function '{self.function.name}'")
+                    raise ValueError(
+                        f"Unexpected argument '{key}' for function '{self.function.name}'"
+                    )
 
         return self.function.function(**kwargs)
 
@@ -137,16 +135,15 @@ class FunctionTool(ChatCompletionTool):
         if self.function.strict:
             for key in kwargs.keys():
                 if key not in self.function.parameters["properties"]:
-                    raise ValueError(f"Unexpected argument '{key}' for function '{self.function.name}'")
+                    raise ValueError(
+                        f"Unexpected argument '{key}' for function '{self.function.name}'"
+                    )
 
         return await self.function.function(**kwargs)
 
     @staticmethod
     def from_function(
-            func: Callable,
-            *,
-            description: Optional[str] = None,
-            strict: bool = False
+        func: Callable, *, description: Optional[str] = None, strict: bool = False
     ) -> "FunctionTool":
         """
         Create a FunctionTool from a Python function.
@@ -175,10 +172,11 @@ class FunctionTool(ChatCompletionTool):
             "type": "object",
             "properties": param_schema,
             "required": [
-                name for name, param in sig.parameters.items()
+                name
+                for name, param in sig.parameters.items()
                 if param.default is inspect.Parameter.empty
             ],
-            "additionalProperties": False
+            "additionalProperties": False,
         }
 
         return FunctionTool(
@@ -187,12 +185,16 @@ class FunctionTool(ChatCompletionTool):
                 description=tool_description,
                 parameters=parameters,
                 strict=strict,
-                function=func)
+                function=func,
+            )
         )
 
 
 def function_tool(
-        func: Optional[Callable] = None, *, description: Optional[str] = None, strict: bool = False
+    func: Optional[Callable] = None,
+    *,
+    description: Optional[str] = None,
+    strict: bool = False,
 ) -> Callable[[Callable], FunctionTool] | FunctionTool:
     """
     Decorator that converts a function into a FunctionTool.
@@ -206,7 +208,9 @@ def function_tool(
     """
 
     def decorator(func_: Callable) -> FunctionTool:
-        return FunctionTool.from_function(func=func_, description=description, strict=strict)
+        return FunctionTool.from_function(
+            func=func_, description=description, strict=strict
+        )
 
     if func is not None and callable(func):
         # Used as @function_tool
@@ -215,10 +219,11 @@ def function_tool(
     # Used as @function_tool()
     return decorator
 
+
 __all__ = [
     "python_type_to_json_type",
     "ChatCompletionTool",
     "FunctionObject",
     "FunctionTool",
-    "function_tool"
+    "function_tool",
 ]

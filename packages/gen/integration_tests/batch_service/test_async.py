@@ -19,9 +19,9 @@ from gen_ai_hub.batch_service.models.response import (
 from integration_tests.batch_service.test_base import BatchServiceTestBase
 from integration_tests.test_helpers import retry_on_429_or_503_class
 
+
 @retry_on_429_or_503_class()
 class TestBatchServiceAsync(BatchServiceTestBase, unittest.IsolatedAsyncioTestCase):
-
     created_batch_id: str | None = None
 
     async def asyncTearDown(self):

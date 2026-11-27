@@ -24,6 +24,7 @@ class ResponseFormatType(str, Enum):
 
         JSON_SCHEMA: Response format as defined json schema
     """
+
     TEXT = "text"
     JSON_OBJECT = "json_object"
     JSON_SCHEMA = "json_schema"
@@ -31,8 +32,9 @@ class ResponseFormatType(str, Enum):
 
 class ResponseFormatText(BaseModel):
     """
-    Response format that the model output should adhere to. 
+    Response format that the model output should adhere to.
     """
+
     type_: ResponseFormatType = Field(default=ResponseFormatType.TEXT, alias="type")
 
 
@@ -40,27 +42,33 @@ class ResponseFormatJsonObject(BaseModel):
     """
     Response format JSON Object that the model output should adhere to.
     """
-    type_: ResponseFormatType = Field(default=ResponseFormatType.JSON_OBJECT, alias="type")
+
+    type_: ResponseFormatType = Field(
+        default=ResponseFormatType.JSON_OBJECT, alias="type"
+    )
 
 
 class JSONResponseSchema(BaseModel):
     """
-        Response format JSON Schema that the model output should adhere to.
+    Response format JSON Schema that the model output should adhere to.
 
-        Args:
-            name: The name of the response format.
+    Args:
+        name: The name of the response format.
 
-            description: A description of what the response format is for.
+        description: A description of what the response format is for.
 
-            schema: A schema for the response format described as a JSON Schema object.
+        schema: A schema for the response format described as a JSON Schema object.
 
-            strict: Whether to enable strict schema adherence when generating the output.
+        strict: Whether to enable strict schema adherence when generating the output.
     """
+
     name: str
     description: Optional[str] = None
-    schema_: dict = Field(default_factory=dict,
-                          alias="schema",
-                          description="The schema for the response format, described as a JSON Schema object.")
+    schema_: dict = Field(
+        default_factory=dict,
+        alias="schema",
+        description="The schema for the response format, described as a JSON Schema object.",
+    )
     strict: bool = False
 
     @field_validator("name", mode="before")
@@ -74,21 +82,33 @@ class JSONResponseSchema(BaseModel):
         :rtype: str
         """
 
-        pattern = r'^[a-zA-Z0-9_-]+$'
+        pattern = r"^[a-zA-Z0-9_-]+$"
         if re.match(pattern, name):
             if len(name) > 64:
-                raise ValueError("The name of the response format must be a-z, A-Z, 0-9, "
-                                 "or contain underscores and dashes, with a maximum length of 64.")
+                raise ValueError(
+                    "The name of the response format must be a-z, A-Z, 0-9, "
+                    "or contain underscores and dashes, with a maximum length of 64."
+                )
         else:
-            raise ValueError("The name of the response format must be a-z, A-Z, 0-9, "
-                             "or contain underscores and dashes, with a maximum length of 64.")
+            raise ValueError(
+                "The name of the response format must be a-z, A-Z, 0-9, "
+                "or contain underscores and dashes, with a maximum length of 64."
+            )
 
         return name
 
 
 class ResponseFormatJsonSchema(BaseModel):
-    type_: ResponseFormatType = Field(default=ResponseFormatType.JSON_SCHEMA, alias="type")
+    type_: ResponseFormatType = Field(
+        default=ResponseFormatType.JSON_SCHEMA, alias="type"
+    )
     json_schema: JSONResponseSchema
 
-__all__ = ["ResponseFormatType", "ResponseFormatText", "ResponseFormatJsonObject", "ResponseFormatJsonSchema",
-           "JSONResponseSchema"]
+
+__all__ = [
+    "ResponseFormatType",
+    "ResponseFormatText",
+    "ResponseFormatJsonObject",
+    "ResponseFormatJsonSchema",
+    "JSONResponseSchema",
+]

@@ -39,21 +39,27 @@ from ai_core_sdk.ai_core_v2_client import AICoreV2Client
 
 The SDK requires credentials from your tenant's subaccount Service Key:
 ```python
-client = AICoreV2Client(base_url=AI_API_BASE,
-                        auth_url=AUTH_URL,
-                        client_id=CLIENT_ID,
-                        client_secret=CLIENT_SECRET,
-                        resource_group=resource_group_id)
+client = AICoreV2Client(
+    base_url=AI_API_BASE,
+    auth_url=AUTH_URL,
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    resource_group=resource_group_id,
+)
 ```
 (For persistent client configuration see below.)
 
 ### Create New Resource Group
 
 ```python
-resource_group_create = client.resource_groups.create(resource_group_id=resource_group_id)
+resource_group_create = client.resource_groups.create(
+    resource_group_id=resource_group_id
+)
 print(resource_group_create.resource_group_id)
 resource_group_details = client.resource_groups.get(resource_group_id=resource_group_id)
-print(f"{resource_group_details.status_message} \n{resource_group_details.resource_group_id}")
+print(
+    f"{resource_group_details.status_message} \n{resource_group_details.resource_group_id}"
+)
 ```
 
 ### Create Object Store Secret
@@ -61,13 +67,17 @@ print(f"{resource_group_details.status_message} \n{resource_group_details.resour
 ```python
 # access key and secret are assumed to reside in environment variables OSS_KEY and OSS_SECRET
 object_store_secret_create = client.object_store_secrets.create(
-            name="default",
-            type="S3",
-            bucket="<your S3 bucket>", 
-            endpoint="<your S3 host>",
-            path_prefix="<your path prefix in S3>", region="<your S3 region>",
-            data={"AWS_ACCESS_KEY_ID": os.environ.get("OSS_KEY"),
-            "AWS_SECRET_ACCESS_KEY": os.environ.get("OSS_SECRET")})
+    name="default",
+    type="S3",
+    bucket="<your S3 bucket>",
+    endpoint="<your S3 host>",
+    path_prefix="<your path prefix in S3>",
+    region="<your S3 region>",
+    data={
+        "AWS_ACCESS_KEY_ID": os.environ.get("OSS_KEY"),
+        "AWS_SECRET_ACCESS_KEY": os.environ.get("OSS_SECRET"),
+    },
+)
 
 secret_get = client.object_store_secrets.get(name="default")
 print(f"{secret_get.metadata}")

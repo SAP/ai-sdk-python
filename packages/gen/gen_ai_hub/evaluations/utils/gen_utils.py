@@ -72,7 +72,9 @@ def update_variable_mapping(
     return variable_mapping_dict
 
 
-def get_accumulated_config_data(evaluation_configs_data: List[_EvaluationConfigData]) -> _EvaluationConfigData:
+def get_accumulated_config_data(
+    evaluation_configs_data: List[_EvaluationConfigData],
+) -> _EvaluationConfigData:
     # case when all dataset data and all metrics across all evaluation configs are the same.
     accumulated_orchestration_config_data: List[dict] = []
     accumulated_metrics_list: List[str] = evaluation_configs_data[0].metrics_list
@@ -204,7 +206,9 @@ def create_model_versions_map_from_configuration_param_bindings(
     return model_versions_map, model_filter_type
 
 
-def create_model_versions_map_from_custom_metric_config(custom_metric_config_data) -> Dict[str, List[str]]:
+def create_model_versions_map_from_custom_metric_config(
+    custom_metric_config_data,
+) -> Dict[str, List[str]]:
     model_versions_map = defaultdict(list)
     if not custom_metric_config_data:
         return model_versions_map
@@ -221,8 +225,7 @@ def create_model_versions_map_from_custom_metric_config(custom_metric_config_dat
 
 
 def select_model_details_randomly(
-    orchestration_config_data: List[dict],
-    error_collector: ValidationCollector,
+    orchestration_config_data: List[dict], error_collector: ValidationCollector
 ) -> Optional[Tuple[str, str]]:
     """
     Selects at random, model name and version from the list of model names and versions provided by the users run data.
@@ -236,9 +239,7 @@ def select_model_details_randomly(
 
     model_name = random.choice(list(model_versions_map))
     model_version = random.choice(model_versions_map[model_name])
-    logger.info(
-        f"Randomly chosen model and version is: {model_name} & {model_version}",
-    )
+    logger.info(f"Randomly chosen model and version is: {model_name} & {model_version}")
     return model_name, model_version
 
 
@@ -248,12 +249,7 @@ def update_test_orch_config(
     try:
         ORCHESTRATION_CONFIGURATION_V2[CONFIG_KEY][MODULES_KEY][PROMPT_TEMPLATING_KEY][
             MODEL_KEY
-        ].update(
-            {
-                "name": model_name,
-                "version": model_version,
-            }
-        )
+        ].update({"name": model_name, "version": model_version})
         return ORCHESTRATION_CONFIGURATION_V2[CONFIG_KEY]
     except Exception as e:
         error_collector.add_error(
@@ -655,7 +651,9 @@ def _remove_output_param_if_present(var_set: set[str], orch_config: dict) -> set
     return var_set
 
 
-def get_mapped_value_if_exists(key, mapping_keys, variable_mapping, dataset_columns) -> str:
+def get_mapped_value_if_exists(
+    key, mapping_keys, variable_mapping, dataset_columns
+) -> str:
     """Gets the first valid mapped value from the list of keys if it exists in variable mapping, else returns the first key"""
     # Ensure mapping_keys is a list, even if it's a single string
     if isinstance(mapping_keys, str):
@@ -1199,7 +1197,9 @@ def handle_reference_missing_rows(
     )
 
 
-def update_artifact_dict(artifact_reference: ArtifactSource, artifact_dict_count: dict) -> None:
+def update_artifact_dict(
+    artifact_reference: ArtifactSource, artifact_dict_count: dict
+) -> None:
     artifact_instance = artifact_reference.artifact
     if isinstance(artifact_instance, str):
         artifact_dict_count[artifact_instance] = (
@@ -1211,7 +1211,9 @@ def update_artifact_dict(artifact_reference: ArtifactSource, artifact_dict_count
         )
 
 
-def resolve_orchestration_config_v2(template_data: List[PromptTemplate], llm: LLM) -> dict:
+def resolve_orchestration_config_v2(
+    template_data: List[PromptTemplate], llm: LLM
+) -> dict:
     orchestration_config_data = ORCHESTRATION_CONFIG_TEMPLATE_V2
     template_list_data = []
     for data in template_data:
@@ -1226,7 +1228,9 @@ def resolve_orchestration_config_v2(template_data: List[PromptTemplate], llm: LL
     llm_module[LLM_MODULE_V2_NAME_KEY] = llm.name
     llm_module[LLM_MODULE_V2_VERSION_KEY] = llm.version
     # Support both old (parameters) and new (params) attribute names
-    llm_module[LLM_MODULE_V2_PARAMETERS_KEY] = getattr(llm, 'params', None) or getattr(llm, 'parameters', {})
+    llm_module[LLM_MODULE_V2_PARAMETERS_KEY] = getattr(llm, "params", None) or getattr(
+        llm, "parameters", {}
+    )
     orchestration_config_data[MODULES_KEY][PROMPT_TEMPLATING_KEY][MODEL_KEY] = (
         llm_module
     )

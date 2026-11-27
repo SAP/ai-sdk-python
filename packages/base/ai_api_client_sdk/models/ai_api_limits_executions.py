@@ -10,6 +10,7 @@ class AIAPILimitsExecutions(AIAPILimitsEnactments):
     :type max_running_count: int, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, max_running_count: int = -1, **kwargs):
         super().__init__(max_running_count=max_running_count, **kwargs)
 

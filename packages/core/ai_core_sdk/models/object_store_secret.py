@@ -2,18 +2,17 @@ from typing import Any, Dict
 
 
 class ObjectStoreSecret:
-    """The ObjectStoreSecret object defines the object store secret response.
-    """
+    """The ObjectStoreSecret object defines the object store secret response."""
 
     def __init__(self, name: str, metadata: Dict[str, str], **kwargs):
-        key_prefix = 'storage.ai.sap.com/'
-        path_prefix_key = f'{key_prefix}path_prefix'
+        key_prefix = "storage.ai.sap.com/"
+        path_prefix_key = f"{key_prefix}path_prefix"
         self.name: str = name
         self.metadata: Dict[str, str] = metadata
         # pathPrefix key is getting converted into snake case during object mapping d
         # The below code converts path prefix from snake case to camel case
         if path_prefix_key in metadata:
-            self.metadata[f'{key_prefix}pathPrefix'] = metadata[path_prefix_key]
+            self.metadata[f"{key_prefix}pathPrefix"] = metadata[path_prefix_key]
             del metadata[path_prefix_key]
 
     def __str__(self):

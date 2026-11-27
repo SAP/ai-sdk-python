@@ -21,6 +21,7 @@ class GlobalStreamOptions(BaseModel):
         this is a required parameter when input_translation_module_config or
         output_translation_module_config are configured.
     """
+
     enabled: Optional[bool] = False
     chunk_size: Optional[int] = 100
     delimiters: Optional[List[str]] = None
@@ -30,8 +31,9 @@ class GlobalStreamOptions(BaseModel):
         data = super().model_dump(**kwargs)
         if not self.enabled:
             # Remove chunk_size and delimiters from output when streaming is disabled
-            data.pop('chunk_size', None)
-            data.pop('delimiters', None)
+            data.pop("chunk_size", None)
+            data.pop("delimiters", None)
         return data
+
 
 __all__ = ["GlobalStreamOptions"]

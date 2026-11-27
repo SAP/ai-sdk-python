@@ -14,7 +14,7 @@ The main client class is the [AIAPIV2Client](ai_api_client_sdk/ai_api_v2_client.
 has resource clients as properties. The resource client implementations can be found in folder [resource_clients](ai_api_client_sdk/resource_clients). 
 The resources, response types etc. are represented by model classes. These can be found in folder [models](ai_api_client_sdk/models).
 
-Renovate is set up for this repository. For further information, take a look at the [documentation in ml-api-facade](https://github.wdf.sap.corp/AI/ml-api-facade/blob/master/docs/renovate.md).
+Renovate is set up for this repository. For further information, you can take a look at the [official website](https://www.mend.io/mend-renovate/).
 
 ## Usage
 
@@ -58,15 +58,14 @@ Each resource client has these functions (if supported for that resource) to sen
 Example:
 
 ```python
-
 from ai_api_client_sdk.ai_api_v2_client import AIAPIV2Client
 
 ai_api_v2_client = AIAPIV2Client(
-    base_url="<BASE_URL>", 
-    auth_url="<AUTH_URL>", 
+    base_url="<BASE_URL>",
+    auth_url="<AUTH_URL>",
     client_id="<CLIENT_ID>",
-    client_secret="<CLIENT_SECRET>", 
-    resource_group="<RESOURCE_GROUP_ID>"
+    client_secret="<CLIENT_SECRET>",
+    resource_group="<RESOURCE_GROUP_ID>",
 )
 
 scenario = ai_api_v2_client.scenario.get(scenario_id="<SCENARIO_ID>")
@@ -76,5 +75,5 @@ scenario = ai_api_v2_client.scenario.get(scenario_id="<SCENARIO_ID>")
 
 The [unit tests](tests) are simply python unit tests. They can be run via pytest or directly from IDE.
 
-The [integration_tests](integration_tests) are also python tests. They run against intwdf cluster. 
+The [integration_tests](integration_tests) are also python tests. They run against an internal cluster. 
  

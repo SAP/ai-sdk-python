@@ -11,13 +11,17 @@ from gen_ai_hub.orchestration_v2.models.message import (
     UserMessage,
     AssistantMessage,
 )
-from gen_ai_hub.orchestration_v2.models.multimodal_items import ImageItem, ImageDetailLevel
+from gen_ai_hub.orchestration_v2.models.multimodal_items import (
+    ImageItem,
+    ImageDetailLevel,
+    FileItem,
+)
 from gen_ai_hub.orchestration_v2.models.response_format import (
     ResponseFormatType,
     ResponseFormatText,
     ResponseFormatJsonObject,
     ResponseFormatJsonSchema,
-    JSONResponseSchema
+    JSONResponseSchema,
 )
 from gen_ai_hub.orchestration_v2.models.template import Template
 
@@ -61,10 +65,14 @@ class TestTemplate(unittest.TestCase):
 
     def test_template_with_response_format_json_object(self):
         messages = [UserMessage(content="Simple message")]
-        template = Template(template=messages, response_format=ResponseFormatJsonObject())
+        template = Template(
+            template=messages, response_format=ResponseFormatJsonObject()
+        )
 
         json_data = template.model_dump()
-        self.assertEqual(json_data["response_format"]["type"], ResponseFormatType.JSON_OBJECT)
+        self.assertEqual(
+            json_data["response_format"]["type"], ResponseFormatType.JSON_OBJECT
+        )
 
     def test_template_with_response_format_json_schema(self):
         messages = [UserMessage(content="Simple message")]
@@ -76,29 +84,36 @@ class TestTemplate(unittest.TestCase):
             "properties": {
                 "firstName": {
                     "type": "string",
-                    "description": "The person's first name."
+                    "description": "The person's first name.",
                 },
                 "lastName": {
                     "type": "string",
-                    "description": "The person's last name."
-                }
-            }
+                    "description": "The person's last name.",
+                },
+            },
         }
 
-        response_format = ResponseFormatJsonSchema(json_schema=JSONResponseSchema(name="test",
-                                                                                  description="desc",
-                                                                                  schema=json_schema_example,
-                                                                                  strict=True))
+        response_format = ResponseFormatJsonSchema(
+            json_schema=JSONResponseSchema(
+                name="test", description="desc", schema=json_schema_example, strict=True
+            )
+        )
         template = Template(template=messages, response_format=response_format)
 
         json_data = template.model_dump()
-        self.assertEqual(json_data["response_format"]["type"], ResponseFormatType.JSON_SCHEMA)
+        self.assertEqual(
+            json_data["response_format"]["type"], ResponseFormatType.JSON_SCHEMA
+        )
         self.assertEqual(json_data["response_format"]["json_schema"]["name"], "test")
         self.assertTrue(json_data["response_format"]["json_schema"]["strict"])
-        self.assertEqual(json_data["response_format"]["json_schema"]["schema"], json_schema_example)
+        self.assertEqual(
+            json_data["response_format"]["json_schema"]["schema"], json_schema_example
+        )
 
     def test_response_format_name_too_long(self):
-        name_too_long = "ThisIsAveryLongNameLongerThenExpectedItShouldBeMaximum64Characters"
+        name_too_long = (
+            "ThisIsAveryLongNameLongerThenExpectedItShouldBeMaximum64Characters"
+        )
         try:
             JSONResponseSchema(name=name_too_long, schema={})
             self.fail("Expected the validation to fail due to length of name")
@@ -118,10 +133,10 @@ class TestTemplateWithTools(unittest.TestCase):
                     "type": "object",
                     "properties": {},
                     "required": [],
-                    "additionalProperties": False
+                    "additionalProperties": False,
                 },
-                "strict": False
-            }
+                "strict": False,
+            },
         }
         template = Template(template=messages, tools=[tool_dict])
         json_data = template.model_dump()
@@ -180,10 +195,7 @@ class TestTemplateWithTools(unittest.TestCase):
 class TestUserMessageMultimodal(unittest.TestCase):
     def test_user_message_with_single_string(self):
         msg = UserMessage(content="Hello world!")
-        expected = {
-            "role": Role.USER,
-            "content": "Hello world!"
-        }
+        expected = {"role": Role.USER, "content": "Hello world!"}
         self.assertEqual(msg.model_dump(), expected)
 
     def test_user_message_with_list_of_strings(self):
@@ -192,8 +204,8 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "Hello"},
-                {"type": "text", "text": "World"}
-            ]
+                {"type": "text", "text": "World"},
+            ],
         }
         self.assertEqual(msg.model_dump(), expected)
 
@@ -204,10 +216,11 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "Describe this image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/image.png"
-                }}
-            ]
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image.png"},
+                },
+            ],
         }
         self.assertEqual(msg.model_dump(), expected)
 
@@ -219,16 +232,22 @@ class TestUserMessageMultimodal(unittest.TestCase):
             "role": Role.USER,
             "content": [
                 {"type": "text", "text": "First image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/1.png",
-                    "detail": ImageDetailLevel.LOW
-                }},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/1.png",
+                        "detail": ImageDetailLevel.LOW,
+                    },
+                },
                 {"type": "text", "text": "Second image:"},
-                {"type": "image_url", "image_url": {
-                    "url": "https://example.com/2.png",
-                    "detail": ImageDetailLevel.HIGH
-                }}
-            ]
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/2.png",
+                        "detail": ImageDetailLevel.HIGH,
+                    },
+                },
+            ],
         }
         self.assertEqual(msg.model_dump(), expected)
 
@@ -242,6 +261,68 @@ class TestUserMessageMultimodal(unittest.TestCase):
             self.assertTrue(item.url.startswith("data:image/png;base64,"))
             # Check that the base64 part decodes to the original file content
             encoded = item.url.split(",", 1)[1]
+            with open(tmp_path, "rb") as f:
+                original = f.read()
+            decoded = base64.b64decode(encoded)
+
+            self.assertEqual(decoded, original)
+        finally:
+            os.unlink(tmp_path)
+
+    def test_user_message_with_string_and_file(self):
+        file = FileItem(file_data="https://example.com/1.pdf", filename="doc.pdf")
+        msg = UserMessage(content=["Summarize this file:", file])
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "text", "text": "Summarize this file:"},
+                {
+                    "type": "file",
+                    "file": {
+                        "file_data": "https://example.com/1.pdf",
+                        "filename": "doc.pdf",
+                    },
+                },
+            ],
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_user_message_with_file_dict(self):
+        msg = UserMessage(
+            content=[
+                {"type": "file", "file": {"file_data": "data:x", "filename": "a.pdf"}}
+            ]
+        )
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "file", "file": {"file_data": "data:x", "filename": "a.pdf"}}
+            ],
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_user_message_with_file_without_filename(self):
+        file = FileItem(file_data="https://example.com/1.pdf")
+        msg = UserMessage(content=[file])
+        expected = {
+            "role": Role.USER,
+            "content": [
+                {"type": "file", "file": {"file_data": "https://example.com/1.pdf"}}
+            ],
+        }
+        self.assertEqual(msg.model_dump(), expected)
+
+    def test_file_item_from_file(self):
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            tmp.write(b"not a real pdf")
+            tmp_path = tmp.name
+
+        try:
+            item = FileItem.from_file(tmp_path)
+            self.assertTrue(item.file_data.startswith("data:application/pdf;base64,"))
+            self.assertIsNone(item.filename)
+            # Check that the base64 part decodes to the original file content
+            encoded = item.file_data.split(",", 1)[1]
             with open(tmp_path, "rb") as f:
                 original = f.read()
             decoded = base64.b64decode(encoded)

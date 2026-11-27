@@ -36,6 +36,7 @@ The `setup_aicore.py` module now provides separate setup functions and mixins to
 import pytest
 from integration_tests.setup_aicore import TestCaseBedrockSetupMixin
 
+
 @pytest.mark.bedrock
 class TestAmazonServices(TestCaseBedrockSetupMixin, unittest.TestCase):
     def test_bedrock_functionality(self):
@@ -49,6 +50,7 @@ class TestAmazonServices(TestCaseBedrockSetupMixin, unittest.TestCase):
 ```python
 from integration_tests.setup_aicore import TestCaseStandardSetupMixin
 
+
 class TestOpenAIServices(TestCaseStandardSetupMixin, unittest.TestCase):
     def test_openai_functionality(self):
         # This test will only have standard models deployed
@@ -60,6 +62,7 @@ class TestOpenAIServices(TestCaseStandardSetupMixin, unittest.TestCase):
 
 ```python
 from integration_tests.setup_aicore import TestCaseAICoreSetupMixin
+
 
 class TestAllServices(TestCaseAICoreSetupMixin, unittest.TestCase):
     def test_mixed_functionality(self):

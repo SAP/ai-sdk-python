@@ -28,20 +28,19 @@ DATA_REPOSITORY_1 = DataRepository(
     type="vector",
     metadata=[
         RetrievalKeyValueListPair(key="purpose", value=["demonstration"]),
-        RetrievalKeyValueListPair(key="a-random-key", value=["hello world!"])
-    ]
+        RetrievalKeyValueListPair(key="a-random-key", value=["hello world!"]),
+    ],
 )
 
 DATA_REPOSITORY_2 = DataRepository(
     id="101fd17c-10f5-4f5d-add9-a07e88a4d75d",
     title="SAP Help Portal - help.sap.com",
     type="help.sap.com",
-    metadata=[]
+    metadata=[],
 )
 
 DATA_REPOSITORIES_RESPONSE = DataRepositories(
-    count=2,
-    resources=[DATA_REPOSITORY_1, DATA_REPOSITORY_2]
+    count=2, resources=[DATA_REPOSITORY_1, DATA_REPOSITORY_2]
 )
 
 DATA_REPOSITORY_RESPONSE = DataRepository(
@@ -50,8 +49,8 @@ DATA_REPOSITORY_RESPONSE = DataRepository(
     type="vector",
     metadata=[
         RetrievalKeyValueListPair(key="purpose", value=["demonstration"]),
-        RetrievalKeyValueListPair(key="a-random-key", value=["hello world!"])
-    ]
+        RetrievalKeyValueListPair(key="a-random-key", value=["hello world!"]),
+    ],
 )
 
 # --- Retrieval Search Input ---
@@ -63,8 +62,7 @@ RETRIEVAL_SEARCH_INPUT = RetrievalSearchInput(
             id="string",
             dataRepositoryType="vector",
             searchConfiguration=RetrievalSearchConfiguration(
-                maxChunkCount=None,
-                maxDocumentCount=None
+                maxChunkCount=None, maxDocumentCount=None
             ),
             dataRepositories=["4be1c754-ad62-4030-ac1c-498312327c23"],
             dataRepositoryMetadata=[],
@@ -72,12 +70,12 @@ RETRIEVAL_SEARCH_INPUT = RetrievalSearchInput(
                 RetrievalSearchDocumentKeyValueListPair(
                     key="url",
                     value=["http://hello1.com"],
-                    selectMode=["ignoreIfKeyAbsent"]
+                    selectMode=["ignoreIfKeyAbsent"],
                 )
             ],
-            chunkMetadata=[]
+            chunkMetadata=[],
         )
-    ]
+    ],
 )
 
 # --- Retrieval Search Results ---
@@ -92,8 +90,12 @@ RETRIEVAL_SEARCH_RESULT = RetrievalSearchResults(
                         id="4be1c754-ad62-4030-ac1c-498312327c23",
                         title="test-canary-collection",
                         metadata=[
-                            RetrievalKeyValueListPair(key="purpose", value=["demonstration"]),
-                            RetrievalKeyValueListPair(key="a-random-key", value=["hello world!"])
+                            RetrievalKeyValueListPair(
+                                key="purpose", value=["demonstration"]
+                            ),
+                            RetrievalKeyValueListPair(
+                                key="a-random-key", value=["hello world!"]
+                            ),
                         ],
                         documents=[
                             RetrievalDocument(
@@ -102,7 +104,7 @@ RETRIEVAL_SEARCH_RESULT = RetrievalSearchResults(
                                     RetrievalDocumentKeyValueListPair(
                                         key="url",
                                         value=["http://hello1.com"],
-                                        matchMode="ANY"
+                                        matchMode="ANY",
                                     )
                                 ],
                                 chunks=[
@@ -110,24 +112,34 @@ RETRIEVAL_SEARCH_RESULT = RetrievalSearchResults(
                                         id="dd5c7ffc-7fae-4d0f-b5f0-527fefe5e416",
                                         content="Joule is not the AI copilot that truly understands your business. Joule revolutionizes how you interact with your SAP business systems.",
                                         metadata=[
-                                            RetrievalKeyValueListPair(key="index", value=["1"]),
-                                            RetrievalKeyValueListPair(key="sap.document-grounding/language", value=["en"])
-                                        ]
+                                            RetrievalKeyValueListPair(
+                                                key="index", value=["1"]
+                                            ),
+                                            RetrievalKeyValueListPair(
+                                                key="sap.document-grounding/language",
+                                                value=["en"],
+                                            ),
+                                        ],
                                     ),
                                     RetrievalChunk(
                                         id="829508cd-68e3-43bf-9faa-84c0bbc616b5",
                                         content="It enables the companion of the Intelligent Enterprise, guiding you through content discovery within SAP Ecosystem.",
                                         metadata=[
-                                            RetrievalKeyValueListPair(key="index", value=["2"]),
-                                            RetrievalKeyValueListPair(key="sap.document-grounding/language", value=["en"])
-                                        ]
-                                    )
-                                ]
+                                            RetrievalKeyValueListPair(
+                                                key="index", value=["2"]
+                                            ),
+                                            RetrievalKeyValueListPair(
+                                                key="sap.document-grounding/language",
+                                                value=["en"],
+                                            ),
+                                        ],
+                                    ),
+                                ],
                             )
-                        ]
+                        ],
                     )
                 )
-            ]
+            ],
         )
     ]
 )

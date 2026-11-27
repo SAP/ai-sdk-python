@@ -43,16 +43,42 @@ class Execution(Enactment):
     :type completion_time: datetime, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, id: str, configuration_id: str, configuration_name: str, scenario_id: str, status: Status,
-                 target_status: TargetStatus, created_at: datetime, modified_at: datetime,
-                 output_artifacts: List[Artifact] = None, status_message: str = None,
-                 status_details: Dict[str, Any] = None, submission_time: datetime = None, start_time: datetime = None,
-                 execution_schedule_id: str = None, completion_time: datetime = None, **kwargs):
-        super().__init__(id=id, configuration_id=configuration_id, configuration_name=configuration_name,
-                         scenario_id=scenario_id, status=status, target_status=target_status, created_at=created_at,
-                         modified_at=modified_at, status_message=status_message, status_details=status_details,
-                         submission_time=submission_time, start_time=start_time, completion_time=completion_time,
-                         **kwargs)
+
+    def __init__(
+        self,
+        id: str,
+        configuration_id: str,
+        configuration_name: str,
+        scenario_id: str,
+        status: Status,
+        target_status: TargetStatus,
+        created_at: datetime,
+        modified_at: datetime,
+        output_artifacts: List[Artifact] = None,
+        status_message: str = None,
+        status_details: Dict[str, Any] = None,
+        submission_time: datetime = None,
+        start_time: datetime = None,
+        execution_schedule_id: str = None,
+        completion_time: datetime = None,
+        **kwargs,
+    ):
+        super().__init__(
+            id=id,
+            configuration_id=configuration_id,
+            configuration_name=configuration_name,
+            scenario_id=scenario_id,
+            status=status,
+            target_status=target_status,
+            created_at=created_at,
+            modified_at=modified_at,
+            status_message=status_message,
+            status_details=status_details,
+            submission_time=submission_time,
+            start_time=start_time,
+            completion_time=completion_time,
+            **kwargs,
+        )
         self.output_artifacts: List[Artifact] = output_artifacts
         self.execution_schedule_id = execution_schedule_id
 
@@ -69,16 +95,22 @@ class Execution(Enactment):
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.execution.Execution`
         """
-        execution_dict['status'] = Status(execution_dict['status'])
-        execution_dict['target_status'] = TargetStatus(execution_dict['target_status'])
-        execution_dict['created_at'] = parse_datetime(execution_dict['created_at'])
-        execution_dict['modified_at'] = parse_datetime(execution_dict['modified_at'])
-        if execution_dict.get('submission_time'):
-            execution_dict['submission_time'] = parse_datetime(execution_dict['submission_time'])
-        if execution_dict.get('start_time'):
-            execution_dict['start_time'] = parse_datetime(execution_dict['start_time'])
-        if execution_dict.get('completion_time'):
-            execution_dict['completion_time'] = parse_datetime(execution_dict['completion_time'])
-        if execution_dict.get('output_artifacts'):
-            execution_dict['output_artifacts'] = [Artifact.from_dict(oa) for oa in execution_dict['output_artifacts']]
+        execution_dict["status"] = Status(execution_dict["status"])
+        execution_dict["target_status"] = TargetStatus(execution_dict["target_status"])
+        execution_dict["created_at"] = parse_datetime(execution_dict["created_at"])
+        execution_dict["modified_at"] = parse_datetime(execution_dict["modified_at"])
+        if execution_dict.get("submission_time"):
+            execution_dict["submission_time"] = parse_datetime(
+                execution_dict["submission_time"]
+            )
+        if execution_dict.get("start_time"):
+            execution_dict["start_time"] = parse_datetime(execution_dict["start_time"])
+        if execution_dict.get("completion_time"):
+            execution_dict["completion_time"] = parse_datetime(
+                execution_dict["completion_time"]
+            )
+        if execution_dict.get("output_artifacts"):
+            execution_dict["output_artifacts"] = [
+                Artifact.from_dict(oa) for oa in execution_dict["output_artifacts"]
+            ]
         return Execution(**execution_dict)

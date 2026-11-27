@@ -93,7 +93,6 @@ def extract_config_data(
                 error_collector,
             )
 
-
             # stores resolved metric names provided via metricConfig
             metrics_list = resolve_metric_names(
                 evaluation_config.metrics, error_collector
@@ -104,9 +103,7 @@ def extract_config_data(
                 if metric.variable_mapping is not None:
                     prefix_key = metrics_list[index] + "/"
                     variable_mapping_dict = update_variable_mapping(
-                        metric.variable_mapping,
-                        prefix_key,
-                        variable_mapping_dict,
+                        metric.variable_mapping, prefix_key, variable_mapping_dict
                     )
 
             current_config_data = _EvaluationConfigData(
@@ -199,6 +196,5 @@ def build_accumulated_config(
     if not accumulated_config_data:
         # Not a single execution flow so re-create multiple executions
         accumulated_config_data = evaluation_configs_data
-
 
     return (accumulated_config_data, single_execution_flow, reusable_artifact)

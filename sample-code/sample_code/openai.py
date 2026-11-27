@@ -62,9 +62,7 @@ def chat_completion_stream():
 
     def generate():
         stream = chat.completions.create(
-            model_name="gpt-5.4-nano",
-            messages=messages,
-            stream=True,
+            model_name="gpt-5.4-nano", messages=messages, stream=True
         )
         for chunk in stream:
             if chunk.choices:
@@ -121,6 +119,4 @@ def embedding():
         model_name="text-embedding-3-small",
         input="The quick brown fox jumps over the lazy dog.",
     )
-    return {
-        "result": result.data[0].embedding,
-    }
+    return {"result": result.data[0].embedding}

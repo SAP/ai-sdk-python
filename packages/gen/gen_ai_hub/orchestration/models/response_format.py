@@ -16,6 +16,7 @@ class ResponseFormatType(str, Enum):
         JSON_OBJECT: Response format as json object
         JSON_SCHEMA: Response format as defined json schema
     """
+
     TEXT = "text"
     JSON_OBJECT = "json_object"
     JSON_SCHEMA = "json_schema"
@@ -23,7 +24,7 @@ class ResponseFormatType(str, Enum):
 
 class ResponseFormatText(JSONSerializable):
     """
-    Response format that the model output should adhere to. 
+    Response format that the model output should adhere to.
     """
 
     def to_dict(self):
@@ -55,11 +56,11 @@ class ResponseFormatJsonSchema(JSONSerializable):
     """
 
     def __init__(
-            self,
-            name,
-            schema: object = None,
-            description: Optional[str] = None,
-            strict: bool = False
+        self,
+        name,
+        schema: object = None,
+        description: Optional[str] = None,
+        strict: bool = False,
     ):
         """Initializes a ResponseFormatJsonSchema instance.
 
@@ -83,23 +84,17 @@ class ResponseFormatJsonSchema(JSONSerializable):
         :return: A dictionary representation of the ResponseFormatJsonSchema.
         :rtype: dict
         """
-        json_schema = {
-                "name": self.name,
-                "strict": self.strict,
-                "schema": self.schema
-        }
+        json_schema = {"name": self.name, "strict": self.strict, "schema": self.schema}
         if self.desciption:
-            json_schema['description'] = self.desciption
-        return {
-            "type": ResponseFormatType.JSON_SCHEMA,
-            "json_schema": json_schema
-        }
+            json_schema["description"] = self.desciption
+        return {"type": ResponseFormatType.JSON_SCHEMA, "json_schema": json_schema}
 
 
-class ResponseFormatFactory():
+class ResponseFormatFactory:
     """
     Factory class that maps response format input to classes that can handle to_dict conversion.
     """
+
     @staticmethod
     def create_response_format_object(response_format):
         """Creates a response format object based on the provided response format.
@@ -117,17 +112,18 @@ class ResponseFormatFactory():
 
         if isinstance(response_format, ResponseFormatJsonSchema):
             return response_format
-        
+
         return None
 
- 
-class Validator():
+
+class Validator:
     """
     A utility class for validating response format names.
 
-    This class provides methods to validate the names of response formats to ensure 
+    This class provides methods to validate the names of response formats to ensure
     they adhere to specified patterns and length constraints.
     """
+
     @staticmethod
     def validate_name(name):
         """Validates the name of the response format.
@@ -138,14 +134,17 @@ class Validator():
         :return: The validated name.
         :rtype: str
         """
-        pattern = r'^[a-zA-Z0-9_-]+$'
+        pattern = r"^[a-zA-Z0-9_-]+$"
         if re.match(pattern, name):
             if len(name) > 64:
-                raise ValueError("The name of the response format must be a-z, A-Z, 0-9, "
-                                 "or contain underscores and dashes, with a maximum length of 64.")
+                raise ValueError(
+                    "The name of the response format must be a-z, A-Z, 0-9, "
+                    "or contain underscores and dashes, with a maximum length of 64."
+                )
         else:
-            raise ValueError("The name of the response format must be a-z, A-Z, 0-9, "
-                             "or contain underscores and dashes, with a maximum length of 64.")
+            raise ValueError(
+                "The name of the response format must be a-z, A-Z, 0-9, "
+                "or contain underscores and dashes, with a maximum length of 64."
+            )
 
         return name
-    

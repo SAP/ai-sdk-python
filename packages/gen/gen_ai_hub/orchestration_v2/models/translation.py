@@ -12,6 +12,7 @@ from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
 
 class TranslationType(str, Enum):
     """Enumerates supported translation types."""
+
     SAP_DOCUMENT_TRANSLATION = "sap_document_translation"
 
 
@@ -38,7 +39,10 @@ class SAPDocumentTranslation(BaseModel):
 
         config: Configuration object for the translation module.
     """
-    type_: TranslationType = Field(default=TranslationType.SAP_DOCUMENT_TRANSLATION, alias="type")
+
+    type_: TranslationType = Field(
+        default=TranslationType.SAP_DOCUMENT_TRANSLATION, alias="type"
+    )
     config: TranslationConfig
 
 
@@ -52,9 +56,11 @@ class SAPDocumentTranslationApplyToSelector(BaseModel):
               targets the value of "user_input" in placeholder_values specified in the request payload;
               and considers the value to be in German.
     """
+
     category: Literal["placeholders", "template_roles"]
     items: list[str]
     source_language: str
+
 
 class InputTranslationConfig(TranslationConfig):
     """
@@ -65,6 +71,7 @@ class InputTranslationConfig(TranslationConfig):
         target_language: Language to which the text should be translated. Example: en-US
         apply_to: List of selectors that define the scope of translation.
     """
+
     apply_to: Optional[list[SAPDocumentTranslationApplyToSelector]] = None
 
 
@@ -83,8 +90,10 @@ class SAPDocumentTranslationInput(SAPDocumentTranslation):
 
         config: Configuration object for the translation module.
     """
+
     translate_messages_history: Optional[bool] = None
     config: Union[InputTranslationConfig, TranslationConfig]
+
 
 class SAPDocumentTranslationOutput(SAPDocumentTranslation):
     """
@@ -95,7 +104,9 @@ class SAPDocumentTranslationOutput(SAPDocumentTranslation):
 
         config: Configuration object for the translation module.
     """
+
     config: Union[OutputTranslationConfig, TranslationConfig]
+
 
 class TranslationModuleConfig(BaseModel):
     """
@@ -106,9 +117,19 @@ class TranslationModuleConfig(BaseModel):
 
         output: Configuration for output translation
     """
+
     input: Optional[Union[SAPDocumentTranslationInput, SAPDocumentTranslation]] = None
     output: Optional[Union[SAPDocumentTranslationOutput, SAPDocumentTranslation]] = None
 
-__al__ = ["TranslationType", "TranslationConfig", "SAPDocumentTranslation", "SAPDocumentTranslationApplyToSelector",
-          "InputTranslationConfig", "OutputTranslationConfig", "SAPDocumentTranslationInput",
-          "SAPDocumentTranslationOutput", "TranslationModuleConfig"]
+
+__al__ = [
+    "TranslationType",
+    "TranslationConfig",
+    "SAPDocumentTranslation",
+    "SAPDocumentTranslationApplyToSelector",
+    "InputTranslationConfig",
+    "OutputTranslationConfig",
+    "SAPDocumentTranslationInput",
+    "SAPDocumentTranslationOutput",
+    "TranslationModuleConfig",
+]

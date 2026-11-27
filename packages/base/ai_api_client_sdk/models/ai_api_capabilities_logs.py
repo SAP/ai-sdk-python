@@ -10,6 +10,7 @@ class AIAPICapabilitiesLogs:
     :type user_deployments: bool, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
+
     def __init__(self, executions: bool = True, deployments: bool = True, **kwargs):
         self.executions: bool = executions
         self.deployments: bool = deployments

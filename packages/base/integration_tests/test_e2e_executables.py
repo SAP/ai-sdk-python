@@ -8,8 +8,9 @@ class TestE2EExecutables(AIAPIV2ClientE2ETestBase):
         self.assertTrue(res.count > 0)
         executables = res.resources
         self.assert_datetime(executables[0].created_at)
-        executable = self.ai_api_v2_client.executable.get(scenario_id=executables[0].scenario_id,
-                                                          executable_id=executables[0].id)
+        executable = self.ai_api_v2_client.executable.get(
+            scenario_id=executables[0].scenario_id, executable_id=executables[0].id
+        )
         self.assertEqual(executables[0], executable)
         self.assertIsNotNone(executable.id)
         self.assertIsNotNone(executable.scenario_id)

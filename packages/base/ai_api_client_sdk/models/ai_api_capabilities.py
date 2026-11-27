@@ -1,6 +1,8 @@
 from typing import Any, Dict
 
-from ai_api_client_sdk.models.ai_api_capabilities_bulk_updates import AIAPICapabilitiesBulkUpdates
+from ai_api_client_sdk.models.ai_api_capabilities_bulk_updates import (
+    AIAPICapabilitiesBulkUpdates,
+)
 from ai_api_client_sdk.models.ai_api_capabilities_logs import AIAPICapabilitiesLogs
 
 
@@ -29,10 +31,19 @@ class AIAPICapabilities:
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
 
-    def __init__(self, multitenant: bool = True, shareable: bool = True, static_deployments: bool = True,
-                 user_deployments: bool = True, time_to_live_deployments: bool = False, user_executions: bool = True,
-                 bulk_updates: AIAPICapabilitiesBulkUpdates = None, execution_schedules: bool = False,
-                 logs: AIAPICapabilitiesLogs = None, **kwargs):
+    def __init__(
+        self,
+        multitenant: bool = True,
+        shareable: bool = True,
+        static_deployments: bool = True,
+        user_deployments: bool = True,
+        time_to_live_deployments: bool = False,
+        user_executions: bool = True,
+        bulk_updates: AIAPICapabilitiesBulkUpdates = None,
+        execution_schedules: bool = False,
+        logs: AIAPICapabilitiesLogs = None,
+        **kwargs,
+    ):
         self.multitenant: bool = multitenant
         self.shareable: bool = shareable
         self.static_deployments: bool = static_deployments
@@ -53,10 +64,16 @@ class AIAPICapabilities:
         :return: An object, created from the values provided
         :rtype: class:`ai_api_client_sdk.models.ai_api_capabilities.AIAPICapabilities`
         """
-        if 'logs' in ai_api_capabilities_dict:
-            ai_api_capabilities_dict['logs'] = AIAPICapabilitiesLogs.from_dict(ai_api_capabilities_dict['logs'])
-        if 'bulk_updates' in ai_api_capabilities_dict:
-            ai_api_capabilities_dict['bulk_updates'] = AIAPICapabilitiesBulkUpdates.from_dict(ai_api_capabilities_dict['bulk_updates'])
+        if "logs" in ai_api_capabilities_dict:
+            ai_api_capabilities_dict["logs"] = AIAPICapabilitiesLogs.from_dict(
+                ai_api_capabilities_dict["logs"]
+            )
+        if "bulk_updates" in ai_api_capabilities_dict:
+            ai_api_capabilities_dict["bulk_updates"] = (
+                AIAPICapabilitiesBulkUpdates.from_dict(
+                    ai_api_capabilities_dict["bulk_updates"]
+                )
+            )
         return AIAPICapabilities(**ai_api_capabilities_dict)
 
     def __eq__(self, other):

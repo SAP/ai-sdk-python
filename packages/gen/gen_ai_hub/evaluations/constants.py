@@ -51,12 +51,7 @@ MODEL_FILTER_LIST_TYPE_KEY = "modelFilterListType"
 TEST_TEMPLATE_STRING = "What is Generative AI?"
 
 ORCHESTRATION_CONFIG_TEMPLATE_V2 = {
-    "modules": {
-        "prompt_templating": {
-            "model": {},
-            "prompt": {},
-        }
-    }
+    "modules": {"prompt_templating": {"model": {}, "prompt": {}}}
 }
 
 ORCHESTRATION_CONFIGURATION_V2 = {

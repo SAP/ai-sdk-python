@@ -8,6 +8,7 @@ class GroundingType(str, Enum):
     """
     Enumerates supported grounding types.
     """
+
     DOCUMENT_GROUNDING_SERVICE = "document_grounding_service"
 
 
@@ -15,6 +16,7 @@ class DataRepositoryType(str, Enum):
     """
     Enumerates data repository types.
     """
+
     VECTOR = "vector"  # DataRepository with vector embeddings
     URL = "help.sap.com"  # website supporting elastic search
 
@@ -85,15 +87,16 @@ class GroundingFilterSearch(JSONSerializable):
 class DocumentGroundingFilter(JSONSerializable):
     """Module for configuring document grounding filters."""
 
-    def __init__(self,
-                 id: str,
-                 data_repository_type: str,
-                 search_config: GroundingFilterSearch = None,
-                 data_repositories: List[str] = None,
-                 data_repository_metadata: List[Dict[str, Any]] = None,
-                 document_metadata: List[DocumentMetadata] = None,
-                 chunk_metadata: List[Dict[str, Any]] = None
-                 ):
+    def __init__(
+        self,
+        id: str,
+        data_repository_type: str,
+        search_config: GroundingFilterSearch = None,
+        data_repositories: List[str] = None,
+        data_repository_metadata: List[Dict[str, Any]] = None,
+        document_metadata: List[DocumentMetadata] = None,
+        chunk_metadata: List[Dict[str, Any]] = None,
+    ):
         """Initializes the DocumentGroundingFilter instance.
 
         :param id: The unique identifier for the grounding filter.
@@ -113,7 +116,7 @@ class DocumentGroundingFilter(JSONSerializable):
         :type data_repository_metadata: List[Dict[str, Any]], optional
         :param document_metadata: DocumentMetadata object, defaults to None
         :type document_metadata: List[DocumentMetadata], optional
-        :param chunk_metadata: Restrict chunks considered during search to those with the given metadata, 
+        :param chunk_metadata: Restrict chunks considered during search to those with the given metadata,
             defaults to None
         :type chunk_metadata: List[Dict[str, Any]], optional
         """
@@ -132,10 +135,7 @@ class DocumentGroundingFilter(JSONSerializable):
         :return: Dictionary representation of the DocumentGroundingFilter.
         :rtype: dict
         """
-        config = {
-            "id": self.id,
-            "data_repository_type": self.data_repository_type,
-        }
+        config = {"id": self.id, "data_repository_type": self.data_repository_type}
         if self.search_config:
             config["search_config"] = self.search_config.to_dict()
         if self.data_repositories:
@@ -143,7 +143,9 @@ class DocumentGroundingFilter(JSONSerializable):
         if self.data_repository_metadata:
             config["data_repository_metadata"] = self.data_repository_metadata
         if self.document_metadata:
-            config["document_metadata"] = [metadata.to_dict() for metadata in self.document_metadata]
+            config["document_metadata"] = [
+                metadata.to_dict() for metadata in self.document_metadata
+            ]
         if self.chunk_metadata:
             config["chunk_metadata"] = self.chunk_metadata
         return config
@@ -152,8 +154,13 @@ class DocumentGroundingFilter(JSONSerializable):
 class DocumentGrounding(JSONSerializable):
     """defines the detailed configuration for the Grounding module."""
 
-    def __init__(self, input_params: List[str], output_param: str, filters: List[DocumentGroundingFilter] = None,
-                 metadata_params: List[str] = None):
+    def __init__(
+        self,
+        input_params: List[str],
+        output_param: str,
+        filters: List[DocumentGroundingFilter] = None,
+        metadata_params: List[str] = None,
+    ):
         """Initializes the DocumentGrounding instance.
 
         :param input_params: The list of input parameters used for grounding input questions.
@@ -176,10 +183,7 @@ class DocumentGrounding(JSONSerializable):
         :return: Dictionary representation of the DocumentGrounding.
         :rtype: dict
         """
-        config = {
-            "input_params": self.input_params,
-            "output_param": self.output_param,
-        }
+        config = {"input_params": self.input_params, "output_param": self.output_param}
         if self.filters:
             config["filters"] = [filter.to_dict() for filter in self.filters]
         if self.metadata_params:
@@ -208,7 +212,4 @@ class GroundingModule(JSONSerializable):
         :return: Dictionary representation of the GroundingModule.
         :rtype: dict
         """
-        return {
-            "type": self.type,
-            "config": self.config.to_dict(),
-        }
+        return {"type": self.type, "config": self.config.to_dict()}

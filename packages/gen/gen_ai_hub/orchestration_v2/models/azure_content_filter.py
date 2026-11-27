@@ -50,6 +50,7 @@ class AzureContentFilter(BaseModel):
     violence: Optional[Union[AzureThreshold, Literal[0, 2, 4, 6]]] = None
     self_harm: Optional[Union[AzureThreshold, Literal[0, 2, 4, 6]]] = None
 
+
 class AzureContentSafetyInput(AzureContentFilter):
     """
     Filter configuration for Azure Content Safety Input
@@ -60,7 +61,8 @@ class AzureContentSafetyInput(AzureContentFilter):
             violence: Threshold for violent content.
             self_harm: Threshold for self-harm content.
             prompt_shield: A flag to use prompt shield
-        """
+    """
+
     prompt_shield: Optional[bool] = False
 
 
@@ -80,4 +82,10 @@ class AzureContentSafetyOutput(AzureContentFilter):
 
     protected_material_code: Optional[bool] = False
 
-__all__ = ["AzureContentFilter", "AzureContentSafetyInput", "AzureContentSafetyOutput", "AzureThreshold"]
+
+__all__ = [
+    "AzureContentFilter",
+    "AzureContentSafetyInput",
+    "AzureContentSafetyOutput",
+    "AzureThreshold",
+]

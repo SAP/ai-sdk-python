@@ -17,9 +17,9 @@ def form_top_skip_params(top: int = None, skip: int = None) -> Dict[str, int]:
     """
     params = {}
     if top:
-        params['$top'] = top
+        params["$top"] = top
     if skip:
-        params['$skip'] = skip
+        params["$skip"] = skip
     if not params:
         params = None
     return params
@@ -32,7 +32,7 @@ def is_within_aicore() -> bool:
         bool: True if the ai-core-sdk is used within aicore cluster
               False if the ai-core-sdk is used outside aicore cluster
     """
-    return os.getenv('AICORE_EXECUTION_ID') and os.getenv('AICORE_TRACKING_ENDPOINT')
+    return os.getenv("AICORE_EXECUTION_ID") and os.getenv("AICORE_TRACKING_ENDPOINT")
 
 
 def get_home() -> str:

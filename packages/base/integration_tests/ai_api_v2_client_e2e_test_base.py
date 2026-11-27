@@ -19,15 +19,19 @@ from . import AUTH_URL, BASE_URL, CLIENT_ID, CLIENT_SECRET, RESOURCE_GROUP_ID
 
 
 class AIAPIV2ClientE2ETestBase(TestCase):
-
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
         # Uncomment the following line and the one in setUpClass to run integration_tests via IDE
         # provision_resource_group()
-        cls.ai_api_v2_client = AIAPIV2Client(base_url=BASE_URL, auth_url=AUTH_URL, client_id=CLIENT_ID,
-                                             client_secret=CLIENT_SECRET, resource_group=RESOURCE_GROUP_ID)
-        cls.test_scenario_id = '88888888-4444-4444-4444-cccccccccccc'
+        cls.ai_api_v2_client = AIAPIV2Client(
+            base_url=BASE_URL,
+            auth_url=AUTH_URL,
+            client_id=CLIENT_ID,
+            client_secret=CLIENT_SECRET,
+            resource_group=RESOURCE_GROUP_ID,
+        )
+        cls.test_scenario_id = "88888888-4444-4444-4444-cccccccccccc"
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -39,8 +43,9 @@ class AIAPIV2ClientE2ETestBase(TestCase):
         for k in d.keys():
             self.assertEqual(d[k], getattr(o, k))
 
-    def assert_dicts_in_objects(self, dict_list: List[Dict[str, Any]], object_list: list,
-                                key: str = 'id'):
+    def assert_dicts_in_objects(
+        self, dict_list: List[Dict[str, Any]], object_list: list, key: str = "id"
+    ):
         dict_keys = [d[key] for d in dict_list]
         object_list = list(filter(lambda o: getattr(o, key) in dict_keys, object_list))
         self.assertEqual(len(dict_list), len(object_list))
@@ -53,8 +58,14 @@ class AIAPIV2ClientE2ETestBase(TestCase):
         self.assertIsNotNone(response_obj_dt_field)
         self.assertEqual(response_obj_dt_field.tzinfo, timezone.utc)
 
-    def wait_until_enactment_has_status(self, resource_client: BaseClient, params: Dict[str, str], status: Status,
-                                        repetition=400, skip_if_fails=False):
+    def wait_until_enactment_has_status(
+        self,
+        resource_client: BaseClient,
+        params: Dict[str, str],
+        status: Status,
+        repetition=400,
+        skip_if_fails=False,
+    ):
         for _ in range(repetition):
             enactment = resource_client.get(**params)
             if enactment.status in [status, Status.DEAD]:
@@ -62,11 +73,15 @@ class AIAPIV2ClientE2ETestBase(TestCase):
             sleep(3)
         print(enactment.status_details)
         if skip_if_fails and status != enactment.status:
-            pytest.skip(f'Skipping because status of enactment with params {params} did not reach expected state {status}. ({enactment.status})')
+            pytest.skip(
+                f"Skipping because status of enactment with params {params} did not reach expected state {status}. ({enactment.status})"
+            )
         self.assertEqual(status, enactment.status)
         return enactment
 
-    def get_an_executable(self, deployable: bool = False, scenario_id: str = None) -> Executable:
+    def get_an_executable(
+        self, deployable: bool = False, scenario_id: str = None
+    ) -> Executable:
         if not scenario_id:
             scenario_id = self.test_scenario_id
         res = self.ai_api_v2_client.executable.query(scenario_id=scenario_id)
@@ -82,21 +97,20 @@ class AIAPIV2ClientE2ETestBase(TestCase):
             artifact_dicts.append(artifact)
         return artifact_dicts
 
-    def create_artifact_dict(self, i=1, labels=None, kind: Artifact.Kind = Artifact.Kind.MODEL):
+    def create_artifact_dict(
+        self, i=1, labels=None, kind: Artifact.Kind = Artifact.Kind.MODEL
+    ):
         if not labels:
             labels = [
-                Label(**{
-                    "key": "ext.ai.sap.com/s4hana-version",
-                    "value": "string"
-                })
+                Label(**{"key": "ext.ai.sap.com/s4hana-version", "value": "string"})
             ]
         return {
-            'name': f'Test Artifact {i}',
-            'kind': kind,
-            'labels': labels,
-            'url': 'gs://kfserving-examples/models/tensorflow/flowers',
-            'scenario_id': self.test_scenario_id,
-            'description': f'Test Artifact {i} description'
+            "name": f"Test Artifact {i}",
+            "kind": kind,
+            "labels": labels,
+            "url": "gs://kfserving-examples/models/tensorflow/flowers",
+            "scenario_id": self.test_scenario_id,
+            "description": f"Test Artifact {i} description",
         }
 
     def get_an_artifact(self) -> Artifact:
@@ -107,8 +121,14 @@ class AIAPIV2ClientE2ETestBase(TestCase):
         res = self.ai_api_v2_client.artifact.create(**artifact_dict)
         return self.ai_api_v2_client.artifact.get(artifact_id=res.id)
 
-    def create_configuration_dicts(self, n: int, executable_id: str, parameters: List[Parameter] = None,
-                                   input_artifacts: List[InputArtifact] = None, scenario_id: str = None):
+    def create_configuration_dicts(
+        self,
+        n: int,
+        executable_id: str,
+        parameters: List[Parameter] = None,
+        input_artifacts: List[InputArtifact] = None,
+        scenario_id: str = None,
+    ):
         if scenario_id:
             test_scenario_id = scenario_id
         else:
@@ -117,26 +137,34 @@ class AIAPIV2ClientE2ETestBase(TestCase):
         configuration_dicts = []
         for i in range(n):
             configuration_dict = {
-                'name': f'Test Configuration {i}',
-                'scenario_id': test_scenario_id,
-                'executable_id': executable_id
+                "name": f"Test Configuration {i}",
+                "scenario_id": test_scenario_id,
+                "executable_id": executable_id,
             }
             if parameters:
-                configuration_dict['parameter_bindings'] = [
-                    ParameterBinding(key=p.name, value=f'Test {p.name} value {i}') for p in parameters
+                configuration_dict["parameter_bindings"] = [
+                    ParameterBinding(key=p.name, value=f"Test {p.name} value {i}")
+                    for p in parameters
                 ]
             if input_artifacts:
                 artifact = self.get_an_artifact()
-                configuration_dict['input_artifact_bindings'] = [
-                    InputArtifactBinding(key=ia.name, artifact_id=artifact.id) for ia in input_artifacts
+                configuration_dict["input_artifact_bindings"] = [
+                    InputArtifactBinding(key=ia.name, artifact_id=artifact.id)
+                    for ia in input_artifacts
                 ]
             configuration_dicts.append(configuration_dict)
         return configuration_dicts
 
     def get_a_configuration(self, deployable: bool = False, scenario_id: str = None):
-        executable = self.get_an_executable(deployable=deployable, scenario_id=scenario_id)
-        cfg_dict = self.create_configuration_dicts(n=1, executable_id=executable.id, parameters=executable.parameters,
-                                                   input_artifacts=executable.input_artifacts, scenario_id=scenario_id)[
-            0]
+        executable = self.get_an_executable(
+            deployable=deployable, scenario_id=scenario_id
+        )
+        cfg_dict = self.create_configuration_dicts(
+            n=1,
+            executable_id=executable.id,
+            parameters=executable.parameters,
+            input_artifacts=executable.input_artifacts,
+            scenario_id=scenario_id,
+        )[0]
         res = self.ai_api_v2_client.configuration.create(**cfg_dict)
         return self.ai_api_v2_client.configuration.get(configuration_id=res.id)

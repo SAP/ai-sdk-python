@@ -76,7 +76,9 @@ class TestFunctionTool(unittest.TestCase):
         tool2 = FunctionTool.from_function(sample, description="Explicit description.")
         self.assertEqual(tool2.description, "Explicit description.")
         self.assertIn("description", tool2.to_dict()["function"])
-        self.assertEqual(tool2.to_dict()["function"]["description"], "Explicit description.")
+        self.assertEqual(
+            tool2.to_dict()["function"]["description"], "Explicit description."
+        )
 
         # Case 3: No docstring and no description, description should not be in dict
         @function_tool

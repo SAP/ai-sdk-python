@@ -7,11 +7,17 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from botocore.config import Config
 from aiobotocore.config import AioConfig
 
-from gen_ai_hub.proxy.native.amazon.clients import Session, ClientWrapper, AsyncSession, AsyncClientWrapper
-from tests.mock import (AMAZON_BEDROCK_RESPONSE,
-                        AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE,
-                        get_mocked_ai_core_client,
-                        )
+from gen_ai_hub.proxy.native.amazon.clients import (
+    Session,
+    ClientWrapper,
+    AsyncSession,
+    AsyncClientWrapper,
+)
+from tests.mock import (
+    AMAZON_BEDROCK_RESPONSE,
+    AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE,
+    get_mocked_ai_core_client,
+)
 
 
 def get_bedrock_messages_inference_config():
@@ -23,9 +29,7 @@ def get_bedrock_messages():
         {
             "role": "user",
             "content": [
-                {
-                    "text": "Describe the purpose of a 'hello world' program in one line."
-                }
+                {"text": "Describe the purpose of a 'hello world' program in one line."}
             ],
         }
     ]
@@ -43,6 +47,7 @@ def get_bedrock_prompt():
             },
         }
     )
+
 
 def get_delayed_bedrock_response(delay) -> Iterator[bytes]:
     response = AMAZON_BEDROCK_RESPONSE
@@ -74,8 +79,7 @@ class TestAmazonModels(unittest.TestCase):
             model_name="amazon--nova-premier"
         )
         self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/invoke",
+            mock_make_request.call_args.args[1]["url"], deployment.url + "/invoke"
         )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
@@ -87,7 +91,10 @@ class TestAmazonModels(unittest.TestCase):
         response = bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt())
         self.assertIsInstance(response, MagicMock)
         mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "invoke-with-response-stream")
+        self.assertEqual(
+            mock_make_request.call_args.args[1]["url_path"],
+            "invoke-with-response-stream",
+        )
         deployment = self.proxy_client.select_deployment(
             model_name="amazon--nova-premier"
         )
@@ -103,10 +110,15 @@ class TestAmazonModels(unittest.TestCase):
             model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
         with self.assertWarns(DeprecationWarning):
-            response = bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt(), timeout=120)
+            response = bedrock.invoke_model_with_response_stream(
+                body=get_bedrock_prompt(), timeout=120
+            )
             self.assertIsInstance(response, MagicMock)
             mock_make_request.assert_called_once()
-            self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "invoke-with-response-stream")
+            self.assertEqual(
+                mock_make_request.call_args.args[1]["url_path"],
+                "invoke-with-response-stream",
+            )
             deployment = self.proxy_client.select_deployment(
                 model_name="amazon--nova-premier"
             )
@@ -115,47 +127,46 @@ class TestAmazonModels(unittest.TestCase):
                 deployment.url + "/invoke-with-response-stream",
             )
 
-
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
     def test_completion_stream_chunks(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
             model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
-        response = bedrock.invoke_model_with_response_stream(
-            body=get_bedrock_prompt()
-        )
+        response = bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt())
 
         stream = response["body"]
-        self.assertTrue(all(isinstance(json.loads(event["chunk"]["bytes"])["type"], str) for event in stream))
+        self.assertTrue(
+            all(
+                isinstance(json.loads(event["chunk"]["bytes"])["type"], str)
+                for event in stream
+            )
+        )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
     def test_broken_stream_chunks(self, mock_make_request):
-        mock_make_request.return_value = (self.http_mock, AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE)
+        mock_make_request.return_value = (
+            self.http_mock,
+            AMAZON_BEDROCK_BROKEN_STREAM_RESPONSE,
+        )
         bedrock = Session().client(
             model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
-        response = bedrock.invoke_model_with_response_stream(
-            body=get_bedrock_prompt()
-        )
+        response = bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt())
 
         with self.assertRaises(ValueError):
-            for event in response['body']:
+            for event in response["body"]:
                 json.loads(event["chunk"]["bytes"])
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
     def test_stream_is_not_buffered(self, mock_make_request):
         delay = 1
-        self.http_mock.iter_lines.return_value = (
-            get_delayed_bedrock_response(1)
-        )
+        self.http_mock.iter_lines.return_value = get_delayed_bedrock_response(1)
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
         bedrock = Session().client(
             model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
-        response = bedrock.invoke_model_with_response_stream(
-            body=get_bedrock_prompt()
-        )
+        response = bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt())
 
         stream = response["body"]
         times = []
@@ -182,8 +193,7 @@ class TestAmazonModels(unittest.TestCase):
             model_name="amazon--nova-premier"
         )
         self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/converse",
+            mock_make_request.call_args.args[1]["url"], deployment.url + "/converse"
         )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.BaseClient._make_request")
@@ -198,7 +208,9 @@ class TestAmazonModels(unittest.TestCase):
         )
         self.assertIsInstance(response, MagicMock)
         mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "converse-stream")
+        self.assertEqual(
+            mock_make_request.call_args.args[1]["url_path"], "converse-stream"
+        )
         deployment = self.proxy_client.select_deployment(
             model_name="amazon--nova-premier"
         )
@@ -208,23 +220,27 @@ class TestAmazonModels(unittest.TestCase):
         )
 
     def test_config_parameters(self):
-        custom_config = Config({'temperature': 0})
+        custom_config = Config({"temperature": 0})
         self.assertIsInstance(
-            Session().client(model_name="amazon--nova-premier",
-                             proxy_client=self.proxy_client,
-                             region_name='us', config=custom_config),
-            ClientWrapper
+            Session().client(
+                model_name="amazon--nova-premier",
+                proxy_client=self.proxy_client,
+                region_name="us",
+                config=custom_config,
+            ),
+            ClientWrapper,
         )
 
     def test_service_name(self):
         with self.assertRaises(NotImplementedError):
-            Session().client(model_name="amazon--nova-premier",
-                             proxy_client=self.proxy_client,
-                             service_name="Claude")
+            Session().client(
+                model_name="amazon--nova-premier",
+                proxy_client=self.proxy_client,
+                service_name="Claude",
+            )
 
 
 class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
-
     @classmethod
     def setUpClass(cls) -> None:
         cls.proxy_client = get_mocked_ai_core_client()
@@ -234,25 +250,24 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         cls.parsed_response_mock = MagicMock()
 
     async def test_config_parameters_for_async(self):
-        custom_config = AioConfig(
-            read_timeout=120,
-            connect_timeout=120,
+        custom_config = AioConfig(read_timeout=120, connect_timeout=120)
+        res_client = await AsyncSession().async_client(
+            model_name="amazon--nova-premier",
+            proxy_client=self.proxy_client,
+            region_name="us",
+            config=custom_config,
         )
-        res_client = await AsyncSession().async_client(model_name="amazon--nova-premier",
-                                                 proxy_client=self.proxy_client,
-                                                 region_name='us', config=custom_config)
-        self.assertIsInstance(
-            res_client,
-            AsyncClientWrapper
-        )
+        self.assertIsInstance(res_client, AsyncClientWrapper)
         self.assertEqual(res_client._client_config.read_timeout, 120)
         self.assertEqual(res_client._client_config.connect_timeout, 120)
 
     async def test_async_client(self):
         with self.assertRaises(NotImplementedError):
-            await AsyncSession().async_client(model_name="amazon--nova-premier",
-                                        proxy_client=self.proxy_client,
-                                        service_name="Claude")
+            await AsyncSession().async_client(
+                model_name="amazon--nova-premier",
+                proxy_client=self.proxy_client,
+                service_name="Claude",
+            )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
     async def test_async_invoke_model(self, mock_make_request):
@@ -268,8 +283,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             model_name="amazon--nova-premier"
         )
         self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/invoke",
+            mock_make_request.call_args.args[1]["url"], deployment.url + "/invoke"
         )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
@@ -289,8 +303,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             model_name="amazon--nova-premier"
         )
         self.assertEqual(
-            mock_make_request.call_args.args[1]["url"],
-            deployment.url + "/converse",
+            mock_make_request.call_args.args[1]["url"], deployment.url + "/converse"
         )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
@@ -305,7 +318,9 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIsInstance(response, MagicMock)
         mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "converse-stream")
+        self.assertEqual(
+            mock_make_request.call_args.args[1]["url_path"], "converse-stream"
+        )
         deployment = self.proxy_client.select_deployment(
             model_name="amazon--nova-premier"
         )
@@ -314,7 +329,6 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
             deployment.url + "/converse-stream",
         )
 
-
     @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
     async def test_async_invoke_streaming(self, mock_make_request):
         mock_make_request.return_value = (self.http_mock, self.parsed_response_mock)
@@ -322,10 +336,15 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         bedrock = await AsyncSession().async_client(
             model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
-        response = await bedrock.invoke_model_with_response_stream(body=get_bedrock_prompt())
+        response = await bedrock.invoke_model_with_response_stream(
+            body=get_bedrock_prompt()
+        )
         self.assertIsInstance(response, MagicMock)
         mock_make_request.assert_called_once()
-        self.assertEqual(mock_make_request.call_args.args[1]["url_path"], "invoke-with-response-stream")
+        self.assertEqual(
+            mock_make_request.call_args.args[1]["url_path"],
+            "invoke-with-response-stream",
+        )
         deployment = self.proxy_client.select_deployment(
             model_name="amazon--nova-premier"
         )
@@ -335,7 +354,9 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         )
 
     @patch("gen_ai_hub.proxy.native.amazon.clients.AioBaseClient._make_request")
-    async def test_async_invoke_streaming_reads_response_on_error(self, mock_make_request):
+    async def test_async_invoke_streaming_reads_response_on_error(
+        self, mock_make_request
+    ):
         mock_make_request.side_effect = Exception("Error")
 
         bedrock = await AsyncSession().async_client(
@@ -360,8 +381,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         """Test that _cleanup() handles exceptions without raising."""
         # Create a real client first
         bedrock = await AsyncSession().async_client(
-            model_name="amazon--nova-premier",
-            proxy_client=self.proxy_client
+            model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
 
         # Replace the context manager with a mock that raises on __aexit__
@@ -377,7 +397,9 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         except Exception:
             cleanup_succeeded = False
 
-        self.assertTrue(cleanup_succeeded, "_cleanup() should handle exceptions gracefully")
+        self.assertTrue(
+            cleanup_succeeded, "_cleanup() should handle exceptions gracefully"
+        )
         # Verify __aexit__ was called despite the exception
         mock_aexit.assert_called_once_with(None, None, None)
         # Verify context manager was set to None
@@ -386,8 +408,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
     async def test_close_calls_cleanup(self):
         """Test that close() properly calls _cleanup()."""
         bedrock = await AsyncSession().async_client(
-            model_name="amazon--nova-premier",
-            proxy_client=self.proxy_client
+            model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
 
         # Replace context manager with a mock to track calls
@@ -408,8 +429,7 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         """Test that using async with properly cleans up."""
         # Create client and replace context manager with mock
         bedrock = await AsyncSession().async_client(
-            model_name="amazon--nova-premier",
-            proxy_client=self.proxy_client
+            model_name="amazon--nova-premier", proxy_client=self.proxy_client
         )
 
         mock_context_manager = MagicMock()
@@ -431,7 +451,13 @@ class TestAsyncClientWrapper(unittest.IsolatedAsyncioTestCase):
         # Clean up the original context manager
         await original_context_manager.__aexit__(None, None, None)
 
+
 def test_flat_import_amazon():
-    from gen_ai_hub.proxy.native.amazon import ClientWrapper as client_wrapper_flat_import
-    from gen_ai_hub.proxy.native.amazon.clients import ClientWrapper as client_wrapper_nested_import
+    from gen_ai_hub.proxy.native.amazon import (
+        ClientWrapper as client_wrapper_flat_import,
+    )
+    from gen_ai_hub.proxy.native.amazon.clients import (
+        ClientWrapper as client_wrapper_nested_import,
+    )
+
     assert client_wrapper_flat_import == client_wrapper_nested_import

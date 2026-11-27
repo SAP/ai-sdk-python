@@ -1,4 +1,4 @@
-# Sample Code - Work in Progress
+# Sample Code
 
 Sample code to demonstrate the usage of the SAP Cloud SDK for AI.
 
@@ -13,7 +13,10 @@ Before running the application, ensure the following prerequisites are met:
   - `gpt-5.4-nano`
   - `text-embedding-3-small`
   - `anthropic--claude-4.6-sonnet`
+  - `amazon--titan-embed-text`
   - `gemini-3.5-flash`
+  - `gemini-embedding`
+  - `sap-rpt-1.6`
 
 ## Local Deployment
 

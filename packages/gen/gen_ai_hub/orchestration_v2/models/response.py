@@ -5,26 +5,28 @@ Response models for orchestration v2
 from typing import List, Optional, Any, Literal, Union
 from pydantic import ConfigDict, Field
 
-from gen_ai_hub.orchestration.models.response import ModuleResultsStreaming
-from gen_ai_hub.orchestration_v2.models.base import ABCBaseModel as BaseModel
-from gen_ai_hub.orchestration_v2.models.message import ChatMessage, FunctionCall, ResponseChatMessage
+from gen_ai_hub.orchestration_v2.models.base import ResponseBaseModel
+from gen_ai_hub.orchestration_v2.models.message import (
+    ChatMessage,
+    FunctionCall,
+    ReasoningBlock,
+    ResponseChatMessage,
+)
 
 
-class ResponseBaseModel(BaseModel):
+class CacheCreationTokenDetails(ResponseBaseModel):
     """
-    Abstract base model that extends Pydantic's BaseModel and ABC.
+    Per-TTL breakdown of tokens written to the prompt cache.
 
-    - `extra="allow"` allows unexpected fields in responses to be accepted,
-      since the external API might introduce new attributes in the response.
+    Present only when cache_control includes an explicit ttl value.
 
-    This enforces consistent and safe serialization behavior across all
-    derived models.
+    Attributes:
+        ephemeral_5m_input_tokens: Tokens cached with a 5-minute TTL.
+        ephemeral_1h_input_tokens: Tokens cached with a 1-hour TTL.
     """
 
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=False,
-    )
+    ephemeral_5m_input_tokens: Optional[int] = None
+    ephemeral_1h_input_tokens: Optional[int] = None
 
 
 class PromptTokensDetails(ResponseBaseModel):
@@ -33,10 +35,17 @@ class PromptTokensDetails(ResponseBaseModel):
 
     Attributes:
         audio_tokens (Optional[int]): Audio input tokens present in the prompt.
-        cached_tokens (Optional[int]): Cached tokens present in the prompt.
+        cached_tokens (Optional[int]): Tokens read from the prompt cache (cache hit).
+        cache_creation_tokens (Optional[int]): Tokens written to the prompt cache (cache miss).
+        cache_creation_token_details (Optional[CacheCreationTokenDetails]): Per-TTL
+            breakdown of cache writes. Present only when an explicit ttl was used.
     """
+
     audio_tokens: Optional[int] = None
     cached_tokens: Optional[int] = None
+    cache_creation_tokens: Optional[int] = None
+    cache_creation_token_details: Optional[CacheCreationTokenDetails] = None
+
 
 class CompletionTokensDetails(ResponseBaseModel):
     """
@@ -52,15 +61,18 @@ class CompletionTokensDetails(ResponseBaseModel):
                 are still counted in the total completion tokens for purposes of billing, output, and context
                 window limits.
     """
+
     accepted_prediction_tokens: Optional[int] = None
     audio_tokens: Optional[int] = None
     reasoning_tokens: Optional[int] = None
     rejected_prediction_tokens: Optional[int] = None
 
+
 class TokenUsage(ResponseBaseModel):
     """
     Usage of tokens in the response
     """
+
     completion_tokens: int
     prompt_tokens: int
     total_tokens: int
@@ -76,6 +88,7 @@ class GenericModuleResult(ResponseBaseModel):
 
         data: Additional data object from the module
     """
+
     message: str
     data: Optional[Any] = None
 
@@ -92,6 +105,7 @@ class TopLogprob(ResponseBaseModel):
 
         bytes: UTF-8 bytes of the token, if applicable.
     """
+
     token: str
     logprob: float
     bytes: Optional[List[int]] = None
@@ -112,6 +126,7 @@ class ChatCompletionTokenLogprob(ResponseBaseModel):
         top_logprobs: List of most likely tokens and their log probabilities
             at this token position.
     """
+
     token: str
     logprob: float
     bytes: Optional[List[int]] = None
@@ -122,6 +137,7 @@ class ChoiceLogprobs(ResponseBaseModel):
     """
     Log probabilities for the choice.
     """
+
     content: Optional[List[ChatCompletionTokenLogprob]] = None
     refusal: Optional[List[ChatCompletionTokenLogprob]] = None
 
@@ -142,41 +158,46 @@ class LLMChoice(ResponseBaseModel):
 
                        - 'content_filter' if content was omitted due to a filter enforced by the LLM model provider
                                           or the content filtering module
+
+        provider_specific_fields: Provider-specific fields not representable in the OpenAI schema.
+                                  When not identical, includes 'finish_reason' with the raw, unmapped
+                                  finish reason string from the provider.
     """
 
     index: int
     message: ResponseChatMessage
     logprobs: Optional[ChoiceLogprobs] = None
     finish_reason: str
+    provider_specific_fields: Optional[dict[str, Any]] = None
 
 
 class StreamFunctionObject(FunctionCall):
     """
-       Represents a function call with its name and arguments.
+    Represents a function call with its name and arguments.
 
-       Attributes:
-           name: str
-               The name of the function to call.
+    Attributes:
+        name: str
+            The name of the function to call.
 
-           arguments: str
-               The arguments to call the function with, as generated by the model in JSON
-               format. Note that the model does not always generate valid JSON, and may
-               hallucinate parameters not defined by your function schema. Validate the
-               arguments in your code before calling your function.
-       """
-    model_config = ConfigDict(
-        extra="allow",
-        frozen=False,
-    )
+        arguments: str
+            The arguments to call the function with, as generated by the model in JSON
+            format. Note that the model does not always generate valid JSON, and may
+            hallucinate parameters not defined by your function schema. Validate the
+            arguments in your code before calling your function.
+    """
+
+    model_config = ConfigDict(extra="allow", frozen=False)
 
     name: Optional[str] = None
     arguments: Optional[str] = None
 
 
 class StreamToolCall(ResponseBaseModel):
-    type_: Literal["function"] = Field(default="function",
-                                       alias="type",
-                                       description="The type of the tool. Currently, only function is supported.")
+    type_: Literal["function"] = Field(
+        default="function",
+        alias="type",
+        description="The type of the tool. Currently, only function is supported.",
+    )
     index: int
     id: Optional[str] = None
     function: Optional[StreamFunctionObject] = None
@@ -186,6 +207,8 @@ class StreamDelta(ResponseBaseModel):
     role: Optional[str] = None
     content: str
     tool_calls: Optional[List[StreamToolCall]] = None
+    refusal: Optional[str] = None
+    reasoning_content: Optional[List[ReasoningBlock]] = None
 
 
 class StreamLLMChoice(ResponseBaseModel):
@@ -193,6 +216,7 @@ class StreamLLMChoice(ResponseBaseModel):
     delta: StreamDelta
     logprobs: Optional[ChoiceLogprobs] = None
     finish_reason: Optional[str] = None
+    provider_specific_fields: Optional[dict[str, Any]] = None
 
 
 class Citation(ResponseBaseModel):
@@ -208,6 +232,7 @@ class Citation(ResponseBaseModel):
         end_index (Optional[int]): The ending index position of the citation in
             a referenced text.
     """
+
     ref_id: Optional[int] = None
     title: str
     url: str
@@ -236,6 +261,7 @@ class LLMModuleResult(ResponseBaseModel):
 
         citations: Optional list of citations associated with the response.
     """
+
     id: str
     object: str
     created: int
@@ -275,6 +301,7 @@ class ModuleResults(ResponseBaseModel):
         output_unmasking: Optional list of choices from the output unmasking
             module.
     """
+
     grounding: Optional[GenericModuleResult] = None
     templating: Optional[List[ChatMessage]] = None
     input_translation: Optional[GenericModuleResult] = None
@@ -311,6 +338,7 @@ class SAPAPIError(ResponseBaseModel):
                                                         if available or
                                                         applicable.
     """
+
     request_id: str
     code: int
     message: str
@@ -318,32 +346,35 @@ class SAPAPIError(ResponseBaseModel):
     intermediate_results: Optional[ModuleResults] = None
     headers: Optional[dict[str, str]] = None
 
+
 class SAPAPIErrorStreaming(ResponseBaseModel):
     """
-        Represents an error returned from an SAP API.
+    Represents an error returned from an SAP API.
 
-        Attributes:
-            request_id (str): The unique identifier of the request associated
-                              with the error.
+    Attributes:
+        request_id (str): The unique identifier of the request associated
+                          with the error.
 
-            code (int): The http error code.
+        code (int): The http error code.
 
-            message (str): A detailed message describing the error.
+        message (str): A detailed message describing the error.
 
-            location (str): The location where the error occurred
+        location (str): The location where the error occurred
 
-            intermediate_results (Optional[ModuleResults]): Optional attribute
-                                                            to store any
-                                                            processing results
-                                                            if available or
-                                                            applicable.
-        """
+        intermediate_results (Optional[ModuleResults]): Optional attribute
+                                                        to store any
+                                                        processing results
+                                                        if available or
+                                                        applicable.
+    """
+
     request_id: str
     code: int
     message: str
     location: str
-    intermediate_results: Optional[ModuleResultsStreaming] = None
+    intermediate_results: Optional[StreamModuleResults] = None
     headers: Optional[dict[str, str]] = None
+
 
 class CompletionPostResponse(ResponseBaseModel):
     """
@@ -355,11 +386,19 @@ class CompletionPostResponse(ResponseBaseModel):
         intermediate_results (ModuleResults): Results from various modules executed during the processing.
 
         final_result (LLMModuleResult): Output from LLM. Follows the OpenAI spec.
+
+        intermediate_failures (Optional[List[SAPAPIError]]): List of errors encountered during processing, if any.
+
+        headers (Optional[dict[str, str]]): HTTP response headers of this orchestration call,
+            exposed for convenience (e.g. X-Orchestration-Dropped-Model-Params). Access it via
+            ``response.headers``.
     """
+
     request_id: str
     intermediate_results: ModuleResults
     final_result: LLMModuleResult
     intermediate_failures: Optional[List[SAPAPIError]] = None
+    headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
 
 
 class StreamCompletionPostResponse(ResponseBaseModel):
@@ -367,12 +406,16 @@ class StreamCompletionPostResponse(ResponseBaseModel):
     intermediate_results: Optional[StreamModuleResults]
     final_result: Optional[StreamLLMModuleResult]
     intermediate_failures: Optional[List[SAPAPIError]] = None
+    headers: Optional[dict[str, str]] = Field(default=None, exclude=True)
+
 
 class ErrorResponse(ResponseBaseModel):
     error: Union[SAPAPIError, list[SAPAPIError]]
 
+
 class ErrorResponseStreaming(ResponseBaseModel):
     error: Union[SAPAPIErrorStreaming, list[SAPAPIErrorStreaming]]
+
 
 class OrchestrationResponseWithRetries(CompletionPostResponse):
     """
@@ -383,9 +426,13 @@ class OrchestrationResponseWithRetries(CompletionPostResponse):
     Attributes:
         retries: Number of retry attempts that were made to successfully complete this request.
     """
+
     retries: int = 0
 
-__all__ = ["PromptTokensDetails",
+
+__all__ = [
+    "CacheCreationTokenDetails",
+    "PromptTokensDetails",
     "CompletionTokensDetails",
     "TokenUsage",
     "GenericModuleResult",
@@ -408,4 +455,5 @@ __all__ = ["PromptTokensDetails",
     "StreamCompletionPostResponse",
     "ErrorResponse",
     "ErrorResponseStreaming",
-    "OrchestrationResponseWithRetries"]
+    "OrchestrationResponseWithRetries",
+]

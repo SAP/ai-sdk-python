@@ -12,7 +12,10 @@ class DatasetCapabilities:
     :type delete: bool, optional
     :param `**kwargs`: The keyword arguments are there in case there are additional attributes returned from server
     """
-    def __init__(self, upload: bool = True, download: bool = True, delete: bool = True, **kwargs):
+
+    def __init__(
+        self, upload: bool = True, download: bool = True, delete: bool = True, **kwargs
+    ):
         self.upload: bool = upload
         self.download: bool = download
         self.delete: bool = delete

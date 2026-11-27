@@ -17,6 +17,9 @@ from gen_ai_hub.orchestration_v2 import (
     FunctionObject,
     FunctionTool,
     GlobalStreamOptions,
+    GraniteGuardian41Categories,
+    GraniteGuardian41Filter,
+    GraniteGuardian41FilterConfig,
     ImageItem,
     InputFiltering,
     InputTranslationConfig,
@@ -106,7 +109,7 @@ def completion_stream():
     Run chat example with a streaming response through the Orchestration Service API.
 
     Returns:
-        JSON object containing the model response as result.
+        Plain text stream containing the model response.
     """
     config = OrchestrationConfig(
         modules=ModuleConfig(
@@ -239,7 +242,7 @@ def completion_with_fallback():
                             )
                         ]
                     ),
-                    model=LLMModelDetails(name="anthropic--claude-4.5-haiku"),
+                    model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
                 )
             ),
         ]
@@ -380,6 +383,12 @@ def input_filtering():
                 ),
                 # category 'privacy' enabled
                 LlamaGuard38bFilterConfig(config=LlamaGuard38bFilter(privacy=True)),
+                # 'harm' catch-all category enabled
+                GraniteGuardian41FilterConfig(
+                    config=GraniteGuardian41Filter(
+                        categories=GraniteGuardian41Categories(harm=True)
+                    )
+                ),
             ]
         )
     )
@@ -447,7 +456,7 @@ def output_filtering():
                         )
                     ]
                 ),
-                model=LLMModelDetails(name="anthropic--claude-4.5-haiku"),
+                model=LLMModelDetails(name="anthropic--claude-4.6-sonnet"),
             ),
             filtering=content_filter_config,
         )
@@ -505,6 +514,79 @@ def completion_masking():
     result = service.run()
     service.close_http_connection()
     return {"result": result.final_result.choices[0].message.content}
+
+
+def reasoning_content():
+    """
+    Run chat example with reasoning effort 'high' through the Orchestration Service API.
+
+    Returns:
+        JSON object containing the model response as result including the reasoning content.
+    """
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            content="What is the longest river on planet earth?"
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(
+                    name="gemini-3.5-flash", params={"reasoning_effort": "high"}
+                ),
+            )
+        )
+    )
+    service = OrchestrationService(config=config)
+    result = service.run()
+    service.close_http_connection()
+    return {
+        "result": result.final_result.choices[0].message.content,
+        "reasoning_content": result.final_result.choices[0].message.reasoning_content,
+    }
+
+
+def reasoning_content_stream():
+    """
+    Run chat example with reasoning effort 'high' and streaming response through the Orchestration Service API.
+
+    Returns:
+        Plain text stream containing the reasoning content.
+    """
+    config = OrchestrationConfig(
+        modules=ModuleConfig(
+            prompt_templating=PromptTemplatingModuleConfig(
+                prompt=Template(
+                    template=[
+                        UserMessage(
+                            content="What is the longest river on planet earth?"
+                        )
+                    ]
+                ),
+                model=LLMModelDetails(
+                    name="gemini-3.5-flash", params={"reasoning_effort": "high"}
+                ),
+            )
+        ),
+        stream=GlobalStreamOptions(enabled=True),
+    )
+
+    service = OrchestrationService(config=config)
+
+    def generate():
+        stream = service.stream()
+        for chunk in stream:
+            if chunk.final_result:
+                reasoning_content_chunk = chunk.final_result.choices[
+                    0
+                ].delta.reasoning_content
+                if reasoning_content_chunk:
+                    yield "".join([block.content for block in reasoning_content_chunk])
+        service.close_http_connection()
+
+    return StreamingResponse(generate(), media_type="text/plain")
 
 
 def translation():

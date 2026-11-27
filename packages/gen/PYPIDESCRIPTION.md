@@ -19,4 +19,4 @@ You can install a subset of the extra libraries (without langchain support) by s
 
 ## Configuration, Usage
 
-Please refer to the official documentation hosted on [help.sap.com](https://help.sap.com/doc/generative-ai-hub-sdk/CLOUD/en-US/index.html) for details on how to configure and use the SAP Cloud SDK for AI (Python).
+Please refer to [the official documentation](https://sap.github.io/ai-sdk/docs/python/overview) for details on how to configure and use the SAP Cloud SDK for AI (Python).

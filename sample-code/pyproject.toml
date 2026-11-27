@@ -8,12 +8,12 @@ license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.141.1",
-    "sap-ai-sdk-gen",
+    "sap-ai-sdk-gen[all]",
     "uvicorn>=0.52.1",
 ]
 
 [build-system]
-requires = ["uv_build>=0.12.1,<0.13.0"]
+requires = ["uv_build>=0.13.9,<0.14.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
