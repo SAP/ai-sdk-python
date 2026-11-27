@@ -7,7 +7,7 @@
       "auto_run_on_draft_pr": false,
       "use_custom_review_focus": false,
       "excluded_paths": [],
-      "auto_exclude_authors": []
+      "auto_exclude_authors": ["app/renovate", "app/dependabot"]
     }
   },
   "excluded_paths": []
